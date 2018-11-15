@@ -1,0 +1,90 @@
+<script type="text/javascript">
+   //AJAX获取区域
+function getPlace(_ths){
+   var urls=$(_ths).attr('to-url');
+    if($(_ths).val() > 0){
+      $.ajax({
+         type:'post',
+         dataType: "json",
+         url:urls+"/region_id/"+$(_ths).val(),
+         success:function(response,status,xhr){
+            var str='<option value="">请选择</option>';
+            for(var i in response){
+                str+='<option value="'+ response[i].region_id +'">'+ response[i].region_name +'</option>';
+            }
+            if($(_ths).next('select').length >0){
+                $(_ths).next().html(str);
+            }                                        
+          }
+       });    
+   }                              
+}    
+</script>
+<style type="text/css">
+dl dt{text-align:right;}
+table #add-tables{
+    
+}
+.country,.province,.city{
+    margin-right:10px !important;
+}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/OrderInfo/saveAddressForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="order_id" value="{$address['order_id']}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+              <table width="100%" border="0" cellpadding="1" cellspacing="1"  id="add-tables">
+                  <tr><td style="text-align: right;height:40px;width: 12%" >配送区域：</td>
+                          <td colspan="3" align="left">
+                              <select name="country" class="country" onchange="getPlace(this)" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择国家</option>
+                                     {$address['region'][0]}
+                              </select>                                              
+                              <select name="province" class="province" onchange="getPlace(this)" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择省份</option>
+                                      {$address['region'][1]}
+                              </select>
+                              <select name="city" class="city" onchange="getPlace(this)" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择城市</option>
+                                      {$address['region'][2]}
+                              </select>
+                               <select name="district" class="district" onchange="getPlace(this)" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择区县</option>
+                                      {$address['region'][3]}
+                              </select><span style="color:red;"> *</span>                                                                                          
+                          </td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: right;height:40px;width: 12%" >收货姓名：</td>
+                      <td align="left" style="width: 20%;"><input name="consignee" value="{$address.consignee}" type="text" class="add-input"/><span style="color:red;"> *</span></td>
+                      <td align="right" style="text-align: right;" >邮件地址：</td>
+                      <td align="left"><input name="email" value="{$address.email}" type="text" class="add-input" /></td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: right;height:40px;width: 12%" >详细地址：</td>
+                      <td align="left" ><input name="address" value="{$address.address}" type="text" class="add-input"/><span style="color:red;"> *</span></td>
+                      <td align="right" style="width: 12%;text-align: right;" >邮政编码：</td>
+                      <td align="left"><input name="zipcode" value="{$address.zipcode}" type="text" class="add-input" /></td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: right;height:40px;width: 12%" >手机：</td>
+                      <td align="left" ><input name="mobile" value="{$address.mobile}" type="text" class="add-input"/><span style="color:red;"> *</span></td>
+                      <td align="right" style="width: 12%;text-align: right;" >电话：</td>
+                      <td align="left"><input name="tel" value="{$address.tel}" type="text" class="add-input" /></td>
+                  </tr>                                                                                            
+              </table>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

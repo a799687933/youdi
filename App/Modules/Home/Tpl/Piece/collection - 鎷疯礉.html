@@ -1,0 +1,46 @@
+{/*头部愿望商品列表*/}
+<foreach name="pbulcCollect" item="g">
+	<li>
+		<span class="icon31" url="{:U('Cookie/deleteDoodsCollect',array('id'=>$g['id'],'is_location'=>0))}"></span>
+		<div class="ckywlmt">
+			<table width="100%" height="100%">
+			  <tr>
+				  <td align="center" valign="middle" width="100%" height="100%">
+					  <a href="{:U('Goods/index',array('html'=>$g['id']))}"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+				   </td>
+			   </tr>
+			</table>
+		 </div>
+		 <div class="ckywlmtb">
+			 <table width="100%" height="100%">
+				<tr>
+					<td align="center" valign="middle" width="100%" height="100%">
+						<a href="{:U('Goods/index',array('html'=>$g['id']))}"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+					</td>
+				 </tr>
+			  </table>
+		 </div>
+		<div class="ckywlmb">
+		<!--<p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>-->
+		<p><b>{:C('KTEC_H')} {$g['goods_retail_price']}</b></p>
+		</div>
+	</li>
+</foreach>
+<script type="text/javascript">
+colletionCounts();
+function colletionCounts(){
+	var count={$publicCount};
+    $(function(){
+		 if(count > 0){
+			 $('.iconfont-like2').show();
+			 $('.iconfont-like').hide();
+		 }else{
+			 $('.iconfont-like').show();
+			 $('.iconfont-like2').hide();			 
+		 }	    
+	     $('.public-collect').text(count);
+		 $(".zjll3").myscroll({ prev: ".zjll3left", next: ".zjll3right", scrollbox: ".zjll3m" });
+	});
+	
+}
+</script>

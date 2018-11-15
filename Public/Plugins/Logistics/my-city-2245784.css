@@ -1,0 +1,78 @@
+#my-city-2245784{
+   padding:0;
+   margin:0;
+   font-size:12px;
+   width:430px;
+   min-height:100px;
+   border:1px #CECBCE solid;
+   border-radius: 2px;
+   box-shadow: 3px 3px 10px #eee;
+   position:absolute;
+   top:25px;
+   left:-150px;
+   background:#fff !important;
+   z-index:9999;
+   display:none;
+}
+#my-city-2245784-h2{
+    height:30px;
+	line-height:30px;
+	position:relative;
+	padding:0;
+	margin:0;
+	border-bottom:1px #CECBCE solid;
+	width:98%;
+	margin:0 auto;
+}
+#my-city-2245784-h2 .my-city-2245784-h2-spans{
+	border:1px solid #CECBCE;
+	background:#fff url(jd-stock.png) no-repeat 98% center;
+	font-size:12px;
+	color:#666;
+	display:inline-block;
+	min-width:32px;
+	height:20px;
+	line-height:20px;
+	padding:2px 8px;
+	text-align:left;
+	/*border-bottom:2px solid #fff;*/
+	margin-top:5px;
+	cursor:pointer;
+	color:#666;
+
+}
+#my-city-2245784-close{
+    position:absolute;
+	top:-12px;
+	right:-14px;
+	display:block;
+	width:21px;
+	height:21px;
+	background:url(my-city-2245784.png) no-repeat;
+	cursor:pointer;
+}
+.my-city-2245784-list{
+   padding:0;
+   margin:0;
+}
+.my-city-2245784-list ul{
+   padding:0;
+   margin:0;
+   list-style-type:none;
+   margin:5px;
+}
+.my-city-2245784-list ul li{
+   width:100px;
+   height:25px;
+   line-height:25px;
+   float:left;
+   margin:2px 2px;
+}
+.my-city-2245784-list ul li a{
+   color:#666;
+   text-decoration:none;
+}
+.nones6371,.nones6372{
+   display:none;
+
+}

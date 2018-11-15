@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{$result['titletext']} | YOUDI WU 中国</title>
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script>
+ $(function(){
+	 $(".cjr li:eq(0) .cjrb").show()
+	 $(".cjr li:eq(0) h2 .cjrz").hide()
+	 $(".cjr li:eq(0) h2 .cjrf").show()
+	 })
+</script>
+</head>
+<body>
+<div class="box yyhddb">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+          <h1>客服中心</h1>
+          <p>
+          {:isL(L('StefanoTwoDesigners'),'Domenico Dolce和Stefano Gabbana两位设计师在意大利时尚圈扮演了举足轻重的角色。感性，妩媚的意大利时尚女性激起了两人的创作灵感，他们的设计风格性感中带干练，难怪在短短的30年内便能成功地将该品牌晋升为家喻户晓的奢侈品大牌。Farfetch现在就带你体验！')}</p>
+     </div><div class="cb"></div></div>
+ </div>
+ <!--<h1 class="title"><div class="wrap"><span>{:isL(L('ContactUs'),'联系我们')}</span></div></h1>-->
+ <div class="cjwen">
+ <include file="Common:cjl" />{/*左边导航*/}
+ <!--
+  <div class="cjl">
+   <ul>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_1')]['id']))}">{$files[7][C('B_1')]['titletext']}{/*联系我们*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_8')]['id']))}">{$files[7][C('B_8')]['titletext']}{/*如何购物*/}</a></li>
+    <li><a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></li>
+    <li><a href="{:U('Modular/refund',array('html'=>$files[7][C('B_3')]['id']))}">{$files[7][C('B_3')]['titletext']}{/*退货与退款*/}</a></li>
+    <li><a href="{:U('Modular/problem',array('html'=>$files[7][C('B_4')]['id']))}">{$files[7][C('B_4')]['titletext']}{/*常见问题*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_5')]['id']))}">{$files[7][C('B_5')]['titletext']}{/*条款与条件*/}</a></li>
+    <li><a href="{:U('Modular/privacy',array('html'=>$files[7][C('B_6')]['id']))}">{$files[7][C('B_6')]['titletext']}{/*隐私与Cookie政策*/}</a></li>
+   </ul>
+  </div><!--cjwtl end-->
+  <div class="cjr" id="ddyjs">
+  <h1>{$result['titletext']}</h1>
+  {$result['content']|stripcslashes=###}
+   <!--<ul>
+   	<li>
+     <h2>配送时间<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+      <p class="icon21">什么时候可以收到货?</p>
+      <p class="pb15">正常情况下当天五点前下单的隔天就能收到货 (除个别偏远地区除外) 。</p>
+      <p class="icon21">快递需要运费吗?</p>
+      <p class="pb15">凡是在YOUDIWU官方网站消费的顾客均可享受免运费配送。</p>
+      <p class="icon21">退货麻不麻烦?</p>
+      <p class="pb15">您只需在YOUDIWU官方网站点击退款并填上您购买时的订单号，顺丰快递员将会上门为您取货并退回给我们，无需您亲自寄送。</p>
+      <p class="icon21">退货需要我自己支付运费吗?</p>
+      <p class="pb15">假如您在YOUDIWU购买的产品您不喜欢或是不适合，退回的商品一律免运费退货。</p>
+      <p class="icon21">我已经退货了，什么时候可以收到退款?</p>
+      <p class="pb15">买家把商品推给我们后，我们会严格检查商品问题，在确定无误且不影响二次销售的情况下则立即给买家退款。</p>
+     </div>
+    </li>
+    <li>
+     <h2>订单修改<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+     </div>
+    </li>
+    <li>
+     <h2>订单跟踪<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+     </div>
+    </li>
+    <li>
+     <h2>订单取消<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+     </div>
+    </li>
+    <li>
+     <h2>配送区域<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+     </div>
+    </li>
+    <li>
+     <h2>配送公司<span class="cjrz">+</span><span class="cjrf">-</span></h2>
+     <div class="cjrb">
+      <p class="icon21">发的是什么快递？</p>
+      <p class="pb15">我们的快递配送方式唯一指定为：顺丰航空。</p>
+      <p class="icon21">什么时候发货?</p>
+      <p class="pb15">当天17点前下单的我们统一当天发货，17点后下的单我们统一为隔天发货</p>
+     </div>
+    </li>
+   </ul>-->
+   <!--<div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>-->
+  </div><!--cjwtr end-->
+  <div class="cb pv35"></div>
+ </div><!--cjwt end-->
+ 
+ 
+<!--content endh-->
+ <include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<!---->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

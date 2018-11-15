@@ -1,0 +1,83 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Links/index","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                     输入关键字：<input type="text" name="link_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Links/linkAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Links/addOrSave')}" target="dialog" mask="true" width="900" height="550" title="添加友情链接"><span>添加友情链接</span></a></li>
+            </if>
+
+            <if condition="access('Links/linkDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Links/linkDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/index" class="delete"><span>删除友情链接</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>编号</th>
+                <th>友情链接名称</th>
+                <th >友情链接地址</th>
+                <th>描述</th>
+                <th >是否显示</th>
+                <th >排序</th>
+                <th >添加时间</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="links" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.link_name|tpl_modify_oen=###,'links','link_name',$r['id'],'id','Links/addOrSaveForm'}<if condition="$r['logos']"><img src="__SYS_IMG__/a_pic.png" style="position: relative;top:3px;left:3px;" /></if></td>
+                <td><a href="{$r.link_url}" target="_blank">{$r.link_url}</a></td>
+                <td>{$r.description|tpl_modify_oen=###,'links','description',$r['id'],'id','Links/addOrSaveForm'}</td>
+                <td>{$r.is_show|tpl_yes_no=###,'links','is_show',$r['id'],'id','Links/addOrSaveForm'}</td>
+                <td>{$r.link_sort|tpl_modify_oen=###,'links','link_sort',$r['id'],'id','Links/addOrSaveForm'}</td> 
+               <td>{$r.add_tiem|date='Y-m-d',###}</td>
+               <td>
+                    {$action|tpl_action='dialog','Links/addOrSave',C('VAR_PAGE').'/'.$currentPage.'/action/index/id/'.$r["id"],'修改'.strip_tags($r['link_name']),'icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','Links/linkDelete',C('VAR_PAGE').'/'.$currentPage.'/action/index/ids/'.$r["id"],'确定执行删除('.strip_tags($r['link_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

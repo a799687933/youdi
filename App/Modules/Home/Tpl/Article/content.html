@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{$result['titletext']} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/flexslider.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/clickMoerPage.js"></script>
+<!--<script src="__PLUGINS__/kindeditor-4.1.10/kindeditor.js" type="text/javascript"></script>{/*kindeditor-4.1.10编辑器js*/} 
+<script src="__PLUGINS__/kindeditor-4.1.10/lang/{:getLang()}.js" type="text/javascript"></script>{/*kindeditor-4.1.10编辑器中文语言*/}
+
+<script type="text/javascript">
+{/*指定显示文本编辑器的按钮*/}
+window.items=[
+            'emoticons'
+]    
+</script>
+<script src="__PLUGINS__/kindeditor-4.1.10/kindelitor-config.js" type="text/javascript"></script>{/*kindeditor-4.1.10配置*/} -->
+
+<script type="text/javascript">
+$(document).ready(function() {	
+$('.bxslider').bxSlider({
+	   controls: true,
+	   pager: null,
+	   auto:true
+	  });	
+});
+</script>
+<!--[if IE]>
+		<script src="js/html5shiv.min.js"></script>
+<![endif]-->
+<script defer src="__HOME__/js/flexslider.js"></script> 
+<script>
+ $(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",directionNav: true,slideshow:false,animationSpeed:1000
+     
+      });
+	  $(".flexslider").hover(function(){
+		  $(this).toggleClass("flexslidernow")
+     });
+
+	{/*显示更多内容*/}
+	/*$('.onaclick').on('click','.col2ab',function(){
+		 var onaclick=$(this).parents('.xspjb');									 
+		 if($(this).is('.pjbbtxtdj')){
+			 $(this).hide();
+			 onaclick.find('.pjbbtxtdj2').show();
+			 onaclick.find('.pjbbtxt').css('height','auto');
+		 }else if($(this).is('.pjbbtxtdj2')){
+			 $(this).hide();
+			 onaclick.find('.pjbbtxtdj').show();
+			 onaclick.find('.pjbbtxt').css('height','24px');
+		}
+	});*/
+	
+	{/*ajax加载文章列表*/}
+	var aurl="{:U('Article/index')}";
+	$.ajax({
+		 type:'get',
+		 dataType: "text",
+		 url:aurl,
+		 success:function(response,status,xhr){
+              $('#article-list').html(response);
+		  },
+		  complete:function(){
+		  },
+		   beforeSend:function(){
+		  },         
+		 error:function(xhr,errorText,errorType){
+			 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+		 }
+	});   	
+
+});
+
+$(function(){
+	$(".rating-static-module label").click(function(){
+		$(this).find('span').addClass("Hui-iconfont-cang-selected")
+		$(this).nextAll("label").find('span').removeClass("Hui-iconfont-cang-selected")
+		$(this).prevAll("label").find('span').addClass("Hui-iconfont-cang-selected")
+		$('input[name="score"]').val($(this).index() + 1);
+		})
+	//弹出表情
+	$('body').on('click','.emotion',function(){
+	     var show_face=$(this).find('.show_face2');
+		 if(show_face.css('display')=='none'){
+			 $(this).find('.show_face2').show();
+		 }else{
+			 $(this).find('.show_face2').hide();
+		 }
+	});
+	//表情付值
+	$('body').on('click','.show_face2 .face-item',function(){
+	    var _this=$(this);
+		var c_name=_this.attr('set_value');
+		var face=_this.attr('data-ubb');
+		var centent=$('.'+c_name).val();
+		$('.'+c_name).val(centent+face);
+		//$('.up-arrow1,.up-arrow2').hide();
+	});
+});
+
+/*点赞*/
+var isForm6=false;
+function praise(_this){	
+	var num=parseInt($(_this).find('.paraise_num').text());
+	var url="{:U('Article/clickLike',array('id'=>$result['id']))}";
+	if(isForm6) return;
+	isForm6=true;		
+	$.getJSON(url,{},function(res){
+		 isForm6=false;							  
+		 res=res[0];					  
+	     if(!res[1]){
+			 if(res[3]) window.location.href=res[3];
+			 return;
+		}
+		if(res[5] == 'save'){
+			$(_this).find('.iconstyle').removeClass('commentlr').addClass('col999');	
+			num--;
+			$(_this).find('.paraise_num').text(num);		
+		}else{
+			$(_this).find('.iconstyle').removeClass('col999').addClass('commentlr');	
+			num++;
+			$(_this).find('.paraise_num').text(num);			
+		}
+	});    
+}
+
+//列表评论点赞
+var isForm7=false;
+function praiseList(_this,id,user_id){
+	if(isForm7) return;
+	isForm7=true;	
+    var li=$(_this).parents('li');
+	var num=parseInt(li.find('.list_nums').text());
+	var url="{:sign_url(array('table_num'=>1),U('Article/clickLike'))}&id="+id+"&user_id="+user_id;
+	$.getJSON(url,{},function(res){
+		 isForm7=false;							  
+		 res=res[0];					  
+	     if(!res[1]){
+			 if(res[3]) window.location.href=res[3];
+			 return;
+		}
+		if(res[5] == 'save'){
+			li.find('.iconstylelist').addClass('col999');	
+			num--;
+			li.find('.list_nums').text(num);		
+		}else{
+			li.find('.iconstylelist').removeClass('col999');	
+			num++;
+			li.find('.list_nums').text(num);			
+		}
+	});    	
+}
+
+//收藏夹
+var isForm8=false;
+function setCollection(_this){
+	if(isForm8) return;
+	isForm8=true;		
+	var url="{:sign_url(array('id'=>$result['id']),U('Article/setCollection'))}";
+	$.getJSON(url,{},function(res){
+		 isForm8=false;					  
+		 res=res[0];					  
+	     if(!res[1]){
+			 if(res[3]) window.location.href=res[3];
+			 return;
+		}
+		if(res[5] == 'save'){
+			$(_this).removeClass('fa-star').addClass('fa-star-o');
+		}else{
+			$(_this).removeClass('fa-star-o').addClass('fa-star');			
+	    }
+	});
+}
+//提交主体评论
+var isForm9=false;
+function comment(_this){
+    var content=$('.dptjlbm_text').val();
+	if($(_this).is('.disccc')) return;
+	if(content)  content=content.replace(/(^\s*)|(\s*$)/g, "");
+	if(!content) {
+		$('.dptjlbm_text').focus();
+		return;
+	}
+	if(isForm9) return;
+	isForm9=true;	
+	$(_this).addClass('disccc');
+	var url="{:sign_url(array('id'=>$result['id']),U('Article/commnetForm'))}";
+    $.ajax({
+		 type:'post',
+		 dataType: "json",
+		 url:url,
+		 data:{content:content},
+		 success:function(response,status,xhr){	
+		         isForm9=false;
+				 res=response[0];	
+				 if(!res[1]){
+					 if(res[3]) window.location.href=res[3];
+					 return;
+				}
+				$('.dptjlbm_text').val('');
+				getComment();
+		  },
+		   beforeSend:function(){
+			 //请求前
+		  }
+	 });		
+}
+//提交主体评论后重新获取评论列表
+function getComment(type){
+	type = arguments[0] ? arguments[0] : '';
+    var url="{:U('Article/commentList','','')}?id={$result['id']}&order_type="+type;
+    $.ajax({
+		 type:'get',
+		 dataType: "text",
+		 url:url,
+		 success:function(response,status,xhr){
+              $('#comment-list').html(response);		  
+		  },
+		   beforeSend:function(){
+			 //请求前
+		  }
+	 });		
+}
+
+//提交二次评论
+var isForm10=false;
+function mentReply(_this,url,name){
+   var parents=$(_this).parents('li');
+   var content=parents.find('.content_input').val();
+   if(content)  content=content.replace(/(^\s*)|(\s*$)/g, "");
+   	if(!content) {
+		parents.find('.content_input').focus();
+		return;
+	}
+	if(isForm10) return;
+	isForm10=true;
+    $.ajax({
+		 type:'POST',
+		 dataType: "JSON",
+		 data:{content:content},
+		 url:url,
+		 success:function(response,status,xhr){
+			  isForm10=false;
+			  res=response[0];
+			  if(!res[1]){
+				 if(res[3]) window.location.href=res[3];
+				 return;
+			  }			  
+			  parents.find('.huifu').css('color','#ccc').removeClass('huifu');
+			 $(_this).parent(".duih").hide();
+			 $(_this).parent(".duih").siblings(".liuylbbb").show();
+			 $(_this).parents("li").removeClass("now")	;	  
+			 //生成节点
+		     content= repFace(content);//替换表情
+			 var node='<p><span class="vam mr5">'+name+'</span><span class="vam" style="color:#023867;">@</span>';              
+              node+='<img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">'+content+'<span class="col999 pl15 f12">刚刚</span></p>';
+              parents.find('.liuylbbdh').append(node);
+		  },
+		   beforeSend:function(){
+			 //请求前
+		  }
+	 });	
+}
+/*递归替换表情*/
+function repFace(content){
+	 var face={
+		   'face_01':'[流汗]',
+		   'face_02':'[钱]',
+		   'face_03':'[发怒]',
+		   'face_04':'[浮云]',
+		   'face_05':'[给力]',
+		   'face_06':'[大哭]',
+		   'face_07':'[憨笑]',
+		   'face_08':'[色]',
+		   'face_09':'[奋斗]',
+		   'face_10':'[鼓掌]',
+		   'face_11':'[鄙视]',
+		   'face_12':'[可爱]', 
+		   'face_13':'[闭嘴]',
+		   'face_14':'[疑问]',
+		   'face_15':'[抓狂]',
+		   'face_16':'[惊讶]',
+		   'face_17':'[可怜]',
+		   'face_18':'[弱]',
+		   'face_19':'[强]',
+		   'face_20':'[握手]',
+		   'face_21':'[拳头]',
+		   'face_22':'[酒]',
+		   'face_23':'[玫瑰]',
+		   'face_24':'[打酱油]'				 
+	 };
+	 for(var i in face){
+		 var fa='<span title="" class="margin0 face-item '+i+'" style="display:inline-block;height:23px;width:23px;position:relative;top:5px;"></span>';
+		 var test=eval("/"+face[i]+"/");
+		 if(test.test(content)){
+			 content=content.replace(face[i],fa);		
+			 return  repFace(content);
+		 }
+	 }	
+	 return content;    
+}
+</script>
+<style type="text/css">
+.show_face{
+	width:288px;height:110px;border:1px #666 solid;background:#fff;border-radius:6px;position:absolute;
+	top:30px;
+	left:-12px;
+	display:none; z-index:100
+}
+.up-arrow1{position:absolute;top:15px;z-index:102;font-size:22px;color:#000;left:3px;display:none;}
+.up-arrow2{position:absolute;top:16px;z-index:102;font-size:22px;color:#fff;left:3px;display:none;}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ .up-arrow1{top:19px}  
+ .up-arrow2{top:20px} 
+ .show_face{ top:34px;}
+}
+@media screen and (max-width:767px){
+	.up-arrow1{top:19px !important}  
+ .up-arrow2{top:20px !important} 
+	}
+
+
+.show_face ul li{
+    width:35px;
+	height:30px;
+    border-left: 1px dashed #e5e5e5;
+    float: left;
+    margin: 0;	
+}
+.show_face ul li span,.pjbbtxt span{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin: 8px 9px;
+    overflow: hidden; vertical-align:middle
+}
+.show_face ul{border-top: 1px dashed #e5e5e5;height:35px;}
+.show_face ul li span.face-item,.pjbbtxt span.face-item{
+    background: url(__COMMON__/Images/face-map.png) no-repeat center;
+	/**background-size:26px 557px;**/
+	cursor:pointer;
+}
+.show_face ul li span.face_01,.pjbbtxt span.face_01{
+   background-position: -2px -2px;
+}
+.show_face ul li span.face_02,.pjbbtxt span.face_02{
+   background-position: -2px -24px;
+}
+.show_face ul li span.face_03,.pjbbtxt span.face_03{
+   background-position: -1px -49px;
+}
+.show_face ul li span.face_04,.pjbbtxt span.face_04{
+   background-position: -2px -73px;
+}
+.show_face ul li span.face_05,.pjbbtxt span.face_05{
+   background-position: -2px -97px;
+}
+.show_face ul li span.face_06,.pjbbtxt span.face_06{
+   background-position: -2px -121px;
+}
+.show_face ul li span.face_07,.pjbbtxt span.face_07{
+   background-position: -2px -145px;
+}
+.show_face ul li span.face_08,.pjbbtxt span.face_08{
+   background-position: -2px -168px;
+}
+.show_face ul li span.face_09,.pjbbtxt span.face_09{
+   background-position: -2px -192px;
+}
+.show_face ul li span.face_10,.pjbbtxt span.face_10{
+   background-position: -2px -215px;
+}
+.show_face ul li span.face_11,.pjbbtxt span.face_11{
+   background-position: -2px -238px;
+}
+.show_face ul li span.face_12,.pjbbtxt span.face_12{
+   background-position: -2px -260px;
+}
+.show_face ul li span.face_13,.pjbbtxt span.face_13{
+   background-position: -2px -284px;
+}
+.show_face ul li span.face_14,.pjbbtxt span.face_14{
+   background-position: -2px -307px;
+}
+.show_face ul li span.face_15,.pjbbtxt span.face_15{
+   background-position: -2px -331px;
+}
+.show_face ul li span.face_16,.pjbbtxt span.face_16{
+   background-position: -2px -355px;
+}
+.show_face ul li span.face_17,.pjbbtxt span.face_17{
+   background-position: -2px -378px;
+}
+.show_face ul li span.face_18,.pjbbtxt span.face_18{
+   background-position: -2px -401px;
+}
+.show_face ul li span.face_19,.pjbbtxt span.face_19{
+   background-position: -2px -425px;
+}
+.show_face ul li span.face_20,.pjbbtxt span.face_20{
+   background-position: -2px -445px;
+}
+.show_face ul li span.face_21,.pjbbtxt span.face_21{
+   background-position: -2px -465px;
+}
+.show_face ul li span.face_22,.pjbbtxt span.face_22{
+   background-position: -2px -488px;
+}
+.show_face ul li span.face_23,.pjbbtxt span.face_23{
+   background-position: -2px -511px;
+}
+.show_face ul li span.face_24,.pjbbtxt span.face_24{
+   background-position: -2px -535px;
+}
+.margin0{
+    margin:0 !important;
+}
+
+
+
+.face-wrapper-dw{top:24px;left:-10px;display:none;width:300px;height:145px;position:absolute;z-index:2;background:url(__COMMON__/Images/face-bg.png);overflow:hidden}
+ .face-wrapper-dw .wrapper-cont-dw{width:288px;height:107px;margin-top:6px;margin-left:1px}
+ .face-wrapper-dw .wrapper-cont-dw ul{border-top:1px dashed #e5e5e5; height:35px;}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child{border-top:0}
+.face-wrapper-dw .wrapper-cont-dw ul li{border-left:1px dashed #e5e5e5;width:35px;height:35px;float:left;margin:0}
+.face-wrapper-dw .wrapper-cont-dw ul li:hover{background:#f2f2f2}
+.face-wrapper-dw .wrapper-cont-dw ul li:first-child{border-left:0}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child li:first-child{border-top-left-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child li:last-child{border-top-right-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul:last-child li:first-child{border-bottom-left-radius:8px}.face-wrapper-dw .wrapper-cont-dw ul:last-child li:last-child{border-bottom-right-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul li a{width:35px;height:24px;display:inline-block;text-align:center;overflow:hidden;padding:8px 0 0}
+.face-wrapper-dw .wrapper-cont-dw ul li span{display:inline-block;width:22px;height:22px;margin:8px 9px;overflow:hidden}
+.face-item{background:url(__COMMON__/Images/face-map.png) no-repeat center}.face-item.face_01{background-position:-2px -2px}.face-item.face_02{background-position:-2px -24px}.face-item.face_03{background-position:-1px -49px}.face-item.face_04{background-position:-2px -73px}.face-item.face_05{background-position:-2px -97px}.face-item.face_06{background-position:-2px -121px}.face-item.face_07{background-position:-2px -145px}.face-item.face_08{background-position:-2px -168px}.face-item.face_09{background-position:-2px -192px}.face-item.face_10{background-position:-2px -215px}.face-item.face_11{background-position:-2px -238px}.face-item.face_12{background-position:-2px -260px}.face-item.face_13{background-position:-2px -284px}.face-item.face_14{background-position:-2px -307px}.face-item.face_15{background-position:-2px -331px}.face-item.face_16{background-position:-2px -355px}.face-item.face_17{background-position:-2px -378px}.face-item.face_18{background-position:-2px -401px}.face-item.face_19{background-position:-2px -425px}.face-item.face_20{background-position:-2px -445px}.face-item.face_21{background-position:-2px -465px}.face-item.face_22{background-position:-2px -488px}.face-item.face_23{background-position:-2px -511px}.face-item.face_24{background-position:-2px -535px}@media (-webkit-min-device-pixel-ratio:2),(min--moz-device-pixel-ratio:2),(min-resolution:2dppx),(min-resolution:192dpi){.face-item{background:url(__COMMON__/Images/face-map-2x.png) no-repeat center;background-size:44px auto}.face-item.face_01{background-position:0 -176px}.face-item.face_02{background-position:-22px -66px}.face-item.face_03{background-position:0 -44px}.face-item.face_04{background-position:-22px -154px}.face-item.face_05{background-position:0 -88px}.face-item.face_06{background-position:-22px 0}.face-item.face_07{background-position:0 -110px}.face-item.face_08{background-position:0 -66px}.face-item.face_09{background-position:0 0}.face-item.face_10{background-position:0 -22px}.face-item.face_11{background-position:-22px -44px}.face-item.face_12{background-position:0 -132px}.face-item.face_13{background-position:-22px -88px}.face-item.face_14{background-position:-22px -22px}.face-item.face_15{background-position:0 -154px}.face-item.face_16{background-position:-22px -132px}.face-item.face_17{background-position:-22px -110px}.face-item.face_18{background-position:0 -220px}.face-item.face_19{background-position:0 -198px}.face-item.face_20{background-position:-22px -198px}.face-item.face_21{background-position:-22px -220px}.face-item.face_22{background-position:-22px -244px}.face-item.face_23{background-position:0 -132px}.face-item.face_24{background-position:-22px -176px}}
+
+
+.comm999 {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    color: #999;
+    font-size: 15px;
+}
+.disccc{background:#ccc !important;cursor:auto!important;}
+</style>
+
+</head>
+
+<body>
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<!--<div class="banner">
+  <ul class="bxslider">
+      <foreach name="newAd" item="a">
+	     <li><a  <if condition="trim($a['ad_url'])">href="{$a['ad_url']}"</if> target="_blank"><img src="__ROOT__/{$a['ad_img']}" /></a></li>
+	  </foreach>
+	</ul>
+</div><!--banner end-->
+<div class="flexsliderwrap">
+			<div class="flexslider" >
+			   <ul class="slides">
+                   <foreach name="album" item="a" key="aks">
+						<li><b> {$aks+1} of {:count($album)} </b>
+                        <table width="100%" height="100%">
+                          <tr>
+                              <td align="center" valign="middle" width="100%" height="100%">
+                                 <a  <if condition="trim($a['img_bewrite'])">href="{$a['img_bewrite']}"</if> target="_blank"><img src="__ROOT__/{$a['img']}" /></a>
+                              </td>
+                          </tr>
+                    </table>
+                  </li>
+                </foreach>
+		    </ul>
+	    </div>
+ </div>
+ 
+ 
+<div class="dptj">
+<div class="dptjl">
+ <div class="dptjlt">
+  <div class="dptjltt">
+  <h1>{$result['titletext']|strip_tags=###}</h1>
+  <p class="dptjlttm">{$result['bewrite']|strip_tags=###}</p>
+  <div class="dptjlttb">{$result['author']} {:date('Y.m.d',$result['addtime'])}
+   <div class="dptjlttbr"><span class="fa fa-eye vam col999"></span><span class="col999 vam ml5 mr10">{$result['count_click']} Read</span>
+   <span class="fa fa-commenting f13 vam col999"></span><a href="#comment" class="col999 vam ml5 comment">{$result['comment']} Comments</a>
+   <a class="fa fa-facebook ml25" style=" color:#4d679d"></a>
+   <a class="fa fa-twitter" style=" color:#5eb0ea"></a>
+   <a class="fa fa-google-plus" style=" color:#d54c43"></a>
+   <a class="fa fa-pinterest-p" style=" color:#ca2934"></a>
+   <a class="fa fa-weibo" style=" color:#d8302f"></a>
+   <a class="fa fa-wechat" style=" color:#3dc128"></a>
+   </div>
+   <div class="cb"></div>
+  </div>
+  </div>
+  <div class="dptjltb">{$result['content']|stripcslashes=###}</div>
+  <p class="f18 col333 pv30">Voyager Espresso</p>
+  <div class="txtmshu"><em></em><span>photographer</span><b class="pl5">tylerglickman/hypebeast</b>
+  {/*收藏按钮*/}
+  <if condition="is_login()">
+     <if condition="$collection">
+        <div class="txtmshur"><span class="fa fa-star" onClick="setCollection(this)"></span></div>	
+     <else />
+        <div class="txtmshur"><span class="fa fa-star-o"  onClick="setCollection(this)"></span></div>	
+     </if>
+  <else />
+     <div class="txtmshur"><a href="{:sign_url(array('url'=>base64_encode(get_url())),U('Login/index'))}"><span class="fa fa-star-o"></span></a></div>	
+  </if> 
+  </div>
+  <p class="lh20 col999" style="text-transform:uppercase">share this article</p>
+  <div class="fxicon">
+   <a href="javascript:void(0);" class="fa fa-facebook" style="background:#4d679d"></a>
+   <a href="javascript:void(0);" class="fa fa-twitter" style="background:#5eb0ea"></a>
+   <a href="javascript:void(0);" class="fa fa-google-plus" style="background:#d54c43"></a>
+   <a href="javascript:void(0);" class="fa fa-pinterest-p" style="background:#ca2934"></a>
+   <a href="javascript:void(0);" class="fa fa-weibo" style="background:#d8302f"></a>
+   <a href="javascript:void(0);" class="fa fa-wechat" style="background:#3dc128"></a>
+  </div>
+  <php>$YOU_LABEL=C('YOU_LABEL');</php>
+  <div class="bqtxt">
+    <foreach name="YOU_LABEL" item="you" key="youKey">
+        <a href="{:U('Article/index',array('babel'=>$youKey))}"><span>{$you['cn_name']}</span></a>
+    </foreach>
+  </div>
+ </div><!--dptjlt end-->
+ <div class="wztxt1" id="comment"><p><b>Comments for this thread are now closed.</b></p></div>
+ <div class="commentbox mb30" id="liuylb">
+  <span class="commentl">{$result['comment']} Comment</span>
+  <span onClick="praise(this)" style="cursor:pointer">
+      <span class="{$clicks ? 'commentlr' : 'col999'} fa fa-thumbs-up iconstyle"></span>
+      <span class="col333 vam f12 mh5">点赞</span>
+      <span class="commentlrr paraise_num">{$result['like_count']}</span>
+  </span>
+  <div class="zhpx">
+   <span class="zhpxtxt">综合排序</span><span class="zhpxtxtr fa fa-sort-desc"></span>
+   <div class="zhpxb">
+    <span onClick="getComment(1)">最热</span><span onClick="getComment(2)">最新</span><span onClick="getComment(3)">最旧</span>
+   </div>
+  </div><!--zhpx end-->
+  <script>
+   $(function(){
+	   $(".zhpxtxtr").click(function(){
+		   $(".zhpxb").slideToggle()
+		   })
+	$(".zhpxb span").click(function(){
+		txt=$(this).text()
+		$(".zhpxtxt").text(txt)
+		   $(".zhpxb").slideUp()
+		   })	   
+	   })
+  </script>
+  <div class="cb"></div>
+ </div><!--commentbox-->
+ <textarea name="" class="liuybox dptjlbm_text" ></textarea>
+ <div class="liuybb" >
+  <a class="icon27j emotion" style="background: none; position:relative; margin-top:6px;">
+          <img src="__HOME__/images2/icon7.png" alt="" style="width:25px; height:25px;"/>
+          <span class="up-arrow1">◆</span><span class="up-arrow2">◆</span>
+          <div node-type="face-box" class="face-wrapper-dw show_face2" >
+                    <div node-type="face-cont" class="wrapper-cont-dw">
+                        <ul class="clear-g">
+                            <li>
+                                <span title="流汗" data_path="base" data-ubb="[流汗]" class="face-item face_01" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="钱" data_path="base" data-ubb="[钱]" class="face-item face_02" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="发怒" data_path="base" data-ubb="[发怒]" class="face-item face_03" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="浮云" data_path="base" data-ubb="[浮云]" class="face-item face_04" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="给力" data_path="base" data-ubb="[给力]" class="face-item face_05" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="大哭" data_path="base" data-ubb="[大哭]" class="face-item face_06" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="憨笑" data_path="base" data-ubb="[憨笑]" class="face-item face_07" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="色" data_path="base" data-ubb="[色]" class="face-item face_08" set_value="dptjlbm_text"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="奋斗" data_path="base" data-ubb="[奋斗]" class="face-item face_09" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="鼓掌" data_path="base" data-ubb="[鼓掌]" class="face-item face_10" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="鄙视" data_path="base" data-ubb="[鄙视]" class="face-item face_11" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="可爱" data_path="base" data-ubb="[可爱]" class="face-item face_12" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="闭嘴" data_path="base" data-ubb="[闭嘴]" class="face-item face_13" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="疑问" data_path="base" data-ubb="[疑问]" class="face-item face_14" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="抓狂" data_path="base" data-ubb="[抓狂]" class="face-item face_15" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="惊讶" data_path="base" data-ubb="[惊讶]" class="face-item face_16" set_value="dptjlbm_text"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="可怜" data_path="base" data-ubb="[可怜]" class="face-item face_17" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="弱" data_path="base" data-ubb="[弱]" class="face-item face_18" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="强" data_path="base" data-ubb="[强]" class="face-item face_19" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="握手" data_path="base" data-ubb="[握手]" class="face-item face_20" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="拳头" data_path="base" data-ubb="[拳头]" class="face-item face_21" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="酒" data_path="base" data-ubb="[酒]" class="face-item face_22" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="玫瑰" data_path="base" data-ubb="[玫瑰]" class="face-item face_23" set_value="dptjlbm_text"></span>
+                            </li>
+                            <li>
+                                <span title="打酱油" data_path="base" data-ubb="[打酱油]" class="face-item face_24" set_value="dptjlbm_text"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+       </a>
+  <if condition="is_login()">
+      <input type="button" name="" value="留言" onClick="comment(this)" class="liuybbr {$isComment ? 'disccc' : ''}"/><!--disccc-->
+  <else />
+      <input type="button" name="" value="留言" onClick="window.location.href='{:sign_url(array('url'=>base64_encode(get_url())),U('Login/index'))}';" class="liuybbr"/>
+  </if>        
+       
+       <div class="cb"></div>
+ </div><!--liuybb end-->
+ <div class="liuylb">
+  <ul id="comment-list">
+     <include file="Article/commentList" />
+  </ul>
+  <div class="cb pt25"></div>
+  <if condition="$pageNumShown gt 1">
+       <a href="javascript:void(0)" class="more clickMoerPage" >
+          <input class="morebtn" value="Load More" type="button" onClick="mobile.clickPage(this,{$pageNumShown},'#comment-list','{:U('Article/commentList','','')}/id/{$result['id']}/p/');"/> 
+       </a>
+  </if>
+ </div><!--liuylb end-->
+ <script>
+ //点击加载更多，按钮必须是button
+/**
+ *THIS   this
+ * totalPages  总页数
+ * addEnd      追加内容节点
+ * url               请求地址
+ *  */
+mobile={};
+var page=2;
+mobile.clickPage=function(THIS,totalPages,addEnd,url){    
+    var _this=this;
+    this.run=function(){
+         if(page <= totalPages){  
+            if($(THIS).attr('ajax') == 'ok') return;      
+			if(page == totalPages) $(THIS).parents('a').hide(); //最后一页
+             _this.getPage();
+         }else{
+			 $(THIS).parents('a').hide();
+             //$(THIS).attr('disabled',true).val(window.LoadingCompleted);
+         }             
+    };  
+    this.getPage=function(){
+          $.ajax({
+             type:'get',
+             dataType: "text",
+             url:url+page+'/req/app',
+             success:function(response,status,xhr){
+                 $(THIS).attr('ajax','').attr('disabled',false).val('Load More');
+                 page++;
+                 $(addEnd).append(response);
+              },
+              beforeSend:function(){
+                  $(THIS).attr('ajax','ok').attr('disabled',true).val(window.Loading);
+              },         
+             error:function(xhr,errorText,errorType){
+                 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+             }
+         });              
+    };  
+    //运行
+    _this.run();         
+};	
+
+$(function(){
+	$('body').on('click','.ckdh',function(){
+		 $(this).siblings(".xsjsnr").show()
+		 $(this).hide() 
+		 $(this).parent(".liuylbbb").siblings(".liuylbbdh").show()	  
+	});		 
+	
+	$('body').on('click','.xsjsnr',function(){
+		 $(this).siblings(".ckdh").show()
+		 $(this).hide() 
+		 $(this).parent(".liuylbbb").siblings(".liuylbbdh").hide()		
+	});
+	
+	$('body').on('click','.huifu',function(){
+		 $(this).parent(".liuylbbb").hide()
+		 $(this).parent(".liuylbbb").siblings(".duih").show()
+		 $(this).parents("li").addClass("now")		
+	});
+});
+ </script>
+ 
+ 
+ 
+ 
+ <div class="dptjlb" style="display:none">
+
+       <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24 vat" style="display:inline-block">
+	
+   
+	<a class="jiathis_button_tsina icon-weibo glyphs col000 mr5" style="font-size:20px"></a>
+    <a class="jiathis_button_weixin icon-wechat glyphs col000"  style="font-size:20px"></a>
+	
+</div>
+<span class="col000 f14 pl10 vab">Share this article</span>
+<style>
+ .dptjlb .jiathis_style_24x24 .jtico_tsina,.dptjlb .jiathis_style_24x24 .jtico_weixin,.dptjlb .jiathis_style_24x24 .jtico_fb{ background:none !important; display:none !important}
+</style>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+  <div class="dptjlbm">
+   <form action="{:U('Article/commnetForm')}" class="comment" method="post">
+       <input type="hidden"  name="id" value="{$result['id']}"/>
+       <input type="hidden" name="score" value="0" /><!--kindeditor-->
+       <textarea id="saytext" name="content" class="dptjlbm_text"></textarea>
+       <a class="icon27j emotion" style="background: none; position:relative">
+          <img src="__COMMON__/Images/show-fcde.png" />
+          <span class="up-arrow1">◆</span><span class="up-arrow2">◆</span>
+          <div node-type="face-box" class="face-wrapper-dw show_face2">
+                    <div node-type="face-cont" class="wrapper-cont-dw">
+                        <ul class="clear-g">
+                            <li>
+                                <span title="流汗" data_path="base" data-ubb="[流汗]" class="face-item face_01"></span>
+                            </li>
+                            <li>
+                                <span title="钱" data_path="base" data-ubb="[钱]" class="face-item face_02"></span>
+                            </li>
+                            <li>
+                                <span title="发怒" data_path="base" data-ubb="[发怒]" class="face-item face_03"></span>
+                            </li>
+                            <li>
+                                <span title="浮云" data_path="base" data-ubb="[浮云]" class="face-item face_04"></span>
+                            </li>
+                            <li>
+                                <span title="给力" data_path="base" data-ubb="[给力]" class="face-item face_05"></span>
+                            </li>
+                            <li>
+                                <span title="大哭" data_path="base" data-ubb="[大哭]" class="face-item face_06"></span>
+                            </li>
+                            <li>
+                                <span title="憨笑" data_path="base" data-ubb="[憨笑]" class="face-item face_07"></span>
+                            </li>
+                            <li>
+                                <span title="色" data_path="base" data-ubb="[色]" class="face-item face_08"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="奋斗" data_path="base" data-ubb="[奋斗]" class="face-item face_09"></span>
+                            </li>
+                            <li>
+                                <span title="鼓掌" data_path="base" data-ubb="[鼓掌" class="face-item face_10"></span>
+                            </li>
+                            <li>
+                                <span title="鄙视" data_path="base" data-ubb="[鄙视]" class="face-item face_11"></span>
+                            </li>
+                            <li>
+                                <span title="可爱" data_path="base" data-ubb="[可爱]" class="face-item face_12"></span>
+                            </li>
+                            <li>
+                                <span title="闭嘴" data_path="base" data-ubb="[闭嘴]" class="face-item face_13"></span>
+                            </li>
+                            <li>
+                                <span title="疑问" data_path="base" data-ubb="[疑问]" class="face-item face_14"></span>
+                            </li>
+                            <li>
+                                <span title="抓狂" data_path="base" data-ubb="[抓狂]" class="face-item face_15"></span>
+                            </li>
+                            <li>
+                                <span title="惊讶" data_path="base" data-ubb="[惊讶]" class="face-item face_16"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="可怜" data_path="base" data-ubb="[可怜]" class="face-item face_17"></span>
+                            </li>
+                            <li>
+                                <span title="弱" data_path="base" data-ubb="[弱]" class="face-item face_18"></span>
+                            </li>
+                            <li>
+                                <span title="强" data_path="base" data-ubb="[强]" class="face-item face_19"></span>
+                            </li>
+                            <li>
+                                <span title="握手" data_path="base" data-ubb="[握手]" class="face-item face_20"></span>
+                            </li>
+                            <li>
+                                <span title="拳头" data_path="base" data-ubb="[拳头]" class="face-item face_21"></span>
+                            </li>
+                            <li>
+                                <span title="酒" data_path="base" data-ubb="[酒]" class="face-item face_22"></span>
+                            </li>
+                            <li>
+                                <span title="玫瑰" data_path="base" data-ubb="[玫瑰]" class="face-item face_23"></span>
+                            </li>
+                            <li>
+                                <span title="打酱油" data_path="base" data-ubb="[打酱油]" class="face-item face_24"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    
+                </div>
+         <!-- <div class="show_face">
+                        <ul class="clear-g" style="border:none">
+                            <li>
+                                <span title="流汗" data_path="base" data-ubb="[流汗]" class="face-item face_01"></span>
+                            </li>
+                            <li>
+                                <span title="钱" data_path="base" data-ubb="[钱]" class="face-item face_02"></span>
+                            </li>
+                            <li>
+                                <span title="发怒" data_path="base" data-ubb="[发怒]" class="face-item face_03"></span>
+                            </li>
+                            <li>
+                                <span title="浮云" data_path="base" data-ubb="[浮云]" class="face-item face_04"></span>
+                            </li>
+                            <li>
+                                <span title="给力" data_path="base" data-ubb="[给力]" class="face-item face_05"></span>
+                            </li>
+                            <li>
+                                <span title="大哭" data_path="base" data-ubb="[大哭]" class="face-item face_06"></span>
+                            </li>
+                            <li>
+                                <span title="憨笑" data_path="base" data-ubb="[憨笑]" class="face-item face_07"></span>
+                            </li>
+                            <li>
+                                <span title="色" data_path="base" data-ubb="[色]" class="face-item face_08"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="奋斗" data_path="base" data-ubb="[奋斗]" class="face-item face_09"></span>
+                            </li>
+                            <li>
+                                <span title="鼓掌" data_path="base" data-ubb="[鼓掌]" class="face-item face_10"></span>
+                            </li>
+                            <li>
+                                <span title="鄙视" data_path="base" data-ubb="[鄙视]" class="face-item face_11"></span>
+                            </li>
+                            <li>
+                                <span title="可爱" data_path="base" data-ubb="[可爱]" class="face-item face_12"></span>
+                            </li>
+                            <li>
+                                <span title="闭嘴" data_path="base" data-ubb="[闭嘴]" class="face-item face_13"></span>
+                            </li>
+                            <li>
+                                <span title="疑问" data_path="base" data-ubb="[疑问]" class="face-item face_14"></span>
+                            </li>
+                            <li>
+                                <span title="抓狂" data_path="base" data-ubb="[抓狂]" class="face-item face_15"></span>
+                            </li>
+                            <li>
+                                <span title="惊讶" data_path="base" data-ubb="[惊讶]" class="face-item face_16"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="可怜" data_path="base" data-ubb="[可怜]" class="face-item face_17"></span>
+                            </li>
+                            <li>
+                                <span title="弱" data_path="base" data-ubb="[弱]" class="face-item face_18"></span>
+                            </li>
+                            <li>
+                                <span title="强" data_path="base" data-ubb="[强]" class="face-item face_19"></span>
+                            </li>
+                            <li>
+                                <span title="握手" data_path="base" data-ubb="[握手]" class="face-item face_20"></span>
+                            </li>
+                            <li>
+                                <span title="拳头" data_path="base" data-ubb="[拳头]" class="face-item face_21"></span>
+                            </li>
+                            <li>
+                                <span title="酒" data_path="base" data-ubb="[酒]" class="face-item face_22"></span>
+                            </li>
+                            <li>
+                                <span title="玫瑰" data_path="base" data-ubb="[玫瑰]" class="face-item face_23"></span>
+                            </li>
+                            <li>
+                                <span title="打酱油" data_path="base" data-ubb="[打酱油]" class="face-item face_24"></span>
+                            </li>
+                        </ul>
+          </div>-->
+       </a>
+       <!--<span id="comment" class="fr f16 lh30 col000" style="cursor:pointer">评论</span>-->
+       <input type="submit" id="comment" msg="{:isL(L('PleaseLater'),'提交中...')}"
+       style="height:28px;padding:0 16px;color:#000;background:#fff; border:1px solid #dfdfdf;font-size:14px;float:right;display:block;position:absolute; right:5px; bottom:5px; border-radius:5px;" 
+       value="{:isL(L('Comment'),'评论')}" info-text="comment-t1"/>
+   </form>    
+  </div>
+  <!--<p class="tsy comment-t" style="text-align:left;margin-top:-10px;border-top:none;">评论提示层</p>-->
+  <script type="text/javascript">       
+         //提交评论
+	    formInit('.comment',true,true,true,true);    
+  </script> 
+   <div style="display:inline-block;" class="rating-static-module pl5"> 
+      <label><span class="Hui-iconfont Hui-iconfont-cang"></span></label><!--全星CLASS Hui-iconfont-cang-selected-->
+      <label><span class="Hui-iconfont Hui-iconfont-cang "></span></label>
+      <label><span class="Hui-iconfont Hui-iconfont-cang " ></span></label>
+      <label><span class="Hui-iconfont Hui-iconfont-cang"></span></label>
+      <label><span class="Hui-iconfont Hui-iconfont-cang"></span></label>
+    </div>
+  <span class="lh22 f14 col000 pl10 vat pt5" style="display:inline-block">Wonderful index</span>
+  
+  <!--这里限制用户点击数-->
+  <php>if($clicks['id']){</php>
+     <a class="icon27i  show-praise icon27inow">
+     <i class="fa fa-thumbs-up"></i>{:isL(L('Like'),'点赞')}(<span class="like_count">{$result['like_count']}</span>)
+     </a>
+  <php>}else{</php>
+     <php>if(is_login()){</php>
+         <a class="icon27i  show-praise" href="javascript:void(0);" onClick="praise()">
+         <i class="fa fa-thumbs-up"></i>{:isL(L('Like'),'点赞')}(<span class="like_count">{$result['like_count']}</span>)
+         </a>
+     <php>}else{</php>
+         <a class="icon27i  show-praise" href="{:U('Login/index','','')}?url={:base64_encode(get_url())}">
+         <i class="fa fa-thumbs-up"></i>{:isL(L('Like'),'点赞')}(<span class="like_count">{$result['like_count']}</span>)
+         </a>     
+     <php>}</php>
+   <php>}</php>
+   <!--这里限制用户点击数-->
+   
+   <!--这里不限制用户点击数
+     <a href="javascript:void(0);" onClick="praise()" class="icon27i fr pr20 show-praise">
+     <i class="fa fa-thumbs-o-up"></i>{:isL(L('Like'),'点赞')}(<span class="like_count">{$result['like_count']}</span>)
+     </a>
+     <!--不显示"谢谢你的赞"提示语
+       <span class="fr pr20 like-success" style="position:relative;top:-6px;color:green;display:none;">{:isL(L('ForYourPraise'),'谢谢你的赞')}</span>
+       这里不限制用户点击数-->
+ </div><!---->
+ 
+ 
+ <div class="pjlb" style="display:none">
+  <ul id="comment-list"><include file="commentList" /></ul>{/*评论列表*/}
+ 
+  <a href="javascript:void(0)" class="more mb20 clickMoerPage"  <php>if($pageNumShown <= 1){</php>style="display:none;"<php>}</php>>
+         <input class="morebtn" value="Load More" type="button" onClick="clickMoerPage(this,{$pageNumShown},'{:U('Article/commentList','','')}?id={$result['id']}&p={0}','#comment-list')">
+     </a>
+ </div><!--pjlb end-->
+ 
+
+ 
+</div>
+
+<include file="Article:right" />
+<div class="cb"></div>
+
+
+
+</div><!--zxzx end-->
+
+<div class="dptj" style="padding-top:30px;">
+ <div class="alsot">you may also like</div>
+ <div class="cb pv15"></div>
+ <div class="also">
+  <ul>
+       <foreach name="tres" item="t" key="tk">
+           <li>
+               <a href="{:U('Article/content',array('html'=>$t['id']))}">
+                    <img src="__ROOT__/{$t['thumb']}" alt="">
+                    <p>{$t['titletext']|sub_str=###,30}</p>
+               </a>
+           </li>
+       </foreach>
+       <div class="cb pb20"></div>
+  </ul>
+ </div><!--also end-->
+ <div class="alsot">what to ready next</div>
+ <div class="what2">
+ <div class="zxlb">
+  <ul id="article-list"></ul>{/*ajax自动加载列表，模板在 Article/index_list */}
+ </div><!--zxlb end-->
+ <a href="javascript:void(0)" class="more" style="margin-top:-10px;<php>if($pageSum <= 1){</php>style="display:none;"<php>}</php>">
+         <input type="button" onClick="clickMoerPage2(this,{$pageSum},'{:U('Article/index','','')}?id={$result['id']}&p={0}','#article-list')"
+          class="morebtn" value="Load More">
+     </a>
+ </div><!--what2 end-->
+ <div class="cb"></div>
+</div><!--dptj end-->
+ 
+<!--content end-->
+ <include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript">
+    $(function(){
+        setTimeout(function(){
+            $('.ke-container').css('width','100%');
+        },500);
+        
+    });    
+</script>
+</body>
+</html>

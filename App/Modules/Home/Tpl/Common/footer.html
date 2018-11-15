@@ -1,0 +1,214 @@
+ <div class="wrap fhdbbox"><div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div></div>
+
+ <div class="footer">
+  <div class="footerm">
+      <ul>
+        <li>
+         <h1>{:isL(L('News1'),'最新资讯')}<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+         <div class="fh1b" >
+         <div style="position:relative;overflow:hidden">
+         <form method="get" action="{:U('/EmailSubscribe/saveEmail')}" class="save-email">
+         <!--<input type="text" name="" value="订阅电子报" onfocus="if(value=='订阅电子报') {value=''}" onblur="if (value=='') {value='订阅电子报'}"  class="femail">-->
+         <input type="text" name="email" placeholder="{:isL(L('SubscribeTo'),'订阅电子报')}"  class="femail required email" info-text="email-text" error-info="{:isL(L('EnterYourEmail'),'请输入您的电邮地址')}" error-other="{:isL(L('EmailFormatError'),'请输入正确的电邮地址')}">
+         <span class="glyphs icon-contact dydzb"></span>
+          <input value="" class="xshuo_btn" info-text="email-text" type="submit"  style="position:absolute; right:0; top:-100%; height:35px;/*display:none*/">
+         <!-- <p class="colf00 f12 lh28 email-text" style="display:none">您已在YOUDI中有注册账户。</p><!--已注册的提示-->
+          <!--<p style="color:#090; background:#fff; position:absolute; left:0; top:0; width:100%; height:100%; line-height:35px; font-size:14px; display:none">感谢您的注册</p><!--注册成功提示-->
+          </form>
+         </div>
+              <script type="text/javascript">
+			     //邮件订阅2
+                 formInit('.save-email',true,true,true,true);
+            </script>            
+         <!--<input type="email" name="" value="" placeholder="{:isL(L('SubscribeTo'),'订阅电子报')}" class="femail">-->
+         
+         
+         <p class="dydzbtxt">
+             {:isL(L('ReadPrivacy'),'阅读我们的隐私与Cookie政策')}&nbsp;
+             <a href="{:U('Modular/privacy',array('html'=>$files[7][C('B_6')]['id']))}" class="djcc">{:isL(L('ClickHere'),'点击此处')}</a>
+         </p>
+         </div>
+         <h1>{:isL(L('AboutYourIssue'),'您有什么话想对我说？')}<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+         <div class="fh1b" style="">
+         <div class="xshuo">
+            <form action="{:U('/Message/words')}" id="msg-post" method="post"> 
+             <input type="hidden" name="submit" value="msg-bottoms" />   
+             <input type="text" name="content" value="" class="xshuo_input required" info-text="content-text" error-info="{:isL(L('Required'),'必填栏')}"/><input type="submit" id="msg-bottoms"  value="" class="xshuo_btn" info-text="content-text"/>
+             <div class="cb"></div>
+             <p class="colf00 f12 lh28 content-text" style="display:none;padding-left:0;"></p>
+           </form>   
+             <script type="text/javascript">
+				 //留言给我们
+				 formInit('#msg-post',true,true,true,true);
+            </script>          
+         </div>
+        </div>
+         <h1>{:isL(L('PaymentMethod'),'付款方式')}<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+         <div class="fh1b">
+         <div class="fkfs footer-paymentMethods">
+         <a class="paymentType masterCard "></a>
+         <a class="paymentType visa"></a>
+         <a  class="paymentType americanexpress"></a>
+         <a  class="paymentType paypal"></a>
+         <a class="paymentType alipay"></a>
+         <a class="icon13b" style="background-position:center center; background-size:50px auto;"></a>
+         </div>
+         </div>
+        </li>
+        <li>
+        <h1>{:isL(L('Country'),'国家')}<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+        <div class="fh1b">
+         <div class="select_box" style=" background:none"><span style="display:block; position:absolute; right:0; top:0; width:40px; height:37px;" class="zhez"></span>
+         <div style="cursor: pointer;" class="select_showbox faa"><if condition="$_COOKIE['think_language'] eq 'en-us'">{:isL(L('English'),'美国')}<else />{:isL(L('CHINA'),'中国')}</if></div>
+         <ul class="select_option" style="display: none;">
+         <li class="fe"><a style="display:block; color:#333" href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'en-us'))}">{:isL(L('English'),'美国')}</a></li>
+         <li class="faa"><a style="display:block;color:#333" href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}">{:isL(L('CHINA'),'中国')}</a></li>
+         </ul>
+         </div>
+    </div>
+     <h1>FOLLOW US<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+     <div class="fllow fh1b">
+     <a href="http://weibo.com/p/1006061827314140/home?from=page_100606&mod=TAB&is_all=1#place
+" target="_blank" class="icon-weibo glyphs"></a>
+
+
+      <if condition="is_mobile()">
+      <a href="javascript:void(0)" target="_blank" class="icon-wechat glyphs tcwx2" ></a>
+      <else/>
+      <a href="/Modular/weiXin" target="_blank" class="icon-wechat glyphs tcwx" ></a>
+      </if>
+
+     <a href="https://www.instagram.com/youdiwu/" target="_blank" class="icon-instagram glyphs" ></a>
+     <a href="https://www.youtube.com" target="_blank" class="icon-youtube glyphs"></a>
+     <a href="https://www.facebook.com/YOUDIWUHEIHEI" target="_blank" class="icon-facebook glyphs"></a>
+     <a href="https://twitter.com/WuYoudi" target="_blank" class="icon-twitter glyphs"></a>
+     <if condition="is_mobile()">
+      
+      <else/>
+      <img src="__HOME__/images/1118.jpg"  alt=""/>
+      </if>
+      
+     </div>
+        </li>
+        <li>
+        <div class="kfzx">
+          <h1>{:isL(L('CustomerService'),'客服中心')}<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+          <div class="fh1b">
+         <!-- <p><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_1')]['id']))}">{$files[7][C('B_1')]['titletext']}{/*联系我们*/}</a></p>-->
+           <p><a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_1')]['id']))}">{$files[7][C('B_1')]['titletext']}{/*联系我们*/}</a></p>
+           
+           <!--<php>if(is_mobile()){</php>
+              <p><a href="{:U('Comment/index')}">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></p>
+           <php>}else{</php>
+              <p><a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></p>   
+           <php>}</php>-->
+           <p><a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></p>   
+          
+          <p><a href="{:U('Modular/refund',array('html'=>$files[7][C('B_3')]['id']))}" >{$files[7][C('B_3')]['titletext']}{/*退货与退款*/}</a></p>
+          <p><a href="{:U('Modular/problem',array('html'=>$files[7][C('B_4')]['id']))}" >{$files[7][C('B_4')]['titletext']}{/*常见问题*/}</a></p>
+          <p><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_5')]['id']))}">{$files[7][C('B_5')]['titletext']}{/*条款与条件*/}</a></p>
+          <p><a href="{:U('Modular/privacy',array('html'=>$files[7][C('B_6')]['id']))}" >{$files[7][C('B_6')]['titletext']}{/*隐私与Cookie政策*/}</a></p>
+          <p><a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_7')]['id']))}" >{$files[7][C('B_7')]['titletext']}{/*需要帮助？*/}</a></p>
+          <div class="cb pb15 phonecb"></div>
+          </div>
+        </div>
+        <div class="kfzx">
+          <h1>关于 YOUDI WU<span class="glyphs icon-more fr  colaaa pl10 pr10"></span></h1>
+          <div class="fh1b">
+          <p><a href="{:U('Modular/about',array('html'=>$files[3][C('A_1')]['id']))}" >{$files[3][C('A_1')]['titletext']}{/*关于我们*/}</a></p>
+          <p><a href="{:U('Modular/opportunity',array('html'=>$files[3][C('A_2')]['id']))}" >{:isL(L('CareerOpportunities'),'职业机会')}</a></p>
+          <p><a href="{:U('Modular/pubarticle',array('html'=>$files[3][C('A_3')]['id']))}" >{$files[3][C('A_3')]['titletext']}{/*YOUDI WU服务保证*/}</a></p>
+          <p><a href="{:U('Modular/idea',array('html'=>$files[3][C('A_7')]['id']))}" >{:isL(L('BrandIdea'),'品牌理念')}</a></p>
+          <p><a href="{:U('/Modular/download')}" >YOUDI WU APP</a>
+          <p><a href="{:U('Comment/index')}" >{:isL(L('CustomerReviews'),'YOUDI WU累计评论')}</a></p>
+          <p><a href="{:U('Modular/technology',array('html'=>$files[3][C('A_4')]['id']))}" >{$files[3][C('A_4')]['titletext']}{/*技术支持*/}</a></p>
+          <div class="cb pb15 phonecb"></div>
+          </div>
+        </div>
+        <div class="cb"></div>
+       
+        </li>
+        <div class="cb"></div>
+      </ul>
+      <if condition="is_mobile()">
+      <div class="colb0 f13 pl10 lh20 pt30"><span class="logo2">&nbsp;</span>以及 "YOUDI WU" <br/>图形均为youdi-wu.com Limited的商标。</div>
+      <else/>
+      <div class="colb0 f13 pl10 lh20 pt30"><span class="logo2">&nbsp;</span>以及 "YOUDI WU" 图形均为youdi-wu.com Limited的商标。</div>
+      </if>
+      <!--<p class="colb0 f13 pl10 lh20 pt30">{:get_con($langfx.'WEBBOTTOMINOF')}</p>-->
+   </div>
+ </div><!--footer end-->
+ </div><!--sydb end-->
+ <!----> 
+ <div class="tcwxbg">
+  <div class="tcwx">
+    <span class="close tcwxclose"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+    <img src="__HOME__/images/1206.png" alt=""/>
+    <h1>如何添加 YOUDI WU 微信公众号：</h1>
+    <p>请拿起您的另一部分手机进行扫描</p>
+  </div>
+ </div>
+ <!--手机版弹出微信 end-->
+ <script>
+  $(function(){
+	  $(".fh1b p a").mouseenter(function(){
+		  $(this).css("color","#fff")
+		  $(this).parent("p").siblings("p").children("a").css("color","#aaa")
+		  $(this).parents(".kfzx").siblings(".kfzx").children(".fh1b").children("p").children("a").css("color","#aaa")
+		  })
+		$(".fh1b p a").mouseout(function(){
+		  $(".fh1b p a").css("color","#fff")
+		  }) 
+		  
+		$(".select_box").click(function(){
+			if ($(window).width() < 990) {
+				$(".select_option").slideToggle()
+				}
+			
+			})
+			 
+		$(".tcwx").hover(function(){
+			$(".fllow img").toggle()
+			})	
+			
+		
+		$(window).load(function() { 
+		hw=$(window).height()
+		hd=$("body").height()
+/*if(hd<hw){
+			$(".fhdbbox").hide()
+			$(".footer").addClass("footer2")
+			}else{
+				$(".footer").removeClass("footer2")
+				} */
+});
+
+		//alert(hd)	
+		
+		if($(".box").hasClass("yyhddb")){
+			$(".fhdbbox").hide()
+			}	
+		if($(".box").hasClass("wlgq")){
+			$(".footer").removeClass("footer2")
+			}				
+		/**if(hd<hw){
+			$(".footer").addClass("footer2")
+			}else{
+				$(".footer").removeClass("footer2")
+				}	
+	    	**/
+		//弹层
+	  $(".tcwx2").click(function(){						  
+	      $(".tcwxbg").fadeIn("fast",function(){
+		      $(".tcwx").slideDown();
+		  })
+	   });
+	   //关闭层
+	   $(".tcwxclose").click(function(){
+	   $(".tcwx").slideUp("fast",function(){
+		   $(".tcwxbg").fadeOut()
+		   })
+	   });	
+	  })
+	  
+ </script>

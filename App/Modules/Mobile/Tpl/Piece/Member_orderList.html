@@ -1,0 +1,21 @@
+<foreach name="orderList" item="ord">
+<li style="line-height:200%;margin-top:1px;" class="">
+  <a href="{:U(is_m().'/Member/orderShow',array('order_id'=>$ord['order_id']))}" style="display:block;color:#666">
+    <div style="padding:5px;">
+        <b style="color:#000;font-size:0.5rem;">{$ord.order_sn} </b>
+
+        <span style="float:right"> {$ord.add_time|date='Y-m-d H:i:s',###}</span>  
+        <br/>
+          {/*支付方式*/}
+          {$payType[$ord['pay_type']]}&nbsp;&nbsp;金额{:getPrice($ord['order_amount'],true)}
+         <!--   {/*付款状态*/}
+            [{$payStart[$ord['pay_status']]}]			
+            
+            {/*配送状态*/}
+            [{$shippingStart[$ord['shipping_status']]}]																					 
+
+            {/*订单状态*/}
+            [{$orderStart[$ord['order_status']]}]-->
+     </a>
+</li>
+</foreach>    

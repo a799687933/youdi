@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('UserCenter'),'用户中心')}</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/iconfont2.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<style>
+ .tctp{ background:rgba(0,0,0,0.7); width:100%; height:100%; position:fixed; left:0; top:0; z-index:300; display:none}
+ .tpprev{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; left:35px; top:50%; margin-top:-15px; color:#bababa; line-height:30px; text-align:center; font-size:60px;}
+ .tpnext{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; right:35px; top:50%; margin-top:-15px;color:#bababa; line-height:30px; text-align:center; font-size:60px;}
+ .tpm{ background:#444; width:620px; height:620px; position:absolute; left:50%; top:50%; margin:-310px 0 0 -310px; display:none}
+ .tpm b{ display:table-cell; vertical-align:middle; text-align:center; width:620px; height:620px; padding:30px; box-sizing:border-box}
+ .tpm img{ max-width:100%; max-height:100%}
+</style>
+</head>
+
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<script type="text/javascript">
+$(function(){
+
+
+             $(".djpy").click(function(){
+				 $(this).siblings(".zcpjrtrmt").show().delay(6000).hide(0);
+				 $(this).parent("a").siblings("a").children(".zcpjrtrmt").hide()
+				 })
+			      
+         	     	     
+});
+</script>
+<!--content begin-->
+<div class="zhu">
+ <div class="zcpjt">
+          <h1>请对商品做出评价</h1>
+          <p style="height:44px;">文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字</p>
+     </div>
+  <div class="zcpj">
+   <ul>
+   
+   	<li>
+     <div class="zcpjl"><table width="100%"><tr>
+      <td align="center" valign="middle" width="50%"><a href=""><img src="/Uploads/2016-11/20161117120533.png" alt=""></a></td>
+      <td align="left" width="50%">
+       <div class="pl20">
+        <p class="f14">YOUDI WU</p>
+        <p><a href="" class="col2ab">圆形印花衬衫</a></p>
+        <p class="pv10">商品编号：HS-00000077</p>
+        <p>数量：1</p>
+        <p>尺码：30<br/>颜色：白色</p>
+       </div>
+      </td>
+     </tr></table></div><!--zcpjl end-->
+     <div class="zcpjr">
+      <div class="zcpjrtl">
+       <div class="rating-static-module">           
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <div class="cb"></div>
+        </div>
+        <span class="lh22 f12 col000 pb5" style="display:inline-block">Wonderful index</span>
+      </div><!--zcpjrtl end-->
+      <div class="zcpjrtr">
+       <a href="javascript:void(0)" title="好评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><i class="Hui-iconfont Hui-iconfont-face-weixiao"></i>
+       </a>
+       <a href="javascript:void(0)" title="中评" class="mh15">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><i class="Hui-iconfont Hui-iconfont-face-dai"></i>
+       </a>
+       <a href="javascript:void(0)" title="差评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><i class="Hui-iconfont Hui-iconfont-face-chijing" style="color:#aaa"></i>
+       </a>       
+      </div>
+      <div class="cb"></div>
+      <textarea name="" class="zcpjrm mb5" placeholder="写点评价吧，您的评价对其他买家有很大帮助的。"></textarea>
+      <div class="zcpjrbl">
+       <div class="showt"><i class="fa fa-file-image-o col000 mr5"></i>Show Time</div>
+       <div class="pjbbimg2 fl" style=" width:80%">
+                       <ul>
+                            <li><img src="/UploadUser/2016-08/57b69c7435cf3.jpg"><span></span></li>
+                            <li><img src="/UploadUser/2016-08/57b69c78672d0.jpg"><span></span></li>          
+                       
+                       </ul>
+                       <div class="tctp">
+ <span class="tpprev glyphs icon-prev"></span><span class="tpnext glyphs icon-next"></span>
+ <div class="tpm"><span class="close tpclose" style="top:-30px; right:-40px;"><span class="glyphs icon-close" style="line-height:30px;"></span></span><b><img src="" alt=""></b></div>
+</div><!--tctp end-->
+                  </div>
+      </div><!---->
+      <div class="zcpjrbr"><input type="radio" name="" class="vam"/><span class="vam mr15">公开</span><input type="radio" name="" class="vam"/><span class="vam">匿名</span></div><!---->
+      <div class="cb"></div>
+      <div class="cb"></div>
+     </div><!--zcpjl end-->
+     <div class="cb"></div>
+    </li><!--到这才是一组-->
+    <li>
+     <div class="zcpjl"><table width="100%"><tr>
+      <td align="center" valign="middle" width="50%"><a href=""><img src="/Uploads/2016-11/20161117120533.png" alt=""></a></td>
+      <td align="left" width="50%">
+       <div class="pl20">
+        <p class="f14">YOUDI WU</p>
+        <p><a href="" class="col2ab">圆形印花衬衫</a></p>
+        <p class="pv10">商品编号：HS-00000077</p>
+        <p>数量：1</p>
+        <p>尺码：30<br/>颜色：白色</p>
+       </div>
+      </td>
+     </tr></table></div><!--zcpjl end-->
+     <div class="zcpjr">
+      <div class="zcpjrtl">
+       <div class="rating-static-module">           
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <div class="cb"></div>
+        </div>
+        <span class="lh22 f12 col000 pb5" style="display:inline-block">Wonderful index</span>
+      </div><!--zcpjrtl end-->
+      <div class="zcpjrtr">
+       <a href="javascript:void(0)" title="好评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="中评" class="mh15">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="差评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>       
+      </div>
+      <div class="cb"></div>
+      <textarea name="" class="zcpjrm mb5" placeholder="写点评价吧，您的评价对其他买家有很大帮助的。"></textarea>
+      <div class="zcpjrbl">
+       <div class="showt"><i class="fa fa-file-image-o col000 mr5"></i>Show Time</div>
+      </div><!---->
+      <div class="zcpjrbr"><input type="radio" name="" class="vam"/><span class="vam mr15">公开</span><input type="radio" name="" class="vam"/><span class="vam">匿名</span></div><!---->
+      <div class="cb"></div>
+      <div class="cb"></div>
+     </div><!--zcpjl end-->
+     <div class="cb"></div>
+    </li>
+    <li>
+     <div class="zcpjl"><table width="100%"><tr>
+      <td align="center" valign="middle" width="50%"><a href=""><img src="/Uploads/2016-11/20161117120533.png" alt=""></a></td>
+      <td align="left" width="50%">
+       <div class="pl20">
+        <p class="f14">YOUDI WU</p>
+        <p><a href="" class="col2ab">圆形印花衬衫</a></p>
+        <p class="pv10">商品编号：HS-00000077</p>
+        <p>数量：1</p>
+        <p>尺码：30<br/>颜色：白色</p>
+       </div>
+      </td>
+     </tr></table></div><!--zcpjl end-->
+     <div class="zcpjr">
+      <div class="zcpjrtl">
+       <div class="rating-static-module">           
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <div class="cb"></div>
+        </div>
+        <span class="lh22 f12 col000 pb5" style="display:inline-block">Wonderful index</span>
+      </div><!--zcpjrtl end-->
+      <div class="zcpjrtr">
+       <a href="javascript:void(0)" title="好评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="中评" class="mh15">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="差评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>       
+      </div>
+      <div class="cb"></div>
+      <textarea name="" class="zcpjrm mb5" placeholder="写点评价吧，您的评价对其他买家有很大帮助的。"></textarea>
+      <div class="zcpjrbl">
+       <div class="showt"><i class="fa fa-file-image-o col000 mr5"></i>Show Time</div>
+      </div><!---->
+      <div class="zcpjrbr"><input type="radio" name="" class="vam"/><span class="vam mr15">公开</span><input type="radio" name="" class="vam"/><span class="vam">匿名</span></div><!---->
+      <div class="cb"></div>
+      <div class="cb"></div>
+     </div><!--zcpjl end-->
+     <div class="cb"></div>
+    </li>
+    <li>
+     <div class="zcpjl"><table width="100%"><tr>
+      <td align="center" valign="middle" width="50%"><a href=""><img src="/Uploads/2016-11/20161117120533.png" alt=""></a></td>
+      <td align="left" width="50%">
+       <div class="pl20">
+        <p class="f14">YOUDI WU</p>
+        <p><a href="" class="col2ab">圆形印花衬衫</a></p>
+        <p class="pv10">商品编号：HS-00000077</p>
+        <p>数量：1</p>
+        <p>尺码：30<br/>颜色：白色</p>
+       </div>
+      </td>
+     </tr></table></div><!--zcpjl end-->
+     <div class="zcpjr">
+      <div class="zcpjrtl">
+       <div class="rating-static-module">           
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <span class="rateit-selected fl svg"></span>
+        <div class="cb"></div>
+        </div>
+        <span class="lh22 f12 col000 pb5" style="display:inline-block">Wonderful index</span>
+      </div><!--zcpjrtl end-->
+      <div class="zcpjrtr">
+       <a href="javascript:void(0)" title="好评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="中评" class="mh15">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>
+       <a href="javascript:void(0)" title="差评">
+        <div class="zcpjrtrmt">谢谢您的反馈！</div>
+       <input type="radio" name="pin" class="vam djpy"/><img src="__HOME__/images/1126a.jpg" alt="" class="vam ml5"/>
+       </a>       
+      </div>
+      <div class="cb"></div>
+      <textarea name="" class="zcpjrm mb5" placeholder="写点评价吧，您的评价对其他买家有很大帮助的。"></textarea>
+      <div class="zcpjrbl">
+       <div class="showt"><i class="fa fa-file-image-o col000 mr5"></i>Show Time</div>
+      </div><!---->
+      <div class="zcpjrbr"><input type="radio" name="" class="vam"/><span class="vam mr15">公开</span><input type="radio" name="" class="vam"/><span class="vam">匿名</span></div><!---->
+      <div class="cb"></div>
+      <div class="cb"></div>
+     </div><!--zcpjl end-->
+     <div class="cb"></div>
+    </li>
+   </ul>
+  </div><!--zcpj end-->   
+  <div class="pv20 tl">
+  <span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span>
+  <div class="bcbtn" style="float:right; width:20%">
+ 
+    <input value="提交评价" class="btn" type="button">
+  
+   <span class="glyphs icon-thinArrow btnb"></span>    
+ </div>
+ <div class="cb"></div>
+  </div>
+
+</div>
+<!--content endh-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript">
+ $(function(){
+
+  
+/****/
+var bigImg='';
+	var _index=0;
+	
+		$(".tpclose").click(function(){
+		$(this).parent(".tpm").slideUp("fast",function(){
+			$(this).parents(".tctp").fadeOut()
+			})
+		
+	});
+	$(".pjbbimg2 li img").click(function(){
+		$(this).parent("li").parent("ul").siblings(".tctp").fadeIn("fast",function(){
+			$(this).children(".tpm").slideDown()
+			});
+		bigImg=$(this).attr("src");//获取点击图片的地址
+		$(this).parent("li").parent("ul").siblings(".tctp").children(".tpm").children("b").children("img").attr("src",bigImg); //更换大图的图片地址
+		_index=$(this).index();//保存图片的序列号
+		i=$(this).parent("li").parent("ul").children("li").length;
+		
+	});
+
+
+	$(document).on('click', ".tpnext",function(){
+		_index++; //序列号加1 _index+1
+		
+		if(_index>=i){_index=0};
+		//alert(i)
+		bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+	});
+	
+	$(".tpprev").click(function(){
+		_index--; //序列号加1 _index+1
+		if(_index< 0){_index=i-1};
+		//alert(_index)
+		bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+	});
+	 
+    }); 
+
+</script>
+ 
+
+</body>
+</html>

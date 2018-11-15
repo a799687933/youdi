@@ -1,0 +1,26 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent"> 
+    
+    <form method="post" action="{:sign_url(array('article_id'=>$article_id,'reply_id'=>$reply_id,'user_id'=>$user_id),U(APP_APPS.'/NewComment/editReplyList2'))}" 
+    class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+            <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+                 <tr>
+                      <td  style="text-align:right;">回复：</td>
+                      <td id="bands-td"><textarea name="content" class="required" cols="50" rows="8" style="resize:none;"></textarea></td>
+                 </tr>        
+             </table>
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">回复</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

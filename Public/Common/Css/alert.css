@@ -1,0 +1,58 @@
+#ajax-return-divs,#ajax-return-divs-loads{
+ min-width:150px;
+ height:35px;
+ line-height:35px;
+ position:fixed;
+ top:8%;
+ left:45%;
+ border:1px #eee solid;
+ border-radius: 4px;
+ -moz-border-radius:4px;
+ z-index:200002;
+ box-shadow: 3px 3px 10px #888888;  
+ background:#fff;
+ text-align:center;
+ font-size:12px !important;
+}
+#ajax-return-divs #ajax-return-divs-span102{
+  padding-left:25px;
+  padding-right:5px;
+  font-size:12px !important;
+  background:#fff url(../Images/icon102.jpg) no-repeat 5% center;
+}
+#ajax-return-divs #ajax-return-divs-span103{
+  padding-left:25px;
+  padding-right:5px;
+  font-size:12px !important;
+  background:#fff url(../Images/icon103.jpg) no-repeat 5% center;
+}
+#ajax-return-divs-loads{
+    background:#fff url(../Images/5-121204193R3.gif) no-repeat 13% center;
+    font-size:12px !important;
+}
+
+.my-alerts09656895748{background: #fff;
+    height:210px; padding:10px 20px; box-sizing:border-box;
+    left: 50%; margin:-145px 0 0 -10rem;
+    position: fixed;
+    top: 50%;
+    width:20rem; 
+    z-index: 10001;}	
+.my-alerts09656895748 h1{border-bottom: 1px solid #ededed;
+    color: #000; font-weight:normal;
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;}	
+.close{ color: #000;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    font-size: 20px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 40px;}
+.boxm{ padding:20px 0}		
+
+
+

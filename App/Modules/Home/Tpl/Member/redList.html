@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+        $(document).ready(function () {  
+            valinit('.form1','post','',true,'topRight');  
+            var ps = $("#div_pro").position();  
+            $("#div_pro").mouseenter(function () {  
+                $("#float_box").show();  
+            });  
+            $("#float_box").mouseleave(function () {  
+                $("#float_box").hide();  
+            });  
+        })  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > 
+                {:isL(L('DiscountCoupons'),'我的优惠劵')}
+             </p>
+            <!--<h1><a href="{:U('Member/orderList')}">站内信息</a></h1>-->{/*右边*/}
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+             <table class="my-table" >
+             <tbody>
+              <tr>
+                  <th>{:isL(L('SerialNumber'),'序号')}</th>
+                  <th>{:isL(L('CouponsName'),'优惠劵名称')}</th>
+                  <th>{:isL(L('Amount'),'金额')}</th>
+                  <th>{:isL(L('MinimumAmount'),'最小订单金额')}</th>
+                  <th>{:isL(L('UpToDate'),'截至使用日期')}</th>
+                  <th>{:isL(L('Status'),'状态')}</th>
+             </tr>
+                  <foreach name="res" item="r">
+                     <tr>
+                         <td align="center">
+                         <if condition="$r['picture']">
+                                 <img src="__ROOT__/{$r.picture}" style="height:30px;"/>
+                         <else />
+                                 <if condition="$r['bonus_sn'] eq 0 ">
+                                       A/N
+                                 <else />
+                                       {$r.bonus_sn}
+                                 </if>
+                         </if>
+                         </td>
+                         <td align="center">{$r.bonus_name}</td>
+                         <td align="center">{$r.bonus_money}</td>
+                         <td align="center">{$r.min_amount}</td>
+                         <td align="center">{$r.use_end_date|date='Y-m-d H:i:s',###}</td>
+                         <td align="center">
+                             <if condition="$r['used_time'] gt 0 AND $r['order_id'] gt 0">
+                                  <span style="color:red;">{:isL(L('HasBeenUsed'),'已使用')}</span>
+                             <else />
+                                  <if condition="time() gt $r['use_end_date']">
+                                    <span style="color:#f60;">{:isL(L('Expired'),'已过期')}
+                                  <else />
+                                     <span style="color:green;">{:isL(L('NotUsed'),'未使用')}</span> 
+                                  </if>
+                             </if>
+                        </td>
+                     </tr> 
+                 </foreach> 
+                 <tr style="border-bottom:none;"><td align="left" colspan="6"><div class="pro_next" style="background:none;">{$page}</div></td></tr>   
+                <!--{:isL(L('AddLineCoupons'),'添加优惠劵')}
+                <tr style="border-bottom:none;"> 
+                     <th colspan="6" style="text-align: left;padding-left:6px;background: #eee;height:30px;line-height:30px;">
+                      {:isL(L('AddLineCoupons'),'添加优惠劵')}
+                     </th>    
+                 </tr> 
+                  <tr style="border-bottom:none;">
+                      <td align="left" colspan="6" style="text-align:left">
+                            <form method="post" action="{:U('/Member/redAdd','','')}" class="form1">
+                                {:isL(L('SerialNumber'),'列号')}：
+                                <input type="text" name="bonus_sn" id="bonus_sn" style="height:30px;width:200px;" class="validate[required]"/>
+                                <input type="submit" id="submits" value="{:isL(L('Add'),'添加')}"  
+                                style="width:100px;height:34px;line-height:34px;color:#fff;background:#f10582;border:#f10582; cursor:pointer"/>
+                            </form>
+                      </td>
+                 </tr> -->                                        
+               </tbody>
+             </table>
+                        
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('Registered'),'注册')} | YOUDI WU 中国</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script>
+$(function(){
+   $('.cat_tree').hide();
+	var url="{:U('Register/chkData','','')}";
+	myValidationEngine('ajaxUser',url,'my=data','{:isL(L("BeRegistered"),"此用户已被其他人注册")}','{:isL(L("CanBeRegistered"),"此用户可以注册")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');      
+	var url="{:U('Register/checkCode','','')}";
+	myValidationEngine('ajaxYzm',url,'my=data','{:isL(L("VerificationCodeError"),"验证码错误")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');  
+	valinit('.form1','get','',true,'bottomLeft');  
+});
+</script>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+<div class="main">
+    <div class="login_banner"><img src="__HOME__/images/login_banner.jpg" /></div>
+    <div class="login_c">
+        <div class="login_l"><img src="__HOME__/images/login_l.jpg" /></div>
+        <div class="login_r">
+            <div class="login_ri">
+            <form method="post" action="{:U('/Register/regDo')}" class="form1" >
+                <input type="hidden" name="recommend" value="" />
+                <ul>
+                    <li class="title">{:isL(L('FreeRegistration'),'免费注册')}</li>
+                    <li class="input">
+                        <h1><font>*</font>{:isL(L('UserName'),'用户名')}</h1>
+                        <input type="text" class="login1 validate[required,ajax[ajaxUser]]"  name="user_name" id="user_name"/>
+                    </li>
+                    <li class="input">
+                        <h1><font>*</font>{:isL(L('LoginPassword'),'登录密码')}</h1>
+                        <input type="password"  id="password" name="password" class="login1"  />
+                    </li>
+                    <li class="input">
+                        <h1><font>*</font>{:isL(L('ConfirmPassword'),'确认密码')}</h1>
+                        <input type="password" name="not_password" id="not_password" class="login1 validate[required,equals[password]]"  />
+                    </li>
+                    <li class="input">
+                        <h1><font>*</font>{:isL(L('Email'),电子邮箱)}</h1>
+                        <input type="text" name="reg_email" id="reg_email" class="login1 validate[custom[email],required]"  />
+                   </li>
+                    <li class="input">
+                        <h1><font>*</font>{:isL(L('VerificationCode'),'验证码')}</h1>
+                        <input type="text" class="login3 validate[required,ajax[ajaxYzm]]" id="code" name="code" style="position: relative;top:-4px;" />
+                        <img src="{:U('/Register/showCode','','')}" onClick="javascript:this.src='{:U('/Register/showCode','','')}/tm/'+Math.random()"/></span> 
+                    </li>
+                    <li class="input ty">
+                       <h1>&nbsp;</h1>
+                       <input type="checkbox" class="validate[minCheckbox[1]] checkbox" id="agree" name="agree"/>
+                       {:isL(L('HaveReadTermsService'),'我已经阅读并同意服务条款')}
+                    </li>
+                    <li class="input"><h1>&nbsp;</h1><input type="submit" img="__COMMON__/Images/load.gif" class="login2" value="{:isL(L('Registered'),'注册')}" id="submits" /></li>
+                    <li class="input ksdl">
+                         <h1>&nbsp;</h1>{:isL(L('HaveAccountLogin'),'已经有账号，请点击这里')}
+                         <a href="{:U('/Login')}">{:isL(L('QuickLogin'),'快速登录')}>></a>
+                    </li>
+                </ul>
+                </form>     
+            </div>
+        </div>
+        <div class="clear"></div>  
+    </div> 
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

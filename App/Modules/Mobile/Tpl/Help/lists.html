@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="g-mn">
+    <include file="Common:header1" />
+  
+  <div class="member_list">
+    <ul>
+      <foreach name="result" item="res">
+        <li>
+               <a href="{:U(is_m().'/Help/index',array('html'=>$res['id']))}"> 
+                        <div class="m1">
+                            <span><img src="__MOBILE__/images/sc9.png"></span>
+                        </div>
+                        <div class="title">{$res['titletext']}</div>
+                        <div class="member_more">
+                            <span><img src="__MOBILE__/images/member0.png"></span>
+                       </div>
+               </a>
+        </li>
+     </foreach>
+    </ul>
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

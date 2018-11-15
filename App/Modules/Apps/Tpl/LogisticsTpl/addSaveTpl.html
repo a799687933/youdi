@@ -1,0 +1,559 @@
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<script type="text/javascript">
+/*编辑物流公司内容*/
+function shippings(_this){
+   var shippings=$(_this).parents('.shippings');	
+   if($(_this).attr('checked')){
+	   shippings.find('.copy-tr,.shows').show();
+   }else{
+	    shippings.find('.copy-tr,.shows').hide();
+   }
+}
+
+/*控制.city-list 显示与隐藏*/
+function city_list(_this,type){
+	var parent=$(_this).parents('td');
+    if(type==true){
+		parent.children('.city-list').show();
+	}else{
+		parent.children('.city-list').hide();
+	}
+   
+}
+
+function div_city2_show(_this){
+	$('.div_city2').hide();
+	$(_this).next().show();
+}
+
+function hide_ul_city2(_this){
+   $('.div_city2').hide();
+}
+
+/*点击单个城市*/
+function li_desc(_this){
+   var parent=$(_this).parents('.li-desc');
+   var disableds=parent.find('.disableds');
+   var li_desc_pre=parent.find('.li-desc-pre');
+   var num=parent.find('.num');
+   var j=0;
+   for(var i=0;i < disableds.length;i++){
+	   if(i > 0){
+			if(disableds.eq(i).attr('checked')){
+				j++;
+			}		   
+	   }
+   }
+   if(j >0){
+	   num.text(j);
+	   li_desc_pre.attr('checked',true);
+   }else{
+	   num.text(0);
+       li_desc_pre.attr('checked',false); 
+   }
+}
+
+/*点击省份的城市ID*/
+function get_child(_this,inputClass){
+	var parent=$(_this).parents('td');
+   var class1=parent.find(inputClass);
+   var j=false;
+   if($(_this).attr('checked')){
+	   for(var i=0;i < class1.length;i++){
+		   class1.eq(i).attr('checked',true);
+	   }
+	   j=true;
+   }else{
+	   for(var i=0;i < class1.length;i++){
+		   class1.eq(i).attr('checked',false);
+	   }	   
+   }
+   var parent=$(_this).parents('.li-desc');
+   var k=j ? i : 0;
+   parent.find('.num').text(k);
+
+}
+/*保存城市ID集合*/
+function city_id_value(_this,id){
+   var parent=$(_this).parents('.cell-area');
+   var text=parent.find('.text');
+   var city_id=parent.find('.disableds');
+   var city_id_str='';
+   var text_str='';
+   var temp='';
+   var province_id='';
+   for(var i=0;i < city_id.length;i++){ 
+	   temp=city_id.eq(i); 
+	   if(temp.attr('checked') && temp.val() && (temp.attr('name') !='checkbox_province_id'+id+'[]')){
+		   city_id_str+= temp.val() ? temp.val()+',' : '';
+		   text_str+=temp.attr('str-name') ? temp.attr('str-name')+'、' : '';
+	   }else if(temp.attr('checked') && temp.val() && (temp.attr('name') =='checkbox_province_id'+id+'[]')){
+		   province_id+=temp.val() ? temp.val()+',' : '';
+		   temp.attr('checked',true);
+       }
+   }
+   parent.find('input[name="city_id'+id+'[]"]').val(city_id_str);
+   parent.find('input[name="city_name'+id+'[]"]').val(text_str);
+   parent.find('input[name="province_id'+id+'[]"]').val(province_id);
+   text.text(text_str);
+   parent.children('.city-list').hide();
+}
+
+//复制节点add-node
+function addNode(_this,id){
+      $(function(){
+        var before=$(_this).parents('.trs').prev();
+		var copy_tr=$(_this).parents('.shippings').find('.copy-tr'); 
+		if(copy_tr.length > 0){
+			var tr=copy_tr.last();
+		}else{
+			var tr=$('#copy-tr').last();
+		}
+        var str=$(tr).clone(true);     
+		var htmls=str.html();
+		htmls=htmls.replace(/checkbox_province_id\[\]/g, "checkbox_province_id"+id+"[]");
+		htmls=htmls.replace(/city_id_value\(this,0\)/, "city_id_value(this,"+id+")");
+		htmls=htmls.replace(/city_id\[\]/, "city_id"+id+"[]");
+		htmls=htmls.replace(/city_name\[\]/, "city_name"+id+"[]");
+		htmls=htmls.replace(/province_id\[\]/, "province_id"+id+"[]");
+		htmls=htmls.replace(/first_number\[\]/, "first_number"+id+"[]");
+		htmls=htmls.replace(/first_price\[\]/, "first_price"+id+"[]");
+		htmls=htmls.replace(/add_numeber_moer\[\]/, "add_numeber_moer"+id+"[]");
+		htmls=htmls.replace(/add_price_moer\[\]/, "add_price_moer"+id+"[]");
+		htmls='<tr class="copy-tr">'+htmls+'</tr>';
+        before.before(htmls); 
+		var new_tr=$(_this).parents('.shippings').find('.copy-tr').last(); 
+		new_tr.find('.text').text('');
+		new_tr.find('input[name="city_id'+id+'[]"]').val('');
+		new_tr.find('input[name="city_name'+id+'[]"]').val('');
+		new_tr.find('input[name="province_id'+id+'[]"]').val('');
+		new_tr.find('input[name="first_number'+id+'[]"]').val(1);
+		new_tr.find('input[name="first_price'+id+'[]"]').val('0.00');
+		new_tr.find('input[name="add_numeber_moer'+id+'[]"]').val(1);
+		new_tr.find('input[name="add_price_moer'+id+'[]"]').val('0.00');
+		/*var disableds=new_tr.find('.disableds');
+		for(var i=0;i < disableds.length;i++){
+			if(disableds.eq(i).attr('checked')){
+				disableds.eq(i).attr('disabled',true);
+			}
+		}*/
+      });
+}
+
+//删除节点
+function delNode(_this){
+      $(function(){
+		if($('.copy-tr').length > 0){
+			$(_this).parents('.copy-tr').remove();         
+		}
+      });
+} 
+
+/*选择计费方式*/
+function select_pricing(_this){
+    var values=$(_this).val();
+	var str='';
+	if(values==0){
+		str='件';
+	}else if(values==1){
+		str='g';
+	}else if(values==2){
+		str='cm³';
+	}
+	$('.set-test').text(str);
+}
+</script>
+<style type="text/css">
+table.logistics_tpl{
+    background:#f5f5f5;
+	border-spacing:1px;
+	border-collapse:separate;   
+}
+table.logistics_tpl tr td{
+    background:#fff;
+	line-height:30px;
+	padding:5px 0;
+}
+.city-list{
+    position:absolute;
+	top:0;
+	left:0;
+	width:500px;
+	height:270px;
+	background:#fff;
+	border:1px #ccc solid;
+	z-index:1;
+}
+.city-list h2{
+    height:30px;
+	line-height:30px;
+	text-indent:5px;
+	border-bottom:1px #ccc solid;
+}
+.city-list h2 span{
+    float:right;
+	padding-right:5px;
+}
+.ul-city li{
+    min-width:100px;
+	float:left;
+	margin:3px;
+	margin-left:5px;
+}
+.ul-city2 li{
+     min-width:50px;
+	 float:left;
+}
+table.shippings{
+	border:1px solid #ccc !important;
+	margin:10px 0 !important;
+	padding:5px 0 !important;
+	}
+</style>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>       
+                <li></li>     
+                <li><a href="javascript:;"><span>通用信息</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/LogisticsTpl/addSaveTplForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$result.id}"/>
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            
+            <div inited="1000" style="display: block;"></div>
+  
+    <div inited="1000" style="display: block;"><!--通用资料内容-->
+
+        <table cellpadding="0" cellspacing="0" class="mytable">
+            <tr>
+                  <td  style="text-align:right;" nowrap='nowrap'　　　　>模板名称：</td>
+                  <td>
+                      <input type="text" 
+                                 name="tpl_name" 
+                                 value="{$result.tpl_name}" 
+                                 maxlength="250" 
+                                 class="required" size="50" 
+                      style="margin:3px 0;"/>
+                  </td>
+            </tr>
+
+           <tr>
+                  <td  style="text-align:right;">宝贝地址：</td>
+                  <td>
+                            <select name="country"  onchange="getPlace(this,'.country_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择国家</option>
+                                     {$address[0]}
+                             </select>   
+                                                                             
+                              <select name="province" onchange="getPlace(this,'.province_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择省份</option>
+                                      {$address[1]}
+                              </select>
+                                       
+                              <select name="city" onchange="getPlace(this,'.city_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                     <option value="">请选择城市</option>
+                                      {$address[2]}
+                              </select>
+                                      
+                           <select name="district"  onchange="getPlace(this,'.district_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}" >
+                                 <option value="">请选择区县</option>
+                                  {$address[3]}
+                          </select>	
+                  </td>
+            </tr>
+            
+           <tr><td style="height:5px;"></td></tr> 
+            <tr>
+                <td  style="text-align:right;">发货时间：</td>
+                <td>
+                     <select name="delivery_time" >
+                             <option value="" >请选择发货时间</option>
+                             <option value="8小时内" <if condition="$result['delivery_time'] eq '8小时内'">selected="selected"</if>>8小时内</option>
+                             <option value="12小时内" <if condition="$result['delivery_time'] eq '12小时内'">selected="selected"</if>>12小时内</option>
+                             <option value="16小时内" <if condition="$result['delivery_time'] eq '16小时内'">selected="selected"</if>>16小时内</option>
+                            <option value="20小时内" <if condition="$result['delivery_time'] eq '20小时'">selected="selected"</if>>20小时内</option> 
+                            <option value="1天内" <if condition="$result['delivery_time'] eq '1天内'">selected="selected"</if>>1天内</option>
+                            <option value="2天内" <if condition="$result['delivery_time'] eq '2天内'">selected="selected"</if>>2天内</option>
+                            <option value="3天内" <if condition="$result['delivery_time'] eq '3天内'">selected="selected"</if>>3天内</option>
+                            <option value="5天内" <if condition="$result['delivery_time'] eq '5天内'">selected="selected"</if>>5天内</option> 
+                           <option value="7天内" <if condition="$result['delivery_time'] eq '7天内'">selected="selected"</if>>7天内</option>  
+                           <option value="8天内" <if condition="$result['delivery_time'] eq '8天内'">selected="selected"</if>>8天内</option>   
+                           <option value="10天内" <if condition="$result['delivery_time'] eq '10天内'">selected="selected"</if>>10天内</option> 
+                          <option value="12天内" <if condition="$result['delivery_time'] eq '12天内'">selected="selected"</if>>12天内</option>  
+                          <option value="15天内" <if condition="$result['delivery_time'] eq '15天内'">selected="selected"</if>>15天内</option>  
+                          <option value="17天内" <if condition="$result['delivery_time'] eq '17天内'">selected="selected"</if>>17天内</option>   
+                          <option value="20天内" <if condition="$result['delivery_time'] eq '20天内'">selected="selected"</if>>20天内</option>
+                          <option value="25天内" <if condition="$result['delivery_time'] eq '25天内'">selected="selected"</if>>25天内</option>
+                          <option value="30天内" <if condition="$result['delivery_time'] eq '30天内'">selected="selected"</if>>30天内</option>
+                          <option value="35天内" <if condition="$result['delivery_time'] eq '35天内'">selected="selected"</if>>35天内</option> 
+                          <option value="45天内" <if condition="$result['delivery_time'] eq '45天内'">selected="selected"</if>>45天内</option>
+                     </select>
+                </td>
+            </tr>
+          
+            <tr>
+                 <td  style="text-align:right;">是否包邮：</td>
+                 <td>
+                         <input type="radio" 
+                                    name="free_shipping" value="0" 
+                        <if condition="$result['free_shipping'] eq '0'">checked="checked"<else />checked="checked"</if>/>否
+                                                 
+                         <input type="radio" value="1" 
+                                    name="free_shipping" 
+                         <if condition="$result['free_shipping'] eq 1">checked="checked"</if>/>是
+                    
+                 </td>
+            </tr>
+
+            <tr>
+                 <td  style="text-align:right;">计价方式：</td>
+                 <td>
+                         <input type="radio" value="0" 
+                                    name="pricing"  onclick="select_pricing(this)"
+                         <if condition="$result['pricing'] eq 0">checked="checked"<elseif condition="$result['pricing'] eq ''"/>checked="checked"</if>/>按件数
+                         <input type="radio" 
+                                    name="pricing" value="1"  onclick="select_pricing(this)"
+                        <if condition="$result['pricing'] eq '1'">checked="checked"</if>/>按重量            
+                         <input type="radio" 
+                                    name="pricing" value="2"  onclick="select_pricing(this)"
+                        <if condition="$result['pricing'] eq '2'">checked="checked"</if>/>按体积                                                     
+                 </td>
+            </tr>
+                              
+            <tr>
+                  <td  style="text-align:right;">默认运费：</td>
+                  <td>
+                         
+                         <table>
+                         <tr>
+                               <td>
+                                 <input type="text" value="{$result['default_number']}" name="default_number" class="number" size="8" style="margin:6px 5px 3px 5px;"/>
+                              </td>
+                              <td><span class="set-test"><if condition="$type">{$type}<else />件</if></span>内，</td>
+                               <td>
+                                 <input type="text" value="{$result['default_price']}" name="default_price" class="number" size="8" style="margin:6px 5px 3px 5px;"/>
+                              </td>
+                              <td>元， 每增加</td>  
+                               <td>
+                                 <input type="text" value="{$result['add_number']}" name="add_number" class="number" size="8" style="margin:6px 5px 3px 5px;"/>
+                              </td>  
+                               <td><span class="set-test"><if condition="$type">{$type}<else />件</if></span>，增加运费</td>   
+                               <td>
+                                 <input type="text" value="{$result['add_price']}" name="add_price" class="number" size="8" style="margin:6px 5px 3px 5px;"/>元
+                              </td>                                                                                                              
+                         </tr>
+                         </table> 
+                         <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                         <span style="color:#666;position:relative;top:-0px;">除指定地区外，其余地区的运费采用“默认运费”</span>
+                            
+                  </td>
+           </tr>
+           
+           <tr>
+           <td ></td>
+           <td style="width:96%">
+           
+         <foreach name="shipping" item="sh">  
+           <table style="width:100%" class="shippings" >
+           <tr>
+               <td></td>
+               <td style="padding-top:5px;">
+                   <input type="checkbox" name="shipping_{$sh.shipping_id}" <php>if($sh['loginstis']){</php>checked="checked"<php>}</php> value="1" onclick="shippings(this)" />
+                   {$sh.shipping_name}
+               </td>
+           </tr>
+           {/*生成节点区域*/}
+            <foreach name="sh['loginstis']" item="tp">
+           <tr class="copy-tr">
+                 <td></td>
+                 <td style="width:100%">
+                     <table border="0" cellpadding="0" cellspacing="0"  style="margin-top:10px;width:100%" class="logistics_tpl">
+                        <thead>
+                                <tr >
+                                <th style="height:30px;text-align:center">运送到</th>
+                                <th style="height:30px;text-align:center">首件(<span class="set-test"><if condition="$type">{$type}<else />件</if></span>)</th>
+                                <th style="height:30px;text-align:center">首费(元)</th>
+                                <th style="height:30px;text-align:center">续件(<span class="set-test"><if condition="$type">{$type}<else />件</if></span>)</th>
+                                <th style="height:30px;text-align:center">续费(元)</th>
+                                <th style="height:30px;text-align:center">操作</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-group="n1">
+                        <td class="cell-area" style="width:50%;position:relative;">
+                             <a href="javascript:void(0)" class="a-styes" style="float:right;position:relative;top:8px;color:#36c;display:block;float:right;width:13%;" onclick="city_list(this,true)">编辑城市</a>
+                              <input type="hidden" name="city_id{$sh.shipping_id}[]" value="{$tp['city_id']}">
+                              <input type="hidden" name="city_name{$sh.shipping_id}[]" value="{$tp['city_name']}">
+                              <input type="hidden" name="province_id{$sh.shipping_id}[]" value="{$tp['province_id']}">
+                              <p style="float:left;width:85%;padding:5px;line-height:180%" class="text">{$tp['city_name']}</p>
+                              <div class="city-list" style="display:none">
+                                  <h2>
+                                         选择区域
+                                         <a href="javascript:void(0)" style="float:right;color:red;position:relative;top:10px;padding-right:5px;" onclick="city_list(this,false)">取消</a>
+                                         <a href="javascript:void(0)" style="float:right;color:green;position:relative;top:10px;padding-right:5px;" onclick="city_id_value(this,{$sh.shipping_id})">确定</a>
+                                  </h2>
+                                  <ul class="ul-city">
+                                     <foreach name="city" item="c">
+                                       <li style="position:relative;" class="li-desc">
+                                           <input type="checkbox" class="disableds li-desc-pre" value="{$c.region_id}"  
+                                                      name="checkbox_province_id{$sh.shipping_id}[]" onclick="get_child(this,'.city_{$c.region_id}')" 
+                                                      <if condition="in_array($c['region_id'],$tp['province_arr'])">checked="checked"</if>
+                                           style="position:relative;top:2px;" />{$c.region_name}
+                                           <!--(<span class="num"><if condition="$tp['province_id'] eq $c['region_id']">{$tp['city_count']}<else />0</if></span>)-->
+                                           <a href="javascript:void(0)" onclick="div_city2_show(this)"><img src="{:C('__IMG__')}/moer_city.gif" /></a>
+                                           
+                                             <div 
+                                                  style="position:absolute;z-index:2;background:#FFFEC6;
+                                                  border:1px #f7e4a5 solid;width:200px;min-height:150px;display:none" class="div_city2">
+                                                   <p style="height:20px;">
+                                                       <a href="javascript:void(0)" style="float:right;padding-right:5px;position:relative;top:5px;color:red;" onclick="hide_ul_city2(this)">
+                                                         关闭
+                                                       </a>
+                                                  </p>                                                     
+                                                  <ul class="ul-city2">
+                                                    <php>foreach($c['child'] as $childk=>$childv){</php>
+                                                       <li>
+                                                           <input type="checkbox" 
+                                                                       name="checkebs1" onclick="li_desc(this)" 
+                                                                       str-name="{$childv.region_name}" 
+                                                                       class="city_{$childv.parent_id} disableds" 
+                                                                       <if condition="in_array($childv['region_id'],$tp['city_arr'])">checked="checked"</if>
+                                                                       value="{$childv.region_id}" style="position:relative;top:2px;" />{$childv.region_name}
+                                                       </li>
+                                                     <php>}</php>
+                                                  </ul>
+                                                  <div style="clear:both;"></div>
+                                             </div>
+                                            
+                                       </li>
+                                      </foreach> 
+                                  </ul>
+                                  <div style="clear:both;"></div>
+                              </div>
+                        </td>
+                        <td style="text-align:center">
+                              <input type="text" value="{$tp['first_number']}" name="first_number{$sh.shipping_id}[]" class="required number"   size="5" >
+                        </td>
+                        <td style="text-align:center">
+                               <input type="text"  value="{$tp['first_price']}" name="first_price{$sh.shipping_id}[]" class="required number" size="5"  ></td>
+                        <td style="text-align:center">
+                               <input type="text"  value="{$tp['add_numeber_moer']}" name="add_numeber_moer{$sh.shipping_id}[]" class="required number" size="5"  >
+                         </td>
+                        <td style="text-align:center">
+                               <input type="text"  value="{$tp['add_price_moer']}" name="add_price_moer{$sh.shipping_id}[]" class="required number" size="5" >
+                        </td >
+                        <td style="text-align:center"><a href="javascript:void(0)" class="J_DeleteRule" onclick="delNode(this)" style="color:#36c;">删除</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                 </td>
+           </tr>           
+           </foreach>          
+           {/*生成节点结束*/}
+           <tr class="shows" style="<if condition="!$_GET['id']">display:none;</if>"><td colspan="2" style="height:20px;"></td></tr>
+           <tr class="trs shows" style="<if condition="!$_GET['id']">display:none;</if>">
+                <td></td>
+                <td ><a href="javascript:void(0);" style="color:#36c;" onclick="addNode(this,{$sh.shipping_id})">为指定地区城市设置运费</a></td>
+           </tr>
+          </table>
+         </foreach> 
+       </td>
+     </tr>
+   </table>
+                                                           
+    </div><!--通用资料内容结束-->            
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>
+<table id="citys" style="display:none">
+           <tr id="copy-tr">
+                 <td></td>
+                 <td style="width:100%">
+                     <table border="0" cellpadding="0" cellspacing="0"  style="margin-top:10px;width:100%" class="logistics_tpl">
+                        <thead>
+                                <tr >
+                                <th style="height:30px;text-align:center">运送到</th>
+                                <th style="height:30px;text-align:center">首件(<span class="set-test"><if condition="$type">{$type}<else />件</if></span>)</th>
+                                <th style="height:30px;text-align:center">首费(元)</th>
+                                <th style="height:30px;text-align:center">续件(<span class="set-test"><if condition="$type">{$type}<else />件</if></span>)</th>
+                                <th style="height:30px;text-align:center">续费(元)</th>
+                                <th style="height:30px;text-align:center">操作</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-group="n1">
+                        <td class="cell-area" style="width:50%;position:relative;">
+                             <a href="javascript:void(0)" class="a-styes" style="float:right;position:relative;top:8px;color:#36c;display:block;float:right;width:13%;" onclick="city_list(this,true)">编辑城市</a>
+                              <input type="hidden" name="city_id[]" value="">
+                              <input type="hidden" name="city_name[]" value="">
+                              <input type="hidden" name="province_id[]" value="">
+                              <p style="float:left;width:85%;padding:5px;line-height:180%" class="text"></p>
+                              <div class="city-list" style="display:none">
+                                  <h2>
+                                      选择区域
+                                      <a href="javascript:void(0)" style="float:right;color:red;position:relative;top:10px;padding-right:5px;" onclick="city_list(this,false)">取消</a>
+                                      <a href="javascript:void(0)" style="float:right;color:green;position:relative;top:10px;padding-right:5px;" onclick="city_id_value(this,0)">确定</a>
+                                  </h2>
+                                  <ul class="ul-city">
+                                     <foreach name="city" item="c">
+                                       <li style="position:relative;" class="li-desc">
+                                           <input type="checkbox" class="disableds li-desc-pre" value="{$c.region_id}"  name="checkbox_province_id[]" onclick="get_child(this,'.city_{$c.region_id}')" style="position:relative;top:2px;" />
+                                           {$c.region_name}<!--(<span class="num">0</span>)-->
+                                           <a href="javascript:void(0)" onclick="div_city2_show(this)"><img src="{:C('__IMG__')}/moer_city.gif" /></a>
+                                           
+                                             <div 
+                                                  style="position:absolute;z-index:2;background:#FFFEC6;
+                                                  border:1px #f7e4a5 solid;width:200px;min-height:150px;display:none" class="div_city2">
+                                                   <p style="height:20px;">
+                                                       <a href="javascript:void(0)" style="float:right;padding-right:5px;position:relative;top:5px;color:red;" onclick="hide_ul_city2(this)">
+                                                         关闭
+                                                       </a>
+                                                  </p>                                                     
+                                                  <ul class="ul-city2">
+                                                     <foreach name="c['child']" item="ch">
+                                                       <li>
+                                                           <input type="checkbox" name="checkebs1" onclick="li_desc(this)" str-name="{$ch.region_name}" class="city_{$ch.parent_id} disableds" value="{$ch.region_id}" style="position:relative;top:2px;" />{$ch.region_name}
+                                                       </li>
+                                                     </foreach>  
+                                                  </ul>
+                                                  <div style="clear:both;"></div>
+                                             </div>
+                                            
+                                       </li>
+                                      </foreach> 
+                                  </ul>
+                                  <div style="clear:both;"></div>
+                              </div>
+                        </td>
+                        <td style="text-align:center">
+                              <input type="text" value="1" name="first_number[]" class="required number"   size="5" >
+                        </td>
+                        <td style="text-align:center">
+                               <input type="text"  value="" name="first_price[]" class="required number" size="5"  ></td>
+                        <td style="text-align:center">
+                               <input type="text"  value="1" name="add_numeber_moer[]" class="required number" size="5"  >
+                         </td>
+                        <td style="text-align:center">
+                               <input type="text"  value="" name="add_price_moer[]" class="required number" size="5" >
+                        </td >
+                        <td style="text-align:center"><a href="javascript:void(0)" class="J_DeleteRule" onclick="delNode(this)" style="color:#36c;">删除</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                 </td>
+           </tr>
+</table>

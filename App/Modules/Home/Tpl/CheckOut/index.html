@@ -1,0 +1,870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('Cashier'),'收银台')} | YOUDI WU 中国</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/checkOut.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/alert.css"/>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script type="text/javascript" src="__HOME__/js/Calculation.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+	var ps = $("#div_pro").position();  
+	$("#div_pro").mouseenter(function () {  
+		$("#float_box").show();  
+	});  
+	$("#float_box").mouseleave(function () {  
+		$("#float_box").hide();  
+	});  
+	
+    valinit('.form1','post','',true,'bottomLeft');  
+	valinit('.form2','post','',true,'bottomLeft');  
+	valinit('.form3','post','',true,'bottomLeft'); 
+
+});
+//结算操作
+/*
+options.ROOT="__ROOT__"; //根目录
+options.IsMobile='';//是否手机模块;如果手机模块直接使用 '<php>echo APP_MOBILE;</php>';
+options.CatrIds="{$_GET['cart_id']}"; //购物车ID集合
+options.redAmount='#red-amount';//显示现金卷金额节点ID  
+options.integralAmount="{$integralAmount}"; //订单可换积分
+options.userIntergal="{$userIntergal}"; //会员可用积分 
+options.showIntegralNode='#integral-amount';//显示已使用积分对换金额节点
+options.CUR_REP="<php>$CUR_REP=C('CUR_REP');echo C($CUR_REP[getLang()].'_CUR');</php>";//PHP货币汇率
+options.integralFormula="{$integralFormula}"; //积分换算位
+options.logisticsSelectName='logistics_name';//物流列表select节点名称
+options.totalLogisticsNode='#total_logistics';//显示物流费节点
+options.orderAmount='#order-amount'; //显示应付总金额节点
+options.addressInputName='selectAdderss';//地址列表input type="radio" name="selectAdderss" 节点名称
+options.isInv='is_inv'; //发票列表 input type="radio" name="is_inv" 节点名称
+options.payType='pay_type'; //支付方式列表 input type="radio" name="is_inv" 节点名称
+options.integral='integral';//用户输入的积分input 节点名称
+options.redSelectName='member_bonus_id';//红包select节点名称
+options.promptDelivery='#prompt-delivery';//购物满即送金额节点
+options.orderMessage='order_message';//订单留言input 节点名称
+options.tokenInputName='{$_SESSION["MY_TOKEN"]}';//令牌input节点名称
+options.Error="{:isL(L('Error'),'错误')}";//错误提示标题
+options.Pctrgapca="{:isL(L('Pctrgapca'),'请选择收货地址或创建一个新地址')}";//请选择收货地址，如还没有收货地址请新建一个
+options.PleaseOrdData="{:isL(L('PleaseOrdData'),'请先保存普通发票资料')}";//请先保存普通发票资料
+options.PleaseVAT="{:isL(L('PleaseVAT'),'请先保存增值税发票资料')}";//请先保存增值税发票资料
+options.botBg='#ea9901'; //提交按钮背景色
+options.botColor='#fff'; //提交按钮字体色
+options.disabBotBg='#eee'; //提交中的背景色
+options.disabBotColor='#999';  //提交中的字体色   
+options.NoLogisticsCity='{:isL(L("NoLogisticsCity"),"你的地址所在区域暂无物流信息或免运费商品")}'; //你的地址所在区域暂无物流信息或免运费商品
+*/
+//加载计算应付金额
+$(function(){calAmount();});
+/*选择地址自动获取物流信息*/
+function getLogistics(url){
+  $.ajax({
+     type:'get',
+     url:url,
+     data:'',
+     dataType:'json',
+     success:function(response,status,xhr){
+         for(var i in response){
+             var logistics=$('#logistics-'+i);
+             var td=logistics.parents('.parents');
+             var logisticsPrice=td.find('.logistics-price');
+             if(parseFloat(response[i]['base_price']) > 0){
+                  logistics.html(response[i]['list']);
+                  logisticsPrice.text(response[i]['base_price']);
+                  calAmount(td);
+             }else{
+                  logistics.html('<option>暂无此城市物流信息</option>');
+                  logisticsPrice.text('0.00');               
+             }
+         }
+         
+      }
+   });  
+}
+
+/*提交*/
+function sendForm(_this){
+    var config=true;
+   //地址ID
+   var adderss=$('input[name="selectAdderss"]');
+   var selectAdderss=0;
+   for(var i=0;i < adderss.length;i++){
+      if(adderss.eq(i).attr('checked')){
+          if(adderss.eq(i).val()){
+              selectAdderss=parseInt(adderss.eq(i).val());
+              break;
+          }
+      }
+   }
+   if(selectAdderss==0){
+       if($('.receiver_fm').css('display') !='none'){
+           if($('input[name="consignee"]').val()==''){
+               $('input[name="consignee"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("NameCanNotBeEmpty"),"收货人姓名不能为空")}','','','',3);
+               return;
+           }
+           if($('input[name="mobile"]').val()==''){
+               $('input[name="mobile"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("HandNumberError"),"手机格式错误")}','','','',3);
+               return;
+           }     
+           if($('select[name="country"]').val()==''){
+               $('select[name="country"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("SelectCountry"),"请选择国家")}','','','',3);
+               return;
+           }     
+           if($('select[name="province"]').val()==''){
+               $('select[name="province"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("SelectProvince"),"请选择省份")}','','','',3);
+               return;
+           }     
+           if($('select[name="city"]').val()==''){
+               $('select[name="city"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("SelectCity"),"请选择城市")}','','','',3);
+               return;
+           }          
+           if($('input[name="address"]').val()==''){
+               $('input[name="address"]').focus();
+               myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("AddressCanNotBeEmpty"),"地址不能为空")}','','','',3);
+               return;
+           }             
+       }else{
+           myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("Pctrgapca"),"请选择收货地址，如还没有收货地址请新建一个")}','','','',3);
+       }
+   }
+   //检查发票
+   var usInv=$('input[name="is_inv"]');
+   var isInv=0;
+   for(var j=0;j < usInv.length;j++){
+       if(usInv.eq(j).attr('checked')){
+           isInv=parseInt(usInv.eq(j).val());
+           break;
+       }
+   }
+   if(isInv==1){ //普通发票
+       var result=ajaxToDo("{:U('/Member/isInv',array('data'=>'member_pu_tong_inv'))}",'text');
+       if(parseInt(result)==0){
+          myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("PleaseOrdData"),"请先保存普通发票资料")}','','','',3);
+          config=false;
+       }
+   }else if(isInv==2){ //增值税发票
+       var result=ajaxToDo("{:U('/Member/isInv',array('data'=>'member_zeng_zhi_inv'))}",'text');
+       if(parseInt(result)==0){
+          myAlert('{:isL(L("Error"),"错误提示")}','{:isL(L("PleaseVAT"),"请先保存增值税发票资料")}','','','');
+          config=false;
+       }       
+   }
+   //支付方式
+   var pay=$('input[name="pay_type"]');
+   var payType=0;
+   for(var i=0;i < pay.length;i++){
+       if(pay.eq(i).attr('checked')){
+           payType=pay.eq(i).val();
+           break;
+       }
+   }
+   //检查积分
+   var integral = parseInt($('input[name="integral"]').val()) > 0 ? $('input[name="integral"]').val() : 0;
+   //订单留言
+   var orderMessage = $('textarea[name="order_message"]').val() ? $('textarea[name="order_message"]').val() : '';
+   //使用现金卷
+   var redId=$('select[name="red"]').length > 0 ? $('select[name="red"]').val() : 0;
+   //物流公司ID
+   var logistics=$('select[name="logistics"]').length > 0 ? $('select[name="logistics"]').val() : 0;
+   
+   var parameters="selectAdderss="+selectAdderss+"&isInv="+isInv+"&payType="+payType;
+   parameters+="&integral="+integral+"&redId="+redId+"&logistics="+logistics+"&orderMessage="+orderMessage;
+   //地址
+   parameters+="&consignee="+$('input[name="consignee"]').val()+"&mobile="+$('input[name="mobile"]').val();
+   parameters+="&email="+$('input[name="email"]').val()+"&country="+$('select[name="country"]').val();
+   parameters+="&province="+$('select[name="province"]').val()+"&city="+$('select[name="city"]').val()+"&district="+$('select[name="district"]').val();
+   parameters+="&address="+$('input[name="address"]').val()+"&zipcode="+$('input[name="zipcode"]').val();
+   parameters+="&default="+$('input[name="default"]').val();
+   var url="{:get_up_url(array('ids'=>$ids,'user_integral'=>$userIntergal),U('CheckOut/addOrder','',''),true)}&"+parameters;
+   //alert(url);return;
+   if(config){
+       window.location.href=url;
+   }
+   
+}
+
+/*计算总价*/
+function total(_this){   
+     var parents=$('.parents');
+     if($(_this).get(0).tagName=='INPUT'){
+         //已使用积分
+         var intergalValue=parseInt($(_this).val());
+         if(isNaN(intergalValue)){
+             $(_this).val('');
+             parents.find('.'+$(_this).attr('attr-id')).text('0.00');
+             var arrs=calintergal();       
+             $('#user-intergal').text(arrs[0]-arrs[1]);
+             calAmount();
+             return;
+         }
+         if(intergalValue < 1000) {
+             myAlert("{:isL(L('Error'),'错误')}","{:isL(L('IntegraLLeastInput'),'积分最少输入')}({:C('INTEGRAL_LOWEST_POINT')})",'','','',3);
+             $(_this).val('');
+             parents.find('.'+$(_this).attr('attr-id')).text('0.00');            
+             var arrs=(calintergal());               
+             $('#user-intergal').text(arrs[0]-arrs[1]);
+             calAmount();
+             return;
+         }
+         var arrs=(calintergal());//alert(arrs);
+         //alert(arrs[1]);
+         if(arrs[1] > arrs[0] || arrs[1] > parseInt($('#availableIntegral').text())){
+             myAlert("{:isL(L('Error'),'错误')}","{:isL(L('UsingAccountValue'),'你使用的积分量超过你帐户上的积分量')}",'','','',3);
+             $(_this).val('');
+             parents.find('.'+$(_this).attr('attr-id')).text('0.00');   
+             var arrs=calintergal();
+             $('#user-intergal').text(arrs[0]-arrs[1]);
+             calAmount();
+             return;             
+         }
+         {/*获取外币转换比例*/}
+         <php>$curRep=C('CUR_REP');$CUR=C($curRep[getLang()].'_CUR');</php>
+         var RATIO=parseFloat("{$integralFormula}"); //积分换算比例       
+         var inter=conversio(intergalValue * RATIO,'{$CUR}');
+         parents.find('.'+$(_this).attr('attr-id')).text(inter);         
+         $('#user-intergal').text(arrs[0]-arrs[1]);
+         calAmount();
+     }else{
+         var selectPrice=$(_this).children('option:selected').attr('price');
+         parents.find('.'+$(_this).attr('attr-id')).text(selectPrice);
+         calAmount();
+     }
+}
+
+/*计算积分量*/
+function calintergal(){
+    var totalIntegral=parseInt($('#user-intergal').attr('user-intergal'));
+    var amount=$('input[name="integral"]').length > 0 && $('input[name="integral"]').val() ? parseInt($('input[name="integral"]').val()) : 0;
+    var arr=[totalIntegral,amount];
+    return arr;
+}
+
+/*计算应付金额*/
+function calAmount(){
+    if(!arguments[0]) parents =$('.parents');
+     var original=parseFloat(parents.find('.total-amount').text());
+     var logisticsPrice=parents.find('.logistics-price');
+     logisticsPrice=logisticsPrice.length > 0 ? parseFloat(logisticsPrice.text()) : 0;
+     var reduction=parents.find('.reduction');
+     reduction=reduction.length > 0 ? parseFloat(reduction.text()) : 0;
+     var useIntegral=parents.find('.use-integral');
+     useIntegral=useIntegral.length > 0 ? parseFloat(useIntegral.text()) : 0;
+     var useRed=parents.find('.use-red');
+     useRed=useRed.length > 0 ? parseFloat(useRed.text()) : 0;
+     parents.find('.amount-paid').text(fmoney((original+logisticsPrice)-reduction-useIntegral-useRed));
+}
+</script>
+<style type="text/css">
+.member_r,.order_add,.order_img,.member_r_title{width:1200px;}
+.order_add_dz{width:1208px;}
+.order_add_dz li{width:1100px;}
+.order_list{width:1200px;}
+.order_list li.title{width:1200px;}
+.order_list .lista2{width:200px;}
+.order_list .lista3{padding-left:75px;}
+.order_buy{width:1200px;}
+.slideTxtBoxsc{width:1200px;}
+.order_list .list2{width:250px;}
+.order_list .list3{text-align:center;}
+.order_list .list4{padding-left:70px;}
+.order_list .list6,.order_list .lista6{float:right}
+.order_list .lista4{padding-left: 90px;}
+.order_buy .buy4{width:auto}
+.order_buy .buy2{width:150px;}
+.order_buy .buy3{width:120px;}
+.order_list li{
+    width:1200px !important;height:auto;
+}
+.order_buy_cr{width:1200px;}
+.order_list .lista2{width:320px;}
+.order_list .list4{padding-left:100px;padding-top:40px;}
+.order_list .lista5{float:right}
+.order_list .list5{float:right}
+</style> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ 
+    <div class="member_r">
+    	
+        <div class="order_img"><img src="__HOME__/images/order2.jpg" /></div>
+        <div class="order_add">
+        	<div class="member_r_title">{:isL(L('ConsigneeInformation'),'收货人信息')}</div>
+            <div class="order_add_dz">
+            	<ul>
+                	<li class="red"></li>
+                    
+                    <foreach name="addressList" item="addList" > 
+                    <li class="radio-parent <if condition="$addList['default_address'] eq 1">now</if>">
+                            <input type="radio" onclick="selectAddress(this,{$addList.city})"
+                            name="selectAdderss" value="{$addList.address_id}" 
+                            <if condition="$addList['default_address'] eq 1">checked="checked"</if> /> 
+                           <span>{$addList.consignee}</span>  
+                           <span>{$addList.r_province}{$addList.r_city}{$addList.r_district}{$addList.address} ({$addList.consignee}) {$addList.mobile}</span> 
+                           <h1 style="display:inline !important;float:right">
+                                <a href="javascript:void(0);" 
+                                onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}',
+                                '{:isL(L('IsDefaultAddress'),'您是否确定此地址设为默认地址？')}','{:U('Member/setDefault','','')}?address_id={$addList['address_id']}','')" >
+                                {:isL(L('DefaultAddress'),'默认地址')}</a>
+                                <a href="{:U('Member/address','','')}?address_id={$addList['address_id']}&sends=ok">{:isL(L('Modify'),'修改')}</a>
+                           </h1>
+                    </li>
+                   </foreach>
+                    
+                    <li class="radio-parent">
+                          <input type="radio" value="" <if condition="!$addressList">checked="checked"</if> name="selectAdderss" /> {:isL(L('CreateNewAddress'),'创建一个新收货地址')}
+                    </li>
+                    <li>
+                       {/*地址表单*/}
+	                   <div class="receiver_fm" style="<if condition="$addressList">display:none</if>">
+                      <style type="text/css">.receiver_tbl tr td{padding:5px 3px;}</style>
+                     <form action="{:U('Member/addressForm')}" class="form1">
+                            <input type="hidden" name="check_out" value="ok" />
+                            <input type="hidden" name="submits" value="submits" />
+                            <table class="receiver_tbl f_12 clr_6" border="0">
+                                    <tr>
+                                          <td class="al_rt" style="text-align:right"><span class="clr_r">*</span>{:isL(L('Consignee'),'收货人')}：</td>
+                                          <td class="al_lt">
+                                                 <input type="text" name="consignee" 
+                                                 class="validate[required]" 
+                                                 style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;" />
+                                           </td>
+                                          <td class="al_rt" style="text-align:right"><span  class="clr_r">*</span>{:isL(L('Phone'),'手机')}：</td>
+                                          <td class="al_lt">
+                                                 <input type="text" name="mobile" 
+                                                 class="validate[required,custom[phone]]" 
+                                                 style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;"/>
+                                          </td>
+                                    </tr>
+                                    
+                                   {/*中文时才显示*/}
+                                   <if condition="getLang() eq 'zh-cn'">
+                                        <tr>
+                                             <td class="al_rt" style="text-align:right"><span class="clr_r">*</span> {:isL(L('Area'),'区域')}：</td>
+                                             <td class="al_lt">
+                                              <select name="country"  onChange="getPlace(this)" url="{:U("/CheckOut/getCitys","","")}" style="height:30px;">
+                                                   <option value="">{:isL(L('Country'),'国家')}</option>
+                                                   {$region[0]}
+                                             </select>
+                                             <select name="province"   onChange="getPlace(this)" url="{:U("/CheckOut/getCitys","","")}" style="height:30px;">
+                                                  <option value="">{:isL(L('Province'),'省份')}</option>
+                                                  {$region[1]}
+                                            </select>
+                                            <select name="city"   onChange="getPlace(this)" url="{:U("/CheckOut/getCitys","","")}" style="height:30px;">
+                                                  <option value="">{:isL(L('City'),'城市')}</option>
+                                                  {$region[2]}
+                                            </select>
+                                            <select name="district" style="height:30px;">
+                                                   <option value="">{:isL(L('District'),'区县')}</option>
+                                                   {$region[3]}
+                                            </select>
+                                         </td>
+                                         <td class="al_rt" style="text-align:right">{:isL(L('Email'),'电子邮件')}：</td>
+                                         <td class="al_lt">
+                                               <input type="text" name="email" class="reg_ipt" 
+                                               style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;"/>
+                                        </td>
+                                      </tr>
+                                <else />
+                                        <tr>
+                                         <td class="al_rt" style="text-align:right">{:isL(L('Email'),'电子邮件')}：</td>
+                                         <td class="al_lt" colspan="3">
+                                               <input type="text" name="email" class="reg_ipt" 
+                                               style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;"/>
+                                        </td>
+                                      </tr>                                  
+                               </if>
+                               
+                               <tr>
+                                     <td class="al_rt" style="text-align:right"><span class="clr_r">*</span>{:isL(L('Address'),'地址')}：</td>
+                                     <td class="al_lt">
+                                            <input class="validate[required]" type="text" 
+                                            name="address" style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;"/>
+                                      </td>
+                                       <td class="al_rt" style="text-align:right">{:isL(L('ZipCode'),'邮政编码')}：</td>
+                                       <td class="al_lt">
+                                            <input type="text" name="zipcode" 
+                                            class="reg_ipt" style="width:350px;height:30px;line-height:30px;border:1px #ccc solid;"/>
+                                       </td>
+                                </tr>
+                                <tr>
+                                       <td></td>
+                                       <td colspan="3" class="al_lt">
+                                              <input type="checkbox" checked="checked" 
+                                              value="1" name="default" class="ver_mid"/><span class="ver_mid">{:isL(L('DefaultAddress'),'默认地址')}</span>
+                                      </td>
+                                 </tr>
+                                 
+                                 {/*未登录用户不可提交地址*/}
+                                 <php>if(is_login()){</php>
+                                     <tr>
+                                           <td></td>
+                                           <td colspan="3" class="al_lt">
+                                                 <input  id="submits" type="submit" 
+                                                 style="width: 145px;background-color: #ea9901;
+                                                 height: 30px;color: #FFF;line-height: 30px;border: none;border-radius: 3px; cursor:pointer;"                                            
+                                                 value="{:isL(L('Preservation'),'保存')}" />
+                                           </td>
+                                    </tr>
+                                <php>}</php>
+                            </table>	
+                     </form> 
+                </div>
+               <script type="text/javascript">
+				   $(function(){
+						$('input[name="selectAdderss"]').click(function(){
+							 $('.radio-parent').attr('class','radio-parent');
+							 $(this).parent().attr('class','now radio-parent');															
+							 if($(this).val()){
+								 $('.receiver_fm').hide();
+							 }else{
+								$('.receiver_fm').show(); 
+							 }
+						});
+					});
+               </script>                
+               {/*地址表单结束*/}
+            </li>                    
+           </ul>
+
+            </div>
+        
+        </div>
+        
+        <div class="order_add">
+        	<div class="member_r_title">{:isL(L('PaymentMethod'),'支付方式')}</div>
+            <div class="order_add_dz order_add_zf">
+            	<ul>
+                    <li><label><input type="radio" name="pay_type" value="0" checked="checked"/> {:isL(L('OnlinePayment'),'在线支付')}</label></li>
+                    <li><label><input type="radio" name="pay_type" value="1"/>{:isL(L('CourierCollection'),'快递代收')}</label></li>
+                    <li><label><input type="radio" name="pay_type" value="2"/> {:isL(L('BankTransfer'),'线下支付')}</label></li>
+                    <li><label><input type="radio" name="pay_type" value="3" /> {:isL(L('AccountPayment'),'帐户支付')}</label></li>              
+                </ul>
+            </div>        
+        </div>
+        
+        <div class="order_add">
+        	<div class="member_r_title">{:isL(L('InvoiceInformation'),'发票信息')}</div>
+            <div class="order_add_dz">
+                {/*发票开始*/}
+				<script type="text/javascript">
+                    $(function(){
+                         //选择发票
+                         $('input[name="is_inv"]').click(function(){
+                                 var val=parseInt($(this).val());
+                                 var tbale=$('.table-show');
+                                 $('.inv-title-class').css('background','none');
+                                 $(this).parents('.inv-title-class').css('background','#faf3f3');
+                                 $('input[name="is_inv"]').attr('checked',false);
+                                 $(this).attr('checked',true);
+                                 if(val==0){
+                                     tbale.hide();
+                                 }else if(val==1){
+                                     tbale.hide();
+                                     tbale.eq(0).show();
+                                }else if(val==2){
+                                     tbale.hide();
+                                     tbale.eq(1).show();				
+                                }
+                          });		
+                    });
+                </script>                
+				<ul class="receit_ul f_12 clr_3">
+                                <li>
+                                     <input type="radio" name="is_inv" class="ver_mid" value="0" checked="true"/> 
+                                     <span class="ver_mid">{:isL(L('DonInvoic'),'不要发票')}</span>
+                                </li>     
+								<li class="inv-title-class" style="padding-bottom:10px;">
+                                     <input type="radio" name="is_inv" class="ver_mid" value="1" /> 
+                                     <span class="ver_mid">{:isL(L('CommonInvoice'),'普通发票')}</span>
+                                     <form class="form2" action="{:U('Member/puTougForm')}">
+                                        <input type="hidden" name="check_out" value="ok" />
+                                        <input type="hidden" name="submits" value="submits1" />
+                                		<table class="f_12 clr_6 receiver_tbl table-show" border="0" style="display:none">
+                                            <tr>
+                                                 <td class="al_rt" style="width:100px;text-align:right">
+                                                     <span class="clr_r">*</span>{:isL(L('InvoiceTitle'),'发票抬头')}：
+                                                 </td>
+                                                <td class="al_lt">
+                                                     <input type="text"  name="inv_title" value="{$ordinary.inv_title}" id="inv_title"  class="reg_ipt" />
+                                                 </td>
+                                            </tr>
+                                            <tr>
+                                                 <td class="al_rt" style="text-align:right">
+                                                       {:isL(L('Other'),'其它')}：
+                                                  </td>
+                                                  <td class="al_lt">
+                                                        <textarea name="inv_content" id="inv_content" style="width:300px;height:100px">{$ordinary.inv_content}</textarea>
+                                                 </td>
+                                            </tr>
+                                            <tr>
+                                                  <td class="al_rt"></td>
+                                                  <td class="al_lt" style="padding-top:10px;">
+                                                       <input type="submit" id="submits1" value="{:isL(L('Preservation'),'保存')}" 
+                                                        style="width: 145px;background-color: #ea9901;
+                                                        height: 30px;color: #FFF;line-height: 30px;border: none;border-radius: 3px; cursor:pointer;"
+                                                       />
+                                                  </td>
+                                           </tr>
+										</table>	
+                                     </form>   
+								</li>
+                                
+								<li class="inv-title-class">
+                                     <input type="radio" name="is_inv" class="ver_mid"  value="2" /> 
+                                     <span class="ver_mid">{:isL(L('VATspecialticket'),'增值税专用票')}</span>
+									 <span class="clr_9"></span>
+                                    <form class="form3" action="{:U('Member/zengZhiForm')}">
+                                        <input type="hidden" name="check_out" value="ok" />  
+                                        <input type="hidden" name="submits" value="submits2" />                                      
+                                          <table class="f_12 clr_6 receiver_tbl table-show" border="0" style="display:none">
+                                            <tr>
+                                                <td style="width:70px;text-align:right;">
+                                                     {:isL(L('InvoiceTitle'),'发票抬头')}：
+                                                </td>
+                                                <td style="text-align:left">
+                                                     <input type="text" name="company_name" 
+                                                     value="{$vat.company_name}" id="company_name" 
+                                                     class=" validate[required]" 
+                                                    style="height:30px;margin-bottom:5px;width:300px;"/>
+                                                </td>
+                                          </tr>
+                    
+                                          <tr>
+                                              <td style="width:80px;text-align:right;">
+                                                   {:isL(L('IdentificationCode'),'纳税人识别码')}：
+                                              </td>
+                                              <td style="text-align:left">
+                                                   <input type="text" name="id_code" 
+                                                   value="{$vat.id_code}" id="id_code" 
+                                                   class="fpxxb_input validate[required]" 
+                                                   style="height:30px;margin-bottom:5px;width:300px;"/>
+                                             </td>
+                                       </tr>
+    
+                                       <tr>
+                                            <td style="width:80px;text-align:right;">
+                                                  {:isL(L('RegisteredAddress'),'注册地址')}：
+                                             </td>
+                                            <td style="text-align:left">
+                                                  <input type="text" name="reg_address" 
+                                                  value="{$vat.reg_address}" id="reg_address" 
+                                                  class="fpxxb_input validate[required]" 
+                                                  style="height:30px;margin-bottom:5px;width:300px;"/>
+                                            </td>
+                                       </tr>
+    
+                                       <tr>
+                                           <td style="width:80px;text-align:right;">
+                                                 {:isL(L('RegisteredPhone'),'注册电话')}：
+                                           </td>
+                                           <td style="text-align:left">
+                                               <input type="text" name="reg_tel" 
+                                               value="{$vat.reg_tel}" id="reg_tel" class="fpxxb_input validate[required]" 
+                                               style="height:30px;margin-bottom:5px;width:300px;"/>
+                                           </td>
+                                       </tr>
+    
+                                  <tr>
+                                        <td style="width:80px;text-align:right;">
+                                             {:isL(L('OpeAccount'),'开户银行')}：
+                                        </td>
+                                        <td style="text-align:left">
+                                             <input type="text" name="bank_name" 
+                                             value="{$vat.bank_name}" id="bank_name" 
+                                             class="fpxxb_input validate[required]" 
+                                             style="height:30px;margin-bottom:5px;width:300px;"/>
+                                        </td>
+                                  </tr>
+    
+                                  <tr>
+                                    <td style="width:80px;text-align:right;">
+                                          {:isL(L('BankAccount'),'银行账户')}：
+                                    </td>
+                                    <td style="text-align:left">
+                                          <input type="text" name="bank_sn" 
+                                          value="{$vat.bank_sn}" id="bank_sn" 
+                                          class="fpxxb_input validate[required]" 
+                                          style="height:30px;margin-bottom:5px;width:300px;"/>
+                                     </td>
+                               </tr>
+    
+                               <tr>
+                                    <td style="width:80px;text-align:right;">
+                                          {:isL(L('InvoiceContent'),'发票内容')}：
+                                    </td>
+                                    <td style="text-align:left">
+                                          <input type="text" name="inv_content" 
+                                          value="{$vat.inv_content}" id="inv_content" 
+                                          class="fpxxb_input validate[required]" 
+                                          style="height:30px;margin-bottom:5px;width:300px;"/>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td style="width:80px;text-align:right;">
+                                        {:isL(L('InvoiceName'),'收票人姓名')}：
+                                    </td>
+                                    <td style="text-align:left">
+                                         <input type="text" name="shou_piao" 
+                                         value="{$vat.shou_piao}" id="shou_piao" 
+                                         class="fpxxb_input validate[required]" 
+                                         style="height:30px;margin-bottom:5px;width:300px;"/>
+                                    </td>
+                              </tr>
+    
+                              <tr>
+                                    <td style="width:80px;text-align:right;">
+                                         {:isL(L('InvoiceMobile'),'收票人手机')}：
+                                    </td>
+                                    <td style="text-align:left">
+                                         <input type="text" name="shou_mobile" 
+                                         value="{$vat.shou_mobile}" id="shou_mobile" 
+                                         class="fpxxb_input validate[required]" 
+                                         style="height:30px;margin-bottom:5px;width:300px;"/>
+                                    </td>
+                             </tr>
+                            
+                            {/*中文时才显示*/} 
+                             <if condition="getLang() eq 'zh-cn'">
+                                 <tr>
+                                        <td style="width:80px;text-align:right;">
+                                             {:isL(L('Area'),'区域')}：
+                                        </td>
+                                        <td style="text-align:left">
+                                           <select name="country"  onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                                                <option value="">{:isL(L('Country'),'国家')}</option>{$vatRegion[0]}
+                                           </select>
+                                           <select name="province"  onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                                               <option value="">{:isL(L('Province'),'省份')}</option>{$vatRegion[1]}
+                                           </select>
+                                           <select name="city" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                                                 <option value="">{:isL(L('City'),'城市')}</option>{$vatRegion[2]}
+                                           </select>
+                                           <select name="district" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                                                <option value="">{:isL(L('District'),'区县')}</option>{$vatRegion[3]}
+                                           </select>					
+                                        </td>
+                                </tr>
+                            </if>
+                            
+                            <tr>
+                                   <td style="width:80px;text-align:right;">{:isL(L('Address'),'地址')}：</td>
+                                   <td style="text-align:left">
+                                     <input type="text" 
+                                     name="address" id="address" 
+                                     value="{$vat.address}" placeholder="" 
+                                     class="fpxxb_input" style="height:30px;margin:5px 0;width:300px;"/>
+                                  </td>
+                          </tr>
+                         <tr>
+                                 <td></td>
+                                 <td style="height:5px;text-align:left;" >
+                                     <input type="submit" id="submits2"
+                                       value="{:isL(L('Preservation'),'保存')}" 
+                                       onClick="increase(this,'{:U("Member/zengZhiForm","","")}?check_out=ok')" 
+                                       style="width: 145px;background-color: #ea9901;
+                                       height: 30px;color: #FFF;line-height: 30px;border: none;border-radius: 3px; cursor:pointer;"
+                                       />
+                                 </td>
+                        </tr>		
+                        <tr><td style="height:5px;" colspan="2"></td></tr>	 	
+                    </table>	
+                </form>    
+			</li>
+		</ul>
+       {/*发票结束*/}
+       </div>        
+      </div>
+        
+        
+        <div class="order_list" style="padding:0;padding-bottom:10px;width:100%">
+           <div class="member_r_title">
+               {:isL(L('ShoppingList'),'购物清单')}
+               
+               {/*满购优惠*/}   
+                <if condition="$cart['full']['dis_type'] gt 0">
+                 温馨提示：<!--1.选购清仓促销的商品无法保留库存，请您及时结算。 2.商品的价格和库存将以订单提交时为准。-->    
+                 <span style="color:red;font-size:16px;margin-right:20px;float:right;">
+                    {$cart['full']['dis_name']}{/*活动名称*/}
+                    <foreach name="cart['full']['list']" item="dis">
+                        <if condition="$cart['full']['dis_type'] eq 1">
+                              ({:replace_isl('FullDiscount','购满%d折扣',getPrice($dis['amount'],true))}  {$dis['dis_type_val'] * 10})&nbsp;&nbsp;
+                        <elseif condition="$cart['full']['dis_type'] eq 2" />
+                             ({:replace_isl('FullReduction','购满%d减',getPrice($dis['amount'],true))} {:getPrice($dis['dis_type_val'],true)} )&nbsp;&nbsp;
+                        </if>
+                        
+                     </foreach>
+                 </span>
+                </if> 
+                {/*满购优惠结束*/}        
+           </div> 
+           <table width="100%" cellspacing="0" cellpadding="0" class="cart-table">
+            <tbody>
+            <tr bgcolor="#f5f5f5">
+             <td width="8%" align="left"></td>
+             <td width="35%" align="left">{:isL(L("CommodityInformation"),'商品信息')}</td>
+             <td width="10%" align="center">{:isL(L('UnitPrice'),'单价')}</td>
+             <td width="10%" align="center">{:isL(L('Number'),'数量')}</td>
+             <td width="10%" align="center">{:isL(L('TotalAmount'),'总金额')}</td>
+            </tr>
+            <foreach name="cart['goods_list']" item="catrs" key="keys">   
+                <tr bgcolor="#f9f9f9" style="<if condition="$catrs['zhuhe_goods_id'] gt 0">background:#fff4e8;<else />background:#f9f9f9;</if>" class="cart-goods-list">
+                 <td align="center">
+                 <a href="{:U('/Goods/content',array('html'=>'g-'.$catrs['goods_id']))}" target="_blank" 
+                 style="display:inline-block;width:40px;">
+                      <img alt="" src="{:showImg($catrs['goods_thumb'])}" width="50" height="50">
+                 </a>
+                 </td>
+                 <td align="left">
+                  <p><a href="{:U('/Goods/content',array('html'=>'g-'.$catrs['goods_id']))}" target="_blank">{$catrs[pfix('goods_name')]}</a></p>
+                  <p class="hui">
+                      <foreach name="catrs['goods_attr']" item="attr">
+                           {$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}<br/>
+                       </foreach> 
+                   </p>
+                 </td>
+                 <td align="center">
+                    <strong style="position:relative;color:red;">{:getPrice($catrs['goods_price'],true)}
+                    <if condition="$catrs[pfix(C('CART_REC_INFO'))]">
+                          <div style="position:absolute;top:-35px;left:-40px;background:#fff;height:20px;line-height:20px;
+                          border:1px solid #ccc;
+                          border-radius: 4px;padding:2px 10px;width:110px;">
+                                <span style="color:#ccc;position:absolute;top:14px;font-size:30px;left:50px;z-index:1;">◆</span>
+                                <span style="color:#fff;position:absolute;top:13px;font-size:30px;left:50px;z-index:1;">◆</span>
+                                <span style="position:absolute;left:0; z-index:2;color:#f60;display:block;width:100%;text-align:center;">{$catrs[pfix(C('CART_REC_INFO'))]}</span>
+                          </div>
+                      </if>
+                    </strong>
+                 </td>
+                 <td align="center">{$catrs['goods_number']}</td>
+                 <td align="center">{:CUR()}<strong class="colf60 goods-subtotal">{:getPrice($catrs['subtotal'],false)}</strong></td>
+             </tr>
+           </foreach>
+           <tr style="background:#f9f9f9;border-top:1px #ccc dotted;">
+               <td colspan="7" style="margin-bottom:10px;padding-bottom:10;padding:10px 10px;" class="parents">
+                   <div style="width:350px;float:left;">
+                      {:isL(L('Remarks'),'备  注')}：<textarea name="order_message" style="height:80px;width:350px;resize:none;"/></textarea>
+                   </div>
+                   <div style="width:600px;float:right;text-align:right;line-height:200%">             
+                       
+                      {/*送现金卷*/}
+                      <if condition="$cart['availablelntRed']['bonus_money'] gt 0">
+                          {:replace_isl('CashVolumeDescription','你将获得价值(%d)元的优惠卷',getPrice($cart['availablelntRed']['bonus_money'],true))}
+                      </if> 
+                      {/*送消费积分*/}
+                      <if condition="$cart['sendingPay'] gt 0">
+                              {:isL(L('SendPoints'),'送消费积分')}({$cart['sendingPay']})
+                      </if>
+                       {/*送等级积分*/}
+                      <if condition="$cart['sndingRank'] gt 0">
+                              {:isL(L('SendLevel'),'送等级积分')}({$cart['sndingRank']})
+                      </if>             
+                      <if condition="($cart['availablelntRed']['bonus_money'] gt 0) OR ($cart['sendingPay'] gt 0) OR ($cart['sndingRank'] gt 0)"><br/></if>
+                      
+                      {:isL(L('TotalAmount'),'总金额')}：{:CUR()}<b style="color:red" class="total-amount">{:getPrice($cart['total'],false)}</b><br/>
+                      
+                      {/*物流运费*/}
+                      <if condition="$cart['logisticsFreight']">
+                          <span style="display:inline;float: none;">
+                            物流运费
+                            <select name="logistics" onchange="total(this)" id="logistics-0"  attr-id="logistics-price">
+                                <php>$l=0;</php>
+                                <foreach name="cart['logisticsFreight']" item="lf">
+                                    <option value="{$lf['shipping_id']}"<if condition="$l eq 0">selected="selected"</if> price="{:getPrice($lf['logistics_price'],false)}">
+                                          {$lf['shipping_name']}[{:getPrice($lf['logistics_price'],true)}]
+                                    </option>
+                                    <php>$l++;</php>
+                                </foreach>
+                            </select>
+                          </span>：+{:CUR()}<b style="color:red;" class="logistics-price">
+                          <foreach name="cart['logisticsFreight']" item="lf">
+                               {:getPrice($lf['logistics_price'],false)}
+                               <php>$logisticsPrice=$lf['logistics_price'];break;</php>
+                          </foreach>
+                          </b></br>
+                      <else />
+                          <select name="logistics" style="display:none"><option value=""></option></select>          
+                      </if>
+                     {/*物流运费结束*/}
+        
+                      {/*满即减折扣*/}
+                      <if condition="$cart['full']['reduction'] gt 0">
+                          <if condition="$cart['full']['dis_type'] eq 1">{/*打折扣*/}
+                          
+                          <elseif condition="$cart['full']['dis_type'] eq 2" />{/*满即减*/}
+                               {$cart['full']['dis_name']}({:replace_isl('FullReduction','购满%d减',getPrice($cart['full']['dis_full'],true))})：
+                               -{:CUR()}<b style="color:red;" class="reduction">{:getPrice($cart['full']['reduction'],false)}</b><br/>                          
+                          </if>
+                      </if>             
+                     {/*满即减折扣结束*/} 
+        
+                      {/*积分抵现*/}
+                      <if condition="$userIntergal gt 0 AND $cart['availableIntegral'] AND C('IS_PAY_POINTS')">
+                          <span style="float:none;display:inline">
+                              {:isL(L('YourAccountPoints'),'你当前的消费积分')}
+                              (<b style="color:red" id="user-intergal" user-intergal="{$userIntergal}">{$userIntergal}</b>)
+                          </span>              
+                          {:isl(L('UseIntegralIoCash'),'积分抵现')}(<b style="color:red;" id="availableIntegral">{$cart['availableIntegral']}</b>) 
+                          <input type="text"  attr-id="use-integral"  name="integral" onchange="total(this)" style="width:50px;" />
+                          ：-{:CUR()}<b style="color:red;"  class="use-integral">0.00</b><br/>
+                      <else />
+                          <input type="text" value="0" name="integral" style="width:50px;display:none" /> 
+                      </if>                                    
+                     {/*积分抵现结束*/} 
+        
+                      {/*使用现金卷*/}
+                      <if condition="$cart['useRed'] AND C('IS_BONUS')">
+                          <select name="red" onchange="total(this)" attr-id="use-red">
+                                 <option value="0" price="0.00">{:isL(L('NotUseVolume'),'不使用现金锩')}</option>
+                                 <foreach name="cart['useRed']" item="r">
+                                      <option value="{$r['mb_id']}" price="{:getPrice($r['bonus_money'],false)}">{$r[pfix('bonus_name')]}[{:getPrice($r['bonus_money'],true)}]</option>
+                                 </foreach>
+                          </select>
+                          -{:CUR()}<b style="color:red;"  class="use-red">0.00</b><br/>
+                      <else />
+                          <select name="red" style="display:none"><option value="0"></option></select> 
+                      </if>             
+                     {/*使用现金卷结束*/}              
+                              
+                      {:isL(L('TotalPayable'),'应付金额')}：{:CUR()}<b style="color:red;" class="amount-paid">
+                      <!--<if condition="$logisticsPrice">{:getPrice($li['shops_actual_total']+$logisticsPrice,false)}<else />{:getPrice($li['shops_actual_total'],false)}</if>-->
+                      </b><br/>
+                     </div>
+                    <div style="clear:both;"></div>
+               </td>
+           </tr>
+          </tbody>
+       </table>       
+      </div>
+    </div>
+      
+    <div class="clear"></div>
+     <input type="submit"  value="{:isL(L('Submit'),'确认无误，购买')}" class="btn_qrgm"  onclick="sendForm(this)"/>
+    <a href="{:U('Cart/index')}" class="fhgwc fr">{:isL(L('ReturnToShoppingCart'),'返回购物车')}</a>
+    <a href="__ROOT__/" class="col23 fr">{:isL(L('Around'),'再逛一逛')}</a>   
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

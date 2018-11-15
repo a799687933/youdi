@@ -1,0 +1,56 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Purchase/purchaseTempDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Purchase/purchaseTempDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="51">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>编号</th>
+                <th>姓名</th>
+                <th width="10%">地区</th>
+                <th>电话</th>
+                <th width="60%">需求内容</th>
+                 <th >时间</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="res" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.user_name}</td>
+                <td>{$r.area}</td>
+                <td>{$r.telephone}</td>
+                <td>{$r.content}</td> 
+               <td>{$r.add_time|date='Y-m-d',###}</td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

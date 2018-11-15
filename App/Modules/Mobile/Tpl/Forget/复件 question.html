@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/css.css" />
+<title>新澳洲-注册</title>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/global_phone.js"></script>
+<link rel="Stylesheet" href="__COMMON__ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__COMMON__ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__COMMON__ValidationEngine/Js/jquery.validationEngine-zh-cn.js"></script>
+<script type="text/javascript" src="__COMMON__ValidationEngine/Js/myValidationEngine.js"></script>
+<script>
+	$(function(){
+        var url="{:U(is_m().'/Forget/checks','','')}";
+		myValidationEngine('ajaxUser',url,'my=data','不存在此用户','用户正确','正在验证，请稍等...');		
+        var url="{:U(is_m().'/Common/ajaxYzm','','')}";
+		myValidationEngine('ajaxYzm',url,'my=data','验证码错误','验证码正确','正在验证，请稍等...');	
+		valinit('.form1','get','__ROOT__/{:is_m()}',true,'topLeft');  
+	});
+
+</script>
+</head>
+<body>
+
+<div class="wraper">
+<include file='Common:header'/>{/*头部*/}
+	
+
+	<div class="login_bg">
+		<img src="__PUBLIC__images/dl_bic.png" class="dis_b dl_pic" style="width:7.2rem;" />
+		
+			<div class="reg_fm" style="width:12rem;">
+              <form method="post" action="{:U(is_m().'/Forget/questionForm')}" class="form1" >
+				<table  class="f_16 clr_6 reg2_tbl">
+					<tr>
+                         <td class="al_rt"><span class="clr_r">*</span>帐户名</td>
+                         <td><input placeholder="用户名" name="user_name" id="user_name"  class="f_16 clr_8 ipt_reg validate[required,ajax[ajaxUser]]"  /></td></tr>	
+					<tr>
+					<tr>
+                         <td class="al_rt"><span class="clr_r">*</span>选择问题</td>
+                         <td>
+                             <select name="question" id="question"  style="height:30px;" >
+                                  <option value="">请选择问题</option>
+                                  <option value="您母亲的姓名是">您母亲的姓名是？</option>
+                                  <option value="您父亲的姓名是">您父亲的姓名是？</option>
+                                  <option value="您配偶的姓名是">您配偶的姓名是？</option>
+                                  <option value="您的出生地是">您的出生地是？</option>
+                                  <option value="您高中班主任的名字是">您高中班主任的名字是？</option>
+                                  <option value="您初中班主任的名字是">您初中班主任的名字是？</option>
+                                  <option value="您小学班主任的名字是">您小学班主任的名字是？</option>
+                                  <option value="您的小学校名是">您的小学校名是？</option>
+                                  <option value="您父亲的生日是">您父亲的生日是？</option>
+                                  <option value="您母亲的生日是">您母亲的生日是？</option>
+                                  <option value="您配偶的生日是">您配偶的生日是？</option>
+                            </select>                         
+                         </td>
+                    </tr>	
+					<tr>
+                         <td class="al_rt"><span class="clr_r">*</span>问题答案</td>
+                         <td><input placeholder="问题答案" name="answer" id="answer"  class="f_16 clr_8 ipt_reg"  /></td></tr>	
+					<tr>                    
+					<tr>                    
+                         <td class="al_rt"><span class="clr_r">*</span>重置密码</td>
+                         <td><input placeholder="密码" type="password"  id="password" name="password" class="f_16 clr_8 ipt_reg" /></td>
+                    </tr>	
+					<tr>
+                         <td class="al_rt"><span class="clr_r">*</span>确认密码</td>
+                         <td><input type="password" name="not_password" id="not_password" class="f_16 clr_8 ipt_reg" /></td>
+                   </tr>	
+					<tr>
+                         <td class="al_rt"><span class="clr_r">*</span>验证码</td>
+                         <td style="">
+                               <input value="" class="f_16 clr_8 ipt_reg validate[required,ajax[ajaxYzm]]"   type="text" id="code" name="code" style="width:40%" style="float:left"/>
+                               <img src="{:U('/Common/verify','','')}" style="position:relative;top:13px; cursor:pointer;height:38px;" onClick="javascript:this.src='{:U('/Common/verify','','')}/tm/'+Math.random()"/>
+                         </td>
+                    </tr>	
+
+					<tr><td></td><td><input type="submit" class="reg_sub f_16 clr_f cir_5" id="submits"  value="找回密码" /></td></tr>	
+					<tr><td></td><td class="al_rt">
+						<div class="login_bott">
+							<span class="clr_6 f_16 ver_mid">已经有账号，请点击这里</span> &nbsp;&nbsp;
+							<input type="button" class="login_btn f_16 clr_f cir_5" onClick="window.location.href='{:U(is_m().'/Login/index')}'"  value="快速登录>>" /> &nbsp;
+						</div>
+					</td></tr>
+				</table>	
+                </form>
+				<br />
+				<br />
+				<br />
+		</div>	
+	</div>
+
+	
+<include file='Common:footer'/>{/*页脚*/}	
+	
+	
+</div>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->    
+    <input type="hidden" name="id" value="{$id}" />	
+    <input type="hidden" name="user_id" value="{$userId}"  /> 
+</form>
+
+<div class="pageHeader">
+    <!--<form onsubmit="return dialogSearch(this);" action="{:U(APP_APPS.'/Published/selSeller')}" method="get">
+    <input type="hidden" name="id" value="{$id}" />
+    <input type="hidden" name="user_id" value="{$userId}"  /> 
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                     输入关键字：<input type="text" name="user_name" value="{$searchVal}"/>
+                </td>
+                <td>分类：</td>
+                <td>
+                   
+                    <select class="combox" name="files_id" class="required">
+                      <option value="">-选择分类-</option>
+                      <foreach name="cage" item='C'>                       
+                       <option value="{$C.files_id}" <if condition="$_REQUEST['files_id'] eq $C['files_id']">selected="selected"</if>>{$C.html}{$C.files_name}</option>
+                     </foreach>  
+                    </select>       
+              
+                </td>    
+                <td>城市：</td>
+                <td>
+                   
+                    <select class="combox" name="city_id" class="required">
+                      <option value="">-选择城市-</option>
+                      <foreach name="City" item='C'>                       
+                       <option value="{$C.city_id}" <if condition="$_REQUEST['city_id'] eq $C['city_id']">selected="selected"</if>>{$C.html}{$C.city_name}</option>
+                     </foreach>  
+                    </select>       
+              
+                </td>    				
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>-->
+</div>
+<div class="pageContent">
+    <table class="list" width="100%" layoutH="100">
+        <thead>
+            <tr>
+                <th >需求编号</th>
+                <th>标题</th>
+                <th>悬奖金额</th>       
+                <th>参与方式</th>
+				<th>付款方式</th>
+				<th>发布时间</th>
+				<th>需求状态</th>
+				<th>私信雇用</th>
+				<th>发布会员</th>
+				<th>是否中标</th>
+				<th>中标时间</th>
+				<th>服务分类</th>
+            </tr>                      
+        </thead>
+        <tbody>
+ 
+           <volist name="res" id="V">
+            <tr target="sid_user" rel="{$V.id}">           	
+                <td>{$V.id}</td>
+                <td>{$V.title}</td>
+                <td>{$V.man_hour}</td>
+                <td><if condition="$V['partake']">检测家帮选<else />众多服务商参与</if></td>
+                <td><if condition="$V['payments']">检测家担保<else />自行协商</if></td>
+                <td>{$V.add_time|date='Y-m-d',###}</td>
+                <td>
+				    <if condition="$V['status'] eq -1">
+					     交易失败
+					<elseif condition="$V['status'] eq 0"/>
+					    无状态
+					<elseif condition="$V['status'] eq 1"/>
+					    待选服务商	
+					<elseif condition="$V['status'] eq 2"/>
+					    进行中	
+					<elseif condition="$V['status'] eq 3"/>
+					    待评价				
+					<elseif condition="$V['status'] eq 4"/>
+					    交易成功																				
+					</if>
+				</td>         
+                <td><if condition="$V['employ']"><img src="{:C('__IMG__')}/yes.gif"/><else /><img src="{:C('__IMG__')}/no.gif"/></if></td>
+				<td>{$V.user_name}</td>
+				<td><if condition="$V['is_bid']"><img src="{:C('__IMG__')}/yes.gif"/><else /><img src="{:C('__IMG__')}/no.gif"/></if></td>
+				<td>{$V.dates|date='Y-m-d',###}</td>
+				<td>{$V.files_name}</td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+     <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>       
+        <div class="pagination" targetType="dialog" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+     </div>
+         <div class="formBar">
+           <ul>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>   
+
+    </div>
+   </div>
+

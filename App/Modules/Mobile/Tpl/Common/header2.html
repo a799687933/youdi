@@ -1,0 +1,46 @@
+  <div class="headtop" name="gototop" id="gototop">
+        <div class="head_lang">
+            <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}"><span><img src="__MOBILE__/images/cn.jpg"></span>简体中文</a>
+            <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'vi-vi'))}"><span><img src="__MOBILE__/images/ta.jpg"></span>Tiếng Việt</a>
+        </div>
+        <div class="head_login">
+           <if condition="is_login()">
+                <span style="float:left;">欢迎：</span>
+                <a href="{:U(is_m().'/Member/index')}" title="{:getUserC('SE_USER_NAME')}" style="padding:0;margin:0;">
+                    <span style="color:#f60">{:sub_str(getUserC('SE_USER_NAME'),6)}</span>
+                </a>
+                <span style="float:left;">|</span><a href="{:U(is_m().'/Login/exitLogin')}" style="color:#666">退出</a>              
+           <else />     
+                <a href="{:U(is_m().'/Login/index')}">登陆</a>
+                <a href="{:U(is_m().'/Register/index')}">注册</a>
+            </if>
+        </div>
+  </div>
+ 
+   <div class="head">
+    <div class="logo"><img src="__MOBILE__/images/logo.jpg"></div>
+    <div class="search">
+      <form action="{:U(is_m().'/Category/index')}" method="get">
+        <div  class="search_1">
+          <input type="text" value="{:htmlspecialchars($_GET['keywrods'])}"  name="keywrods" placeholder="输入检索关键字">
+        </div>
+        <input type="image" class="search_2" src="__MOBILE__/images/search_inoc.jpg">
+      </form>
+    </div>
+    <div id="dl-menu" class="dl-menuwrapper" >
+      <button id="dl-menu-button"><img src="__MOBILE__/images/nav_inoc.jpg"></button>
+      <ul class="dl-menu">
+        <li><a href="{:U(is_m().'/Index/index')}">越洋购首页</a> </li>
+        <li><a href="{:U(is_m().'/Recommend/index')}">推荐商品</a> </li>
+        <li><a href="{:U(is_m().'/Promotion/index')}">限时促销</a> </li>
+        <li><a href="{:U(is_m().'/Brand/index')}">越洋专卖店</a> </li>
+        <li><a href="{:U(is_m().'/Help/lists')}">商城服务</a> </li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $( '#dl-menu' ).dlmenu();
+        });
+    </script> 
+    
+  </div> 

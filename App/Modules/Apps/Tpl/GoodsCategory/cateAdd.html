@@ -1,0 +1,208 @@
+<script type="text/javascript">
+//复制节点
+function addType(node){
+      $(function(){
+        var span=$(node).parent();     
+        var str=$(span).clone(true);     
+        str='<p>'+$(str).html()+'</p>';
+        str=str.replace('addType', 'delType');
+        str=str.replace('[+]', '[-]');
+        $(span).after(str);    
+      });
+}
+
+//删除节点
+function delType(_this){
+      $(function(){
+        $(_this).parent().remove();         
+      });
+} 
+
+//AJAX请求属性名称列表
+function changeCat(_this){
+        var openUrl="{:U(APP_APPS.'/GoodsCategory/cateAddForm','','')}/attr/where"+"/goods_attr_type_id/"+$(_this).val();
+        var response=callAjaxDo(openUrl,'text');//获取数据    
+        $(_this).next().next().html(response);    
+}
+    
+</script>
+<style type="text/css">
+dl dt{text-align:right;}    
+</style>
+
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>       
+                <li></li>     
+                <li><a href="javascript:;"><span>通用信息</span></a></li>
+               <li><a href="javascript:;"><span>广告图</span></a></li>
+                <!--  <li ><a href="javascript:;"><span>广告相册</span></a></li>
+                <li ><a href="javascript:;"><span>相册专辑</span></a></li>
+                 <li ><a href="javascript:;"><span>关联文章</span></a></li>            -->
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/GoodsCategory/cateAddForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <if condition="!$_GET['id']">
+            <input type="hidden" name="pid" value="{$pid}"/>
+            <input type="hidden" name="path" value="{$path}"/>
+        </if>
+        <input type="hidden" name="id" value="{$_GET['id']}"/>
+        <div class="pageFormContent tabsContent" layoutH="95">
+          <div inited="1000" style="display: block;"></div>
+              <div inited="1000" style="display: block;"><!--通用资料内容-->
+                
+               <foreach name="names" item="t">   
+                 <dl style="width: 100%;">
+                    <dt>({$t['info']})分类名称：</dt>
+                    <dd><input type="text" name="{$t['field']}" size="50" value="{$save[$t['field']]}" class="required" /></dd>
+     
+                 </dl>
+                </foreach> 
+                <!--价格分级-->
+				<if condition="C('IS_GOODS_CLASS')">
+                 <dl style="width: 100%;">
+                    <dt>价格分级：</dt>
+                    <dd><input type="text" name="grade" size="50" class="digits" value="<if condition="$save['grade']">{$save.grade}<else />0</if>"/></dd>
+                 </dl>                      
+                 <dl style="width: 100%;">
+                    <dt> <img src="__SYS_IMG__/notice.gif" style="position:relative;top:-0px;"/> </dt>
+                    <dd style="width: 80%;color:#666;">该选项表示该分类下商品最低价与最高价之间的划分的等级个数，填0表示不做分级，最多不能超过10个。</dd>
+                 </dl>   
+				 </if>
+				 <!--价格分级-->
+				 
+				 <!--商品属性-->   
+                 <if condition="C('IS_GOODS_ATTRIBUTE')">               
+                 <dl style="width: 100%;height: auto;" >
+                    <dt>属性检索：</dt>
+                    <dd style="width:400px;">
+                          <p><a href="javascript:void(0);" style="float:left;position: relative;top:5px;right:5px;" onclick="addType(this);">[+]</a>
+                                <select name="" onchange="changeCat(this)">
+                                    <option value="">请选择属性类型</option>
+                                    <foreach name="attr_type" item="a">
+                                        <option value="{$a.id}">{$a[pfix('name')]}</option>
+                                    </foreach>
+                            </select>
+                            <span style="float:left;position: relative;top:5px;">&nbsp;>>>&nbsp;</span>
+                            <select name="filter_attr[]" class="attr_type_id"><option value="">请选择筛选属性</option></select>
+                          </p>       
+                          <foreach name="attrType" item="at">
+                              <p><a href="javascript:void(0);" style="float:left;position: relative;top:5px;right:5px;" onclick="delType(this);">[-]</a>
+                                    <select name="" onchange="changeCat(this)">
+                                        <option value="">请选择属性类型</option>
+                                        <foreach name="attr_type" item="a">
+                                            <option value="{$a.id}" <if condition="$a[id] eq $at['goods_attr_type_id']">selected="selected"</if>>{$a[pfix('name')]}</option>
+                                        </foreach>
+                                </select>
+                                <span style="float:left;position: relative;top:5px;">&nbsp;>>>&nbsp;</span>
+                                <select name="filter_attr[]" class="attr_type_id">
+                                    <foreach name="at['attribute']" item="b">
+                                         <option value="{$b.id}" <if condition="$b['id'] eq $at['id']">selected="selected"</if> >{$b.name}</option>
+                                    </foreach>
+                               </select>
+                              </p>                             
+                          </foreach>             
+                   </dd>
+                 </dl>               
+                 <!--商品属性-->
+                 </if>
+                                         
+            <dl style="width: 100%;margin-top: 10px;">
+                <dt>排序：</dt>
+                <dd><input type="text" name="reorder" size="50" value="<if condition="$save['reorder']">{$save.reorder}<else />0</if>" class="required digits"  /></dd>
+             </dl>         
+                              
+            <dl style="width: 100%;">
+                <dt>描述：</dt>
+                <dd><textarea name="description" cols="50" rows="10">{$save.description}</textarea></dd>
+             </dl>    
+            </div><!--通用信息-->
+            
+         {/*单个广告集合*/}   
+          <div inited="1000" style="display: block;">
+            <dl style="width: 100%;">
+                <dt>单张广告图：</dt>
+                <dd style="width: 500px">
+                    <input type="hidden" name="ad_alone" id="ad_alone" value="{$save.ad_alone}"/>
+                    <input name="file2" type="file" id="logosFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>283,'height'=>395))}','logosFileToUpload','logos_img_show','ad_alone','','acc-show','__ROOT__','logos_imgloads');"/>
+                </dd>
+            </dl>     
+            <dl style="<if condition="!$save['ad_alone']">display:none;</if> height:auto;" id="logos_imgloads">
+                <dt>单张广告图：</dt>
+                <dd>
+                   <img src="__ROOT__/{$save.ad_alone}" id="logos_img_show" height="100" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                </dd>
+            </dl>                 
+           <foreach name="adTitle" item="t">   
+              <dl style="width: 100%;">
+                <dt>({$t['info']})广告标题：</dt>
+                <dd><input type="text" name="{$t['field']}" size="50" value="{$save[$t['field']]}" class="" /></dd> 
+             </dl>   
+            </foreach> 
+            
+              <dl style="width: 100%;">
+                <dt>广告价格：</dt>
+                <dd><input type="text" name="ad_price" size="50" value="{$save.ad_price}" class="" /></dd> 
+             </dl>   
+                                     
+             <dl style="width: 100%;">
+                <dt>广告链接：</dt>
+                <dd><input type="text" name="ad_alone_link" size="50" value="{$save.ad_alone_link}" class="" /></dd> 
+             </dl>     
+             
+            <p style="border-bottom:1px #ccc solid;padding-left: 18px;height:20px;line-height: 20px;width:95%;font-size: 18px;"></p>     
+            <dl style="width: 100%;">
+                <dt>单张广告图：</dt>
+                <dd style="width: 500px">
+                    <input type="hidden" name="ad_alone1" id="ad_alone1" value="{$save.ad_alone1}"/>
+                    <input name="file3" type="file" id="logosFileToUpload1"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>1200,'height'=>85))}','logosFileToUpload1','logos_img_show1','ad_alone1','','acc-show1','__ROOT__','logos_imgloads1');"/>
+                </dd>
+            </dl>     
+            <dl style="<if condition="!$save['ad_alone1']">display:none;</if> height:auto;" id="logos_imgloads1">
+                <dt>单张广告图：</dt>
+                <dd>
+                   <img src="__ROOT__/{$save.ad_alone1}" id="logos_img_show1"  style="display:inline-block;position:relative;top:5px;max-width: 300px;" class="acc-show1"/> 
+                </dd>
+            </dl>                 
+                                     
+             <dl style="width: 100%;">
+                <dt>广告链接：</dt>
+                <dd><input type="text" name="ad_alone_link1" size="50" value="{$save.ad_alone_link1}" class="" /></dd> 
+             </dl>                                                                               
+            </div>   
+          {/*单个广告集合结束*/}  
+                      
+            <div inited="1000" style="display: block;"><!--广告相册-->
+                    <p style="height: 10px;padding-bottom:10px;">上传图片: <input name="file3" type="file" id="fileToUpload7" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>220,'height'=>110))}','fileToUpload7','setimgdiv','__ROOT__',1);"></p>  
+                    <div class="divider"></div> 
+                    <!--这里上传图片-->
+                    <foreach name='adArray' item='m'>      
+                             <div class="divigm" style="float:left;margin:3px;position:relative;">
+                                 <span style="display:block;width:200px;background:#000;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;position:absolute;left:0;top:0;">
+                                     <b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer; float:right;color:red;font-size:16px;">×</b>
+                                </span>
+                                 <a href="__ROOT__/{$m.img}" target="_blank"><img src="__ROOT__/{$m.img}" width="200" height="180" style="display:block;"/></a>
+                                 <input type="hidden" value="{$m.img}" name="imgAll[]"/>
+                                 <input type="text" name="title[]"  value="{$m.title}" style="width:197px;height:16px;font-size:12px;border:none;"  placeholder="这里输入图片说明"/><br/>
+                                 <input type="text" name="links[]"  value="{$m.links}" style="width:197px;height:16px;font-size:12px;border:none;"  placeholder="这里输入图片链接"/>
+                          </div>
+                    </foreach>                 
+                   <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="__PUBLIC__/Images/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>                  
+              </div>    <!--广告相册-->
+          </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+        
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

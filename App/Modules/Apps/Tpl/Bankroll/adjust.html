@@ -1,0 +1,58 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Bankroll/adjustForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>帐户营业总额：</dt>
+                <dd>
+                    <input  type="text" value="{$addMoney}" readonly="readonly" size="27"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>已支出余额：</dt>
+                <dd>
+                    <input  type="text" value="-{$subtractMoney}" readonly="readonly" size="27"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>可用余额：</dt>
+                <dd>
+                    <input  type="text" value="{$addMoney - $subtractMoney}" readonly="readonly" size="27"/>
+                </dd>
+            </dl>
+                                    
+            <dl>
+                <dt>调节操作：</dt>
+                <dd>
+                    <select class="combox" name="type" class="required">
+                    <option value="1">增加</option>          
+                       <option value="-1" >减少</option>
+                </select> 
+                <input type="text" name="money" class="required number"  value="" size="18"/>
+                </dd>
+            </dl>
+            
+               <dl>
+                <dt>变动原因：</dt>
+                <dd>
+                     <textarea name="change_data" style="width:600px;height:200px;" class="required" maxlength="200"></textarea>
+                </dd>
+            </dl>
+                      
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

@@ -1,0 +1,240 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<script type="text/javascript">
+$(function(){
+   var optiions=$('select[name="logistics_id"]').children('option:selected');
+   if(optiions.attr('value')){
+	   $('#shipping-name').text('('+optiions.text()+')');
+   }		   
+});
+</script>
+<style type="text/css">
+.list tr td{background:#fff;}    
+</style>
+<div class="page">
+    <div class="pageContent pageForm">
+        <form method="post" action="{:U('OrderInfo/changeState')}" class="pageForm required-validate" onsubmit="return validateCallback(this,navTabAjaxDone)">
+		<input type="hidden" name="id" value="{$orders.order_id}" />
+        <input type="hidden" name="tpl" value="orderRefund" />
+        <div class="pageFormContent" layoutH="58">
+        <table class="list" style="width:100%;">
+           <!--订单信息-->  
+        <!--   <tr>
+                  <th colspan="4" style="background:#D9E7F8;">
+                       <a class="buttonActive auto-size" href="{:U(APP_APPS.'/OrderInfo/printOrder',array('order_id'=>$orders['order_id']))}" target="_blank" style="display:inline;"> <span>打印订单</span>
+                       </a>          
+                       <a class="buttonActive auto-size" target="_blank" href="{:U(APP_APPS.'/OrderInfo/exportEXCEL',array('order_id'=>$orders['order_id']))}" style="display:inline;">
+                           <span>导出EXCEL</span>
+                       </a>                              
+                  </th>           
+           </tr>-->  
+            <tr>
+
+                  <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">退货订单信息</th>
+            </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">订单号：</td>
+                   <td>{$orders.order_sn}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">订单状态：</td>
+                   <td>
+                    [{$orderStatus[$orders['order_status']]}] 	
+					[{$shippingStatus[$orders['shipping_status']]}]                       
+                   <if condition="$orders['order_amount'] eq 0">
+                       [积分对换] 
+                    <elseif condition="$orders['pay_type'] eq 1" />
+                        [到店自提]
+                    <elseif condition="$orders['pay_type'] eq 2" />
+                        [货到付款]
+                    <else />
+                         [{$payStatus[$orders['pay_status']]}]
+                    </if> 					                                                  
+                   </td>
+            </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">下单人：</td>
+                   <td><if condition="$orders['user_name']">{$orders.user_name} <else />匿名用户</if> </td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">下单时间：</td>
+                   <td>{$orders.add_time|date='Y-m-d H:i:s',###}</td>
+            </tr>
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">下单人电话：</td>
+                   <td><if condition="$orders['tel']">{$orders['tel']}<else />{$orders.mobile}</if></td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">发货时间：</td>
+                   <td><if condition="$orders['shipping_time']">{$orders.shipping_time|date='Y-m-d H:i:s',###}<else />未发货</if></td>          
+             </tr>   
+           <!--订单信息结束-->  
+
+                       
+           <!--收货人信息-->
+           <tr>
+                <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                  上门提取地址
+                </th>
+           </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">联系人：</td>
+                   <td>{$retreat_data.consignee}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">电话：</td>
+                   <td>{$retreat_data.mobile}</td>
+            </tr>      
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">地址：</td>
+                   <td>{$retreat_data['country_text'] ? $retreat_data['country_text'] : $retreat_data['country']}{$retreat_data.province}{$retreat_data.city}{$retreat_data.address}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">邮编：</td>
+                   <td>{$retreat_data.zipcode}</td>
+            </tr>                  
+            <!--收货人信息结束-->       
+
+            <!--商品信息-->   
+             <tr>
+                  <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                      商品信息
+                 </th>
+            </tr>    
+             <tr><td colspan="4">
+                    <table cellpadding="0" border="0" cellspacing="0" width="100%" >
+                        <tr >
+                            <td style="font-weight: bold;">商品名称</td>
+                            <td style="font-weight: bold;">货号</td>
+                            <td style="font-weight: bold;">单价</td>
+                            <td style="font-weight: bold;">数量</td>
+                            <td style="font-weight: bold;">属性</td>
+							<td style="font-weight: bold;">退货理由</td>
+                            <td style="font-weight: bold;">用户留言</td>
+                            <td style="font-weight: bold;">小计</td>
+                       </tr>
+                       <php>$refSum=0;</php>
+                       <foreach name="goodsList" item="gl">
+                         <if condition="$retreat_data['goods_data'][$gl['rec_id']]">
+                            <php>$refSum+=$gl['subtotal'];</php>
+                            <tr>
+                                <td style="border-top:1px #ccc solid;">
+                                <a href="{:U('/Goods/index',array('html'=>'g-'.$gl['goods_id']))}" target="_blank">
+                                    <img src="__ROOT__/{$gl['goods_thumb']}" width="30" height="30" />
+                                    <span style="position:relative;top:-7px;">{$gl['goods_name']}</span>
+                                </a>
+                                </td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_sn}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_price}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_number} </td>
+                                <td style="border-top:1px #ccc solid;">
+                                     <foreach name="gl['goods_attr']" item="ga">
+                                           {$ga[pfix('name')]}：{$ga['value'][pfix('attr_value')]}<br/>
+                                     </foreach>
+                               </td>
+							   <td style="border-top:1px #ccc solid;">
+                                      {$RETURN_RREAS[$retreat_data['goods_data'][$gl['rec_id']]['choosing_return']]} <!--用户选择退货理由-->
+                                </td>
+							   <td style="border-top:1px #ccc solid;">
+                                      {$retreat_data['goods_data'][$gl['rec_id']]['return_info']} <!--用户退货留言-->
+                                </td>                                
+                                <td style="border-top:1px #ccc solid;">{$gl.subtotal}</td>
+                            </tr>
+                          </if>  
+                        </foreach>
+                        <tr>
+                            <td style="border-top:1px #ccc solid;" colspan="6"></td>
+                            <td style="border-top:1px #ccc solid;text-align: right;">合计</td>
+                            <td style="border-top:1px #ccc solid;" >￥<strong style="color:red;">{:number_format($refSum,2, '.', '')}</strong></td>
+                        </tr>                                           
+                      </table>  
+             </td></tr>
+            <!--商品信息结束-->       
+            
+            <!--操作信息-->
+             <tr><th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">操作信息</th></tr>  
+             <tr>
+                 <td colspan="1"  style="text-align: right;">操作备注：</td>
+                 <td colspan="3"><textarea cols="100" rows="8" class="required" name="content"></textarea></td>
+            </tr>    
+            
+            <if condition="C('IS_LOGISTICS')">
+                 <tr>
+                     <td colspan="1"  style="text-align: right;padding:3px 0;">物流单号：</td>
+                     <td colspan="3">
+                           <input type="text" name="logistics_sn" value="{$orders.logistics_sn}" style="float:left;" />
+                           <select name="logistics_id" style="height:22px;float:left;margin:0 5px;" >
+                               <foreach name="logistics" item="lo">
+                                   <if condition="$orders['logistics_id'] eq $lo['shipping_id']">
+                                    <option value="{$lo.shipping_id}" <if condition="$orders['logistics_id'] eq $lo['shipping_id']">selected="selected"</if>>{$lo.shipping_name}</option>
+                                   </if> 
+                               </foreach>
+                           </select>
+                           <if condition="$orders['logistics_sn']">
+                               <a href="{:U(APP_APPS.'/OrderInfo/apiKuaidi100',array('order_id'=>$orders['order_id']))}" class="auto-size" target="dialog" mask="true">查看物流</a>
+                           </if>
+                     </td>
+                </tr>  	
+            </if>		
+             <tr>
+                 <td colspan="1"  style="text-align: right;">可操作：</td>
+                 <td colspan="3">
+				     <p style="width:100%"><span style="float:left;position:relative;top:5px;">订单状态：</span>
+							<!-- <label style="width:70px;">
+							 <input type="radio" name="order_status" <if condition="$orders['order_status'] eq 0">checked="checked"</if>  value="0"/>取消
+							 </label>
+							 <label style="width:70px;">
+							 <input type="radio" name="order_status" <if condition="$orders['order_status'] eq 1">checked="checked"</if> value="1" />未确定
+							 </label>
+							 <label style="width:80px;">
+							 <input type="radio" name="order_status" <if condition="$orders['order_status'] eq 2">checked="checked"</if> value="2" />交易完成
+							 </label>-->
+							 <label style="width:180px;">
+							 <input type="radio" name="order_status" <if condition="$orders['order_status'] eq 3">checked="checked"</if> value="3"  />退款(选中状态，自动发邮件)
+							 </label>
+							 <label style="width:80px;">
+							 <input type="radio" name="order_status" <if condition="$orders['order_status'] eq 4">checked="checked"</if> value="4" />退款完成
+							 </label>
+					 </p>	
+					  <p style="width:100%;display:none"><span style="float:left;position:relative;top:5px;">发货情况：</span>
+							 <label style="width:70px;"><input type="radio" name="shipping_status" <if condition="$orders['shipping_status'] eq 0">checked="checked"</if> value="0"/>未发货</label>
+							 <label style="width:70px;"><input type="radio" name="shipping_status" <if condition="$orders['shipping_status'] eq 1">checked="checked"</if> value="1"/>备货中</label>
+							 <label style="width:70px;"><input type="radio" name="shipping_status" <if condition="$orders['shipping_status'] eq 2">checked="checked"</if> value="2"/>已发货</label>
+							 <label style="width:70px;"><input type="radio" name="shipping_status" <if condition="$orders['shipping_status'] eq 3">checked="checked"</if> value="3"/>已收货</label>
+					 </p> 
+					  <p style="width:100%;display:none"><span style="float:left;position:relative;top:5px;">付款情况：</span>
+							 <label style="width:70px;"><input type="radio" name="pay_status" <if condition="$orders['pay_status'] eq 0">checked="checked"</if> value="0"/>未付款</label>
+							 <label style="width:70px;"><input type="radio" name="pay_status" <if condition="$orders['pay_status'] eq 1">checked="checked"</if> value="1"/>付款中</label>
+							 <label style="width:70px;"><input type="radio" name="pay_status" <if condition="$orders['pay_status'] eq 2">checked="checked"</if> value="2"/>已付款</label>
+					 </p> 	                     	 
+                </td>
+           </tr>    
+             <!--操作信息结束-->
+             
+             <!--订单操作日志-->
+              <tr><th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">订单操作日志</th></tr> 
+              <tr><td colspan="4">
+                    <table cellpadding="0" border="0" cellspacing="0" width="100%" >
+                        <tr >
+                            <td style="font-weight: bold;">操作者</td>
+                            <td style="font-weight: bold;">操作时间</td>
+                            <td style="font-weight: bold;">操作选项</td>
+                            <td style="font-weight: bold;">备注</td>
+                       </tr>  
+					   <foreach name="logs" item="l">
+							<tr >
+								<td style="border-top:1px #eee solid">{$l.action_user}</td>
+								<td style="border-top:1px #eee solid">{$l.log_time|date='Y-m-d H:i:s',###}</td>
+								<td style="border-top:1px #eee solid">
+                                        [{$orderStatus[$l['order_status']]}] 	
+                                        [{$shippingStatus[$l['shipping_status']]}] 
+                                        [{$payStatus[$l['pay_status']]}]    								
+								</td>
+								<td style="border-top:1px #eee solid">{$l.action_note}</td>
+						   </tr>     
+					   </foreach>                   
+                  </table>  
+            </td></tr>               
+             <!--订单操作日志结束-->
+        </table>
+        </div>
+        <div class="formBar">
+            <ul>
+			    <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+            </ul>
+        </div>
+        </form>
+    </div>
+</div>

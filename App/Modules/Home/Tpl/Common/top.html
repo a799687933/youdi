@@ -1,0 +1,10 @@
+<script type="text/javascript">
+{/*移步请求头部资料*/}
+ $(document).ready(function(){              
+     $("body .header").load("{:U('Piece/publicTop','','')}", null, function (){
+           {/*付值购物车个数*/}
+           $('.MY-CART-COUNT').text($('.MY-CART').text());
+     });     
+});
+</script>
+<div class="header"></div>

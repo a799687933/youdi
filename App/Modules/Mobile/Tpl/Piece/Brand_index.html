@@ -1,0 +1,3 @@
+<foreach name="brandList" item="res" key="keyrec">
+    <li><a href="{:U(is_m().'/Brand/cover',array('html'=>'b-'.$res['id']))}"><img src="__ROOT__/{$res.logo}" style="height: 93px !important;"></a></li>
+</foreach>

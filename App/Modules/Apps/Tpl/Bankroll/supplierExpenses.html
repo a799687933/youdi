@@ -1,0 +1,107 @@
+<script type="text/javascript">
+$(function(){
+   $('.hovers').hover(function(){
+		$(this).children('.hovers-ch').children('.hovers-chie').show();					   
+	},function(){	
+		$(this).children('.hovers-ch').children('.hovers-chie').hide();		
+	});
+});
+</script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->       
+     <input type="hidden" name="shops_id" value="{$_REQUEST['shops_id']}" />   <!--保存商户ID-->
+     <input  type="hidden" name="trade_type" value="{$_REQUEST['trade_type']}" />    <!--保存收入/提现条件-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);"  method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+			   <!--<td>输入商户ID号：<input type="text" name="supplier_id" value="{$_REQUEST['supplier_id']}" /></td>-->
+                <td>
+                <select class="combox" name="trade_type" class="required">
+                    <option value="">-查询所有-</option>          
+                       <option value="1" <if condition="$_REQUEST['trade_type'] eq 1">selected="selected"</if>>收入</option>
+                       <option value="-1" <if condition="$_REQUEST['trade_type'] eq -1">selected="selected"</if>>支出</option>
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+                <td style="text-align:right;width:100%">{$suuplier['name']} | 可用余额 (￥<strong style="color:green;">{$suuplier['bankroll']})</strong></td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <!--<div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('MemberAccount/accountAdjust')">
+              <li><a class="add" href="{:U(APP_APPS.'/MemberAccount/accountAdjust','','')}/id/{$_REQUEST['id']}/{:C('VAR_PAGE')}/{$currentPage}/action/accountList/name/{$_REQUEST['name']}"target="dialog" mask="true" width="900" height="590"><span>调节会员帐户</span></a></li>
+            </if>
+        </ul>
+    </div>-->
+    <table class="list" width="100%" layoutH="60">
+        <thead>
+            <tr>
+				<th orderfield="goods_supplier_id" class="<if condition='$goods_supplier_id eq "desc"'>desc<else />asc</if>" width="20%">商户名称</th>
+                <th orderfield="trade_type" class="<if condition='$trade_type eq "desc"'>desc<else />asc</if>" width="8%">交易类型</th>
+                <th orderfield="total_price" class="<if condition='$total_price eq "desc"'>desc<else />asc</if>" width="10%">金额总数量</th>
+                <th orderfield="fee" class="<if condition='$fee eq "desc"'>desc<else />asc</if>" width="10%">手续费实金额</th>
+                <th orderfield="actual_price" class="<if condition='$actual_price eq "desc"'>desc<else />asc</if>" width="10%">交易实际总金额</th>
+                <th orderfield="change_desc" class="<if condition='$change_desc eq "desc"'>desc<else />asc</if>" width="30%">金额变动原因</th> 
+                <th orderfield="change_time" class="<if condition='$change_time eq "desc"'>desc<else />asc</if>" width="15%">操作的时间</th> 
+            </tr>                  
+        </thead>
+        <tbody>
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}" class="hovers">
+				<td>{$suuplier['name']}</td>
+                <td>
+                      <if condition='$V["trade_type"] eq 1'>
+                           <span style="color:#0000FF">收入</span>
+                     <elseif condition='$V["trade_type"] eq -1'/>
+                          <span style="color:#FF0000">支出</span>
+                    </if>
+                </td>
+                <td>
+                      <if condition='$V["trade_type"] eq 1'>
+                            <span style="color:#0000FF">+￥{$V.total_price}</span>
+                      <else />
+                           <span style="color:#FF0000">-￥{$V.total_price}</span>
+                      </if>
+                </td>
+                <td>￥{$V.fee}({$V.centum}%)</td>
+                <td>￥<strong style="color:red;">{$V.actual_price}</strong></td> 
+                <td style="position:relative;" class="hovers-ch">
+                   {$V.change_desc|str_replace='<br/>','，',###|strip_tags=###|sub_str=###,30}
+                   <span class="hovers-chie" style="position:absolute;top:22px;left:28px;color:#ccc;display:none;z-index:2;">◆</span>
+                   <span class="hovers-chie" style="position:absolute;top:23px;left:28px;color:#fff;display:none;z-index:2;">◆</span>
+               <div class="hovers-chie" style="width:100%;min-height:100px;position:absolute;top:27px;border:1px #ccc solid;background:#fff;display:none;padding:5px;z-index:1;text-align:left;line-height:180%">{$V.change_desc}</div>                         
+                </td>
+                <td>{$V.change_time|date='Y-m-d H:i:s',###}</td>
+            </tr>
+          </volist>           
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="{$pageNumShown}" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+    <title>满林城家居商城</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/base.css" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/main2014-03.css" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/categories.css" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/slide.css" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/t01-03.css" />
+    <link rel="Stylesheet" href="__PUBLIC__Css/maincategory1.css" />
+    <script type="text/javascript" src="__PUBLIC__Js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__Js/jquery.superslide.js"></script>
+    <script type="text/javascript" src="__PUBLIC__Js/jquery.lazyload.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__Js/common.js"></script>
+    <link rel="Stylesheet" href="__PUBLIC__Js/dialog/skins/default.css" />
+    <script type="text/javascript" src="__PUBLIC__Js/dialog/artDialog.js"></script>
+    <style type="text/css">
+        .tit { display:block; }
+    </style>
+<script stype="text/javascript">
+$(function(){
+        jQuery("img.lazy").lazyload();
+        jQuery(function () {
+            jQuery("#allcategories").hover(function () { jQuery(".tit").show(); }, function () { jQuery(".tit").hide(); });
+            if (jQuery(".slideBox").length == 1) {
+                jQuery(".slideBox").slide({ titCell: ".hd ul", mainCell: ".bd ul", autoPage: true, autoPlay: true });
+            }
+        });
+});
+</script>    
+</head>
+<body>
+    <div class="maindiv">
+        <include file='Common:header'/><!--头部公用-->
+        <div class="content">
+            <div class="cbody">
+                <div class="currentnav">当前位置 : <a href="__ROOT__/">首页</a> &gt;&gt; <a href="{:U('/Channel/index',array('id'=>$position['id']))}" title="{$position.name}" class="pcnode-1">{$position.name}</a> </div>
+            </div>
+            <div class="cbody f-cb">
+                <div class="f-fl left1">
+                    <div>
+<div class="mc-wrapper">
+                            <div class="hd f-ti1">商品分类</div>
+                            <div class="bd">
+                                <ul class="cats">
+                                  <foreach name="twoCate" item="to">
+                                        <if condition=" is_even($key)">
+                                            <li class="calt f-ti1"><a href="{:U('/Category/index/',array('c_id'=>$to['id']))}">{$to.name}</a></li>
+                                        <else />
+                                            <li class=" f-ti1"><a href="{:U('/Category/index/',array('c_id'=>$to['id']))}">{$to.name}</a></li>
+                                        </if>                                                                
+                                  </foreach>                                  
+                               </ul>
+                            </div>
+                        </div></div>
+                   <div>
+                        <!--<div class="mc-wrapper">
+                            <div class="hd f-tac">热销排行榜</div>
+                            <div class="bd f-tac">
+                                <div class="plist">
+                                    
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="/Product.aspx?Id=581" target="_blank"><img src="Upload/asdasd.jpg" alt="" /></a></div>
+                                        <div class="psname"><a href="/Product.aspx?Id=581" target="_blank">艾斯利床垫 3D面料 天然乳胶床垫 天然山棕席梦思床垫包物流</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>1380.00</span>元 &nbsp; <span class="dsc">销量<span class="dscn">1548</span>件</span></div>
+                                        </div>
+                                        
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="/Product.aspx?Id=584" target="_blank"><img src="Upload/hjyutr4.jpg" alt="" /></a></div>
+                                        <div class="psname"><a href="/Product.aspx?Id=584" target="_blank">艾斯利床垫 纯棉布面料梦思床垫包物流</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>1050.00</span>元 &nbsp; <span class="dsc">销量<span class="dscn">1392</span>件</span></div>
+                                        </div>
+                                        
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="/Product.aspx?Id=622" target="_blank"><img src="Upload/jfghfgyhfghf.jpg" alt="" /></a></div>
+                                        <div class="psname"><a href="/Product.aspx?Id=622" target="_blank">艾斯利床垫 绒布面料 3D材料床垫 环保椰维棕席梦思床垫包物流</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>2380.00</span>元 &nbsp; <span class="dsc">销量<span class="dscn">480</span>件</span></div>
+                                        </div>
+                                        
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="/Product.aspx?Id=586" target="_blank"><img src="Upload/sdfwerwre.jpg" alt="" /></a></div>
+                                        <div class="psname"><a href="/Product.aspx?Id=586" target="_blank">艾斯利床垫 高密度海绵床垫 针织面料床垫席梦思床垫包物流</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>1200.00</span>元 &nbsp; <span class="dsc">销量<span class="dscn">408</span>件</span></div>
+                                        </div>
+                                        
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="/Product.aspx?Id=613" target="_blank"><img src="Upload/iuoyutyutyu.jpg" alt="" /></a></div>
+                                        <div class="psname"><a href="/Product.aspx?Id=613" target="_blank">艾斯利床垫 针织面料 高密度海棉床垫席梦思床垫包物流</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>1300.00</span>元 &nbsp; <span class="dsc">销量<span class="dscn">380</span>件</span></div>
+                                        </div>
+                                        
+                                </div>
+                            </div>
+                        </div>销售排行榜-->
+                    </div>
+                    <div>
+                        <div class="mc-wrapper">
+                            <div class="hd f-tac">热门点击</div>
+                            <div class="bd f-tac">
+                                <div class="plist">
+                                      <foreach name="hot" item="h">
+                                        <div class="plitem">
+                                        <div class="psimg"><a href="{:U('/Goods/index',array('id'=>$h['id']))}" target="_blank"><img src="__ROOT__/{$h.goods_thumb}" alt="{$h.goods_name}" /></a></div>
+                                        <div class="psname"><a href="{:U('/Goods/index',array('id'=>$h['id']))}" target="_blank">{$h.goods_name}</a></div>
+                                        <div class="psdet"><span class="dprice"><span class="dsym">￥</span>{$h.goods_retail_price}</span>元 &nbsp; <span class="dvc">点击<span class="dvcn">{$h.click_count}</span>次</span></div>
+                                        </div>
+                                      </foreach>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="f-fr left2">
+                    <div class="catfocus"><div class="slideBox" id="PubCatHome-10000-Focus"> <div class="hd"><ul></ul></div> <div class="bd">  
+                           <ul> 
+                               <foreach name="cAd" item="c">
+                                    <li><a href="{$c.ad_url}" target="_blank"><img src="__ROOT__/{$c.ad_img}" alt="{$c.ad_class_bewrite}" /></a></li>  
+                                </foreach>
+                           </ul>  
+                           </div> <a class="prev" href="javascript:void(0)"></a> <a class="next" href="javascript:void(0)"></a> </div></div>
+                          
+                          <!--品牌-->
+                          <div class="braget">
+                                <ul>
+                                    <foreach name="brand" item="b">
+                                         <li><a href="{:U('Category/index',array('c_id'=>$b['goods_category_id'],'b_id'=>$b['id']))}"><img src="__ROOT__/{$b.logo}" width="100" height="40"/></a></li>
+                                    </foreach>
+                                     
+                                </ul>
+                          </div>
+                          <!--品牌-->
+
+                  <foreach name="twoF" item="TF" key="TK">
+                    <div class="f-hg2"></div>
+                    <div class="box-wrapper">
+                        <div class="bgt960 f-tac" style="height:40px;"> <div style="height: 2px;"></div>
+                            <span style="float:right;padding-right:5px;font-size:12px;color:#666;padding-top:5px;font-weight: normal;">热门推荐：
+                                <foreach name="TF['child']" item="TFCHILD" >
+                                     <a href="{:U('Category/index/',array('c_id'=>$TFCHILD['id']))}">{$TFCHILD.name}</a> |
+                                </foreach>
+                                </span>
+                           <span style="margin-top:10px;background: #6E0D18;padding:8px 18px;color:#fff;-moz-border-top-left-radius:4px;-moz-border-top-right-radius:4px;border-top-right-radius: 4px;border-top-left-radius: 4px;">
+                               <span style="font: 600 18px/45px 'microsoft yahei',Arial,'宋体';">{$TK+1}F</span> <span style="font-family: '黑体';">{$TF.name}</span>
+                               </span> 
+                        </div>
+                        <div class="bx-bd">
+                            <div class="f-hg1"></div>
+                            <div class="rlist">
+                                <div class="productlist f-cb m-b10">
+                                       <foreach name="TF['goods']" item="GO" key="GK">
+                                            <div class="productitem <if condition="$GK eq 0">first-0<elseif condition="$GK eq 4"/>first-4<elseif condition="$GK eq 8"/>first-4</if>" >
+                                                <div class="productimg">
+                                                    <a href="{:U('Goods/index/',array('id'=>$GO['id']))}" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="__ROOT__/{$GO.goods_thumb}" alt="{$GO.goods_name}" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="{:U('Goods/index/',array('id'=>$GO['id']))}" target="_blank" title="{$GO.goods_name}"> {$GO.goods_name} </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ {$GO.goods_retail_price}</span>
+                                                    <span class="psval1"> | 销量:30</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addCart('{:U('/Cart/addCart','','')}',{$GO.id})">加入购物车</a></div>
+                                                    <div class="addfavorite">
+                                                        <if condition="chkSession()">                                                
+                                                             <a href="javascript:goodsCollect('{:U('/Member/collectionAdd',array('goods_id'=>$GO['id']))}');" class="tofav">收藏</a>
+                                                        <else />    
+                                                            <a href="{:U('/Actions/login')}" class="tofav">收藏</a>
+                                                        </if>                                                        
+                                                    </div>                                                    
+                                                </div>
+                                            </div>                                       
+                                       </foreach>                                    
+                                    <!--
+                                            <div class="productitem first-0">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=486" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/PG619.jpg" alt="思科 PG-619金雅典" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=486" target="_blank" title="火热促销中"> 思科 PG-619金雅典 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 968.00</span>
+                                                    <span class="psval1"> | 销量:30</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(486)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(486);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=544" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/C86 6.jpg" alt="百达 E86 五斗柜 " /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=544" target="_blank" title="火热促销中"> 百达 E86 五斗柜  </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 715.00</span>
+                                                    <span class="psval1"> | 销量:0</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(544)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(544);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=362" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/1023.jpg" alt="欧陆皇朝 1023# 床" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=362" target="_blank" title="火热促销中"> 欧陆皇朝 1023# 床 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 1364.00</span>
+                                                    <span class="psval1"> | 销量:23</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(362)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(362);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=118" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/A8080.jpg" alt="凯巢 A8080床（真皮）" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=118" target="_blank" title="火热促销中"> 凯巢 A8080床（真皮） </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 2618.00</span>
+                                                    <span class="psval1"> | 销量:22</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(118)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(118);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem first-4">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=511" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/8321.jpg" alt="思科 8321 套房" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=511" target="_blank" title="火热促销中"> 思科 8321 套房 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 2783.00</span>
+                                                    <span class="psval1"> | 销量:0</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(511)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(511);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=482" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/PK053.jpg" alt="思科 PK-053四星酒店" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=482" target="_blank" title="火热促销中"> 思科 PK-053四星酒店 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 1078.00</span>
+                                                    <span class="psval1"> | 销量:29</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(482)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(482);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=435" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/A305.jpg" alt="千禧恋 A305 床" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=435" target="_blank" title="火热促销中"> 千禧恋 A305 床 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 1298.00</span>
+                                                    <span class="psval1"> | 销量:24</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(435)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(435);">收藏</a></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="productitem">
+                                                <div class="productimg">
+                                                    <a href="/Product.aspx?Id=365" target="_blank"><img  class="lazy" src="Images/src-loading.gif" data-original="Upload/9061.jpg" alt="欧陆皇朝 9061# 床" /></a>
+                                                </div>
+                                                <div class="productname">
+                                                    <a href="/Product.aspx?Id=365" target="_blank" title="火热促销中"> 欧陆皇朝 9061# 床 </a>
+                                                </div>
+                                                <div class="productprice">
+                                                    <span class="ppval1 p-price">￥ 2222.00</span>
+                                                    <span class="psval1"> | 销量:24</span></div>
+                                                <div class="productactions">
+                                                    <div class="addtocart"><a href="javascript:;addProductToCart(365)">加入购物车</a></div>
+                                                    <div class="addfavorite"><a href="javascript:addFav(365);">收藏</a></div>
+                                                </div>
+                                            </div>-->
+                                       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </foreach>
+                                     
+                </div>
+            </div>
+            <div class="cbody">
+                
+            </div>
+        </div>
+<include file='Common:footer'/>
+    </div>
+
+<include file='Common:rightUset'/>
+</body>
+</html>

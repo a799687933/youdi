@@ -1,0 +1,55 @@
+<!--<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>-->
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider2.js"></script>
+<script type="text/javascript" src="__PLUGINS__/formValidation/formValidation.js"></script>
+<div class="header bgfff">
+
+
+<if condition="is_mobile()">
+ <div class="headertb2">
+  <a href="__ROOT__/" class="logo"></a>
+
+  
+  <a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_1')]['id']))}" class="fr lxr" style="display:inline-block; margin-top:-7px;">
+  
+      	<span class="icon-contact glyphs f20  ml5"></span>
+    </a>
+    <b class="fr col000 ml10" style="margin-top:-7px">{:isL(L('NeedHelp'),'需要帮助？')}</b>
+  
+  <div class="cb"></div>
+ </div><!----> 
+<else/>
+ 
+ <div class="headertb2">
+  <a href="__ROOT__/" class="logo"></a>
+
+  
+  <a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_1')]['id']))}" class="fr lxr" style="display:inline-block; line-height:28px;">
+  
+      	<span class="icon-contact glyphs f20  ml10"></span>
+    </a>
+    <b class="fr col000 ml10">{:isL(L('NeedHelp'),'需要帮助？')}</b>
+  <div class="guoj fr">
+  <if condition="$_COOKIE['think_language'] eq 'en-us'">
+       <h1 class="icon1c col222">English</h1>   
+       <!--<div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}" class="icon1">CHINA</a>
+       </div>  -->
+  <else />
+       <h1 class="icon1 col222">CHINA</h1>   
+       <!--<div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'en-us'))}" class="icon1c">English</a>
+       </div>  --> 
+  </if>  
+  </div>
+  
+
+  <div class="cb"></div>
+ </div><!----> 
+ </if>
+ </div><!--header end-->
+ <div class="cb pv25"></div>
+ 
+ 

@@ -1,0 +1,29 @@
+<if condition="is_mobile()">
+<div class="cjl">
+   <ul>
+   	<li><a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_1')]['id']))}#lxwm">{$files[7][C('B_1')]['titletext']}{/*联系我们*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_8')]['id']))}#rhgw">{$files[7][C('B_8')]['titletext']}{/*如何购物*/}</a></li>
+    <li><a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}#ddyjs">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></li>
+    <li><a href="{:U('Modular/refund',array('html'=>$files[7][C('B_3')]['id']))}#thytk">{$files[7][C('B_3')]['titletext']}{/*退货与退款*/}</a></li>
+    <li><a href="{:U('Modular/problem',array('html'=>$files[7][C('B_4')]['id']))}#cjwt">{$files[7][C('B_4')]['titletext']}{/*常见问题*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_5')]['id']))}#rhgw">{$files[7][C('B_5')]['titletext']}{/*条款与条件*/}</a></li>
+    <li><a href="{:U('Modular/privacy',array('html'=>$files[7][C('B_6')]['id']))}#ysyzc">{$files[7][C('B_6')]['titletext']}{/*隐私与Cookie政策*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_9')]['id']))}#rhgw">{$files[7][C('B_9')]['titletext']}{/*商品包装*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_10')]['id']))}#rhgw">{$files[7][C('B_10')]['titletext']}{/*支付*/}</a></li>
+   </ul>
+  </div><!--cjwtl end-->
+  <else/>
+  <div class="cjl">
+   <ul>
+   	<li><a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_1')]['id']))}">{$files[7][C('B_1')]['titletext']}{/*联系我们*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_8')]['id']))}">{$files[7][C('B_8')]['titletext']}{/*如何购物*/}</a></li>
+    <li><a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}">{$files[7][C('B_2')]['titletext']}{/*订单与寄送*/}</a></li>
+    <li><a href="{:U('Modular/refund',array('html'=>$files[7][C('B_3')]['id']))}">{$files[7][C('B_3')]['titletext']}{/*退货与退款*/}</a></li>
+    <li><a href="{:U('Modular/problem',array('html'=>$files[7][C('B_4')]['id']))}">{$files[7][C('B_4')]['titletext']}{/*常见问题*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_5')]['id']))}">{$files[7][C('B_5')]['titletext']}{/*条款与条件*/}</a></li>
+    <li><a href="{:U('Modular/privacy',array('html'=>$files[7][C('B_6')]['id']))}">{$files[7][C('B_6')]['titletext']}{/*隐私与Cookie政策*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_9')]['id']))}">{$files[7][C('B_9')]['titletext']}{/*商品包装*/}</a></li>
+    <li><a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_10')]['id']))}">{$files[7][C('B_10')]['titletext']}{/*支付*/}</a></li>
+   </ul>
+  </div><!--cjwtl end-->
+</if>

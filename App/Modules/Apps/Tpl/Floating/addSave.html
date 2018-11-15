@@ -1,0 +1,86 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Floating/floatSendForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+        
+            <dl>
+                <dt>类型：</dt>
+                <dd>
+                      <select class="combox selecteds" name="type" class="required" onchange="isType(this)">
+                          <option value="0" <if condition="$save['type'] eq 0">selected="selected"</if>>-Q Q-</option>
+                          <option value="1" <if condition="$save['type'] eq 1">selected="selected"</if>>-电话-</option>
+                         <option value="2" <if condition="$save['type'] eq 2">selected="selected"</if>>-其它链接-</option>
+                       </select>     
+                </dd>
+            </dl>
+                    
+            <dl>
+                <dt>名称：</dt>
+                <dd>
+                    <input  type="text" name="name" class="required" size="40" value="{$save.name}"/>                    
+                </dd>
+            </dl>
+            
+            <dl class="nums">
+                <dt>号码：</dt>
+                <dd>
+                    <input type="text" name="nums" class="" size="40" value="{$save.nums}"/>
+                </dd>
+            </dl>            
+            
+            <dl style="display:none;" class="blocks">
+                <dt>其它链接地址：</dt>
+                <dd>
+                    <input type="text" name="url" class="" size="40" value="{$save.url}"/>
+                </dd>
+            </dl>
+                            
+    
+            <dl>
+                <dt>排序：</dt>
+                <dd>
+                     <input type="text" name="orders" class="required digits" value="<if condition="$save['orders']">{$save.orders}<else />0</if>" size="40"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>是否显示：</dt>
+                <dd>
+                    <label><input type="radio" name="is_show" value="1" <if condition="$save['is_show']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="is_show" value="0" <if condition="!$save['is_show']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+                       
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+<script type="text/javascript">
+function isType(_this){
+   if($(_this).val()==2){
+	   $('.nums').hide();
+	   $('.blocks').show();
+	   $('input[name="nums"]').val('');
+    }else{
+	   $('.nums').show();	
+	   $('.blocks').hide();
+   }
+}
+
+if($('.selecteds').val()==2){
+	$('.blocks').show();
+	$('.nums').hide();
+}
+</script>
+

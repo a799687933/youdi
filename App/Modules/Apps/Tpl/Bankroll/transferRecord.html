@@ -1,0 +1,96 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<script type="text/javascript">
+function showChinaMoney(_this){
+    var val=$(_this).val();
+	var parent=$(_this).parent();
+	if(val){
+	   var str=chinaCost(val);
+	   parent.children('.china-cost').text(str);
+	}else{
+	   parent.children('.china-cost').text('');
+	}
+    
+	
+	
+}
+</script>
+<div class="pageContent">
+  <if condition="$result['is_deal'] eq 0">
+    <form method="post" action="{:U(APP_APPS.'/Bankroll/transferRecordForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+  </if>	
+        <input type="hidden" name="id" value="{$result['id']}" />
+        <div class="pageFormContent nowrap" layoutH="97"> 
+                               
+            <dl>
+                <dt>银行交易号：</dt>
+                <dd>
+                    <input  type="text" name="business_sn" value="{$result.bank_sn}" 
+                    <if condition="$result['bank_sn']">readonly="readonly"</if> 
+                    class="required alphanumeric" size="40" style="float:left" />
+                </dd>
+            </dl>   
+					
+            <dl>
+                <dt>转帐总金额：</dt>
+                <dd>
+                    <input  type="text" name="total_price" value="{$result.money}" class="required number" size="40" readonly="readonly" style="float:left" />
+                    <span class="china-cost" style="position:relative;top:3px;left:5px;font-size:14px;color:red;"></span>
+                </dd>
+            </dl>        
+
+            <dl>
+                <dt>手续费金额：</dt>
+                <dd>
+                    <input  type="text" name="fee" value="{$result.fee}" 
+                     <if condition="$result['fee']">readonly="readonly"</if>
+                     class="required number" size="40" />
+                    <span class="china-cost" style="position:relative;top:3px;left:5px;font-size:14px;color:red;"></span>
+                </dd>
+            </dl>           
+            
+            <if condition="$result['real_account'] gt 0" > 
+                <dl>
+                    <dt>实数到帐：</dt>
+                    <dd>
+                        <input  type="text" name="fee" value="{$result.real_account}"  
+                        <if condition="$result['real_account']">readonly="readonly"</if> 
+                        class="required number" size="40" />
+                        <span class="china-cost" style="position:relative;top:3px;left:5px;font-size:14px;color:red;"></span>
+                    </dd>
+               </dl>  
+                <dl>
+                    <dt>处理时间：</dt>
+                    <dd>
+                        <input  type="text"  value="{$result.update_time|date='Y-m-d H:i:s',###}"  
+                        <if condition="$result['update_time']">readonly="readonly"</if> 
+                        class="required number" size="40" />
+                    </dd>
+               </dl>                 
+          </if>
+                                                
+        <dl class="nowrap">
+            <dt>转帐原因(200个字)：</dt>
+            <dd>
+            <textarea name="reason" class="required" 
+            <if condition="$result['reason']">readonly="readonly"</if>
+            maxlength="200" cols="80" rows="10" style="resize:none;">{$result.reason|stripcslashes=###|strip_tags=###}</textarea></dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+			  <if condition="$result['is_deal'] eq 0">
+                 <if condition="!$_GET['ins_id']"><li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+			  </if> 
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+	<if condition="$result['is_deal'] eq 0">	
+    </form>
+	</if>
+</div>
+
+

@@ -1,0 +1,19 @@
+ <foreach name="res" item="nos">
+    <li style="border:1px solid #ccc;width:100%;margin:5px auto;line-height:200%;">
+        <div style="padding:5px;">
+           {:isL(L('AdvisoryTitle'),'咨询标题')}：{$nos.title}<br/>                        
+           {:isL(L('AdvisoryDescription'),'咨询描述')}：{$nos.content}<br/>       
+           {:isL(L('ReplyContent'),'回复内容')}：
+               <if condition="$nos['reply']">
+                   <span style="color:green;">{$nos.reply}</span>
+               <else />
+                   <span style="color:red;">{:isL(L('NoReply'),'未回复')}</span>
+               </if><br/>    
+             {:isL(L('Operation'),'操作')}：
+             <a class="col666" href="javascript:void(0);" 
+                 onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}','{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                 '{:U(is_m().'/Member/delWords',array('id'=>$nos['id']))}','','mobile')">{:isL(L('Delete'),'删除')}
+             </a>    
+         </div>
+    </li>
+  </foreach>    

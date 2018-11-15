@@ -1,0 +1,125 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+              <li><a class="add" href="{:U(APP_APPS.'/Bonus/bonusAdd',array('send'=>'add'),'')}" target="dialog" mask="true" width="1024" height="590" title="添加现金券类型"><span>添加现金券类型</span></a></li>
+              <li><a class="add" href="{:U(APP_APPS.'/Bonus/bonusAdd',array('type'=>'bonusAdd6','send'=>'add'))}" target="dialog" mask="true" width="1024" height="590" title="添加点击现金卷"><span>添加点击现金卷</span></a></li>
+           <else />
+               <if condition="access('Bonus/bonusAdd')">
+                   <li><a class="add" href="{:U(APP_APPS.'/Bonus/bonusAdd',array('type'=>'bonusAdd6','send'=>'add'))}" target="dialog" mask="true" width="1024" height="590" title="添加点击现金卷"><span>添加点击现金卷</span></a></li>
+               </if>   
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="55">
+        <thead>
+            <tr>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th><!--编号-->
+                <th orderfield="bonus_name"  class="<if condition='$bonus_name eq "desc"'>desc<else />asc</if>">现金券类型名称</th><!--现金券类型名称-->
+                <th orderfield="send_type"  class="<if condition='$send_type eq "desc"'>desc<else />asc</if>">现金券发放类型</th><!--现金券发放类型-->       
+                <th orderfield="bonus_money"  class="<if condition='$bonus_money eq "desc"'>desc<else />asc</if>">现金券金额</th><!--现金券金额-->        
+                <th orderfield="min_amount"  class="<if condition='$min_amount eq "desc"'>desc<else />asc</if>">订单最小金额</th><!--订单最小金额-->         
+                <th>发放数量</th><!--发放数量-->   
+                <th>使用数量</th><!--使用数量-->    
+                <th>排序</th><!--排序--> 
+                <th>操作</th><!--操作-->      
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td>{$V.id}</td>
+                <td>{$V.bonus_name}</td>
+                <td>
+                    <if condition="$V['send_type'] eq C('_ZERO')">
+                       按用户发放   
+                    <elseif  condition="$V['send_type'] eq C('_ONE')"/>
+                       按商品发放
+                   <elseif  condition="$V['send_type'] eq C('_TWO')"/>    
+                       按订单发放   
+                  <elseif  condition="$V['send_type'] eq C('_THREE')"/>    
+                       按线下发放
+                  <elseif  condition="$V['send_type'] eq C('_FOUR')"/>    
+                       推荐会员者发放
+                  <elseif  condition="$V['send_type'] eq C('_FIVE')"/>    
+                       新注册用户自动发放
+                  <elseif  condition="$V['send_type'] eq C('_SIX')"/>    
+                       用户点击领取                    
+                  </if>                  
+               </td>
+               <td>{$V.bonus_money}</td>
+               <td>{$V.min_amount}</td>              
+               <td>
+                   <if condition="$V['send_type'] eq C('_ZERO')">
+                        {$V._zero}
+                   <elseif condition="$V['send_type'] eq C('_ONE')"/>     
+                        {$V._one}
+                   <elseif condition="$V['send_type'] eq C('_TWO')"/>     
+                        {$V._two}
+                   <elseif condition="$V['send_type'] eq C('_THREE')"/>     
+                        {$V._three}     
+                   <elseif condition="$V['send_type'] eq C('_FOUR')"/>        
+                        {$V._four}      
+                   <elseif condition="$V['send_type'] eq C('_FIVE')"/>        
+                        {$V._five}     
+                   <elseif condition="$V['send_type'] eq C('_SIX')"/>        
+                        {$V._six}                            
+                   </if>                                  
+               </td>
+               <td>{$V.countNum}</td>
+              <td>{$V['orders']|tpl_modify_oen=###,'bonus_type','orders',$V['id'],'id','Bonus/addSaveForm'}</td>
+               <td>
+                    
+                    <if condition="access('Bonus/bonusSend')"> <!--发放现金券--> 
+                        <if condition="($V['send_type'] eq C('_TWO')) OR ($V['send_type'] eq C('_FOUR')) OR ($V['send_type'] eq C('_FIVE')) OR ($V['send_type'] eq C('_SIX'))">
+                            <img src="{:C('__IMG__')}/icon_account_not.gif"/>
+                        <else /> 
+                            <a href="{:U(APP_APPS.'/Bonus/bonusSend/','','')}/{:C('VAR_PAGE')}/{$currentPage}/id/{$V['id']}/type/{$V['send_type']}" class="add" target="dialog" mask="true" width="1024" height="590" title="{$V['bonus_name']}-发放现金券">
+                                <img src="{:C('__IMG__')}/icon_account.gif"/>
+                           </a>
+                       </if>   
+                   <else />
+                    <img src="{:C('__IMG__')}/icon_account_not.gif" title="你没有权限!"/>
+                   </if>       
+                     {$action|tpl_action='navTab','Bonus/ticketList','bonus_type_id/'.$V["id"].'/type/'.$V['send_type'],strip_tags($V['bonus_name']).'—查看列表','book_open.gif','book_open2.gif'} <!--查看现金券列表-->  
+                     <if condition="$V['send_type'] eq C('_SIX')">
+                        {$action|tpl_action='dialog','Bonus/bonusSave','id/'.$V["id"].'/'.C('VAR_PAGE').'/'.$currentPage.'/send/update/type/bonusAdd6','修改('.strip_tags($V['bonus_name']).')','icon_edit.gif','icon_edit_not.gif',1000,500} <!--修改按钮-->  
+                     <else />
+                        {$action|tpl_action='dialog','Bonus/bonusSave','id/'.$V["id"].'/'.C('VAR_PAGE').'/'.$currentPage.'/send/update','修改('.strip_tags($V['bonus_name']).')','icon_edit.gif','icon_edit_not.gif',1000,500} <!--修改按钮-->
+                     </if>                                  
+                     <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+                     {$action|tpl_action='ajaxTodo','Bonus/bonusDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['bonus_name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                     <else />
+                           <if condition="$V['send_type'] eq C('_SIX')">
+                              {$action|tpl_action='ajaxTodo','Bonus/bonusDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['bonus_name']).')？','icon_drop.gif','icon_drop_not.gif'}
+                           </if>
+                     </if>
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+         <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div> 
+</div>
+

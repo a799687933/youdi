@@ -1,0 +1,149 @@
+
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>   
+                 <li></li>         
+                 <li class="selected"><a href="javascript:;"><span>通用信息</span></a></li>
+               <!--  <li ><a href="javascript:;"><span>会员简介</span></a></li>
+                 <li ><a href="javascript:;"><span>相关专辑</span></a></li>-->
+                 <li ><a href="javascript:;"><span>备注</span></a></li>                   
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/Member/memberSaveForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}"/>
+        <input type="hidden" name="{:C('VAR_PAGE')}" value="{$_GET[C('VAR_PAGE')]}"/>
+        <input type="hidden" name="action" value="{$_GET['action']}"/>
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            <div inited="1000" style="display: block;"></div>
+            <div inited="1000" style="display: block;"><!--通用资料内容-->
+       
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                    <tr><td  style="text-align:right;">登录帐号：</td><td><input type="text" readonly="readonly"value="{$save.user_name}" maxlength="20" class="" style="margin:3px 0;" size="50"/></td></tr>
+                    <!--<tr><td  style="text-align:right;">会员昵称：</td><td><input type="text" name="nickname" value="{$save.nickname}" maxlength="20" class="" style="margin:3px 0;" size="50"/></td></tr>  --> 
+					<tr><td  style="text-align:right;">会员电话：</td><td><input type="text" name="telephone" value="{$save.telephone}" maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>   
+                   <!--<tr><td  style="text-align:right;">会员Email：</td><td><input type="text" name="reg_email" value="{$save.reg_email}"  maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>-->                  
+                    <tr>
+                        <td  style="text-align:right;">姓氏：</td>
+                        <td>
+                            <input type="text" name="surname" value="{$save.surname}" style="margin:3px 0;" size="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  style="text-align:right;">名字：</td>
+                        <td>
+                            <input type="text" name="full_name" value="{$save.full_name}" style="margin:3px 0;" size="50"/>
+                        </td>
+                    </tr>     
+                    <tr>
+                        <td  style="text-align:right;">生日：</td>
+                        <td>
+                            <input type="text" name="birthday" value="{$save.birthday}" style="margin:3px 0;" size="50"/>
+                        </td>
+                    </tr>       
+                    <tr>
+                        <td  style="text-align:right;">性别：</td>
+                        <td>
+                            <input type="radio" value="0" name="sex" <if condition="$save['sex'] eq 0">checked="checked"</if>>保密
+                            <input type="radio" value="1" name="sex" <if condition="$save['sex'] eq 1">checked="checked"</if>>男
+                            <input type="radio" value="2" name="sex" <if condition="$save['sex'] eq 2">checked="checked"</if>>女
+                        </td>
+                    </tr>  
+                    <tr><td  style="text-align:right;">设置密码：</td><td> <input id="w_validation_pwd" type="password" name="password" class="alphanumeric" minlength="6" maxlength="20" alt="字母、数字、下划线 6-20位" style="margin:3px 0;" size="50"/></td></tr>                                                  
+                    <tr><td  style="text-align:right;">重复密码：</td><td> <input type="password" name="notpassword" class="" equalto="#w_validation_pwd" size="50"/></td></tr>
+                    <tr><td colspan="2" style="height:6px;"></td></tr> 
+                   <!-- <tr><td  style="text-align:right;">区域：</td><td>
+                                          <select name="country" class="country" onchange="getPlace(this,'.country_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                                 <option value="">请选择国家</option>
+                                                 {$region[0]}
+                                          </select>   
+                                                                                 
+                                          <select name="province" class="province" onchange="getPlace(this,'.province_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                                 <option value="">请选择省份</option>
+                                                  {$region[1]}
+                                          </select>
+                                           
+                                          <select name="city" class="city" onchange="getPlace(this,'.city_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                                                 <option value="">请选择城市</option>
+                                                  {$region[2]}
+                                          </select>
+                                          
+                                           <select name="district" class="district" onchange="getPlace(this,'.district_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}" >
+                                                 <option value="">请选择区县</option>
+                                                  {$region[3]}
+                                          </select>		                         
+                     </td></tr>
+                     <tr><td  style="text-align:right;">详细街道：</td><td>
+                            <input type="text" name="address" value="{$save.address}" maxlength="20" class="" style="margin:3px 0;" size="50"/>
+                     </td></tr>-->      
+                     <tr><td  style="text-align:right;">邮政编码：</td><td>
+                            <input type="text" name="zip" value="{$save.zip}" maxlength="20" class="" style="margin:3px 0;" size="50"/>
+                     </td></tr>        
+                     <!--<tr><td  style="text-align:right;">固定电话：</td><td>
+                            <input type="text" name="telephone" value="{$save.telephone}" maxlength="20" class="" style="margin:3px 0;" size="50"/>
+                     </td></tr>    
+                     <tr><td  style="text-align:right;">QQ号：</td><td>
+                            <input type="text" name="qq" value="{$save.qq}" maxlength="20" class="" style="margin:3px 0;" size="50"/>
+                     </td></tr>              
+                     <tr><td  style="text-align:right;">微信号：</td><td>
+                            <input type="text" name="wechat" value="{$save.wechat}" maxlength="20" class="" style="margin:3px 0;" size="50"/>
+                     </td></tr>                                                                                    
+                      <tr><td colspan="2" style="height:6px;"></td></tr>            
+                    <tr><td  style="text-align:right;">缩略图：</td><td>
+                      <input type="hidden" name="head_pic" value="{$save.head_pic}" id="member_thumb"/>
+                     <input name="file4" type="file" id="memberFileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>162,height=>162,'remove'=>'ok'))}','memberFileToUpload','member_img_show','member_thumb','','B-show','__ROOT__');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr id="member_imgloads" style=""><td>缩略图信息：</td><td> 
+                    <if condition="$save['head_pic']">
+                     <img src="__ROOT__/{$save.head_pic}"  height="80" id="member_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/>
+                    <else />
+                     <img src="__ROOT__/{:C('USER_IMG')}"  height="80" id="member_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/>
+                    </if>
+                    </td></tr>   -->    
+                     <tr><td colspan="2" style="height:10px;"></td></tr>                                  
+                    <tr><td  style="text-align:right;">是否锁定：</td><td>
+                              <label><input type="radio" name="is_lock" value="0"  <if condition="$save['is_lock'] eq 0">checked="checked"</if>/>否</label> <label><input type="radio" name="is_lock" value="1" <if condition="$save['is_lock'] eq 1">checked="checked"</if>/>是</label>
+                   </td></tr>
+                </table>
+                                                                   
+            </div><!--通用资料内容结束-->
+            
+            <!--
+            <div inited="1000" style="display: block;"><!--文档祥细内容
+                               
+                    <textarea name="profile"  style="width:99%;height:470px;">{$save.profile}</textarea>   
+               
+            </div><!--文档祥细内容结束-->
+             
+             <!--
+            <div inited="1000" style="display: block;"><!--相关相册的内容
+                               
+                <p style="height: 10px;padding-bottom:10px;">相关相册: <input name="file3" type="file" id="fileToUpload10" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload')}','fileToUpload10');"></p>  
+                <div class="divider"></div> 
+                <!--这里上传图片
+            <foreach name="photo" item='p'>
+              <div class="divigm" style="float:left;margin:3px;position:relative;"><span style="display:block;width:200px;background:#000;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;position:absolute;left:0;top:0;"><b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer;float:right;color:red;font-size:16px;" title="'+closes+'">×</b></span><img src="__ROOT__/{$p.img}" width="200" height="180" style="display:block;"/><input type="hidden" value="{$p.img}" name="imgAll[]"/><input type="text" name="title[]" style="width:197px;height:16px;font-size:12px;border:none;" value="{$p.img_bewrite}"  placeholder="这里输入图片说明"/></div>
+            </foreach>    
+               <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="__PUBLIC__/Images/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>
+               
+            </div><!--相关相册的内容结束-->     
+            
+            <div inited="1000" style="display: block;"><!--关联文章内容-->
+                 <textarea name="remarks"  style="width:99%;height:470px;">{$save.remarks}</textarea>   
+            </div><!--关联文章内容结束-->
+            
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+
+<div class="pageContent">
+    <table class="list" width="100%" layoutH="0">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th width="10%">支付费用</th>
+                <th width="40%">描述</th>
+                <th >是否使用</th>
+                <!--<th >排序</th>-->
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="res" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><strong>{$r.pay_name}</strong></td>
+                <td>{$r.pay_fee}</td>
+                <td>{$r.pay_desc}</td>
+                <td>{$r.enabled|tpl_yes_no=###,'payment','enabled',$r['pay_id'],'pay_id','Payment/exePayForm'}</td>
+               <!-- <td>{$r.pay_order|tpl_modify_oen=###,'payment','pay_order',$r['pay_id'],'pay_id','Payment/exePayForm'}</td> -->
+               <td>
+                    {$action|tpl_action='dialog','Payment/exePay','pay_id/'.$r["pay_id"],'修改'.strip_tags($r['pay_name']),'icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,133 @@
+{/*头部购物车列表*/}
+<php>
+$f="id,goods_id,goods_sn,goods_thumb,".pfix('goods_name')." AS goods_name,goods_price,goods_number";
+$user_id=getUserC('SE_USER_ID') ? getUserC('SE_USER_ID') : '-1';
+$hw="user_id='".$user_id."' OR user_key='".return_key()."'";
+$headercart=M('cart')->field($f)->where($hw)->select();
+</php>
+<div class="ckyw">
+ <php>if($headercart){</php>
+     <div class="ckywl ckywl2">   
+     
+     
+    
+      <div class="ckywlbox4 zjll4" <php>if(count($headercart) <= 5){</php>style="background: none !important;"<php>}</php>>
+      <php>if(count($headercart) > 5){</php>
+         <a href="javascript:void(0)" class="icon30a zjll4right" style="top:100px; margin-top:0"></a>
+         <a href="javascript:void(0)" class="icon30b zjll4left"  style="top:100px; margin-top:0"></a>
+       <php>}</php>  
+         <div class="ckywlm zjll4m">
+          <ul> 
+              <php>
+                  $cartSum=0;
+                  $cartCount=0;
+              </php>
+              <foreach name="headercart" item="g">
+              <php>
+                  $cartSum+=$g['goods_price'] * $g['goods_number'];
+                  $cartCount+=$g['goods_number'];
+              </php>
+                <li>
+                 <span class="dbclose" onclick="deleteTopCatr('{:get_up_url(array('delete'=>mt_rand(1000,9000)),U('Cart/delCart','',''),true)}&ids={$g['goods_id']}')"><span class="glyphs icon-close"></span></span>
+                   
+                    <div class="ckywlmt">
+                        <table width="100%" height="100%">
+                          <tr>
+                              <td align="center" valign="middle" width="100%" height="100%">
+                                  <a href="{:U('Goods/index',array('html'=>$g['goods_id']))}"  target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                               </td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="ckywlmtb">
+                         <table width="100%" height="100%">
+                            <tr>
+                                <td align="center" valign="middle" width="100%" height="100%">
+                                    <a href="{:U('Goods/index',array('html'=>$g['goods_id']))}"  target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                                </td>
+                             </tr>
+                          </table>
+                     </div>
+                    <div class="ckywlmb">
+                     <span class="sold">sold out</span>
+                    <p><b>{:C('KTEC_H')}{$g['goods_price']}</b></p> 
+                    </div>
+                </li>
+            </foreach>
+          </ul>
+          <div class="cb"></div>
+         </div>
+        </div>
+     </div><!--ckywl end-->
+ <php>}else{</php>
+  <div class="ckywl"><p class="col222 f16 lh22 pt20">{:isL(L('NoGoodsInYour'),'您的购物袋中暂无商品')}</p></div><!--没商品时-->
+ <php>}</php>
+ 
+ <div class="ckywr">
+  <h1 class="huan lh22 pr mt20"><b class="f14">{:isL(L('ShoppingBag'),'购物袋')}</b>
+  
+  <span class="close  gwdclose"><span class="glyphs icon-close" style="line-height:35px;"></span></span>
+  </h1>
+  <p class=" col222 f13 lh22 " style="font-weight:bold"><span class="public-cart">{$cartCount ? $cartCount : 0}</span> {:isL(L('Commodity'),'数量')}</p><!--请不要删除这个 public-cart -->
+  <div class="cb pt30"></div>
+  <a href="{:U('Cart/index')}"><div class="bcbtn" style="width:100%">
+    <input value="{:isL(L('ViewShoppingBags'),'查看购物袋')}" class="btn" type="button">
+   <span class="glyphs icon-heart btnb colfff"></span>    
+ </div></a>
+ </div><!--ckywr end-->
+ <div class="cb"></div>
+</div>
+<script type="text/javascript">
+cartsCounts();
+function cartsCounts(){
+	var sum="<php>echo number_format($cartSum ? $cartSum : 0,2,'.','');</php>";
+	var CUR='{:C('KTEC_H')}';
+    $(function(){
+	     $('.public-cart-moeys').text(CUR+sum);
+		 $('.public-cart').text({$cartCount ? $cartCount : 0});
+		 wckyw=$(".ckywl2").width();
+		 $(".ckywlm li").css("width",wckyw/5);		 
+		 $(".zjll4").myscroll({ prev: ".zjll4left", next: ".zjll4right", scrollbox: ".zjll4m" });
+	});
+	
+}
+
+{/*删除头部购物车*/}
+function deleteTopCatr(url){
+	
+      var getCurl="{:U('Piece/headerCart')}";	  
+	  $.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			  $.ajax({
+				 type:'get',
+				 url:getCurl,
+				 success:function(response,status,xhr){
+					 $('#show-cart-list').html(response);
+				  }
+			   });				 
+		  }
+	   });		
+	  
+}
+
+</script>
+<style type="text/css">
+.dbclose1 {
+    position: absolute;
+    z-index: 10;
+    top: 5px;
+    right: 5px;
+    color: #222;
+    background: #fff;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    box-sizing: border-box;
+    border-radius: 50%;
+}
+</style>

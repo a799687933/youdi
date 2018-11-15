@@ -1,0 +1,16 @@
+  <p style="height: 30px;line-height: 30px;font-size: 16px;border-bottom: 1px #c2161d solid;">
+      <span style="float:right;">
+          上次登录时间：
+          <if condition="getUserC('SUPPLIER_LAST_TIME')">{:date('Y-m-d H:i:s',getUserC('SUPPLIER_LAST_TIME'))}<else />首次登录</if> | 
+          <a href="{:U('Supplier/exitUser')}" style="color:#666;">安全退出</a>
+      </span>
+      供应商：{:getUserC('SUPPLIER_NAME')} | 用户ID:{:getUserC('SUPPLIER_ID')} | 登录帐号：{:getUserC('SUPPLIER_LOGIN_NAME')}
+  </p>
+   <h1 class="mb50">
+       <a href="{:U('/Supplier/index')}" class="<if condition="$modelAction eq 'Supplier/index'">now</if>">首页</a>
+       <a href="{:U('/Supplier/orderList')}" class="<if condition="$modelAction eq 'Supplier/orderList'">now</if>">全部订单</a>
+       <a href="{:U('/Supplier/supplierBankList')}" class="<if condition="$modelAction eq 'Supplier/supplierBankList' OR $modelAction eq 'Supplier/addSaveBank'">now</if>">银行帐户</a>
+       <a href="{:U('/Supplier/supplierAccount')}" class="<if condition="$modelAction eq 'Supplier/supplierAccount'">now</if>">我的帐户</a>
+       <a href="{:U('/Supplier/withdraw')}" class="<if condition="$modelAction eq 'Supplier/withdraw' OR $modelAction eq 'Supplier/withdrawApply'">now</if>">提现申请</a>
+       <a href="{:U('Supplier/changePassword')}" class="<if condition="$modelAction eq 'Supplier/changePassword'">now</if>">修改密码</a>
+   </h1>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title><if condition="$data['order_id']">{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}<else />{:isL(L('OrdersSubmittedFailure'),'订单提交失败')}</if>-{:C($langfx.'WEBNAME')}</title>
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script>
+$(document).ready(function (){
+
+      });
+</script>
+<style type="text/css">
+.icon1e {
+  background-image: url(__MOBILE__/Images/icon57-1.jpg);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: auto 18px;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  font-weight: bold;
+  color: #c3151e;
+  padding-left: 30px;
+  font-size: 18px;
+} 
+input.fhsy {
+  border-radius: 2px;
+  display: inline-block;
+  width: 6rem;
+  text-align: center;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+  font-size: 0.6rem;
+  background: #c40000;
+  border:none;
+}   
+</style>
+</head>
+
+<body>
+<div class="wrap">
+<h1 class="toptxt">
+    <if condition="$data['order_id']">{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}<else />{:isL(L('OrdersSubmittedFailure'),'订单提交失败')}</if>
+    <a href="javascript:;history.back();" class="icon12"></a>
+</h1>
+
+<if condition="$data['order_id']">
+    <div class="pt20 pb20 pl20 pr20" style="min-height: 18rem;">
+     <h1 class="tc mb10" style="text-align: left"><b class="icon13">订单提交成功</b></h1>
+     <p class="icon14 lh20 pl30 col666 f14">恭喜您，您的订单提交成功！订单号：{$data['order_sn']}</p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">订单金额：<strong style="color:red;">{:getPrice($data['order_amount'],true)}</strong></p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">                             
+          {:isL(L('SendTo'),'配送至')}：
+          {$data.province}{$data.city}{$data.district}{$data.address}&nbsp;&nbsp;{$data.consignee}&nbsp;&nbsp;{$data.mobile}
+     </p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">我们会尽快核对您的订单，并及时给您发货，如果有什么问题，请及时和我们联系</p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">客服电话：{:C('UNIFYTEL')}</p>
+     <p class="icon14 lh20 pl30 col666 f14 mb15">感谢您选择了我们</p>
+     <p class="">
+         <h1 class="tc mb10" style="text-align: left;margin-bottom: 10px;"><b class="">支付方式</b></h1>
+         <div style="height: 20px;"></div>
+        <form name="formName" id="form-name" action="{:U(is_m().'/MobilePay/index')}" method="post" class="form1" style="margin:0 auto;">
+            <input type="hidden" value="{$base64}" name="data"/>
+            <input type="hidden" value="{$code}" name="code"/>      
+            
+            {/*显示支付银行*/}
+            <foreach name="payment" item="pa">   
+               <if condition="$pa['pay_code'] eq 'alipay'"> 
+                    <p style="border-bottom: 1px #eee solid;width:100%;margin:10px 0;">
+                         <label style="cursor:pointer;display: block">
+                         <input type="radio" name="pay" value="alipay" class="validate[required] radio" checked="checked" style="position: relative;bottom:15px;left: 4px" />    
+                         <img src="__COMMON__/PaymentLogo/alipay.gif" />
+                         </label>
+                     </p>
+                <elseif condition="$pa['pay_code'] eq 'yeepay'" />
+                   {/*易宝支付工行*/}
+                    <p style="border-bottom: 1px #eee solid;width:100%;margin:10px 0;">
+                         <label style="cursor:pointer;display: block">
+                         <input type="radio" name="pay" value="ICBC-WAP" class="validate[required] radio" style="position: relative;bottom:15px;left: 4px" />    
+                         <img src="__COMMON__/PaymentLogo/ICBC-NET-B2C.png" />
+                         </label>
+                     </p>    
+                   {/*易宝支付招商行*/}
+                    <p style="border-bottom: 1px #eee solid;width:100%;margin:10px 0;">
+                         <label style="cursor:pointer;display: block">
+                         <input type="radio" name="pay" value="CMBCHINA-WAP" class="validate[required] radio" style="position: relative;bottom:15px;left: 4px" />    
+                         <img src="__COMMON__/PaymentLogo/CMBCHINA-NET-B2C.png" />
+                         </label>
+                     </p>     
+                   {/*易宝支付建行*/}
+                    <p style="border-bottom: 1px #eee solid;width:100%;margin:10px 0;">
+                         <label style="cursor:pointer;display: block">
+                         <input type="radio" name="pay" value="CCB-WAP" class="validate[required] radio" style="position: relative;bottom:15px;left: 4px" />    
+                         <img src="__COMMON__/PaymentLogo/CCB-NET-B2C.png" />
+                         </label>
+                     </p>                                                              
+                </if>     
+            </foreach> 
+            <p class="pl30" style="padding-left: 0"><input type="submit" value="立即支付({:getPrice($data['order_amount'],true)})" class="fhsy mr30"/></p>
+         </form>
+     </p>
+    </div>
+<else />
+    <div class="pt20 pb20 pl20 pr20" style="min-height: 18rem;">
+     <h1 class="tc mb10"><b class="icon1e">订单提交失败</b></h1>
+     <p class="icon14 lh20 pl30 col666 f14">抱歉，您的订单订单提交失败！订单号：{$data['order_sn']}</p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">                             
+          {:isL(L('SendTo'),'配送至')}：
+          {$data.province}{$data.city}{$data.district}{$data.address}&nbsp;&nbsp;{$data.consignee}&nbsp;&nbsp;{$data.mobile}
+     </p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">我们会尽快核对您的订单，并及时给您处理，如果有什么问题，请及时和我们联系</p>
+     <p class="icon14 lh20 pl30 col666 f14 mv10">客服电话：{:C('UNIFYTEL')}</p>
+     <p class="pl30"><a href="__ROOT__/{:is_m()}" class="fhsy mr30">返回首页</a><a href="{:U(is_m().'/Member/index')}" class="fhgwc">返回用户中心</a></p>
+    </div>
+</if>
+<div class="cb pv20"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>
+</body>
+</html>

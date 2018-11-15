@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人中心-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+   $('.flb').hide();
+});
+</script>
+</head>
+<body>
+<include file="Common:top" />{/*最顶部*/}
+<include file="Common:header" />{/*头部*/}
+<include file="Common:nav" />{/*导航与商品分类*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="grzxl pt30">
+   <h1>会员中心</h1>
+   <div class="grzxlb">
+      <include file='Member:leftNav'/>{/*左边导航*/}
+   </div>
+  </div><!--grzxl end-->
+  <div class="grzxr pt30">
+   <div class="wddd pl20 pr20 pt15 mt20" style="margin-top: 0;min-height: 600px;">
+       <h2 style="border-bottom: 1px #eee solid;clear:both;height:30px;">
+            <span class="icon49a pl10 f14 col333 lh30 fl"><a href="{:U('Member/index')}" style="color:#333">会员首页</a> > 我的钱包 > 提现</span>
+            <span style="float:right">帐户余额：(<b style="color:red;">{:getPrice($member['member_funds'],true)}</b>)
+               <a href="{:U('/Member/extraction')}"
+               class="   f_norm" 
+               style="
+                background:#8c3600;color:#fff;
+               padding:2px 10px;border-radius: 3px;">申请提现</a>
+            </span>             
+       </h2>  
+    <div class="cb"></div>
+    {/*内容区域*/}
+    <div class="wdddb p10">
+       <table width="100%" border="0" cellpadding="1" cellspacing="0"  class="add-tables">
+             <tr>
+                 <th style="height:30px;line-height:30px;">编号</th>
+                 <th>银行名称</th>
+                 <th>银行帐号</th>
+                 <th>开户银行网点</th>
+                 <th>银行开户名称</th>
+                 <th>提现金额</th>
+                 <th>申请时间</th>
+                 <th>状态</th>
+            </tr>
+             <foreach name="result" item="r">
+                 <tr>
+                     <td align="center">{$r.id}</td>
+                     <td align="center">{$r.band_name}</td>
+                     <td align="center">{$r.band_account}</td>
+                     <td align="center">{$r.band_address}</td>
+                     <td align="center">{$r.user_name}</td>
+                     <td align="center">{:getPrice($r['money'],true)}</td>
+                     <td align="center">{$r.add_time|date='Y-m-d H:i:s',###}</td>
+                     <td align="center">
+                         <if condition="$r['update_time'] gt 0 AND $r['bank_sn'] gt 0">
+                              <span style="color:green;">已处理</span>
+                         <else />
+                                 未处理 
+                         </if>
+                    </td>
+                 </tr> 
+             </foreach>                                                                               
+      </table>       
+      <div class="page tc mt30">{$page}</div>       
+    </div>
+    {/*内容区域结束*/}
+    
+   </div><!--wddd end-->
+  </div><!--grzxr end-->
+  <div class="cb"></div>
+ </div>
+ <div class="cb pv35"></div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+
+<!--float-->
+<include file="Common:float" />{/*右边浮动*/}
+<!--float end-->
+</body>
+</html>

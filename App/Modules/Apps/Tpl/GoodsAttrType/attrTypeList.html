@@ -1,0 +1,51 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input name="category_id" type="hidden" value="{$_REQUEST['id']}" />
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <!--<ul class="toolBar">
+            <if condition="access('GoodsAttrType/attrTypeAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/GoodsAttrType/attrTypeAdd',array('id'=>$_REQUEST['id']),'')}" target="dialog" mask="true" width="1024" height="590" title="添加属性类型"><span>添加属性类型</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>-->
+    </div>
+    <table class="list" width="100%" layoutH="54">
+        <thead>
+            <tr>
+                <!--<th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>-->
+                <th>编号</th>
+                <th>属性类型名称</th>         
+                <th >属性数</th>
+                <th >状态</th>
+                <th >操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="attr_type" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <!--<td><input name="ids" value="{$V.id}" type="checkbox"></td>-->
+                <td>{$V.id}</td>
+                <td>{$V[pfix('name')]|tpl_modify_oen=###,'goods_attr_type',pfix('name'),$V['id'],'id','GoodsAttrType/attrTypeForm'}</td>
+                <td>{$V.count_num}</td> 
+                <td>{$V.enabled|tpl_yes_no=###,'goods_attr_type','enabled',$V['id'],'id','GoodsAttrType/attrTypeForm'}</td>              
+                <td>
+                {$action|tpl_action='navTab','GoodsAttribute/goodsAttributeList','goods_attr_type_id/'.$V["id"],strip_tags($V[pfix('name')]).'属性列表','book_open.gif','book_open2.gif'} <!--属性表列-->          
+                {$action|tpl_action='dialog','GoodsAttrType/attrTypeAdd','id/'.$V["id"],'修改'.strip_tags($V[pfix('name')]),'icon_edit.gif','icon_edit_not.gif',1024,590} <!---修改按钮-->
+                <!--{$action|tpl_action='ajaxTodo','GoodsAttrType/attrTypeDel','ids/'.$V["id"],'确定执行删除('.strip_tags($V[pfix('name')]).')','icon_drop.gif','icon_drop_not.gif'}   删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+</div>
+

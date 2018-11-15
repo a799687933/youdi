@@ -1,0 +1,226 @@
+	
+<div class="accordion" fillSpace="sideBar">
+       <!--
+        <div class="accordionHeader">
+            <h2><span>Folder</span>界面组件</h2>
+        </div>
+        -->
+        <div class="accordionContent">
+            <ul class="tree treeFolder">
+            	
+                <if condition="access('Category')"><!--内容管理模块 开始-->
+                <li><span  target="navTab">内容管理</span>
+                    <ul>
+                        {:tpl_left_menu('Category/cateList','文档分类列表')}     
+                        {:tpl_left_menu('Article/articleList','全部文档列表')}   
+                        {:tpl_left_menu('Article/notArticleList','等审核的文档列表')}
+                    </ul>
+                </li>
+                </if>    <!--内容管理模块 结束-->                                                    
+
+               {/*用户内容管理模块 开始*/}
+                <if condition="access('ExtendsArticle')">
+                <foreach name="navs" item="na">
+                   <if condition="is_channel($na['files_id'],1) OR is_channel($na['files_id'],2) OR is_channel($na['files_id'],3)">
+                    <li><span  target="navTab">{$na['files_name']}</span>
+                        <ul>
+                             <foreach name="na['child']" item="n">
+                             <if condition="is_channel($n['files_id'],1) OR is_channel($n['files_id'],2) OR is_channel($n['files_id'],3)">
+                               {:tpl_left_menu('ExtendsArticle/extendsArticleList',$n['files_name'],'files_id/'.$n['files_id'].'/article_type/'.$n['article_type'].'/files_type/'.$n['files_type'])}       
+                              </if>
+                             </foreach>                          
+                        </ul>
+                    </li>
+                    </if>
+                </foreach>
+                </if>                                           
+               {/*用户内容管理模块 结束*/}            
+               
+               {/*用户评论开始*/}
+                <if condition="access('Comment')">
+                    <li><span  target="navTab">用户评论</span>
+                        <ul>
+                               {:tpl_left_menu('Comment/commentList','评论列表')}                      
+                        </ul>
+                    </li>
+                </if>                                           
+               {/*用户评论结束*/}                                                     
+               
+               <!--供应商模块 开始-- >
+                <if condition="access('Supplier')">
+
+                    <li><span  target="navTab">供应商管理</span>
+                        <ul>
+                             {:tpl_left_menu('Supplier/isSuppList','已审核供应商列表')}   
+                             {:tpl_left_menu('Supplier/notSuppList','未审核供应商列表')}                  
+                        </ul>
+                    </li>
+                </if>
+                <!--供应商模块 结束-->  
+                 
+              <!--商品管理 开始-->      
+               <if condition="access('GoodsAttrType') OR access('Supplier') OR access('Goods') OR access('GoodsCategory') OR access('GoodsAppraise')">
+                <li><span  target="navTab">商品管理</span>
+                    <ul>
+                        {:tpl_left_menu('GoodsCategory/cateList','商品分类')}    
+                        <!--{:tpl_left_menu('GoodsCategory/combination','商品分类检索集合')} -->
+					     <if condition="C('IS_GOODS_ATTRIBUTE')">{:tpl_left_menu('GoodsAttrType/attrTypeList','商品属性类型')}</if>
+						<!-- {:tpl_left_menu('Supplier/suppList','供应商列表')} -->            
+                         
+                         <if condition="C('IS_GOODS_BRAND')">{:tpl_left_menu('GoodsBrand/brandList','商品品牌')} </if> 
+						 {:tpl_left_menu('Goods/goodsAllList','全部商品','action/goodsAllList/type/goodsAll')}                               	
+                         {:tpl_left_menu('Goods/goodsShelvesList','已上架商品列表','action/goodsShelvesList/type/1')}
+                         {:tpl_left_menu('Goods/goodsNotShelvesList','已下架商品列表','action/goodsNotShelvesList/type/0')}
+                         {:tpl_left_menu('Goods/recycleBin','商品回收站','action/recycleBin/type/2')}   
+                         <!--{:tpl_left_menu('GoodsAppraise/appList','商品评价')}-->    
+                         <if condition="C('IS_CONSUlTATION')">{:tpl_left_menu('Goods/consultation','商品咨询')}</if>                      
+                    </ul>
+                </li>
+                </if>    <!--商品管理 结束-->      
+				                
+               <!--促销管理 开始-- >  
+               <if condition="access('Promotion') OR access('GroupDeals') OR access('GoodsDiscount') OR access('GoodsDiscount')">  
+                    <li><span  target="navTab">优惠活动管理</span>
+                        <ul>
+                            <if condition="C('IS_PROMOTION')">  {:tpl_left_menu('Promotion/promotionList','促销商品列表')} </if>
+                             {:tpl_left_menu('GroupDeals/groupDealsList','团购活动')}   
+                             {:tpl_left_menu('GoodsDiscount/discountList','优惠活动')}               
+                             {:tpl_left_menu('Bonus/bonusList','现金券')}           
+                        </ul>
+                    </li>
+                </if>    
+                <!--促销管理 结束-->    		 		                 
+
+				<!--物流工具 模块-->
+                <if condition="access('LogisticsTpl')">
+                   <if condition="C('IS_GOODS_LOGISTICS')">
+                        <li><span  target="navTab">物流工具</span>
+                            <ul>
+                                 {:tpl_left_menu('Shipping/disList','物流公司')}
+                                 {:tpl_left_menu('LogisticsTpl/tplList','运费模板')}                                     
+                            </ul>
+                        </li>    
+                   </if>                
+               </if>               
+               <!--物流工具 模块结束-->    
+                               
+               <if condition="access('OrderInfo') OR access('Custom')"><!--订单管理 开始-->    
+                <li><span  target="navTab">订单管理</span>
+                    <ul>
+                         {:tpl_left_menu('OrderInfo/orderToday','今天订单列表')}
+                         {:tpl_left_menu('OrderInfo/orderList','全部订单列表')}
+						 {:tpl_left_menu('OrderInfo/payLogs','订单支付日志')}
+                         <!--{:tpl_left_menu('Custom/customList','私人订制列表')}-->
+                       <!--  {:tpl_left_menu('OrderInfo/discountList','退货单列表')}              
+                         {:tpl_left_menu('OrderInfo/bonusList','添加订单')}         -->        
+                    </ul>
+                </li>
+                </if>    <!--订单管理 结束-->         
+                
+                {/*资金管理*/}
+                <if condition="access('Bankroll')">
+                    <li><span  target="navTab">资金管理</span>
+                        <ul>
+						     {:tpl_left_menu('Bankroll/totalList','总帐户')}  
+							 {:tpl_left_menu('Bankroll/totalExpenses','总帐户收支清单')}  
+                             {:tpl_left_menu('Bankroll/supplierApplyList','供应商提现申请列表')}    
+                             {:tpl_left_menu('Bankroll/memberApplyList','会员提现申请列表')}   
+							 <!--{:tpl_left_menu('Bankroll/shopsExpenses','商家收支清单')}  -->          
+                        </ul>
+                    </li>                   
+                </if> 
+                {/*资金管理结束*/}			
+                	                                                    
+                <!--会员管理模块 开始-->    
+                <if condition="access('Member') OR access('MemberGrade') OR access('Lnvite')">
+                <li><span  target="navTab">会员管理</span>
+                    <ul>
+                        <!-- {:tpl_left_menu('Lnvite/lnviteList','注册邀请码')}-->
+
+                          <if condition="C('IS_RANK_POINTS')">{:tpl_left_menu('MemberGrade/gradeList','会员等级')}</if>
+                          {:tpl_left_menu('Member/memberList','会员列表')}                  
+                         <!--{:tpl_left_menu('Service/index','会员发布需求')}-->
+                    </ul>
+                </li>
+                </if>    <!--会员管理模块 结束-->         
+                
+                <!--邮件订阅 开始-->    
+                <if condition="access('EmailSubscribe')">
+                    <if condition="C('IS_EMAIL_SUBSCRIBE')">
+                        <li><span  target="navTab">邮件订阅</span>
+                            <ul>        
+                                  {:tpl_left_menu('EmailSubscribe/emailList','邮件订阅列表')}         
+                                  {:tpl_left_menu('EmailSubscribe/emailContentList','邮件订阅发送列表')}     
+                            </ul>
+                        </li>
+                    </if>
+                </if>    <!--邮件订阅 结束-->                           
+                
+				<!--信息管理 模块-->
+                <if condition="access('Words') OR access('Cooperation') OR access('InstationInfo') OR access('Recruit') OR access('WantTest')">
+                    <li><span  target="navTab">信息管理</span>
+                        <ul>
+                            <!-- {:tpl_left_menu('Hiring/hiringList','招聘信息列表')}-->  
+                            {:tpl_left_menu('Recruit/recList','招聘信息列表')}   
+                            {:tpl_left_menu('Words/msgList','在线留言列表')}     
+                            {:tpl_left_menu('WantTest/testList','在家试穿申请列表')}     
+						   <!--	 {:tpl_left_menu('Cooperation/cooperationList','寻求合作列表')} -->    
+                            <if condition="C('IS_LETTER')"> {:tpl_left_menu('InstationInfo/sendList','消息推送列表')} </if>   
+                        </ul>
+                    </li>                   
+               </if>               
+               <!--信息管理 模块结束-->
+
+                <if condition="access('WebConfig') OR access('Nav') OR access('City') OR access('Ad') OR access('Links') OR access('ClearImg') OR access('Payment') OR access('Shipping') OR access('BelowLine')"><!--系统管理模块 开始-->
+                <li><span  target="navTab">系统设置(System)</span>
+                    <ul>
+                           {:tpl_left_menu('WebConfig/index','系统基本参数')}
+                           {:tpl_left_menu('Payment/index','在线支付')}
+						   {:tpl_left_menu('BelowLine/lineList','线下支付')}                          
+                           {:tpl_left_menu('Floating/floatList','漂浮客服QQ/电话')}
+                           {:tpl_left_menu('Nav/index','网站栏目列表')}
+                           {:tpl_left_menu('City/index','地区列表')}
+                           {:tpl_left_menu('Ad/index','广告管理')}
+                           {:tpl_left_menu('Links/index','友情链接列表')}
+                           {:tpl_left_menu('ClearImg/index','上传图片文件夹')}
+                    </ul>
+                </li>
+                </if>  <!--系统管理模块 开始-->                                       
+                
+                <if condition="access('Rbac')"><!--RBAC管理模块 开始-->     
+                <li><span  target="navTab">权限管理(RBAC)</span>
+                    <ul>
+                        {:tpl_left_menu('User/index','用户列表')}
+                        {:tpl_left_menu('Rbac/role','角色列表')}
+                        {:tpl_left_menu('Rbac/node','节点列表')}
+                    </ul>
+                </li>
+                </if><!--RBAC管理模块 开始-->     
+                
+                <!--报表管理模块 开始-->                   
+                <if condition="access('Report')"> 
+                <li><span  target="navTab">年/月统计报表</span>
+                    <ul>
+                        {:tpl_left_menu('Report/shopsReport','商户注册统计报表')}
+                        {:tpl_left_menu('Report/memberReport','会员注册统计报表')}
+                        {:tpl_left_menu('Report/orderReport','订单统计报表')}
+                        <!--{:tpl_left_menu('Report/vititReport','访问量统计报表')}-->
+                    </ul>
+                </li>
+                </if><!--报表管理模块 开始-->                     
+
+                <!--流量统计 开始           
+                <if condition="access('VisitQuantity')">    
+                <li><span  target="navTab">流量统计</span>
+                    <ul>
+                        {:tpl_left_menu('VisitQuantity/visitList','用户访问列表')}
+                         {:tpl_left_menu('VisitQuantity/toVisitList','搜索引擎点击访问')}
+                        {:tpl_left_menu('VisitQuantity/spiderGetWeb','搜索引擎爬取记录')}
+                    </ul>
+                </li>
+                </if><!--流量统计 结束-->    
+				                
+            </ul>
+        </div>
+    
+</div>

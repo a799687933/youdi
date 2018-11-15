@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{$result['titletext']} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/jquery.bxslider.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script>
+
+ $(function(){
+	
+	 $(document).on('click', ".aget", function(){
+       $(this).siblings(".xzeb").slideToggle()
+	   $(this).toggleClass("menuOpen")
+	   $(this).parents(".phszmli").siblings(".phszmli").find(".xzeb").slideUp()
+	   $(this).parents(".phszmli").siblings(".phszmli").find(".aget").removeClass("menuOpen")
+     });
+	 $(document).on('click', ".ageb li", function(){
+       $(this).parents(".xzeb").slideUp()
+	   val=$(this).children("label").children(".info").text()
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").text(val)
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").removeClass("menuOpen")
+     });
+	 $(document).on('click', ".shent", function(){
+       $(this).siblings(".xzeb").slideDown()
+	   $(this).addClass("menuOpen")
+     });
+	 $(document).on('click', ".shenb li", function(){
+       $(this).parents(".xzeb").slideUp()
+	   val=$(this).children("label").children(".info").text()
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").text(val)
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").removeClass("menuOpen")
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").removeClass("shent")
+	   $(this).parent("ul").parent(".xzeb").siblings(".xzet").addClass("cst")
+	   num=$(".shenb li").index($(this)) 
+	   $(".csxz ul").eq(num).show()
+	   $(".csxz ul").eq(num).siblings("ul").hide()
+     });
+	 $(document).on('click', ".cst", function(){
+       $(this).siblings(".csb").slideDown() 
+	   $(this).addClass("menuOpen")
+     });
+	 $(document).on('click', ".csb li", function(){
+       $(this).parents(".csxz").slideUp()
+	   val=$(this).children("label").children(".info").text()
+	   $(this).parent("ul").parent(".csxz").siblings(".xzet").text(val)
+	   $(this).parent("ul").parent(".csxz").siblings(".xzet").removeClass("menuOpen")
+     });
+ })
+</script>
+</head>
+<body ontouchstart="">
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="yjzct">
+ <div class="yjzctm">
+ <if condition="is_mobile()">
+  <img src="__HOME__/images/xs_newsletter.jpg" alt=""/>
+  <else/>
+  <img src="__HOME__/images/11120a.jpg" alt=""/>
+  </if>
+  <div class="yjzctmtxt">
+   <h1>{:isL(L('ThanksForYourReg'),'感谢您的注册')}</h1>
+   <p>{:isL(L('LeaveYourEmail'),'留下您的电邮地址，我们将第一时间为您送上 YOUDI WU 最新资讯。')}<br/>{:isL(L('YourOwnExc'),'选择您所感兴趣的方面，让我们为您订制专属信息。')}</p>
+  </div>
+ </div>
+</div><!--yjzct end-->
+<div class="phsz">
+<form action="{:sign_url(array('email'=>$email),U('EmailSubscribe/saveEmailForm'))} " method="post">
+    <div class="phszm">
+     <h1 class="phszmt">{:isL(L('YourPreferences'),'您的偏好（选填）')}</h1>
+     <div class="phszmli">
+     
+      <label class="phszmlilabel">{:isL(L('IDFullName'),'姓名')}</label>
+         <input type="text" name="user_name" value="" class="phszm_input mb20"/>
+         <label class="phszmlilabel">{:isL(L('ChooseYourAge'),'选择您所属年龄层')}</label>
+         <div class="xze">
+          <h1 class="xzet aget dropdown-container dropdown-white-form-container glyphs">{:isL(L('ChooseYourAge'),'选择您所属年龄层')}</h1>
+          <div class="xzeb ageb">
+          <form>
+           <ul>
+            <li>
+            <input name="age" id="1" value="20" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="1" style="padding-left:0"><span class="ffInput__radio" style="top:0; left:0; position:relative; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('Under20'),'20岁以下')}</span></label>
+            </li>
+            <li>
+            <input name="age" id="2" value="20-25" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="2" style="padding-left:0"><span class="ffInput__radio" style="top:0; left:0; position:relative; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('Years2025'),'20岁-25岁')}</span></label>
+            </li>
+            <li>
+            <input name="age" id="3" value="25-35" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="3" style="padding-left:0"><span class="ffInput__radio" style="top:0; left:0; position:relative; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('Years2535'),'25岁-35岁')}</span></label>
+            </li>
+            <li>
+            <input name="age" id="4" value="35" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="4" style="padding-left:0"><span class="ffInput__radio" style="top:0; left:0; position:relative; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('Over35'),'35岁以上')}</span></label>
+            </li>
+           </ul>
+           </form>
+          </div>
+         </div><!--xze end-->
+         <div class="phcb pb20"></div>
+     </div><!--phszmli end-->
+     <!--<p class="xqtxt2">请选择您感兴趣的品牌</p>-->
+     <div class="phszmli">
+      <label class="phszmlilabel">{:isL(L('ChooseYourCity'),'选择您的所在城市')}</label>
+      <div class="cb"></div>
+      <div style="position:relative; width:30%; float:left">
+      <span style="position:absolute; right:1px; top:1px; height:33px; line-height:33px; width:34px; z-index:2; background:#fff; display:inline-block"></span>
+      <input type="text" name="" value="" placeholder="省" class="phszm_input" style="position:relative; z-index:1"/>
+     <!-- <span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:1px; top:1px; line-height:33px; border:none"></span>
+      <select name="province"  class="cityselect" style="width:100%;" onChange="getPlace(this,'#sel2','choseSelect')" url="{:U('CheckOut/getCitys','','')}">
+       <option value="0">{:isL(L('Prov'),'省')}</option>
+          {$region['province']}
+      </select>-->
+      </div>
+      <div style="position:relative; width:70%; float:left; padding-left:15px; box-sizing:border-box">
+       <input type="text" name="" value="" placeholder="市" class="phszm_input"/>
+       <!--
+      <span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:1px; top:1px; line-height:33px; border:none"></span>
+      <select name="city"  class="cityselect" id="sel2" style="width:100%">
+       <option value="0">{:isL(L('City'),'城市')}</option>
+      </select>-->
+      </div>
+      <div class="cb"></div>
+
+         <div class="cb pb20"></div>
+         <label class="phszmlilabel">{:isL(L('ChooseWhat'),'选择您感兴趣的内容')}</label>
+         <div class="xze">
+          <h1 class="xzet aget dropdown-container dropdown-white-form-container glyphs">{:isL(L('ChooseWhat'),'选择您感兴趣的内容')}</h1>
+          <div class="xzeb ageb">
+           <ul>
+            <li>
+            <input name="demand[]" id="31" value="1" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="31" style="padding-left:0"><span class="ffInput__radio" style=" position:relative; left:0; top:0; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('NewProduct'),'新品发布')}</span></label>
+            </li>
+            <li>
+            <input name="demand[]" id="32" value="2" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="32" style="padding-left:0"><span class="ffInput__radio" style=" position:relative; left:0; top:0; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('News1'),'最新资讯')}</span></label>
+            </li>
+            <li>
+            <input name="demand[]" id="33" value="3" type="radio" style="display:none">
+            <label class="ffInput js-ffInput" for="33" style="padding-left:0"><span class="ffInput__radio" style=" position:relative; left:0; top:0; vertical-align:middle"></span><span class="pl5 info vam">{:isL(L('All'),'全部')}</span></label>
+            </li>
+           
+           </ul>
+          </div>
+         </div><!--xze end-->
+     </div><!--phszmli end-->
+     <if condition="is_mobile()">
+      <div class="phszmli">
+      <p class="pv10 lh22 f13 col999">{:isL(L('OnceRegistereds2'),'一旦注册即代表您同意遵守我们的 <a href="/Modular/pubarticle/html/174.html" target="_blank" class="col222" style="border-bottom:1px solid #222">条件与条款</a> and <a href="/Modular/pubarticle/html/175.html" target="_blank" class="col222" style="border-bottom:1px solid #222">隐私与Cookie政策</a>')}</p>
+     <label class="phszmlilabel">&nbsp;</label>
+      <div class="bcbtn" style="width:100%; margin-top:0">
+        <input value="{:isL(L('AddToShopping'),'添加到购物袋，继续购物')}" class="btn" style="height:35px; line-height:30px;" type="submit">
+       <span class="glyphs icon-thinArrow btnb" style="line-height:38px"></span>    
+     </div>
+
+     
+     
+     </div><!--phszmli end-->
+     <else/>
+     <div class="phszmli">
+     <label class="phszmlilabel">&nbsp;</label>
+      <div class="bcbtn" style="width:100%">
+        <input value="{:isL(L('AddToShopping'),'添加到购物袋，继续购物')}" class="btn" style="height:35px; line-height:30px;" type="submit">
+       <span class="glyphs icon-thinArrow btnb" style="line-height:38px"></span>    
+     </div>
+     <div class="cb"></div>
+     <p class="pv10 lh22 f13 col999">{:isL(L('OnceRegistereds2'),'一旦注册即代表您同意遵守我们的 <a href="/Modular/pubarticle/html/174.html" target="_blank" class="col222" style="border-bottom:1px solid #222">条件与条款</a> and <a href="/Modular/pubarticle/html/175.html" target="_blank" class="col222" style="border-bottom:1px solid #222">隐私与Cookie政策</a>')}</p>
+     </div><!--phszmli end-->
+     </if>
+     
+     <div class="cb pb20"></div>
+     <!--<p class="xqtxt">请选择您感兴趣的品牌</p>--> 
+    </div>
+</form>
+</div><!--phsz end-->
+
+<div class="zxfb"> 
+<div class="zjll">
+  <div class="zjllt">
+   <ul>
+    <li class="hover">{:isL(L('YouMayLike'),'您可能会喜欢')}<!--{:isL(L('RecentVisit'),'最近浏览过')}--></li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+  <div class="zjllb">
+   <blockquote class="block" get="likes">
+   <div class="slider2">
+      <include file="Piece/likes" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/likes.html */}
+    </div>
+   </blockquote>
+  </div><!--zjllb end-->
+ </div><!--zjll end-->
+ <div class="cb"></div>
+</div>
+<!--content end-->
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.js"></script>
+<if condition="is_mobile()">
+<script type="text/javascript">
+$(document).ready(function(){			
+	  wk=$(".zjllb").width()
+
+		  
+$('.dbcloseb').click(function(e){
+  e.preventDefault();
+  $(this).parent('.slide').remove();
+  slider1.reloadSlider({
+	  slideWidth:  wk/3,
+            minSlides: 2,
+            maxSlides: 3,
+            slideMargin: 0,
+			prevText:"",
+			nextText:"",
+	  });
+});	  		 	  
+		  
+$('.slider2').bxSlider({			
+	slideWidth:  wk/3,
+	minSlides: 2,
+	maxSlides: 3,
+	slideMargin: 0,
+	prevText:"",
+	nextText:""
+
+  });
+
+	//打开手机检索栏
+	$(document).on('click','.sxtjdj',function(){
+		$(".tcshxl").fadeIn();
+		$(".tcshxlb").slideDown();
+	});
+	//关闭手机检索栏
+	$(document).on('click','.tcshxlt,.close-retrieval',function(){
+		 $(".tcshxl").fadeOut();
+		 $(".tcshxlb").slideUp();	
+		 $('body,html').stop().animate({
+			'scrollTop': 0,
+			'duration': 300,
+			'easing': 'ease-in'
+		  });			
+	});
+	
+});
+
+</script>
+
+<else/>
+
+     <script type="text/javascript">
+
+		$(document).ready(function(){
+		
+		/*加载浏览过的商品*/
+		wkt=$(".zjllb").width();
+		
+		
+		/*删除浏览过的商品*/
+		$(document).on('click','.dbcloseb',function(e){
+			 var _this=$(this);
+			 var url=_this.attr('url');
+			 delRecentVisit(url);
+			  e.preventDefault();
+			  $(this).parent('.slide').remove();
+			  slider1.reloadSlider({
+				  slideWidth:  wkt/8-1,
+				  minSlides: 7,
+				  maxSlides: 8,
+				  slideMargin: 0,
+				  prevText:"",
+				  nextText:"",	
+			   });
+		});	
+
+		 	  
+		  
+		  $('.slider2').bxSlider({			
+            slideWidth:  wkt/8-1,
+            minSlides: 7,
+            maxSlides: 8,
+            slideMargin: 0,
+			prevText:"",
+			nextText:""
+
+          });
+		  
+		  
+
+
+        });
+
+    </script>
+</if>
+
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('Promotion'),'限时促销')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/loadMoerPage.js"></script>
+<script src="__COMMON__/Js/countdown.js"  type="text/javascript"></script>
+<script src="__COMMON__/Js/cart.js"  type="text/javascript"></script>
+<script src="__COMMON__/Js/div-dialog.js"  type="text/javascript"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"> 
+$(function(){
+    //显示结束时间
+    var tgTime=$('.tg_time');
+    var times="{:time()}";
+    for(i = 0;i < tgTime.length;i++){
+        timited(tgTime.eq(i).attr('ids'),tgTime.eq(i).attr('endTime'),times);
+    }
+});
+
+//加载分页
+window.page=new loadMoerPage();
+page.options.url="{:str_replace('2.html','',go_page($_URL_,$pageNumShown,'+'))}"; //请求地址把固定值去掉(2.html)
+page.options.totalPages="{$pageNumShown}"; //总页数
+page.options.addEnd="#add-page"; //追加内容节点
+page.options.addEndLoadImg=".cs_list"; //显示生成加载图片父节点
+page.options.addEndLoadImgPath="__COMMON__/__MOBILE__/images/5-121204193R3.gif"; //加载图标路径
+page.run();
+</script>  
+</head>
+<body>
+<div class="g-mn">
+<include file="Common:header2" />{/*头部*/}
+<div class="cs_list" id="add-page">
+    <include file="Piece:Promotion_index" />{/*调用碎片*/}
+</div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

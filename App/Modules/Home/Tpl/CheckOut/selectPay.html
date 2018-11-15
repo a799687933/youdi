@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('BillingPaying'),'结算 - 支付')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+/*GET提交*/
+function sendGet(){
+   var  payList=$('input[name="pay"]');
+   var pay='';
+   for(var i=0;i < payList.length;i++){
+       if(payList.eq(i).attr('checked')){
+           pay=payList.eq(i).val();
+       }
+   }
+   if(!pay){
+       error('{:isL(L("Pctrgapca"),"请选择收货地址或创建一个新地址")}',3000);
+       return;
+   }
+    var url="{:sign_url(array('ids'=>$_GET['ids'],'total'=>$_GET['total'],'selectAdderss'=>$selectAdderss),U('CheckOut/billingDetails','',''),'')}&pay="+pay;
+    window.location.href=url;
+}    
+$(function(){
+		
+
+ $("input[name='pay']").click(function () {
+                if ($(this).val()=="alipay") {
+                  $(".paytxt").show()  
+                 }else {
+					 $(".paytxt").hide()  
+					 }
+             });
+
+	}) 
+ 	
+</script>
+<if condition="is_mobile()">
+
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<!--content begin-->
+    <div class="jies">
+     <div class="gwdt b">{:isL(L('Billing'),'结算')}</div>
+     <div class="jsl">
+      <div class="jslt">
+       <ul>
+       	<li>1.{:isL(L('SentOut'),'配送')}</li>
+        <li class="now">2.{:isL(L('Pay'),'支付')}<span class="jsltspan2"></span></li>
+        <li class="last">3.{:isL(L('Checklist'),'核对')}<span class="jsltspan1"></span></li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--jslt end-->
+      <div class="zhif">
+       <h1 class="f16 lh30 pv10">{:isL(L('SelectPaymentMethod'),'选择支付方式')}</h1>
+       <div class="pv10"> 
+       <div class="pv10 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam zfb ndis" value="alipay" checked id="zf1" />
+       <label class="ffInput js-checkout-select-paymethod-container" for="zf1">
+            <span class="ffInput__radio"></span>
+            <img src="__HOME__/images/zfb.png" alt="" style="height:52px;"/>
+           <!-- <a class="paymentType alipay"></a>-->
+        </label>
+       
+       
+       <!--<img src="__HOME__/images/1129a.jpg" alt="" class="vam ml10"/>-->
+       </div>
+       <p class="lh22 pt20 pb20 paytxt" style="padding-left:28px;">{:isL(L('TemporarilySupport'),'温馨提示www.youdi-wu.com暂时仅支持alipay付款，给您带来的不便敬请谅解。')} </p>
+       </div>{/*支付宝*/}
+       
+       
+      
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf2"/>
+       <label class="ffInput" for="zf2">
+            <span class="ffInput__radio"></span>
+             <img src="__HOME__/images/wxin.png" alt="" style="height:52px;"/>
+        </label>
+      
+       <!--<img src="__HOME__/images/1129b.jpg"   alt="" class="vam ml10"/>-->
+       </div>
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf3"/>
+       <label class="ffInput" for="zf3">
+            <span class="ffInput__radio"></span>
+             <img src="__HOME__/images/ma.png" alt="" style="height:52px;"/>
+        </label>
+       <!--<img src="__HOME__/images/1129c.jpg"  alt="" class="vam ml10"/>-->
+       </div>
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf4"/>
+       <label class="ffInput" for="zf4">
+            <span class="ffInput__radio"></span>
+             <img src="__HOME__/images/visa.png" alt="" style="height:52px;"/>
+        </label>
+       
+       <!--<img src="__HOME__/images/1129d.jpg" alt="" class="vam ml10"/>-->
+       </div>
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf5"/>
+       <label class="ffInput" for="zf5">
+            <span class="ffInput__radio"></span>
+             <img src="__HOME__/images/AM.png" alt="" style="height:52px;"/>
+        </label>
+       
+       <!--<img src="__HOME__/images/1129e.jpg" alt=""  class="vam ml10"/>-->
+       </div>
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf6"/>
+       <label class="ffInput" for="zf5">
+            <span class="ffInput__radio"></span>
+             <img src="__HOME__/images/pay.png" alt="" style="height:52px;"/>
+        </label>
+       
+       <!--<span class="vam ml10">{:isL(L('CreditCard'),'信用卡')}</span-->
+       </div>
+       <div class="pv20 footer-paymentMethods zhiffs">
+       <input type="radio" name="pay" class="vam ndis" value="" disabled="disabled" id="zf6"/>
+       <label class="ffInput" for="zf5">
+            <span class="ffInput__radio"></span>
+             <span class="vam ml10" style="line-height:52px">{:isL(L('CreditCard'),'信用卡')}</span>
+        </label>
+       
+       <!--<span class="vam ml10">{:isL(L('CreditCard'),'信用卡')}</span-->
+       </div>
+       
+ 
+       
+      </div><!--zhif end-->
+     </div><!--jsl end-->
+     <div class="jsr">
+     <div class="jsrm" >
+      <h1>{:isL(L('Billing'),'总结')}</h1>
+      <p class="pb10 f12">{:isL(L('Subtotal'),'小计')}<span class="fr f16 b">{:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</span></p>
+      <p class="pb10 f12">{:isL(L('SentOut'),'配送')}<span class="fr b f16 huan">{:C('KTEC_H')} 0.00</span></p>
+      <!--<p class="myf">{:isL(L('NewFreeShipping'),'免运费')}</p>-->
+      <div class="jsrb mt5"> 
+       <div class="pb30 f12">{:isL(L('TotalCost'),'总计')}       <span class="fr tr f16"><b>{:C('KTEC_CUR')} {:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</b></span>
+       <p class="tr col999 lh18 f12 pt5">({:isL(L('ValueAddedTax'),'含增值税')})</p>
+       </div>
+       <div style=" position:relative;">
+       <input   onclick="sendGet()" value="{:isL(L('SaveAndContinue'),'保存并继续')}"  class="jsr_btn" type="button">
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+      <div class="jstxt4"><p>{:isL(L('YouCanCheckAll'),'您可以在下一页中检查所有信息并确认您的订单。')}</p></div>
+      </div>
+      <!--
+       <p class="pb20">{:isL(L('TotalCost'),'总计')}<span class="fr b">CNY ￥ {:number_format($_GET['total'],2, '.', '');}</span></p>
+       <input type="button"  onclick="sendGet()" value="{:isL(L('SaveAndContinue'),'保存并继续')}" class="jsr_btn"/>
+       <p class="col999 f12 pl10 lh25">{:isL(L('YouCanCheckAll'),'您可以在下一页中检查所有信息并确认您的订单。')}</p>-->
+      </div>
+      </div>
+     </div><!--jsr end-->
+     <div class="cb"></div>
+    
+    </div><!--jies end-->
+<!--content end-->
+<div class="cb pv10"></div>
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

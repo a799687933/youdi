@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><if condition="$keywrods">{$keywrods}_</if>检索页_{:C('WEBTITLE')}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+  $('.qbcpfllist').hide();
+  /**flsx**/
+  $(".flsxb dl dt").click(function(){
+  $(this).addClass("icon25b");
+  $(this).siblings("dd").show();
+  $(this).parents("dl").siblings("dl").children("dd").hide();
+  $(this).parents("dl").siblings("dl").children("dt").removeClass("icon25b")
+  });
+  /**cpli**/
+   $(".cpli li").hover(
+   function(){
+	   $(this).addClass("hover");
+	   },
+	   function(){
+	   $(this).removeClass("hover");
+	   }
+  );
+  
+  if($('.dd-on').length > 0){
+     var dl=$('.dd-on').parent();
+	 dl.children('dd').show();
+	 dl.children('dt').attr('class','icon25a icon25b');
+	 $('.dd-on').children('a').css('color','red');
+  }
+  if($('.dl-on').length > 0){
+     var dl=$('.dl-on');
+     dl.children('dd').show();
+	 dl.children('dt').attr('class','icon25a icon25b');     
+  }
+});
+
+</script>
+<style type="text/css">
+.classType{
+    color:red !important;
+}
+</style>
+</head>
+
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:topad'/>{/*可关闭的广告*/}
+<include file='Common:header'/>{/*头部 */}
+<include file='Common:classify'/>{/*商品分类*/}
+
+ <!--content begin-->
+ <div class="content bgf6"><div class="wrap">
+	  <div class="weizhi">
+			 <a href="__ROOT__/">首页</a> > 检索 <if condition="$keywrods">> {$keywrods}</if>
+	</div>
+  <div class="left">
+   <div class="flsx">
+   </div><!---->
+   <div class="cb pb10"></div>
+   <if condition="$leftAd['ad_img']"><a <if condition="$leftAd['ad_url']">href="{$leftAd.ad_url}"</if>><img src="__ROOT__/{$leftAd.ad_img}"/></a></if>
+   <div class="rmtj_cplb mt10">
+  <h1>热卖排行</h1>
+  <ul>
+   <foreach name="hot" item="h">
+	   <li>
+		<a href="{:U('/g-'.$h['id'])}"><img alt="" src="__ROOT__/{$h.goods_thumb}"></a>
+		<div class="rmtjr_cplb">
+		 <p class="col333">{$h.goods_name}</p> 
+		 <p><strong>￥{$h.goods_retail_price}</strong></p>
+		</div>
+		<div class="cb"></div>
+	   </li>
+   </foreach>
+  </ul>
+ </div><!---->
+  </div><!--left end-->
+  <div class="right">
+   <div class="plfs mt20">
+    <div class="plfsl">
+     排序方式：<a href="{:U('/Search/index',array('keywords'=>$keywrods,'o'=>0))}" class="{$oClass}">默认</a>
+	                    <a href="{:U('/Search/index',array('keywords'=>$keywrods,'v'=>$Vorders))}" class="xiaol {$vClass}">销量</a>
+						<a href="{:U('/Search/index',array('keywords'=>$keywrods,'h'=>$Gorders))}" class="xiaol {$gClass}">人气</a>
+						<a href="{:U('/Search/index',array('keywords'=>$keywrods,'r'=>$Rorders))}" class="xiaol {$rClass}">价格</a>
+    </div>
+   <!-- <div class="plfsr">
+     <div class="plfsrl">商品所在地：<select name="" class="plfsrl_select"><option value="不限地区">不限地区</option></select></div>
+     <div class="plfsrr"><a href="#" title="">上一页</a>&nbsp;&nbsp;<a href="#" title="">下一页</a></div>
+     <div class="cb"></div>
+    </div>-->
+    <div class="cb"></div>
+   </div><!--plfs end-->
+   <div class="cpli">
+    <ul class="clearfix">
+    <foreach name="result" item="re">
+		 <li>
+		  <a href="{:U('/g-'.$re['id'])}"  target="_blank"><img src="__ROOT__/{$re.goods_thumb}" alt="{$re.goods_name}"/></a>
+		  <span class="fl col000 f14 b">{$re.goods_name|sub_str=###,6}</span><span class="fr f14 col000">￥{$re.goods_retail_price}</span>
+		  <div class="cb"></div>
+		  <p><a href="{:U('/shop/'.$re['catalog'],'','')}" target="_blank">{$re.shop_name|sub_str=###,14}</a>  |  <if condition="$re['shops_type']">企业<else />个人</if></p>
+		  <p>服务评分：{$re['appraise']['score']}</p>
+		 </li>
+	</foreach> 
+     <div class="cb"></div>
+    </ul>
+    <div class="page2 pv15">
+   {$page}
+  </div>
+   </div><!--cpli end-->
+  
+  </div><!--right end-->
+  <div class="cb pb20"></div>
+  <if condition="$indexCenter['ad_img']">
+        <a <if condition="$indexCenter['ad_url']">href="{$indexCenter.ad_url}"</if>><img src="__ROOT__/{$indexCenter.ad_img}" title="{$indexCenter.ad_class_bewrite}"/></a>
+  </if>
+  <include file='Common:services'/>{/*交易流程*/}
+ </div></div>
+  <!--content end-->
+  <!--footer begin-->
+   <include file='Common:help'/>{/*帮助中心*/}		 
+  <!--footer end-->
+ <include file='Common:footer'/>{/*页脚*/}		   
+ <include file='Common:float'/>{/*右边固定可关闭层*/}
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+            <if condition="access('City/cityAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/City/cityAdd','','')}/city_pid/{$_GET['region_id']}/action/province" target="dialog" mask="true" title="添加省份" width="900" height="550"><span>添加省份</span></a></li>
+            </if>
+            <!--<if condition="access('City/cityDelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="ajaxTodo" rel="ids" href="{:U(APP_APPS.'/City/cityDelete','','')}/ids/{sid_user}" class="delete"><span>删除</span></a></li>
+            </if>-->
+            <li class="line">line</li>
+		</ul>
+	</div>
+	<table class="list" width="100%" layoutH="30"  id="list-table">
+		<thead>
+			<tr>
+				<th >城市名称</th>
+				<!--<th width="30%">按字母分类</th>-->
+				<th width="10%">排除</th>
+				<th width="10%">是否显示</th>
+				<!--<th width="10%">是否热门</th>-->
+				<th width="10%" style="text-align: center;">操作</th>	
+			</tr>
+		</thead>
+		<tbody>
+		   <foreach name="CityArr" item="app"> 
+    			<tr target="sid_user" rel="{$app.region_id}"  id="{$app.parent_id}_{$app.region_id}" class="{$app.parent_id} showtr">   				
+    				<td style="text-align:left;text-indent:2px; padding-left:5px;"  class="first-cell">    				  
+    				  <img src="__SYS_IMG__//menu_minus.gif" id="icon_{$app.parent_id}_{$app.region_id}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this)" />
+    				  {$app.region_name|tpl_modify_oen=###,'region','region_name',$app['region_id'],'region_id','City/citySave'}
+                    </td>                  
+    				<!--<td>{$app.region_abc|tpl_modify_oen=###,'region','region_abc',$app['region_id'],'region_id','City/citySave'}</td>-->
+    				<td>{$app.orders|tpl_modify_oen=###,'region','orders',$app['region_id'],'region_id','City/citySave'}</td>
+    				<td>{$app.is_show|tpl_yes_no=###,'region','is_show',$app['region_id'],'region_id','City/citySave'}</td>  		
+					<!--<td>{$app.is_hot|tpl_yes_no=###,'region','is_hot',$app['region_id'],'region_id','City/citySave'}</td>-->  		
+    				<td style="text-align: center;">
+                  {/*城市列表*/}     
+                  <if condition="$app['parent_id'] eq 0">
+                     <img src="__SYS_IMG__/book_open2.gif" />
+                  <else />
+                      {$action|tpl_action='navTab','City/cityList','region_id/'.$app["region_id"].'/name/'.$app['region_name'],'('.$app['region_name'].')城市列表','book_open.gif','book_open2.gif'} 
+                  </if>    
+                  </td> 				
+    		  </tr>
+           </foreach> 
+
+		</tbody>
+	</table>
+
+</div>
+

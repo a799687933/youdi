@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')} - {:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript"> 
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+    var ps = $("#div_pro").position();  
+    $("#div_pro").mouseenter(function () {  
+        $("#float_box").show();  
+    });  
+    $("#float_box").mouseleave(function () {  
+        $("#float_box").hide();  
+    });  
+});  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                 <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > 
+                 <if condition="$_GET['order_type']">{:isL(L('RefundAndEturn'),'退款/退货')}<else />{:isL(L('OrderList'),'订单列表')}</if>
+             </p>          
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+ <table  class="my-table my-table-bot-border" style="width:100%;font-size:12px;">
+         <if condition="$sums">
+             <tr>
+                   <th colspan="7" style="text-align: left !important;padding-left:5px;">
+                        {:isL(L('TradingTeminder'),'我的交易提醒')}： 
+                        
+                       <!-- <a href="{:U('/Member/orderList')}">{:isL(L('AllOrders'),'全部订单')}</a>
+                        ({$sums['counts']}) -->
+                        
+                        <a href="{:U('/Member/orderList',array('status'=>1))}">{:isL(L('Unpaid'),'待付款')}</a>
+                        ({$sums['pay_0']}) 
+                        
+                        <a href="{:U('/Member/orderList',array('status'=>2))}">{:isL(L('AccountPaid'),'待发货')}</a>
+                        ({$sums['pay_2']}) 
+                        
+                        <a href="{:U('/Member/orderList',array('status'=>3))}">{:isL(L('Delivered'),'待确认')}</a>
+                        ({$sums['shipping_status_2']})
+                        
+                        <!--<a href="{:U('/Member/orderList',array('status'=>4))}">{:isL(L('Delivered'),'交易完成')}</a>
+                        ({$sums['order_status_2']})-->
+ 
+                         <a href="{:U('/Member/orderList',array('status'=>6))}">{:isL(L('TransactionCompletion'),'待评价')}</a>
+                        ({$evaluated})
+                                                 
+                        <a href="{:U('/Member/orderList',array('status'=>5))}">{:isL(L('CancelledOrder'),'已取消订单')}</a>
+                        ({$sums['order_status_5']})     
+                   </th>
+             </tr>        
+             </if>
+             <tr>
+                 <th style="height:30px;line-height:30px;">{:isL(L('OrderNumber'),'订单号')}</th>
+                 <th>{:isL(L('SingleTime'),'下单时间')}</th>
+                 <th>{:isL(L('OrderAmount'),'订单总金额')}</th>
+                 <th>{:isL(L('AmountPayable'),'应付金额')}</th>
+                 <th>{:isL(L('PaymentMethod'),'支付方式')}</th>
+                 <th>{:isL(L('OrderStatus'),'订单状态')}</th>
+                 <th>{:isL(L('Operation'),'操作')}</th>
+             </tr>
+             <foreach name="orderList" item="ord">
+                 <tr>
+                     <td align="center"><strong style="font-size:14px;"><a href="{:U('/Member/orderShow',array('order_id'=>$ord['order_id']))}">{$ord.order_sn}</a></strong></td>
+                     <td align="center">{$ord.add_time|date='Y-m-d H:i:s',###}</td>
+                     <td align="center">￥<strong style="color:red;">{$ord.goods_amount}</strong> </td>
+                     <td align="center">￥<strong style="color:red;">{$ord.order_amount}</strong> </td>
+                     <td align="center">
+                        <if condition="$ord['order_amount'] eq 0">
+                               积分对换
+                        <else />                            
+                              {$payType[$ord['pay_type']]}{/*支付方式*/}
+                        </if>                       
+                     </td>
+                     <td align="center">
+                                {/*付款状态*/}
+                               <if condition="$ord['order_amount'] eq 0">
+                                   [积分对换]
+                               <else />
+                                    <if condition="$ord['pay_type'] neq 1 AND $ord['pay_type'] eq 2">
+                                       [{$payStart[$ord['pay_status']]}]
+                                    </if>                                      
+                               </if>  
+                                {/*订单状态*/}
+                                [{$orderStart[$ord['order_status']]}]
+                                {/*配送状态*/}
+                                [{$shippingStart[$ord['shipping_status']]}]                                             
+                     </td>
+                     <td align="center">
+                         <if condition="(($ord['pay_status'] eq 0) AND ($ord['shipping_status'] eq 0) AND ($ord['order_status'] eq 0 OR $ord['order_status'] eq 1))">
+                             <a href="javascript:void(0);" 
+                             onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}','{:isL(L('ISDELETE'),'确定取消定单？')}',
+                             '{:U('/Member/cancelOrder',array('order_id'=>$ord['order_id']))}','')" >{:isL(L('CancelOrder'),'取消订单')}</a>
+                         <else />
+                             <span style="color:#ccc;">{:isL(L('CancelOrder'),'取消订单')}</span> 
+                         </if>                                               
+                        |  <a href="{:U('/Member/orderShow',array('order_id'=>$ord['order_id']))}">{:isL(L('OrderXiang'),'订单祥情')}</a>
+                    </td>
+                 </tr>
+             </foreach>                                                                 
+      </table>           
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('shoppingCa'),'购物车')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/alert.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/cartPage.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script type="text/javascript" src="__HOME__/js/Calculation.js"></script>
+<script type="text/javascript">
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+window.Error="{:isL(L('Error'),'错误')}";
+$(document).ready(function(){
+       counts();
+});
+
+/*全选商品或全选单个商铺商品*/
+function selectCheckbox(_this,types){
+     if(types=='all'){
+         var box=$('#catr').find('input[type="checkbox"]');
+         if($(_this).attr('checked')){
+             for(var i=0;i < box.length;i++){ 
+                 box.eq(i).attr('checked',true);
+             }
+         }else{
+             for(var i=0;i < box.length;i++){
+                 box.eq(i).attr('checked',false);
+             }           
+         }
+     }else{
+             var box=$('.checkbox_'+types);
+             if($(_this).attr('checked')){
+                 for(var i=0;i < box.length;i++){ 
+                     box.eq(i).attr('checked',true);
+                 }
+             }else{
+                 for(var i=0;i < box.length;i++){
+                     box.eq(i).attr('checked',false);
+                 }           
+             }       
+     }
+     counts();
+}
+
+/*单选商品检查是否有组合购买并选定*/
+function cheboxOen(_this){
+    var zhuHeclass='.zhuhe_'+$(_this).val();
+    if($(zhuHeclass).length > 0){
+        if($(_this).attr('checked')){
+            $(zhuHeclass).attr('checked',true);
+        }else{
+            $(zhuHeclass).attr('checked',false);
+        }
+    }
+    counts();
+}
+
+/*计算购物总金额*/
+function counts(){
+    var inputs=$('input[name="goods_id[]"]');
+    var j=0;
+    var totalAmount=0;
+    var originalPrice=0;
+    for(var i=0;i < inputs.length;i++){
+          if(inputs.eq(i).attr('checked')) {
+              var tr=inputs.eq(i).parents('.cart-goods-list');
+              var num=parseInt(tr.find('.goods-num').val());
+              j+=num;
+              totalAmount+=parseFloat(inputs.eq(i).attr('price')) * num;
+              originalPrice+=parseFloat(inputs.eq(i).attr('originalprice')) * num;
+          }
+    }
+    $('#goods-count').text(j);//商总个数
+    $('#goods-total').text(fmoney(totalAmount)); //商品实际总金额
+    $('#saving').text(fmoney(originalPrice - totalAmount));//节省总金额
+}
+
+/*修改商品数量*/
+window.updates=true;
+function updateNumber(fuhao,inputName,url){
+  if(!updates) return;  
+  var numRe=/^\d+$/;
+  var _curNum = parseInt($("input[name='"+inputName+"']").val());
+  if(!numRe.test(_curNum)){ $("input[name='"+inputName+"']").val(2);return;}
+  if(fuhao=="+"){
+      $("input[name='"+inputName+"']").val(_curNum +1);
+   }else if(fuhao=="-"){
+      if(_curNum >1){
+           $("input[name='"+inputName+"']").val(_curNum -1);
+      }
+      if(_curNum==1) return;
+  }
+  m=parseInt($('input[name="'+inputName+'"]').val());
+  var url=url+"&num="+m;
+  updates=false;
+  $.ajax({
+     type:'get',
+     url:url,
+     dataType:'json',
+     success:function(response,status,xhr){
+         updates=true;
+         if(response[0][1]){
+             var tr=$('input[name="'+inputName+'"]').parents('.cart-goods-list');
+             var price=parseFloat(tr.find('input[name="goods_id[]"]').attr('price'));
+             tr.find('.goods-subtotal').text(fmoney(m * price));
+             var table=$('input[name="'+inputName+'"]').parents('.cart-table');
+             var zhClass=table.find('.zhuhe_'+tr.find('input[name="goods_id[]"]').val());
+             if(zhClass.length > 0){
+                 for(var i=0;i < zhClass.length;i++){
+                     var tr=zhClass.eq(i).parents('.cart-goods-list');
+                     var price=parseFloat(tr.find('input[name="goods_id[]"]').attr('price'));
+                     tr.find('.goods-subtotal').text(fmoney(m * price));
+                     tr.find('.goods-num').val(m);
+                 }
+             }
+             counts();
+         }else{
+            if(response[0][3]){
+                window.location.href=response[0][3];
+            }else{
+               myAlert('{:isL(L("Error"),"错误")}',response[0][2],'','',3);
+            } 
+         }
+      }
+   });        
+}
+
+/*删除购物车*/
+window.deleteData=null;
+function toDelete(ids,_this){
+   var str='';   
+   if(ids){
+       str=ids;
+   }else{
+       deleteData=new Array();
+       var inputs=$('input[name="goods_id[]"]');
+       var j=0;
+       for(var i=0;i < inputs.length;i++){
+           if(inputs.eq(i).attr('checked')){
+               str+=inputs.eq(i).val()+',';
+               deleteData[j++]=inputs.eq(i).parents('.cart-goods-list');
+           }
+       }       
+   }
+  if(!str){
+      myAlert('{:isL(L("SelectionTips"),"选择提示")}','{:isL(L("CartDeleteGoods"),"请选择要删除的商品")}','','','',3);
+      return;
+   }
+   var url="{:get_up_url(array('delete'=>mt_rand(1000,9000)),U('Cart/delCart','',''),true)}&ids="+str;
+   myAlert('{:isL(L("DeleteTips"),"删除提示")}','{:isL(L("ISDELETE"),"操作不可恢复确定执行本次操作？")}',url,'','',2);
+   if(_this) deleteData=$(_this).parents('.cart-goods-list');
+}
+
+/*删除商品回调函数*/
+function removeNode(success){
+    if(success){
+        if((deleteData.constructor == Array)){
+             for(var i in deleteData){
+                 deleteData[i].remove();
+             }
+        }else{
+             deleteData.remove();
+        }
+    }
+}
+
+
+function sendForm(){
+   var cleckAll=$('input[name="goods_id[]"]');
+   var str='';
+   for(var i=0;i<cleckAll.length;i++){
+       if(cleckAll.eq(i).attr('checked')) str+=cleckAll.eq(i).val()+',';
+   }
+   if(!str){
+       myAlert('{:isL(L("SelectionTips"),"选择提示")}','{:isL(L("CartSubmitGoods"),"请选择要提交的商品")}','','','',3);
+       return false;
+   }
+   var url="{:get_up_url(array('send'=>mt_rand(1000,9000)),U('CheckOut/index','',''),true)}&ids="+str;
+   window.location.href=url;
+   return false;
+}
+</script> 
+<style type="text/css">
+.member_r{width:1200px;}
+.order_img{width:1200px;}
+.order_list{width:1200px;}
+.order_list li{
+    width:1200px !important;height:auto;
+}
+.order_list .lista2{width:200px;}
+.order_list .lista3{padding-left:75px;}
+.order_buy{width:1200px;}
+.slideTxtBoxsc{width:1200px;}
+.order_list .list2{width:250px;}
+.order_list .list3{text-align:center;}
+.order_list .list4{padding-left:70px;}
+.order_list .list6,.order_list .lista6{float:right}
+.order_list .lista4{padding-left: 90px;}
+.order_buy .buy4{width:auto}
+.order_buy .buy2{width:150px;}
+.order_buy .buy3{width:120px;}
+
+/*加减按钮样式*/
+a.jian_gwc {
+    background: #f0f0f0;
+    border: 1px solid #aaa;
+    padding: 2px 3px;
+    color: #333;
+    display: inline-block;
+}
+.input_gwc {
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-left: none;
+    border-right: none;
+    color: #333;
+    width: 30px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    vertical-align: top;
+}
+/*加减按钮样式结束*/
+</style>
+
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+<div class="main">
+    <div class="member_r">
+    	
+        <div class="order_img"><img src="__HOME__/images/order1.jpg" /></div>
+        <div class="order_list">
+        <h2>
+           {/*满购优惠*/}   
+            <if condition="$cart['full']['dis_type'] gt 0">
+             温馨提示：<!--1.选购清仓促销的商品无法保留库存，请您及时结算。 2.商品的价格和库存将以订单提交时为准。-->    
+             <span style="color:red;font-size:16px;margin-right:20px;">
+                {$cart['full']['dis_name']}{/*活动名称*/}
+                <foreach name="cart['full']['list']" item="dis">
+                    <if condition="$cart['full']['dis_type'] eq 1">
+                          ({:replace_isl('FullDiscount','购满%d折扣',getPrice($dis['amount'],true))}  {$dis['dis_type_val'] * 10})&nbsp;&nbsp;
+                    <elseif condition="$cart['full']['dis_type'] eq 2" />
+                         ({:replace_isl('FullReduction','购满%d减',getPrice($dis['amount'],true))} {:getPrice($dis['dis_type_val'],true)} )&nbsp;&nbsp;
+                    </if>                   
+                 </foreach>
+             </span>
+            </if> 
+            {/*满购优惠结束*/}        
+        </h2>
+      <form method="get" action="{:U('/CheckOut')}" id="catr" > 
+       <table width="100%" cellspacing="0" cellpadding="0" class="cart-table">
+        <tbody><tr bgcolor="#f5f5f5">
+         <td width="8%" align="left">
+             <input type="checkbox" name="all" onclick="selectCheckbox(this,'all')" checked="checked" class="ml10"/> 
+             {:isL(L('checkAll'),'全选')}
+         </td>
+         <td width="35%" align="left">{:isL(L("CommodityInformation"),'商品信息')}</td>
+         <td width="10%" align="center">{:isL(L('UnitPrice'),'单价')}</td>
+         <td width="10%" align="center">{:isL(L('Number'),'数量')}</td>
+         <td width="10%" align="center">{:isL(L('TotalAmount'),'总金额')}</td>
+         <td width="10%" align="center">{:isL(L('Operation'),'操作')}</td>
+        </tr>
+        
+        <foreach name="cart['goods_list']" item="catrs">  
+            <tr bgcolor="#f9f9f9" style="<if condition="$catrs['zhuhe_goods_id'] gt 0">background:#fff4e8;<else />background:#f9f9f9;</if>" class="cart-goods-list">
+             <td align="center">
+             <if condition="$catrs['zhuhe_goods_id'] eq 0">
+                 <input type="checkbox"  name="goods_id[]" checked="checked"
+                 value="{$catrs.goods_id}"  class="ml15 checkbox_{$key4}"  onclick="cheboxOen(this)" 
+                 price="{:getPrice($catrs['goods_price'],false)}"
+                 originalprice="{:getPrice($catrs['market_price'],false)}"
+                 style="margin:0;position: relative;top:-20px;" />     
+             <else />
+                 <input type="checkbox"  name="goods_id[]" checked="checked"
+                 value="{$catrs.goods_id}"  class="ml15 checkbox_{$key4} zhuhe_{$catrs['zhuhe_goods_id']}"  
+                 price="{:getPrice($catrs['goods_price'],false)}"
+                 originalprice="{:getPrice($catrs['market_price'],false)}"
+                 style="margin:0;display:none" />                        
+             </if>
+             <a href="{:U('/Goods/content',array('html'=>'g-'.$catrs['goods_id']))}" target="_blank" 
+             style="display:inline-block;width:40px;<if condition="$catrs['zhuhe_goods_id'] gt 0">margin-left:20px;</if>">
+                  <img alt="" src="{:showImg($catrs['goods_thumb'])}" style="width:50px;height:50px;">
+             </a>
+             </td>
+             <td align="left">
+              <p><a href="{:U('/Goods/content',array('html'=>'g-'.$catrs['goods_id']))}" target="_blank">{$catrs[pfix('goods_name')]}</a></p>
+              <p class="hui">
+                  <foreach name="catrs['goods_attr']" item="attr">
+                       {$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}<br/>
+                   </foreach> 
+               </p>
+             </td>
+             <td align="center">
+                <strong style="position:relative;color:red;">{:getPrice($catrs['goods_price'],true)}
+                <if condition="$catrs[pfix(C('CART_REC_INFO'))]">
+                      <div style="position:absolute;top:-35px;left:-40px;background:#fff;height:20px;line-height:20px;
+                      border:1px solid #ccc;
+                      border-radius: 4px;padding:2px 10px;width:110px;">
+                            <span style="color:#ccc;position:absolute;top:14px;font-size:30px;left:50px;z-index:1;">◆</span>
+                            <span style="color:#fff;position:absolute;top:13px;font-size:30px;left:50px;z-index:1;">◆</span>
+                            <span style="position:absolute;left:0; z-index:2;color:#f60;display:block;width:100%;text-align:center;">{$catrs[pfix(C('CART_REC_INFO'))]}</span>
+                      </div>
+                  </if>
+                </strong>
+             </td>
+             <td align="center">
+             <if condition="$catrs['zhuhe_goods_id'] eq 0">
+             <a class="jian_gwc"  href="javascript:void(0)" onclick="updateNumber('-','number_{$catrs['goods_id']}','{:get_up_url(array('goods_id'=>$catrs['goods_id'],'update'=>mt_rand(1000,9000)),U('Cart/updateCart','',''))}')">-</a><input type="text" class="input_gwc goods-num" name="number_{$catrs['goods_id']}" id="number_{$catrs['goods_id']}" readonly="readonly" value="{$catrs.goods_number}"><a class="jian_gwc" href="javascript:void(0)" onclick="updateNumber('+','number_{$catrs['goods_id']}','{:get_up_url(array('goods_id'=>$catrs['goods_id'],'update'=>mt_rand(1000,9000)),U('Cart/updateCart','',''))}')">+</a>
+             <else />
+             <a class="jian_gwc"  style="cursor:n-resize;">-</a><input type="text" class="input_gwc goods-num" name="number_{$catrs['goods_id']}" id="number_{$catrs['goods_id']}"  disabled="disabled" value="{$catrs.goods_number}"style="cursor:n-resize;"><a class="jian_gwc" style="cursor:n-resize;">+</a>             
+             </if>
+             </td>
+             <td align="center">{:CUR()}<strong class="colf60 goods-subtotal">{:getPrice($catrs['subtotal'],false)}</strong></td>
+             <td align="center">
+                <a class="col666" title="" href="javascript:void(0);" onclick="toDelete({$catrs['goods_id']},this)">{:isL(L('Delete'),'删除')}</a>&nbsp;&nbsp;
+                <a class="col666" title="" href="javascript:void(0);" onclick="myAlert('','','{:U('/Goods/collection',array('id'=>$catrs['goods_id'],'type'=>'goods'),'')}','','')">
+                     {:isL(L('Collection'),'收藏')}
+                </a>
+             </td>
+         </tr>
+       </foreach>
+       </tbody>
+       </table>
+       
+      </div>
+      <div class="wdgwctableb">
+        <div class="wdgwctablebl">
+         <input type="checkbox" class="ml10" name="all" onclick="selectCheckbox(this,'all')">  {:isL(L('checkAll'),'全选')}
+         <a class="col666 pl20 ml20" onclick="toDelete('','')" href="javascript:void();">{:isL(L('Delete'),'删除')}</a>&nbsp;|&nbsp;
+         <a class="col666" title="" href="__ROOT__/">{:isL(L('Around'),'再逛一逛')}</a>
+        </div>
+        <div class="wdgwctablebr">
+            (<strong style="color:red" id="goods-count">{$cartList.count}</strong>){:isL(L('piecesOfGoods'),'件商品')}，{:isL(L('TotalAmount'),'应付金额总计')}：
+            <strong class=" colf60 f24">{:CUR()}</strong>
+            <strong class=" colf60 f24" id="goods-total">{:getPrice($cartList['sum'],true)}</strong> &nbsp;&nbsp;
+            {:isL(L('Saving'),'已节省')}：-{:CUR()}<span id="saving"></span> &nbsp;&nbsp; &nbsp;&nbsp;
+        <input type="submit" class="btn_qjs" value="{:isL(L('Settlement'),'去结算')}" onclick="return sendForm()"><div class="cb"></div></div>
+        <div class="cb"></div>
+       </div>
+      </form>         
+
+        </div>
+        
+  {/*送增品*/}
+  <if condition="$cartList['discount']['goods']">
+      <div style="border:1px #ccc solid;min-height: 200px;">
+         <h2 style="border-bottom: 1px #ccc solid;height:30px;line-height: 30px;line-height:30px;text-indent: 5px;">
+             {$cartList['discount']['dis_name']}{/*活动名称*/}：
+            <foreach name="cartList['discount']['discount_expand']" item="dis">
+                     (满￥{$dis['amount']} 送增品 {$dis['dis_type_val']} )&nbsp;&nbsp;       
+             </foreach>         
+             
+         </h2>  
+         <ul>
+             <foreach name="cartList['discount']['goods']" item="disGoods">
+                 <li style="width: 140px;float:left;margin:3px;border:1px #eee solid;padding:3px;">
+                     <img src="__ROOT__/{$disGoods['goods_thumb']}" style="width:140px;" /><br/>
+                     价值(￥{$disGoods['goods_retail_price']})<br/>
+                     {$disGoods['goods_name']|strip_tags=###|sub_str=###,10}<br/>
+                     <input type="button" onClick="myAlert('确认提示','确定把增品(<span style=color:red;>{$disGoods['goods_name']|strip_tags=###})</span>加入购物车？','{:U('/Cart/addSending',array('id'=>$cartList['discount']['id'],'goods_id'=>$disGoods['id']),'')}','','',2)"  value="加入购物车" />
+                </li>
+             </foreach> 
+         </ul>
+         <div style="clear:both"></div>
+      </div>
+  </if>
+  {/*送增品结束*/}        
+        
+        <div class="memeber_sc">
+        
+        <div class="slideTxtBoxsc">
+			<div class="hd">
+            <h1></h1>
+				<ul><li>{:isL(L('YouMightLike'),'猜你喜欢')}</li><li>{:isL(L('RecentVisit'),'最近浏览')}</li></ul>
+			</div>
+			<div class="bd">
+				<ul>
+                      {/*你可能还喜欢*/} 
+                      <foreach name="categoryLove" item="love">
+                    	<li>
+                            <a href="{:U('Goods/index',array('html'=>'g-'.$love['id']))}"><img src="__ROOT__/{$love.goods_thumb}" width="150" height="120" /></a>
+                            <h1>{$love.goods_name|show_str=###,10}</h1>
+                            <h1>{:getPrice($love['goods_retail_price'],true)}
+                            <span><a href="{:U('Goods/index',array('html'=>'g-'.$love['id']))}" class="ea9901">{:isL(L('Bought'),'立即购买')}</a></span>
+                        </h1>
+                        </li>
+                      </foreach>
+                     {/*你可能还喜欢*/} 
+				</ul>
+				<ul>
+                   {/*最近浏览*/}
+                   <foreach name="recentVisit" item="rv">
+					 <li><a href="{:U('Goods/index',array('html'=>'g-'.$rv['id']))}"><img src="__ROOT__/{$rv.goods_thumb}" width="150" height="120" /></a>
+                        <h1>{$rv[pfix('goods_name')]|show_str=###,10}</h1>
+                        <h1>
+                                {:getPrice($rv['goods_retail_price'],true)}
+                                <span><a href="{:U('Goods/index',array('html'=>'g-'.$rv['id']))}" class="ea9901">{:isL(L('Bought'),'立即购买')}</a></span>
+                         </h1>
+                     </li>
+                     </foreach>
+                    {/*最近浏览结束*/} 
+				</ul>
+                
+			</div>
+		</div>
+		<script type="text/javascript">jQuery(".slideTxtBoxsc").slide({trigger:"click"});</script>
+        
+        </div>        
+    </div>    
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>找回密码_验证手机号_{:C('WEBNAME')}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<link rel="Stylesheet" href="__PUBLIC__ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine-zh-cn.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/fun.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/inputInfos.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/SMS.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+	$('.footerb').attr('class','footerb2 wrap');		
+        var url="{:U('Forget/checks','','')}";
+		myValidationEngine('checks',url,'my=data','不存在此手机号','验证成功','正在验证，请稍等...');			
+        var url="{:U('Common/mobileCode','','')}";
+		myValidationEngine('mobileCode',url,'my=data','手机验证码错误','手机验证码正确','正在验证，请稍等...');				
+		valinit('.form1','get','__ROOT__/',false,'topRight');  
+		window.SMS=new SMS();
+		SMS.inputClick='#sendBottom'; 
+		SMS.mobileVal='#mobile';
+		SMS.PONECODESEND='{:C("PONECODESEND")}'; 
+		SMS.wait='{:C("PONECODESEND")}';
+		SMS.TOKEN="{:C('TOKEN_NAME')}";
+		SMS.url="{:U('Register/sendMobile')}";
+		SMS.type=true;
+		SMS.info='不存在此手机号';
+		SMS.smClick(); 		
+});
+ 
+
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:header'/>{/*头部 */}
+ <!--content begin-->
+ <div class="content bgf6">
+ 	<div class="wrap pt30">
+	  <div class="txdd" style="min-height:600px;"><span class="icon8">&nbsp;</span>
+	   <p class="col333 f20 pb30">找回密码 > 验证手机号</p>
+	   <div class="zzyy" style="border:none;">
+	   <div style="height:100px;"></div>
+	   	<div id="comigs1" style="text-align:center;">
+            <form action="{:U('/Forget/setPwd')}" method="post" class="form1" style="padding:20px;width:460px;margin:0 auto;border:1px solid #ccc;">
+                <label style="width:100px;">手机号：</label>
+                <input type="text" id="mobile" name="mobile" class="sqboxb_input1 mr10 validate[required,custom[phone],ajax[checks]]" style="width:158px;" onBlur="setMbileAttr(this,'{:C('TOKEN_NAME')}')"/>
+                <input type="button" id="sendBottom" value="发送验证码" class="fsyzm"/>		
+                <div class="cb pb10"></div>
+                 <label style="width:100px;">验证码：</label>
+                <input type="text" id="mobile_code" name="mobile_code"  class="sqboxb_input1 validate[required,ajax[mobileCode]]"/> 
+                <div class="cb pb10"></div>
+                <label>&nbsp;</label><input type="submit" id="submits" value="提 交" class="zcl_btn"/>
+            </form>		
+	  </div>
+	    <div class="cb pv30"></div>
+	   </div><!---->	   
+	  </div>
+	  <!--footer begin--> 
+	  <!--footer end-->
+	 </div>
+ </div>
+  <!--content end-->
+   <include file='Common:footer'/>{/*页脚*/}	
+</body>
+</html>

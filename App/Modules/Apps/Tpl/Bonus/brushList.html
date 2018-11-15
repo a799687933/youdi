@@ -1,0 +1,70 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Brush/brushAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Brush/brushAdd')}" target="dialog" mask="true" width="900" height="550" title="添加"><span>添加</span></a></li>
+            </if>
+
+            <if condition="access('Brush/brushDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Brush/brushDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>编号</th>
+                <th>品种</th>
+				<th>规格</th>
+                <th >等级</th>
+                <th>面板</th>
+                <th >色度</th>
+				<th >数量</th>
+				<th >状态(0正在洽谈;1完成付款;2交易成功)</th>
+				<th >时间</th>
+				<th >购买者</th>
+				<th >排序</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="result" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.variety|tpl_modify_oen=###,'brush','variety',$r['id'],'id','Brush/brushAddFrom'}</td>
+				<td>{$r.norms|tpl_modify_oen=###,'brush','norms',$r['id'],'id','Brush/brushAddFrom'}</td>
+                <td>{$r.grades|tpl_modify_oen=###,'brush','grades',$r['id'],'id','Brush/brushAddFrom'}</td>
+                <td>{$r.panel|tpl_modify_oen=###,'brush','panel',$r['id'],'id','Brush/brushAddFrom'}</td>
+               <td>{$r.color|tpl_modify_oen=###,'brush','color',$r['id'],'id','Brush/brushAddFrom'}</td>
+			   <td>{$r.number|tpl_modify_oen=###,'brush','number',$r['id'],'id','Brush/brushAddFrom'}</td>
+			   <td>{$r.status|tpl_modify_oen=###,'brush','status',$r['id'],'id','Brush/brushAddFrom'}</td>
+			   <td>{$r.add_time|tpl_modify_oen=###,'brush','add_time',$r['id'],'id','Brush/brushAddFrom'}</td>
+			   <td>{$r.buyers|tpl_modify_oen=###,'brush','buyers',$r['id'],'id','Brush/brushAddFrom'}</td>
+               <td>{$r.orders|tpl_modify_oen=###,'brush','orders',$r['id'],'id','Brush/brushAddFrom'}</td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

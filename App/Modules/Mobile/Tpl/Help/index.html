@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{$result.titletext|strip_tags=###}-{$result.files_name|strip_tags=###}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.member_list{padding:10px;}
+.member_list img{
+    /*max-width:640px;*/
+}    
+</style>
+</head>
+<body>
+<div class="g-mn">
+ <include file="Common:header1" />
+  <div class="member_list">
+      {$result.content|stripcslashes=###}
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

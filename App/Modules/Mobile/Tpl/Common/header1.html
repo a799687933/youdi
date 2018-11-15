@@ -1,0 +1,20 @@
+  <div class="sub_head">
+  <div class="sub_fh" style="z-index:9999;"><a href="javascript:void(0);" onclick="javascript:;history.go(-1);" ><img src="__MOBILE__/images/fh_inoc.png" ></a></div>
+  <div class="title">{$title}</div>
+  
+  <div id="dl-menu" class="dl-menuwrapper" >
+      <button id="dl-menu-button"><img src="images/nav_inoc.jpg"></button>
+      <ul class="dl-menu">
+        <li><a href="{:U(is_m().'/Index/index')}">越洋购首页</a> </li>
+        <li><a href="{:U(is_m().'/Recommend/index')}">推荐商品</a> </li>
+        <li><a href="{:U(is_m().'/Promotion/index')}">限时促销</a> </li>
+        <li><a href="{:U(is_m().'/Brand/index')}">越洋专卖店</a> </li>
+        <li><a href="{:U(is_m().'/Help/lists')}">商城服务</a> </li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+$(function(){
+	$( '#dl-menu' ).dlmenu();
+});
+</script>  
+ </div>

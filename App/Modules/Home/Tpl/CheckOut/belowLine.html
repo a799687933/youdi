@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+<if condition="$data['order_id']">{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}<else />{:isL(L('OrdersSubmittedFailure'),'订单提交失败')}</if>
+-{:C($langfx.'WEBNAME')}
+</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script type="text/javascript" src="__HOME__/js/Calculation.js"></script>
+<script type="text/javascript">  
+$(document).ready(function () {  
+	var ps = $("#div_pro").position();  
+	$("#div_pro").mouseenter(function () {  
+		$("#float_box").show();  
+	});  
+	$("#float_box").mouseleave(function () {  
+		$("#float_box").hide();  
+	});  
+
+});
+</script>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main" style="text-align:left">
+              <img src="__HOME__/images/order2-2.jpg" />
+	          {/*移动模块*/}
+			  <style type="text/css">
+			     .cgfk{padding:110px 0 110px 270px; border:1px solid #e9e9e9;}
+				 .cgfk h1{ text-align:left; color:#333; font-size:16px; padding-bottom:10px;}
+				 .cgfk p{ background:url(__COMMON__/Images/icon102.jpg) no-repeat 10px center; padding-left:35px; font-size:14px; color:#666; height:35px; line-height:35px;}
+			  </style>
+			  <div class="cgfk" >
+						 <if condition="$data['order_id']">
+								<h1>{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}</h1>				
+								<p>
+								      {:isL(L('OrderNumber'),'订单号')}：<strong style="color:red;">{$data['order_sn']}</strong>
+								</p>		
+								<p>
+								      {:isL(L('TotalAmount'),'总金额')}：<strong style="color:red;">{:getPrice($data['order_amount'],true)}</strong>
+								</p>		                                
+								<p>
+                                   {:isL(langReplace((C('ORDERRETAIN') * 86400) / 3600,L('AutomaticCancellation')),'请你在提交订单后<span style="color:red;">'.((C('ORDERRETAIN') * 86400) / 3600).'</span>小时内完成支付，否则订单自动取消。')}
+                               </p>			
+								<p>{:isL(L('SendTo'),'配送至')}：{$data.province}{$data.city}{$data.district}{$data.address}&nbsp;&nbsp;{$data.consignee}&nbsp;&nbsp;{$data.mobile}</p>
+								<if condition="$data['pay_type'] eq 1">
+								    <p>
+								        {:isL(L('LogisticsCourierCollection'),'感谢您选择了我们的产品，你选择的支付方式(<strong style="color:red;">快递代收</strong>)，我们会尽快发货')}								        
+								    </p>
+								<else />
+									<p>{:isL(L('TransferInstructions'),'感谢您选择了我们，请向以下银行进行转帐')}：</p>		
+									<foreach name="belowLine" item="bl">
+										<p>
+										    {$bl.bank_name} &nbsp;&nbsp; {:isL(L('BankAccount'),'银行帐号')}：{$bl.bank_sn}&nbsp;&nbsp;
+										    {:isL(L('AccountName'),'银行开户名称')}：{$bl.bank_open_account}&nbsp;&nbsp;
+										    {:isL(L('PlaceOfAccount'),'开户网点')}：{$bl.bank_branch}
+									    </p>		
+									</foreach>	
+								</if>
+								<p>
+                                        <a href="__ROOT__/" style="color:#f60;">{:isL(L('Home'),'首页')}</a> | 
+                                        <a href="{:U('/Member/index')}" style="color:#f60;">{:isL(L('UserCenter'),'用户中心')}</a>                               
+                               </p>	
+					   <else />
+								<h1 style="color:red;">{:isL(L('OrdersSubmittedFailure'),'订单提失败')}</h1>
+								<p>{:isL(L('PleaseContact'),'请联系客服')}：{:C('UNIFYTEL')}</p>			
+								<p>
+                                        <a href="__ROOT__/" style="color:#f60;">{:isL(L('Home'),'首页')}</a> | 
+                                        <a href="{:U('/Member/index')}" style="color:#f60;">{:isL(L('UserCenter'),'用户中心')}</a>                               
+                               </p>	
+						</if>		  
+			   </div>		
+		 {/*移动模块*/}
+      
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

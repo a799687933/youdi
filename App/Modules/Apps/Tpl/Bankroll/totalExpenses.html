@@ -1,0 +1,116 @@
+<script type="text/javascript">
+$(function(){
+   $('.hovers').hover(function(){
+		$(this).children('.hovers-ch').children('.hovers-chie').show();					   
+	},function(){	
+		$(this).children('.hovers-ch').children('.hovers-chie').hide();		
+	});
+});
+</script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->       
+     <input type="hidden" name="shops_id" value="{$_REQUEST['shops_id']}" />   <!--保存商户ID-->
+     <input  type="hidden" name="trade_type" value="{$_REQUEST['type']}" />    <!--保存收入/提现条件-->
+     <input  type="hidden" name="trade_type" value="{$_REQUEST['datas']}" />    <!--保存日期-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);"  method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+			   <!--<td>输入商户ID号：<input type="text" name="shops_id" value="{$_REQUEST['shops_id']}" /></td>-->
+                <td>
+                <select class="combox" name="type" class="required">
+                    <option value="">-查询所有-</option>          
+                       <option value="1" <if condition="$_REQUEST['type'] eq 1">selected="selected"</if>>收入</option>
+                       <option value="-1" <if condition="$_REQUEST['type'] eq -1">selected="selected"</if>>支出</option>
+                </select>
+                </td>
+                <td>日期：<input type="text" name="datas" class="date textInput readonly valid" size="12" value="{$datas}" /></td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <table class="list" width="100%" layoutH="60">
+        <thead>
+            <tr>
+				<th orderfield="change_type" class="<if condition='$change_type eq "desc"'>desc<else />asc</if>" width="10%">操作类型</th>
+                <th orderfield="type" class="<if condition='$type eq "desc"'>desc<else />asc</if>" width="7%">交易类型</th>
+                <th orderfield="money" class="<if condition='$money eq "desc"'>desc<else />asc</if>" width="10%">金额</th>
+                <th orderfield="change_data" class="<if condition='$change_data eq "desc"'>desc<else />asc</if>">金额变动原因</th> 
+                <th orderfield="user_name" class="<if condition='$user_name eq "desc"'>desc<else />asc</if>" width="14%">操作管理员</th> 
+                <th orderfield="change_time" class="<if condition='$change_time eq "desc"'>desc<else />asc</if>"  width="13%">操作的时间</th> 
+            </tr>                  
+        </thead>
+        <tbody>
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}" class="hovers">
+				<td>
+                    <php>if($V['change_type']==0){</php>
+                           <span style="color:#0000FF">订单在线支付</span>
+                    <php>}else if($V['change_type']==1){</php>
+                           <span style="color:#0000FF">会员在线充值</span>
+                    <php>}else if($V['change_type']==2){</php>
+                           <span style="color:red">供应商提现支出</span>    
+                    <php>}else if($V['change_type']==3){</php>
+                           <span style="color:red">会员提现支出</span>       
+                    <php>}else if($V['change_type']==4){</php>
+                           <span style="color:red">订单退款支出</span>       
+                    <php>}else if($V['change_type']==5){</php>
+                           <span style="color:green">管理员调节</span>                                                                                             
+                    <php>}</php>
+                </td>
+                <td>
+                      <if condition='$V["type"] eq 1'>
+                           <span style="color:#0000FF">收入</span>
+                     <elseif condition='$V["type"] eq -1'/>
+                          <span style="color:#FF0000">支出</span>
+                    </if>
+                </td>
+                <td>
+                      <if condition='$V["type"] eq 1'>
+                           <span style="color:#0000FF">+￥{$V.money}</span>
+                     <elseif condition='$V["type"] eq -1'/>
+                          <span style="color:#FF0000">-￥{$V.money}</span>
+                    </if>                
+                     
+                </td>
+                <td style="position:relative;" class="hovers-ch">
+                    {$V.change_data|str_replace='<br/>','，',###|sub_str=###,40}
+                   <span class="hovers-chie" style="position:absolute;top:22px;left:28px;color:#ccc;display:none;z-index:2;">◆</span>
+                   <span class="hovers-chie" style="position:absolute;top:23px;left:28px;color:#fff;display:none;z-index:2;">◆</span>
+               <div class="hovers-chie" style="width:100%;min-height:100px;position:absolute;top:27px;border:1px #ccc solid;background:#fff;display:none;padding:5px;z-index:1;text-align:left;line-height:180%">{$V.change_data}</div>                    
+                </td>
+                <td>{$V.user_name}</td>
+                <td>{$V.change_time|date='Y-m-d H:i:s',###}</td>
+            </tr>
+            
+          </volist> 
+          
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="{$pageNumShown}" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

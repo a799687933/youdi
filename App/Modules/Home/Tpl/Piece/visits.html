@@ -1,0 +1,58 @@
+{/*最近浏览列表*/}
+<!--<ul>
+   <foreach name="recentVisit" item="it">
+        <li>
+         <span  class="dbclose" url="{:U('Cookie/delRecentVisit',array('id'=>$it['id']))}"><span class="glyphs icon-close"></span></span>
+          
+           <div class="zjllbmt">
+              <table width="100%" height="100%">
+                  <tr>
+                        <td align="center" valign="middle" width="100%" height="100%">
+                            <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb']}" alt=""/></a>
+                        </td>
+                  </tr>
+              </table>
+           </div>
+           <div class="zjllbmtb">
+             <table width="100%" height="100%">
+                 <tr>
+                     <td align="center" valign="middle" width="100%" height="100%">
+                          <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb2']}" alt=""/></a>
+                     </td>
+                 </tr>
+              </table>
+           </div>
+           <div class="zjllbmb">
+           <p class="tc">￥ {$it['goods_retail_price']}</p>
+           </div>
+        </li>
+    </foreach>
+    <div class="cb"></div>
+  </ul>--> 
+  <foreach name="recentVisit" item="it">
+  <div class="slide">
+   <span  class="dbclose dbcloseb" url="{:U('Cookie/delRecentVisit',array('id'=>$it['id']))}"><span class="glyphs icon-close"></span></span>
+          
+          <div class="zjllbmt">
+              <table width="100%" height="100%">
+                  <tr>
+                        <td align="center" valign="middle" width="100%" height="100%">
+                            <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb']}" alt=""/></a>
+                        </td>
+                  </tr>
+              </table>
+           </div>
+           <div class="zjllbmtb">
+             <table width="100%" height="100%">
+                 <tr>
+                     <td align="center" valign="middle" width="100%" height="100%">
+                          <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb2']}" alt=""/></a>
+                     </td>
+                 </tr>
+              </table>
+           </div>
+           <div class="zjllbmb">
+           <p class="tc">￥ {$it['goods_retail_price']}</p>
+           </div>
+  </div>
+  </foreach>

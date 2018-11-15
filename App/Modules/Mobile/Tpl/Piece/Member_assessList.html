@@ -1,0 +1,31 @@
+ <foreach name="result" item="res">
+	<li style="width:100%;margin-top:10px;line-height:200%;">
+		<div style="padding:5px;">
+           <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$res['goods_id']))}" style="padding-left:0;margin-left:0;">{$res.goods_name|strip_tags=###}</a><br/>                        
+		   {:isL(L('Scores'),'评分')}：{$res.score}<br/>       
+		   {:isL(L('Good'),'好评')}：
+			 <if condition="$res['sva'] eq 0">
+				<span style="color:red;">{:isL(L('LowGrade'),'差评')}</span>
+			 <elseif condition="$res['sva'] eq 1" />
+				<span style="color:blue;">{:isL(L('Medium'),'中评')}</span>
+			 <elseif condition="$res['sva'] eq 2" />
+				<span style="color:green;">{:isL(L('Good'),'好评')}</span>
+			 </if><br/>    
+			 {:isL(L('EvaluationContent'),'评价内容')}：{$res.content}<br/>
+			 {:isL(L('ReplyContent'),'回复内容')}：
+			 <if condition="$res['answer']">
+			   {$res.answer}
+			<else />
+			   <span style="color:red;">{:isL(L('NoReply'),'未回复')}</span>
+			</if>   <br/>
+			{:isL(L('ModificationTime'),'修改时间')}：
+            <if condition="$res['padtetimes']">{$res.padtetimes|date='Y-m-d H:i:s',###}<else />{:isL(L('NotNodified'),'未修改')}</if><br/>
+			{:isL(L('IsAudit'),'是否审核')}：					    
+			 <if condition="$res['is_show']">
+				<span style="color:green;">{:isL(L('Yes'),'已审核')}</span>
+			 <else />
+				<span style="color:red;">{:isL(L('Not'),'未审核')}</span>
+			 </if>                                        
+		 </div>
+	</li>
+  </foreach>          

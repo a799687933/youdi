@@ -1,0 +1,83 @@
+<!--对话框-->    
+<style>
+*:focus { outline: none; }  
+#alert{
+    width:300px;
+    min-height:130px;
+    position: absolute;
+    border:1px solid #E9F6FA;
+    top:-300px;
+    left:42%;
+    border-radius: 4px;
+    -moz-border-radius:4px;
+    box-shadow: 0px 0px 10px #fff;
+    -webkit-box-shadow: 0px 0px 10px #fff; 
+    background:#E9F6FA;
+     position:fixed;
+    _position:absolute;
+     z-index:20000;    
+}    
+#alert #alert-content{
+    width:286px;
+    min-height:90px;
+    background:#fefacf;
+    margin:5px auto;
+    border:1px solid #C32612;
+}
+#alert #alert-content #alert-content-dl{
+    
+}
+#alert #alert-content #alert-content-dl dt{
+    height:25px;
+    line-height:25px;
+    text-indent:30px;
+    width:275px;
+    border-bottom:1px #C32612 solid;
+    margin:0 auto;
+    font-size:14px;
+}
+#alert #alert-content #alert-content-dl dd{
+    padding:5px;
+    line-height:180%;
+    text-align:center;
+}
+#alert #alert-button{
+    height:30px;
+  
+    margin:0;
+    padding:0;
+}
+#alert #alert-button .alert-button-certai{
+    width:60px;
+    height:25px;
+    float:right;
+    text-align:center;
+    margin-right:7px;
+}
+#alert #alert-button .alert-button-certai .button-all{
+    width:60px;
+    height:25px;
+    border:none;
+    background:#f7f7f7;
+    cursor:pointer;
+    border-radius: 4px;
+    border:1px #ccc solid;
+    -moz-border-radius:4px;   
+}
+#alert #alert-button .alert-button-certai .button-all:hover{
+    background:#eee;
+}
+</style>
+<div id="alert-mask" style="display:none;"></div><!--遮罩层-->
+<div id="alert">
+    <div id="alert-content">
+            <dl id="alert-content-dl">
+                   <dt id="alert-info">类型</dt>
+                   <dd id="alert-message">提示消息</dd>
+            </dl>
+    </div>
+    <div id="alert-button">
+           <div class="alert-button-certai button-no"><input type="button" value="取消" action='0' class="button-all"/></div>
+           <div class="alert-button-certai button-yes"><input type="button" value="确定" action='1' class="button-all"/></div>           
+    </div>
+</div>     

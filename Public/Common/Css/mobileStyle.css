@@ -1,0 +1,34 @@
+@charset "utf-8";
+body{background:#CBD2D8;}
+ul.ul-style li{
+   background:#fff !important;
+}
+ul.ul-style li.arrow{
+   background:#fff url(../Images/icon17.png) no-repeat 98% center !important;
+   background-size: auto 10px;
+}
+.input{
+    outline: none;
+	width:98%;
+	height:30px;
+	line-height:30px;
+	border:none;
+	background:#fff;
+	text-indent:5px;
+}
+.textarea{
+    outline: none;
+	width:98%;
+	min-height:200px;
+	border:none;
+	background:#fff;
+	text-indent:5px;
+	resize: none;
+	padding-top:3px;
+}
+a{color:#666}
+select{
+     appearance:none !important;
+    -moz-appearance:none !important; /* Firefox */
+    -webkit-appearance:none !important; /* Safari 和 Chrome */   
+}

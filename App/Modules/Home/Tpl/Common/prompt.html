@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <present name="message">
+<title>操作成功--跳转提示</title>
+<else />
+<title>操作失败--跳转提示</title>
+</present>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<style>
+ .bg{background: #000;
+    height: 100%;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 200;}
+ .box{background: #fff;
+    height:210px; padding:10px 20px; box-sizing:border-box;
+    left: 50%; margin:-145px 0 0 -10rem;
+    position: fixed;
+    top: 50%;
+    width:20rem; 
+    z-index: 201;}	
+.box h1{border-bottom: 1px solid #ededed;
+    color: #000; font-weight:normal;
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;}	
+.close{ color: #000;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    font-size: 20px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 40px;}
+.boxm{ padding:20px 0}		
+</style>
+<script>
+ $(function(){
+	 $(".close").click(function(){
+		 $(".bg").fadeOut()
+		 $(".box").slideUp()
+		 })
+	 })
+</script>
+</head>
+<body style="padding:0;margin:0;">
+<div class="bg"></div>
+<present name="message">
+    <div class="box">
+     <h1>{:isL(L("SuccessTips"),"成功提示")}<span class="close"><span class="glyphs icon-close" style="line-height:35px;"></span></span></h1>
+     <div class="boxm">
+      <p style="text-align:center; font-size:16px; padding-bottom:20px;">{$message}</p>
+      <div style="position:relative; float:right; width:50%;margin-top:30px;">
+      <php>if($jumpUrl && strpos($jumpUrl,'(-1)') ===false){</php>
+        <input id="pwd-submit"  value="{:isL(L('Confirm'),'确定')}" onclick="window.location.href='{$jumpUrl}';" class="tjdzbtn" style=" width:100%; float:none" type="button">
+     <php>}else{</php> 
+        <input id="pwd-submit"  value="{:isL(L('Confirm'),'确定')}" onclick="history.go(-1)" class="tjdzbtn" style=" width:100%; float:none" type="button">
+     <php>}</php>
+      <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; line-height:38px; color:#fff; font-size:1.25em"></span>
+      </div>
+      <div class="cb"></div>
+     </div><!--boxm end-->
+<else/>
+    <div class="box">
+     <h1>{:isL(L("ErrorTips"),"失败提示")}
+     <span class="close"><span class="glyphs icon-close" style="line-height:35px;"></span></span>
+     </h1>
+     <div class="boxm">
+      <p style="text-align:center; font-size:16px; padding-bottom:20px;">{$error}</p>
+      <div style="position:relative; float:right; width:50%;margin-top:30px;">
+      <php>if($jumpUrl && strpos($jumpUrl,'(-1)') ===false){</php>
+        <input id="pwd-submit"  value="{:isL(L('Confirm'),'确定')}" onclick="window.location.href='{$jumpUrl}';" class="tjdzbtn" style=" width:100%; float:none" type="button">
+     <php>}else{</php> 
+        <input id="pwd-submit"  value="{:isL(L('Confirm'),'确定')}" onclick="history.go(-1)" class="tjdzbtn" style=" width:100%; float:none" type="button">
+     <php>}</php>
+      <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; line-height:38px; color:#fff; font-size:1.25em"></span>
+      </div>
+      <div class="cb"></div>
+     </div><!--boxm end-->
+</present> 
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<h1>
+{:isL(L('OrderNumber'),'订单号')} <strong>{$order.order_sn}</strong>
+
+<span class="close wdzhclose" onClick="hideTayer('.ddbh');"><span class="glyphs icon-close" style=" line-height:35px"></span></span>
+</h1>
+
+ <div class="ddbhmid">
+  <foreach name="order['goodsList']" item="go">
+   <if condition="is_mobile()">
+    <div class="pv20">
+   <table width="100%" cellpadding="0" cellspacing="0">
+   <tr>
+       <td align="center" valign="middle" width="42%"><a href="{:U('Goods/index',array('html'=>$go['goods_id']))}" target="_blank"><img src="__ROOT__/{$go.goods_thumb}" alt=""/></a></td>
+       <td align="left" width="58%"><div class="pl20">
+        <p class="f14">YOUDI WU</p>
+        <p>{$go[pfix('goods_name')]}</p>
+        <p class="pv10">{:isL(L('ProductNumber'),'商品编号')}：{$go['goods_sn']}</p>
+        <p>{:isL(L('Number'),'数量')}：{$go['goods_number']}</p>
+        <p><foreach name="go['goods_attr']" item="attr">{$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}&nbsp;&nbsp;</foreach></p>
+        <p class="pt15"><b class="pr10 f14" style="margin-right:0;padding-right:0;">{:C('KTEC_H')} {:number_format($go['goods_price'] * $go['goods_number'],2, '.', '')}</b></p>
+          <p>
+             <php>if($retreat_data['goods_data'][$go['rec_id']]['choosing_return']){</php>
+                 <if condition="$order['order_status'] eq 4">退款完成<else />退款中</if>
+                 (<span>
+                 {$RETURN_RREAS[$retreat_data['goods_data'][$go['rec_id']]['choosing_return']]} <!--用户选择退货理由-->
+                 </span>)
+              <php>}</php>
+          </p>
+       </div></td>
+       
+      </tr>
+      </table>
+      </div>
+   <else/>
+    <div class="pv20">
+   <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+       <td align="center" valign="middle" width="15%"><a href="{:U('Goods/index',array('html'=>$go['goods_id']))}" target="_blank"><img src="__ROOT__/{$go.goods_thumb}" alt=""/></a></td>
+       <td align="left" width="40%"><div class="pl20">
+        
+        <a href="{:U('Goods/index',array('html'=>$go['goods_id']))}" target="_blank" class="f16 col2a" style="font-family:" polaris-condensed-bold","polaris-bold",sans-serif"=""><b>YOUDI WU</b></a>
+        <p><a href="{:U('Goods/index',array('html'=>$go['goods_id']))}" target="_blank" class="col0b">混搭印花衬衫</a></p>
+        <p class="pv10 pb20">{:isL(L('ProductNumber'),'商品编号')}：{$go['goods_sn']}</p>
+        
+        <p>{:isL(L('Number'),'数量')}：{$go['goods_number']}</p>
+        <foreach name="go['goods_attr']" item="attr"><p class="pt10">{$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}&nbsp;&nbsp;</p></foreach>
+       </div></td>
+       <td align="right" width="45%" valign="top">
+          <p style="50%">
+             <span class="pr10 f14" style="margin-right:0;padding-right:0;">{:C('KTEC_H')} {:number_format($go['goods_price'] * $go['goods_number'],2, '.', '')}</span>
+          </p>   
+          <p>
+             <php>if($retreat_data['goods_data'][$go['rec_id']]['choosing_return']){</php>
+                 <if condition="$order['order_status'] eq 4">退款完成<else />退款中</if>
+                 (<span>
+                  {$RETURN_RREAS[$retreat_data['goods_data'][$go['rec_id']]['choosing_return']]} <!--用户选择退货理由-->
+                 </span>)
+              <php>}</php>
+          </p>
+       </td>
+      </tr>
+      </table>
+      </div>
+      </if>
+  </foreach>   
+ </div><!--ddbhmid end-->
+ </div>
+ 
+ 
+ 
+ 
+ <div class="spps">
+  <div class="sppsr">
+   <div class="sppsrt">
+    <p>{:isL(L('Commodity'),'商品')}<span class="sppsrtxt">{:C('KTEC_H')}{$order['goods_amount']}</span></p>
+    <p>{:isL(L('Delivery'),'配送')}<span class="sppsrtxt">{:C('KTEC_H')}0</span></p>
+   </div>
+   <div class="pv15">
+   <p>{:isL(L('TotalCost'),'总计')}<span class="sppsrtxt">{:C('KTEC_H')}{$order['order_amount']}</span></p>
+   </div>
+   <div class="cb  phonecb"></div>
+   
+    {/*订单状态*/}
+    <php>if($order['order_status']==0){</php>{/*已取消*/}
+
+    <php>}else if($order['order_status']==1){</php>
+          <php>if($order['pay_status'] < 2){</php>{/*未付款*/}
+                 <div class="sqth2 pr" style="float:left;">
+                 <input value="{:isL(L('ImmediatePayment'),'立即支付')}"  
+                    onclick="window.open('{:sign_url(array('order_sn'=>$order['order_sn'],'order_time'=>$order['add_time'],
+                    'order_goods'=>$goodsName,'pay'=>$order['pay_code']),U('Payment/index','',''))}');" class="btn" type="button">
+                  <span class="glyphs icon-thinArrow btnb"></span>    
+                </div>  
+                 <div class="sppj2 pr" style="float:left;" >
+                 <input value="取消订单" 
+                    onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id']),U('Member/cancelOrder','',''))}';" class="btn" type="button">
+                  <span class="glyphs icon-thinArrow btnb"></span>    
+                </div>                  
+         <php>}else if(($order['pay_status'] ==2) && ($order['shipping_status'] < 2)){</php> 
+                <!-- <div class="sppj2 pr" >
+                    <input value="{:isL(L('ReturnGoodsEooc'),'申请退货')}" class="btn" 
+                    onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id']),U('Member/returnGoods'))}'" type="button">
+                   <span class="glyphs icon-thinArrow btnb"></span>    
+                 </div> -->      
+                 <div class="sppj2 pr" >
+                    <input value="{:isL(L('WaitingForDelivery'),'等待发货')} " class="btn" type="button" style="cursor:auto"> 
+                 </div>                               
+         <php>}else if(($order['pay_status'] ==2) && ($order['shipping_status'] >= 2)){</php>
+           
+                 <php>if(is_return($order['shipping_time'])){</php>{/*在退货有效期内*/}      
+                     <div class="sqth2"  style="margin-bottom:60px;">
+                        <input value="查看物流" class="btn" onclick="openLogistics('{$order['order_sn']}','{$order['shipping_code']}','{$order['logistics_sn']}')"  type="button">
+                       <span class="glyphs icon-thinArrow btnb"></span>    
+                     </div>                                      
+                     <div class="sqth2" >
+                        <input value="申请退货" class="btn" onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id']),U('Member/returnGoods'))}'"  type="button">
+                       <span class="glyphs icon-thinArrow btnb"></span>    
+                     </div>  
+                     <div class="sppj2 pr">
+                        <input value="{:isL(L('ConfirmReceipt'),'确定收货')}" class="btn" type="button"
+                        onclick="myAlert('','','{:U('Member/comDeal','','')}?order_id={$order['order_id']}','','',2)" >
+                       <span class="glyphs icon-thinArrow btnb"></span>    
+                     </div>  
+                <php>}else{</php>{/*已过有效期，直接评价*/}    
+                     <div class="sqth2" >
+                        <input value="查看物流" class="btn" onclick="openLogistics('{$order['order_sn']}','{$order['shipping_code']}','{$order['logistics_sn']}')"  type="button">
+                       <span class="glyphs icon-thinArrow btnb"></span>    
+                     </div>                  
+                     <div class="sppj2 pr" >
+                        <input value="{:isL(L('CommodityEvaluation'),'商品评价')}" class="btn" 
+                        onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id']),U('Member/appraise'))}'" type="button">
+                       <span class="glyphs icon-thinArrow btnb"></span>    
+                     </div>                                              
+                <php>}</php>   
+                 
+         <php>}</php>
+    <php>}else if($order['order_status']==2){</php>{/*交易完成*/}
+         <php>if($order['is_reviews']){</php>
+                  <div class="sqth2 ">
+                  <input value="查看物流" class="btn mb20"  type="button" onclick="openLogistics('{$order['order_sn']}','{$order['shipping_code']}','{$order['logistics_sn']}')" style="cursor:auto" >
+                    <input value="{:isL(L('TransactionCompletion'),'交易完成')}" class="btn"  type="button" style="cursor:auto">    
+                  </div>  
+                  <div class="sppj2 pr" >
+                    <input value="{:isL(L('CommodityEvaluation12'),'商品已评价')}" class="btn"  type="button" style="cursor:auto">   
+                  </div>                        
+         <php>}else{</php>
+             <php>if(is_return($order['shipping_time'])){</php>
+                 <div class="sqth2 ">
+                 <input value="查看物流" class="btn mb20"  type="button" onclick="openLogistics('{$order['order_sn']}','{$order['shipping_code']}','{$order['logistics_sn']}')" style="cursor:auto">
+                    <input value="交易完成" class="btn"  type="button">
+                   <span class="glyphs icon-thinArrow btnb"></span>    
+                 </div>    
+             <php>}</php> 
+             <div class="sppj2 pr" >
+             
+                <input value="{:isL(L('CommodityEvaluation'),'商品评价')}" class="btn" 
+                onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id']),U('Member/appraise'))}'" type="button">
+               <span class="glyphs icon-thinArrow btnb"></span>    
+             </div>    
+        <php>}</php>                   
+    <php>}else if($order['order_status']==3){</php> {/*退货处理中*/}   
+         <div class="sqth2 ">
+         <input value="查看物流" class="btn"  type="button" onclick="openLogistics('{$order['order_sn']}','{$order['shipping_code']}','{$order['logistics_sn']}')" style="cursor:auto">
+           <span class="glyphs icon-thinArrow btnb"></span>    
+         </div>      
+         <div class="sppj2 pr" >
+            <!--<input value="{:isL(L('ReturnGoods'),'退货处理中')}" class="btn" 
+            onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id'],'rd_id'=>$retreat_data['id']),U('Member/returnGoods'))}'" type="button">
+           <span class="glyphs icon-thinArrow btnb"></span>-->   
+            <input value="{:isL(L('ReturnGoods'),'退货处理中')}" class="btn" type="button" style="cursor:auto">           
+         </div>         
+    <php>}else if($order['order_status']==4){</php>  {/*退货完成*/}
+         <div class="sppj2 pr" >
+            <!--<input value="{:isL(L('ReturnSuccess'),'退货完成')}" class="btn" 
+            onclick="window.location.href='{:sign_url(array('order_id'=>$order['order_id'],'rd_id'=>$retreat_data['id']),U('Member/returnGoods'))}'" type="button">
+           <span class="glyphs icon-thinArrow btnb"></span> -->   
+           <input value="{:isL(L('ReturnSuccess'),'退货完成')}" class="btn" type="button" style="cursor:auto">           
+         </div>          
+    <php>}</php>     
+   {/*订单状态*/}
+   
+  </div>
+  <div class="cb phonecb"></div>
+ </div><!--spps end-->
+ <div class="cb pb20"></div>
+ <!--
+ <div class="ddbhb">
+ <p style="border-bottom:1px #eee solid;height:40px;line-height:40px;color:#000;">
+          {:isL(L('OrderStatus'),'订单状态')}：
+          <if condition="$order['order_status'] eq 0">
+              <span style="color:red;">{:isL(L('Cancelled'),'已取消')}</span>
+          <elseif condition="$order['order_status'] eq 1" />
+              <span>{:isL(L('NotRecognized'),'未确认')}</span>
+              <if condition="$order['pay_status'] eq 0 AND $order['shipping_status'] eq 0">
+                   | <a href="javascript:void(0);" onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}','{:isL(L('ISDELETE'),'确定取消定单？')}',
+'{:U('/Member/cancelOrder',array('order_id'=>$order['order_id']))}','','',3)" style="color:red;">{:isL(L('CancelOrder'),'取消订单')}</a>
+              </if>
+          <elseif condition="$order['order_status'] eq 2" />       
+              <span style="color:green;">{:isL(L('TransactionCompletion'),'交易完成')}</span>      
+          <elseif condition="$order['order_status'] eq 3" />          
+              <span style="color:red;">{:isL(L('ReturnORefund'),'退货/退款')}</span>       
+          <elseif condition="$order['order_status'] eq 4" />          
+              <span style="color:blue;">{:isL(L('AlreadyRefundOrder'),'已退款订单')}</span>
+          </if>     
+ </p>        
+ <p style="border-bottom:1px #eee solid;height:40px;line-height:40px;color:#000;">
+          {:isL(L('PaymentStatus'),'付款状态')}：
+          <if condition="$order['pay_status'] eq 0">
+              {:isL(L('Unpaid'),'未付款')}  
+               <if condition="($order['order_status'] lt 2) AND ($order['order_status'] eq 1)">
+                   <php>if($order['pay_type'] == 0){</php>
+                      <input type="button" value="{:isL(L('PayNow'),'在线支付')}" 
+                      onclick="window.location.href='{:sign_url(array('order_sn'=>$order['order_sn'],'order_time'=>$order['add_time'],'order_goods'=>$goodsName,'pay'=>$order['pay_code']),U('Payment/index','',''))}';"
+                      style="width:100px;margin-left: 10px;background:#a6080f;border:1px solid #a6080f;color:#fff;
+                      height:22px;line-height:22px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+                  <php>}else if($order['pay_type'] ==3){</php>
+                      <input type="button" value="{:isL(L('PayNow'),'余额支付')}" onClick="edcfsAed('#publishs',true,60,'');" 
+                      style="width:100px;margin-left: 10px;background:#a6080f;border:1px solid #a6080f;color:#fff;
+                      height:22px;line-height:22px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+                  <php>}</php>                                                              
+                 </if>
+          <elseif condition="$order['pay_status'] eq 1" />
+              {:isL(L('PaymentIn'),'付款中')}
+          <elseif condition="$order['pay_status'] eq 2" />      
+              <span style="color:green;">{:isL(L('AccountPaid'),'已付款')}</span>
+          </if>               
+     </span>
+ </p>
+ <p style="border-bottom:1px #eee solid;height:40px;line-height:40px;color:#000;">
+       {:isL(L('DeliveryStatus'),'配送状态')}：
+       <if condition="$order['shipping_status'] eq 0">
+          {:isL(L('NonDelivery'),'未发货')}
+       <elseif condition="$order['shipping_status'] eq 1" />
+          <span style="color:green;">{:isL(L('Stocking'),'备货中')}</span>
+       <elseif condition="$order['shipping_status'] eq 2" />      
+          <span style="color:blue;">{:isL(L('Delivered'),'已发货')}</span>  
+           <if condition="$order['order_status'] eq 1">
+              <input type="button" value="{:isL(L('DetermineCompletion'),'确定交易成功')}" 
+              onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}','{:isL(L('ISDELETE'),'操作不可恢复确定执行本次操作？')}',
+              '{:U('Member/comDeal','','')}?order_id={$order['order_id']}','','',2)" 
+              style="min-width:84px;margin-left: 10px;background:#222;border:1px solid #222;color:#fff;padding:0 2px;
+              height:22px;line-height:20px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+              
+              <input type="button" value="{:isL(L('RefundReturn'),'退款退货')}" onClick="edcfsAed('#publishs1',true,60,'',{$order['order_id']});" 
+              style="min-width:100px;margin-left: 10px;background:#222;border:1px solid #222;color:#fff;padding:0 2px;
+              height:22px;line-height:20px;border-radius:4px;cursor:pointer;" id="to-pay"/>     
+         </if>                                                                                                  
+      <elseif condition="$order['shipping_status'] eq 3" />       
+          <span style="color:green;">{:isL(L('ReceivedGoods'),'已收货')}</span>
+      </if>    
+ </p>
+ <div class="ddbhbb pt10" style="width:100%">
+  <span class="ddbhbbl">{:isL(L('TotalAmount'),'总金额')} </span>
+  <span class="ddbhbbr">￥ {$order['goods_amount']}</span>
+  <div class="cb"></div>
+   <div class="ddbhb pb5"></div>
+  <span class="ddbhbbl">{:isL(L('Delivery'),'配送')}</span>
+  <span class="ddbhbbr">￥ 0.00</span>
+  <div class="cb pb5"></div>
+  <div class="ddbhb pb5"></div>
+  <span class="ddbhbbl"> {:isL(L('TotalPayable'),'应付金额')}</span>
+  <span class="ddbhbbr">￥ {$order['order_amount']}</span>
+  <div class="cb"></div>
+ </div></div>
+-->

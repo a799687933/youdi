@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('Recommend'),'推荐商品')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/loadMoerPage.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+$(function(){ 
+
+//按分类查找 
+$(".sty_put").click(function() {
+$(".sty_all").toggle();
+});
+$(".sty_all li ").click(function() {
+var listText = $(this).html();
+$(".sty_put input").val(listText); 
+$(".sty_all").hide(); 
+}); 
+
+});
+</script>
+<script type="text/javascript"> 
+//加载分页
+window.page=new loadMoerPage();
+page.options.url="{:str_replace('2.html','',go_page($_URL_,$pageNumShown,'+'))}"; //请求地址把固定值去掉(2.html)
+page.options.totalPages="{$pageNumShown}"; //总页数
+page.options.addEnd="#add-page"; //追加内容节点
+page.options.addEndLoadImg=".index_tj"; //显示生成加载图片父节点
+page.options.addEndLoadImgPath="__COMMON__/Images/5-121204193R3.gif"; //加载图标路径
+page.run();
+</script>  
+</head>
+<body>
+<div class="g-mn">
+  <include file="Common:header2" />{/*头部*/}
+ 
+ <div class="sub_pro_nav">
+    <ul>
+      <li <if condition="$_GET['order_type'] eq 'create_time'">class="now"</if>><a href="{:condition_url($_URL_,array('order_type'=>'create_time','order'=>$orders))}">新品</a></li>
+      <li <if condition="$_GET['order_type'] eq 'volume'">class="now"</if>><a href="{:condition_url($_URL_,array('order_type'=>'volume','order'=>$orders))}">销量</a></li>
+      <li <if condition="$_GET['order_type'] eq 'goods_retail_price'">class="now"</if>><a href="{:condition_url($_URL_,array('order_type'=>'goods_retail_price','order'=>$orders))}">价格</a></li>
+      <li <if condition="$_GET['order_type'] eq 'cood_count'">class="now"</if>><a href="{:condition_url($_URL_,array('order_type'=>'cood_count','order'=>$orders))}">好评</a></li>
+    </ul>
+  </div>
+  <div class="index_tj">
+    <ul id="add-page">
+        <include file="Piece:Recommend_index" />{/*使用碎片*/}
+    </ul>
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

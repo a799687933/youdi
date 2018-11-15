@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>产品详情-评价</title>
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/loadMoerPage.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/cart.js"></script>
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/javascript"> 
+//加载分页
+window.page=new loadMoerPage();
+page.options.url="{:str_replace('2.html','',go_page($_URL_,$pageNumShown,'+'))}"; //请求地址把固定值去掉(2.html)
+page.options.totalPages="{$pageNumShown}"; //总页数
+page.options.addEnd="#add-page"; //追加内容节点
+page.options.addEndLoadImg=".pj_list"; //显示生成加载图片父节点
+page.options.addEndLoadImgPath="__COMMON__/images/5-121204193R3.gif"; //加载图标路径
+page.run();
+</script>  
+</head>
+
+<body>
+<div class="wrap">
+<div class="toptxt2">
+<div class="cpxqt">{$goods['goods_name']|sub_str=###,13}</div>
+<a href="javascript:;history.back();" class="icon12"></a>
+{/*分享*/}
+<div class="bdsharebuttonbox bdshare-button-style0-16" style="float:right;width:65px;display: inline-block;" data-bd-bind="1452159019696">
+    <a href="javascript:void(0);"  class="fenx" data-cmd="more" style="background: none !important;font-size: 0.6rem;margin-top:15px !important;">分享</a>
+</div>
+<script>
+    window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+{/*分享结束*/}
+</div>
+<div class="cb pv25">&nbsp;</div>
+<div class="qbpjt mt10">
+      <a href="{:U('Goods/goodsAppraiseList',array('id'=>$goods['id'],'comm'=>'yes'))}" class="<if condition="$_GET['sva'] eq '' AND !$_GET['is_pic']">now</if>">全部<br/>({$goodsScore['counts'][0]['counts']})</a>
+      <a href="{:U('Goods/goodsAppraiseList',array('id'=>$goods['id'],'comm'=>'yes','sva'=>2))}" class="<if condition="$_GET['sva'] eq '2'">now</if>">好评<br/>({$goodsScore['counts'][0]['good_count']})</a>
+      <a href="{:U('Goods/goodsAppraiseList',array('id'=>$goods['id'],'comm'=>'yes','sva'=>1))}" class="<if condition="$_GET['sva'] eq '1'">now</if>">中评<br/>({$goodsScore['counts'][0]['medium_count']})</a>
+      <a href="{:U('Goods/goodsAppraiseList',array('id'=>$goods['id'],'comm'=>'yes','sva'=>0))}" class="<if condition="$_GET['sva'] eq '0'">now</if>">差评<br/>({$goodsScore['counts'][0]['subpar_count']})</a>
+      <a href="{:U('Goods/goodsAppraiseList',array('id'=>$goods['id'],'comm'=>'yes','is_pic'=>1))}" class="<if condition="$_GET['is_pic']">now</if>">有图片<br/>({$goodsScore['counts'][0]['img_count']})</a>
+ <div class="cb"></div>
+</div><!--qbpjt end-->
+<div class="qbpjb pj_list">
+ <ul id="add-page">   
+     <include file="Piece:Goods_goodsAppraiseList" /> 
+ </ul>
+</div><!--qbpjb end-->
+<div class="cb pv30"></div>
+<div class="footerxqb">
+<a onClick="myAlert('确认提示','确定收藏该商品？','{:U(is_m().'/Goods/collection',array('id'=>$goods['id']),'')}','',true,2)"  class="icon28 fl"><img src="__MOBILE__/Images/icon28.png" alt=""/><p>收藏</p></a>
+<a href="http://wpa.qq.com/msgrd?v=3&uin={:C('WEBSERVICEQQ1')}&site=qq&menu=yes" class="icon29 fl"><img src="__MOBILE__/Images/icon29.png" alt=""/><p>客服</p></a>
+<if condition="$goods['trade_integral'] gt 0">
+    <a onClick="toCart({$goods.id},false)" class="icon29rb fr">立刻对换</a>
+<else />
+   <if condition="$goods['stock'] eq 0">
+        <a href="#" title="" class="icon29ra fl" style="background:#eee !important;color:#ccc;border:1px solid #ccc;">加入购物车</a>
+        <a href="#" title="" class="icon29rb fr" style="background:#eee !important;color:#ccc;border:1px solid #ccc;">立刻购买</a>
+   <else />
+         <a onclick="carts('','','','{:U(is_m().'/Cart/addCart','','')}?id={$goods['id']}')" class="icon29ra fl">加入购物车</a>
+        <a onclick="carts('','','','{:U(is_m().'/Cart/addCart','','')}?id={$goods['id']}')" class="icon29rb fr">立刻购买</a>  
+   </if> 
+</if>    
+<div class="cb"></div>
+</div>
+  </div>
+</body>
+</html>

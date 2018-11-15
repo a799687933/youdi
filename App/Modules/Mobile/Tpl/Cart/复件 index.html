@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>购物车-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/cartPage.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script type="text/javascript" src="__HOME__/js/Calculation.js"></script>
+<script type="text/javascript">
+__root__="__ROOT__/";
+//******************
+function GetCount() {
+	var conts = 0;
+	var aa = 0;
+	$(".order_list input[name=newslist]").each(function () {
+		if ($(this).attr("checked")) {
+			for (var i = 0; i < $(this).length; i++) {
+				conts += parseInt($(this).val());
+				aa += 1;
+			}
+		}
+	});
+	$("#shuliang").text(aa);
+	$("#zong1").html((conts).toFixed(2));
+	$("#jz1").css("display", "none");
+	$("#jz2").css("display", "block");
+}
+</script>
+<script type="text/javascript">  
+	$(document).ready(function () {  
+		var ps = $("#div_pro").position();  
+		$("#div_pro").mouseenter(function () {  
+			$("#float_box").show();  
+		});  
+		$("#float_box").mouseleave(function () {  
+			$("#float_box").hide();  
+		});  
+	})  
+</script> 
+<style type="text/css">
+.member_r{width:1200px;}
+.order_img{width:1200px;}
+.order_list{width:1200px;}
+.order_list li{
+    width:1200px !important;height:auto;
+}
+.order_list .lista2{width:200px;}
+.order_list .lista3{padding-left:75px;}
+.order_buy{width:1200px;}
+.slideTxtBoxsc{width:1200px;}
+.order_list .list2{width:250px;}
+.order_list .list3{text-align:center;}
+.order_list .list4{padding-left:70px;}
+.order_list .list6,.order_list .lista6{float:right}
+.order_list .lista4{padding-left: 90px;}
+.order_buy .buy4{width:auto}
+.order_buy .buy2{width:150px;}
+.order_buy .buy3{width:120px;}
+</style>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+<div class="main">
+    <div class="member_r">
+    	
+        <div class="order_img"><img src="__HOME__/images/order1.jpg" /></div>
+        <div class="order_list">
+        <form  id="cart-form">
+        	<ul>
+            	<li class="title">
+                <span class="lista1"><input type="checkbox" name="all" onClick="selectCheckbox(this,'all')" class="sel_all ver_mid" />全选</span>
+                <span class="lista2">商品信息</span>
+                <span class="lista3">单价（元）</span>
+                <span class="lista4">数量</span>
+                <span class="lista5">总金额（元）</span>
+                 <!--商品优惠描述<span class="lista5">优惠</span>-->
+                <span class="lista6">操作</span>
+                </li>
+                
+               <foreach name="cartList['list']" item="li"> 
+                <li >
+                <span class="list1">
+                    <input type="checkbox" name="cart_id[]" value="{$li.id}" class="input_o" />
+                    <a href="{:U('Goods/index',array('html'=>'g-'.$li['goods_id']))}"  target="_blank">
+                       <img src="__ROOT__/{$li.goods_thumb}" width="60" height="60" title="{$li[pfix('goods_name')]|strip_tags=###}"/>
+                    </a>
+                </span>
+                <span class="list2" title="{$li[pfix('goods_name')]|strip_tags=###}">
+                    {$li[pfix('goods_name')]|show_str=###,20}<br/>
+                    <foreach name="li['goods_attr']['attr_array']" item="attr">
+                           {$attr[pfix('name')]}：{$attr[pfix('attr_value')]}(+{:getPrice($attr['attr_price'])})<br/>
+                    </foreach>
+                </span>
+                <span class="list3">
+                       {:getPrice($li['goods_price'],true)}<br/>
+                       <if condition="$li['rec_type'] eq 4 AND $li['rec_type'] gt 0">(组合价减{getPrice($li['reduction_price'],true)})</if>
+                </span>
+                <span class="list4"><div class="sl_add">
+                     <a  href="javascript:void(0);" onClick="updateNumber('-','number_{$li.id}',{$li.id})">
+                         <img src="__HOME__/images/btn_down.jpg" width=29 height=34>
+                     </a>
+                    <input type="text" class="num_prod al_ct clr_6" size="5" readonly="readonly"
+                        name="number_{$li.id}" id="number_{$li.id}" 
+                        value="{$li.goods_number}"
+                        temp="{$li.goods_number}"
+                    />            
+                    <a href="javascript:void(0);" onClick="updateNumber('+','number_{$li.id}',{$li.id})">
+                        <img src="__HOME__/images/btn_up.jpg" width=29 height=34>
+                    </a>
+                    </div>
+                 </span>
+                 <span class="list5" id="total1">{:getPrice($li['subtotal'],true)}</span>
+                 <!--商品优惠描述<span class="list5">{$li['discount']}</span>-->
+                 <span class="list6">
+                       <a href="javascript:void(0);" onClick="toDelete({$li.id})">删除</a> | 
+                       <a href="javascript:void(0);" onClick="myAlert('确认提示','确定收藏该商品？','{:U('/Goods/collection',array('id'=>$li['id']),'')}','')">收藏</a>
+                 </span>
+                </li>
+             </foreach>
+            </ul>
+           </form> 
+        </div>
+        <div class="order_buy">
+        	<div class="buy1"><input type="checkbox" name="all" onClick="selectCheckbox(this,'all')" />全选</div>
+        	<div class="buy2"><a href="javascript:void(0);" onClick="toDelete('')">删除</a> | <a href="__ROOT__/">再逛一逛</a></div>
+        	<div class="buy3"> 已选商品<font><label id="shuliang" class="counts">0</label>  </font>件</div>
+        	<div class="buy4">
+            
+                {/*启用会员等级积分*/}
+                <if condition="C('IS_RANK_POINTS')">
+                    <span class="ver_mid">赠送等级积分： {$cartList.rank_points}</span> | 
+                </if>
+                {/*启用会员等级积分结束*/}
+                
+                {/*启用会员消费积分*/} 
+                <if condition="C('IS_PAY_POINTS')">
+                    <span class="ver_mid">赠送消费积分： {$cartList.pay_points}</span> | 
+                </if>
+                {/*启用会员消费积分结束*/} 
+                 
+                <span class="ver_mid">金额总计(不含运费)： </span>
+                <span class="clr_r f_22 ver_mid"><b class="all_fee" style="color:red;">{:getPrice($cartList['sum'],true)}</b></span>            
+             </div>
+        	<div class="buy5"><a href="javascript:void(0);" onClick="sendForm()">去结算(<span class="counts">0</span>)</a></div>
+        </div>
+        
+        <div class="memeber_sc">
+        
+        <div class="slideTxtBoxsc">
+			<div class="hd">
+            <h1></h1>
+				<ul><li>你可能还喜欢</li><li>最近浏览</li></ul>
+			</div>
+			<div class="bd">
+				<ul>
+                      {/*你可能还喜欢*/} 
+                      <foreach name="categoryLove" item="love">
+                    	<li>
+                            <a href="{:U('Goods/index',array('html'=>'g-'.$love['id']))}"><img src="__ROOT__/{$love.goods_thumb}" width="150" height="120" /></a>
+                            <h1>{$love.goods_name|show_str=###,10}</h1>
+                            <h1>{:getPrice($love['goods_retail_price'],true)}
+                            <span><a href="{:U('Goods/index',array('html'=>'g-'.$love['id']))}" class="ea9901">购买</a></span>
+                        </h1>
+                        </li>
+                      </foreach>
+                     {/*你可能还喜欢*/} 
+				</ul>
+				<ul>
+                   {/*最近浏览*/}
+                   <foreach name="recentVisit" item="rv">
+					 <li><a href="{:U('Goods/index',array('html'=>'g-'.$rv['id']))}"><img src="__ROOT__/{$rv.goods_thumb}" width="150" height="120" /></a>
+                        <h1>{$rv[pfix('goods_name')]|show_str=###,10}</h1>
+                        <h1>
+                                {:getPrice($rv['goods_retail_price'],true)}
+                                <span><a href="{:U('Goods/index',array('html'=>'g-'.$rv['id']))}" class="ea9901">购买</a></span>
+                         </h1>
+                     </li>
+                     </foreach>
+                    {/*最近浏览结束*/} 
+				</ul>
+                
+			</div>
+		</div>
+		<script type="text/javascript">jQuery(".slideTxtBoxsc").slide({trigger:"click"});</script>
+        
+        </div>        
+    </div>    
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

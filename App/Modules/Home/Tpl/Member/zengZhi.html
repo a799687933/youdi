@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+        $(document).ready(function () {  
+            valinit('.form1','post','',true,'topRight');  
+            var ps = $("#div_pro").position();  
+            $("#div_pro").mouseenter(function () {  
+                $("#float_box").show();  
+            });  
+            $("#float_box").mouseleave(function () {  
+                $("#float_box").hide();  
+            });  
+        })  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                 <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > 
+                 <if condition="$actionName eq 'puToug'">
+                       {:isL(L('CommonInvoice'),'普通发票')}
+                 <else />
+                       {:isL(L('VATspecialticket'),'增值税发票')}
+                 </if> 
+                 
+                 <span style="float:right;padding-right: 10px;">
+                   <a href="{:U('Member/puToug')}" 
+                   class="   f_norm" 
+                   style="
+                   <if condition="$actionName eq 'puToug'">background:#fff;color:#99c838;<else />background:#ccc;color:#666;</if>
+                   padding:2px 10px;border-radius: 3px;">{:isL(L('CommonInvoice'),'普通发票')}</a>
+                   
+                   <a href="{:U('Member/zengZhi')}" 
+                   class=" f_norm" 
+                   style="
+                   <if condition="$actionName eq 'zengZhi'">background:#fff;color:#99c838;<else />background:#ccc;color:#666;</if>
+                   padding:2px 10px;border-radius: 3px;">{:isL(L('VATspecialticket'),'增值税发票')}</a>
+                </span>                   
+            </p>
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+            <form action="{:U('Member/zengZhiForm')}" class="form1">
+             <table class="my-table" style="width:100%">
+
+                  <tr>
+                      <td style="width:120px;text-align:center;">{:isL(L('UnitName'),'单位名称')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="company_name" value="{$res.company_name}" id="company_name" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>               
+    
+                  <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('IdentificationCode'),'纳税人识别码')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="id_code" value="{$res.id_code}" id="id_code" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>    
+    
+                  <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('RegisteredAddress'),'注册地址')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="reg_address" value="{$res.reg_address}" id="reg_address" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>   
+    
+                  <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('RegisteredPhone'),'注册电话')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="reg_tel" value="{$res.reg_tel}" id="reg_tel" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>   
+     
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('OpeAccount'),'开户银行')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="bank_name" value="{$res.bank_name}" id="bank_name" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>   
+    
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('BankAccount'),'银行账户')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="bank_sn" value="{$res.bank_sn}" id="bank_sn" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>   
+    
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('InvoiceContent'),'发票内容')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="inv_content" value="{$res.inv_content}" id="inv_content" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>  
+    
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('InvoiceName'),'收票人姓名')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="shou_piao" value="{$res.shou_piao}" id="shou_piao" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>  
+    
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('InvoiceMobile'),'收票人手机')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="shou_mobile" value="{$res.shou_mobile}" id="shou_mobile" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>  
+                                                                                                                   
+                  <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('Area'),'区域')}：</td>
+                      <td style="text-align:left">
+                           <select name="country" id="country" class="select110 mr15" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                               <option value="">{:isL(L('Country'),'国家')}</option>{$region[0]}
+                           </select>
+                           <select name="province" class="select110 mr15" id="province" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                               <option value="">{:isL(L('Province'),'省份')}</option>{$region[1]}
+                           </select>
+                           <select name="city" class="select110 mr15" id="city" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                               <option value="">{:isL(L('City'),'城市')}</option> {$region[2]}
+                           </select>
+                           <select name="district" class="select110 mr15" id="district" onChange="getPlace(this)" url="{:U("/Member/searchRegion","","")}">
+                               <option value="">{:isL(L('District'),'区县')}</option> {$region[3]}
+                           </select>
+                      </td>
+                  </tr>              
+    
+                   <tr>
+                      <td style="width:100px;text-align:center;">{:isL(L('DetailedAddress'),'详细地址')}：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="address" id="address" value="{$res.address}" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                      </td>
+                  </tr>  
+                  
+                   <tr style="border:none">
+                      <td style="width:100px;text-align:center;">&nbsp;</td>
+                      <td style="text-align:left">
+                          <input type="submit" 
+                                     value="{:isL(L('Submit'),'提交')}" 
+                                     class="btn_lkgm" 
+                                     img="__PUBLIC__images/13221814.gif" 
+                                     id="submits" 
+                                     style="
+                                               width:200px;margin:0 auto;height: 40px;
+                                               line-height:40px;font-size:20px;
+                                               background:#99c838;color:#fff;border-radius:4px;border:none; cursor:pointer;
+                                     "/>
+                      </td>
+                  </tr>                                                           
+             </table>
+         </form>
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:getUserC('SUPPLIER_NAME')}-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="keywords" content="{:C($langfx.'WEBKEYWORD')}" />
+<meta name="description" content="{:C($langfx.'WEBDEPICT')}" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/alert.css"/>
+<script src="__COMMON__/Js/div-dialog2.js"  type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<style type="text/css">
+.mb50 {
+  margin-bottom: 20px;
+}    
+</style>
+</head>
+<body>
+<include file="Supplier:top" />{/*头部*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="qyrz  pt45" style="min-height: 600px;">
+  <include file="Supplier:nav" />{/*导航*/}
+  
+  {/*内容区*/}
+   <div style="min-height: 500px;margin-bottom: 20px;">
+         <div class="grzxrt">
+                <a href="__ROOT__/{$result['supplier']['license']}" target="_blank">
+                   <img src="__ROOT__/{$result['supplier']['license']}" style="width:100px;height:100px;">   
+                </a>                      
+                <div class="grzxrtm">
+                 <p class="f14 col333 lh35" style="line-height: 25px;">
+                     您好！{$result['supplier']['name']} ，
+                     <span class="f12">上次登录时间：<if condition="getUserC('SUPPLIER_LAST_TIME')">{:date('Y-m-d H:i:s',getUserC('SUPPLIER_LAST_TIME'))}<else />首次登录</if></span></p>
+                 <p class="lh30 col555" style="line-height: 25px;">                       
+                     地址：{$result['supplier']['province']}{$result['supplier']['city']}{$result['supplier']['district']}{$result['supplier']['address']}
+                 </p>
+                 <p class="lh30 col555" style="line-height: 25px;">                       
+                     全部订单：(<span class="colf00">{$result['order_data']['counts']}</span>)
+                     <span class="ph50">待处理订单：(<span class="colf00">{$result['order_data']['pending_count']}</span>)
+                 </p>
+                 <p class="col333 lh30" style="line-height: 25px;">用户提醒：昨天订单量({$result['order_data']['cesterday']})</p>
+                </div>
+                <div class="grzxrtr">
+                 <p>账户余额：<span class="colf00">￥{$result['supplier']['bankroll']}</span>元</p>
+                <!-- <p>我的积分：<span class="colf00">39000</span>分</p>-->
+                </div>
+                <div class="cb"></div>
+         </div> 
+
+<div class="wddd pl20 pr20 pt15 mt20">
+    <span class="icon49a pl10 f14 col333 lh30 fl">最近订单</span>
+    <a href="{:U('Supplier/orderList')}" class="fr lh30 lan">查看所有订单</a>
+    <div class="cb"></div>
+    <div class="wdddb p10">
+     <table cellpadding="0" cellspacing="0" width="100%" style="text-align: center">
+      <tbody><tr>
+            <th class="f_14 clr_3">订单编号</th>
+            <th class="f_14 clr_3">下单时间</th>
+            <th class="f_14 clr_3">总金额</th>
+            <th class="f_14 clr_3">应付总额</th>
+            <th class="f_14 clr_3">支付方式</th>
+            <th class="f_14 clr_3">订单状态</th>
+            <th class="f_14 clr_3">操作</th>
+      </tr>
+          <if condition="$result['order_data']['order_list']">
+            <foreach name="result['order_data']['order_list']" item="ol">
+                <tr>
+                    <td class="f_12 clr_6">{$ol.order_sn}</td>
+                    <td class="f_12 clr_6">{$ol.add_time|from_time=###,'Y-m-d'}</td>
+                    <td class="f_12 clr_6">￥{$ol.goods_amount}</td>
+                    <td class="f_12 clr_6">￥{$ol.order_amount}</td>
+                    <td class="f_12 clr_6">
+                        <if condition="$ol['order_amount'] eq 0">
+                               积分对换
+                        <else />                            
+                              {$payType[$ol['pay_type']]}{/*支付方式*/}
+                        </if>                        
+                    </td>
+                    <td class="f_12 clr_6"> 
+                            {/*付款状态*/}
+                           <if condition="$ol['order_amount'] eq 0">
+                               [积分对换] 
+                            <elseif condition="$ol['pay_type'] eq 1" />
+                                [到店自提]
+                            <elseif condition="$ol['pay_type'] eq 2" />
+                                [货到付款]
+                            <else />
+                                 [{$payStart[$ol['pay_status']]}]
+                            </if>   
+                            {/*订单状态*/}
+                            [{$orderStart[$ol['order_status']]}]
+                            {/*配送状态*/}
+                            [{$shippingStart[$ol['shipping_status']]}]                   
+                     </td>
+                    <td class="center">
+                         <if condition="(($ol['pay_status'] eq 0) AND ($ol['shipping_status'] eq 0) AND ($ol['order_status'] eq 0 OR $ol['order_status'] eq 1))">
+                             <a href="javascript:void(0);" 
+                                 onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                                 '{:isL(L('DetermineCancellationOrder'),'确定取消定单？')}',
+                                 '{:U('/Supplier/cancelOrder',array('order_id'=>$ol['order_id']))}','','',2)" >
+                                 {:isL(L('CancelOrder'),'取消订单')}
+                             </a>
+                         <else />
+                             <span style="color:#ccc;"> {:isL(L('CancelOrder'),'取消订单')}</span> 
+                         </if>  | 
+                         <a href="{:U('Supplier/orderShow',array('order_id'=>$ol['order_id']))}">{:isL(L('OrderDetails'),'订单详情')}</a>
+                    </td>
+                </tr>   
+            </foreach>                
+          <else />     
+             <tr><td colspan="7" style="text-align: center;font-size:14px;color:red;">暂无更多信息</td></tr> 
+          </if>
+        </tbody>
+      </table>
+    </div>
+   </div>
+
+              
+   </div>    
+   {/*内容区*/}  
+     
+  </div><!--qyrz end-->
+ </div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer2" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+<!---->
+
+</body>
+</html>

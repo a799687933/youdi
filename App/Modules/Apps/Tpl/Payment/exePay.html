@@ -1,0 +1,118 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Payment/exePayForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="pay_id" value="{$save.pay_id}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>支付名称：</dt>
+                <dd>
+                    <input  type="text" name="" class="" readonly="readonly" size="58" value="{$save.pay_name}"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>支付费用：</dt>
+                <dd>
+                    <input type="text" name="pay_fee" class="required" size="58" value="{$save.pay_fee}"/>
+                </dd>
+            </dl>
+            
+            <dl style="display: none;">
+                <dt>排序：</dt>
+                <dd>
+                     <input type="text" name="pay_order" class="required digits" value="<if condition="$save['pay_order']">{$save.pay_order}<else />0</if>" size="40"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>是否使用：</dt>
+                <dd>
+                    <label><input type="radio" name="enabled" value="1" <if condition="$save['enabled']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="enabled" value="0" <if condition="!$save['enabled']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>            
+          
+        <if condition="$save['account']">
+            <dl>
+                <dt>商户帐号：</dt>
+                <dd>
+                     <input type="text" name="account" class="required" value="{$save.account}" size="58"/>
+                </dd>
+           </dl>
+        </if>   
+        
+        <if condition="$save['coll_id']">
+            <dl>
+                <dt>合作者身份ID：</dt>
+                <dd>
+                     <input type="text" name="coll_id" class="required" value="{$save.coll_id}" size="58"/>
+                </dd>
+           </dl>
+        </if>     
+        
+        <if condition="$save['key']">
+            <dl>
+                <dt>商户密钥：</dt>
+                <dd>
+                     <input type="text" name="key" class="required" value="{$save.key}" size="58"/>
+                </dd>
+           </dl>
+        </if>                  
+
+        <if condition="$save['appid']">
+            <dl>
+                <dt>微信公众号标识(APPID)：</dt>
+                <dd>
+                     <input type="text" name="appid" class="required" value="{$save.appid}" size="58"/>
+                </dd>
+           </dl>
+        </if>        
+
+        <if condition="$save['mchid']">
+            <dl>
+                <dt>受理商ID(MCHID)：</dt>
+                <dd>
+                     <input type="text" name="mchid" class="required" value="{$save.mchid}" size="58"/>
+                </dd>
+           </dl>
+        </if>     
+
+        <if condition="$save['wx_key']">
+            <dl>
+                <dt>支付密钥(KEY)：</dt>
+                <dd>
+                     <input type="text" name="wx_key" class="required" value="{$save.wx_key}" size="58"/>
+                </dd>
+           </dl>
+        </if>    
+
+        <if condition="$save['appsecret']">
+            <dl>
+                <dt>JSAPI接口中获取(APPSECRET)：</dt>
+                <dd>
+                     <input type="text" name="appsecret" class="required" value="{$save.appsecret}" size="58"/>
+                </dd>
+           </dl>
+        </if>    
+
+        <dl class="nowrap">
+            <dt>支付描述：</dt>
+            <dd><textarea name="pay_desc" class="required" cols="59" rows="8" style="resize:none;">{$save.pay_desc}</textarea></dd>
+        </dl>
+                                                            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

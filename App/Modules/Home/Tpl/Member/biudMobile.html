@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人中心-账户安全-手机绑定</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<link rel="Stylesheet" href="__PUBLIC__ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine-zh-cn.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/fun.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/inputInfos.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/SMS.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+      valinit('.form1','get','__ROOT__/',true,'topRight');  
+        var url="{:U('Register/chkData','','')}";
+		myValidationEngine('ajaxUserMobile',url,'my=data','此号码已被其他人注册','此号码可以使用','正在验证，请稍等...');		
+        var url="{:U('Common/mobileCode','','')}";
+		myValidationEngine('mobileCode',url,'my=data','手机验证码错误','手机验证码正确','正在验证，请稍等...');	
+		valinit('.form1','get','__ROOT__/',true,'topRight');  
+		window.SMS=new SMS();
+		SMS.inputClick='#sendBottom'; 
+		SMS.mobileVal='#mobile';
+		SMS.PONECODESEND='{:C("PONECODESEND")}'; 
+		SMS.wait='{:C("PONECODESEND")}';
+		SMS.TOKEN="{:C('TOKEN_NAME')}";
+		SMS.url="{:U('Register/sendMobile')}";
+		SMS.smClick(); 	  
+  });
+function setMobileValue(_this){
+   if($('#mobile').attr('readonly')){
+	   $('#mobile').attr('readonly',false).val('').css('background','#fff');
+	   $(_this).text('取消');   
+   }else{
+	   $('#mobile').attr('readonly',true).val($('#mobile').attr('mo')).css('background','#f4f4f4');
+	   $(_this).text('更改绑定手机');      
+   }
+
+}  
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Member:memberTop'/>{/*会员中心头部*/}
+<div class="wrap">
+ <h1 class="lh45 col333"><a href="{:U('/Member')}" class="col333">我的石度</a> > 个人中心 > 手机邦定</h1>
+<include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="grzxr">
+  <div class="grzxrt"><div class="grzxrtul"><a href="javascript:void(0);" class="now">手机绑定</a><div class="cb"></div></div></div><!---->
+  <div class="fbgh">
+  <form action="" class="form1">
+	  <label>手机号码：</label><input type="text" mo="{$mobile['mobile_phone']}" name="mobile" id="mobile" value="{$mobile['mobile_phone']}" readonly="readonly" class="input275f4 validate[required,custom[phone],ajax[ajaxUserMobile]]" onBlur="setMbileAttr(this,'{:C('TOKEN_NAME')}')"/><a href="javascript:void(0);" onclick="setMobileValue(this)" style="color:#1abd9b;" class=" lh42 pl10">更改绑定手机</a>
+	  <div class="cb pb10"></div>
+	  <label>验证码：</label><input type="text" id="mobile_code" name="mobile_code" class="input165 mr10 validate[required,ajax[mobileCode]]"/><input type="button" id="sendBottom" value="获取验证码" class="input98f4"/>
+	  <div class="cb pb30"></div>
+	  <label>&nbsp;</label><input type="submit" id="submits" value="确 认" class="lvbtn155 mt30 mr20"/><input type="button" onclick="javascript:;history.back();" value="取消修改" class="huibtn155 mt30"/>
+  </form>
+  </div><!---->
+ </div><!--grzxr end-->
+ <div class="cb pb30"></div>
+</div>
+   
+  <!--footer begin-->
+      <include file='Common:footer'/>{/*页脚*/}
+  <!--footer end-->
+</body>
+</html>

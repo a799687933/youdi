@@ -1,0 +1,154 @@
+<input type="hidden" value="{$res['address_id']}" name="address_id" />
+<if condition="$res['address_id']">
+   <p class="f18 lh30 pt15">{:isL(L('ChangeAddress'),'修改送货地址')}</p>
+<else />
+   <p class="f18 lh30 pt15">{:isL(L('AddAddress'),'添加送货地址')}</p>
+</if>
+<p class="col999 f12 pb15">* {:isL(L('Required'),'必填栏')}</p>
+<div class="cb pb10"></div>
+<div class="xxlr pr20">
+<div class="mb20">
+<label>{:isL(L('Surname'),'姓氏')}*</label>
+<input type="text" name="surname" value="{$res.surname}" info-text="surn-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}" class="xx_input required"/>
+<p class="tsy surn-text">提示语</p>
+</div>
+</div><!---->
+<div class="xxlr pl20">
+<div class="mb20">
+<label>{:isL(L('FullNname'),'名字')}*</label>
+<input type="text" class="xx_input required" name="consignee" value="{$res.consignee}" info-text="consi-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+<p class="tsy consi-text">提示语</p>
+</div>
+</div><!---->
+<div class="cb"></div>
+<div class="mb20">
+
+<label>{:isL(L('country'),'国家')}*</label>
+<input type="hidden" class="xx_input " name="country"  value="1" />{/*默认国家ID 请不要删除*/}
+<input type="text" class="xx_input required"  name="country"  value="中国" info-text="country-text"  readonly="readonly" error-info="{:isL(L('SelectCountry'),'请选择国家')}"/>
+<!--<if condition="is_mobile()">
+<select  class="required phoneselect" name="coun_id" info-text="country-text" error-info="{:isL(L('SelectCountry'),'请选择国家')}" onChange="getPlace(this,'#province','')" url="{:U('CheckOut/getCitys','','')}">
+ <option value="">{:isL(L('SelectCountry'),'请选择国家')}</option>
+ {$region[0]}      
+</select>
+<else />
+<select  class="chosen-select required pcselect" name="coun_id" info-text="country-text" error-info="{:isL(L('SelectCountry'),'请选择国家')}" onChange="getPlace(this,'#province','')" url="{:U('CheckOut/getCitys','','')}">
+ <option value="">{:isL(L('SelectCountry'),'请选择国家')}</option>
+ {$region[0]}      
+</select>
+</if>-->
+<p class="tsy country-text">提示语</p>
+</div>
+<div class="xxlr pr20">
+<div class="mb20">
+<label>{:isL(L('ProvinceCity'),'省/市')}*</label>
+<!--<input type="text" name="province" placeholder="省" value="{$res.province}" info-text="province-text" error-info="{:isL(L('SelectProvince'),'请选择省份')}"  class="xx_input required"/>
+<p class="tsy province-text">提示语</p>-->
+<div style="position:relative; width:100%;  box-sizing:border-box;" class="shenshi"><span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:3px; top:2px; line-height:33px; border:none; opacity:0.3"></span><!--onChange="getPlace(this,'#city','')"-->
+<select  class=" required chosen-select sfselect" name="province" id="province" info-text="province-text" error-info="{:isL(L('SelectProvince'),'请选择省份')}"  
+chosen-url="{:U('CheckOut/getCitys','','')}" chosen-give="#city" chosen-info="请选择城市">
+ <option value="">{:isL(L('SelectProvince'),'请选择省份')}</option>
+   {$region['province']}  
+</select>
+<!--<div class="shenshiss">
+ <input type="button" name="" value="" class="shenshissl_btn"/>
+ <span class="shenshissl fa fa-search"></span>
+ <input type="text" name="" value="" class="shenshissl_input"/>
+ <div class="cb"></div>
+</div><!--shenshiss end-->
+<p class="tsy province-text">提示语</p>
+</div>
+</div>
+</div><!---->
+<div class="xxlr pl20">
+<div class="mb20">
+<label>{:isL(L('City'),'城市')}*</label>
+<!--<input type="text" name="city" value="{$res.city}" placeholder="市" info-text="city-text" error-info="{:isL(L('SelectCity'),'请选择城市')}"  class="xx_input required"/>
+<p class="tsy city-text">提示语</p>-->
+
+<div style="position:relative; width:100%;  box-sizing:border-box"><span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:3px; top:2px; line-height:33px; border:none; opacity:0.3"></span>
+<select  class="cityselect1 required chosen-select" name="city" id="city" info-text="city-text" error-info="{:isL(L('SelectCity'),'请选择城市')}">
+ <option value="">{:isL(L('SelectCity'),'请选择城市')}</option>
+   {$region['city']}  
+</select>
+<p class="tsy city-text">提示语</p>
+</div>
+</div>
+</div><!---->
+<div class="cb"></div>
+<div class="mb20">
+<label>{:isL(L('Address'),'地址')}*</label>
+<input type="text" name="address" value="{$res.address}"  info-text="address-text" error-info="{:isL(L('Required'),'必填栏')}" class="xx_input required "/>
+<p class="tsy address-text">提示语</p>
+</div>
+<div class="xxlr pr20">
+ <div class="mb20">
+<label>{:isL(L('ZipCode'),'邮政编码')}*</label>
+<input type="text" name="zipcode" value="{$res.zipcode}" min="6" max="6" maxlength="6" info-text="zipc-text" error-info="{:isL(L('TrueCode'),'请输入正确的邮编')}" class="xx_input required digits"/>
+<p class="tsy zipc-text">提示语</p>
+</div>
+</div><!---->
+<div class="xxlr pl20">
+<div class="mb25">
+<label>{:isL(L('Telephone'),'电话')}*</label>
+<input type="text" name="tel" value="{$res.tel}" class="xx_input required digits" info-text="tels-text" min="11" max="11" error-info="{:isL(L('CorrectNumber'),'请输入正确电话')}"/>
+<p class="tsy tels-text">提示语</p>
+<p class="f12 col999 lh20">{:isL(L('WeOrderOnly'),'我们只会在需要通知您有关您的订单的情况下向您要电话号码。')}</p>
+</div>
+</div><!---->
+<div class="cb pb40 pcno"></div>
+<span style="position:relative; padding-left:25px; line-height:38px">
+   <input class="vam" name="default" <php>if($res['default_address']){</php>checked="checked"<php>}</php> id="subs1" style="display:none" value="1" type="checkbox">
+  <label class="ffInput" for="subs1">
+  <span class="ffInput__checkbox"></span>
+  <span class="pl5 vam" >{:isL(L('DefaultAddress'),'默认地址')}</span>
+  </label> 
+  </span>
+<div class="bcbtn">
+<input type="hidden" value="address-submit1" name="submits" />
+<input type="hidden" value="{$_REQUEST['check_out']}" name="check_out" />
+<input value="{:isL(L('Preservation'),'保存')}" class="btn"  info-text="sub-text1" type="submit">
+<span class="glyphs icon-thinArrow btnb"></span>  
+ <div style="clear:both;height:10px;"></div>
+ <p class="tsy sub-text1" style="width:30%;float:right;border-top:none;">提示语</p>   
+</div>  
+<div class="cb pb15"></div>
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+
+$(".chosen-select").chosen({
+    no_results_text: "没有找到结果",//搜索无结果时显示的提示
+	disable_search	:true,
+    search_contains:true,   //关键字模糊搜索，设置为false，则只从开头开始匹配
+    allow_single_deselect:true, //是否允许取消选择
+    max_selected_options:6  //当select为多选时，最多选择个数 
+ }).change(function(){
+		var _this=$(this);		
+		var chosen_url=$(_this).attr('chosen-url');//获取下级城市URL
+		var getVal=parseInt(_this.val()); //当前select 选中的值
+		var chosen_give=_this.attr('chosen-give'); //把生成的option 标签付值到那个select标签下
+		var chosen_info=_this.attr('chosen-info'); //提示用户选择
+		if(chosen_url && getVal > 0){
+		  var chosen_url=chosen_url.indexOf('?') > -1 ? chosen_url=chosen_url+"&region_id="+getVal :chosen_url+ "?region_id="+getVal;
+		  $.ajax({
+			 type:'post',
+			 dataType: "json",
+			 url:chosen_url,
+			 success:function(response,status,xhr){
+					var str='<option value="">'+chosen_info+'</option>';
+					for(var i in response) str+='<option value="'+ response[i].region_id +'">'+ response[i].region_name +'</option>';
+					$(chosen_give).html(str);
+					$(chosen_give).chosen("destroy"); //先干掉原来节点
+					$(chosen_give).chosen(); //重新初始化
+			  }
+		   });    
+	   }                             
+});
+setTimeout(function(){
+	$('.chosen-search').find('input[type="text"]').attr('readonly',false).css('text-indent','5px');
+},20);
+$(".shenshi .chosen-container").click(function(){
+	$(".shenshiss").toggle()
+	
+})
+ </script>

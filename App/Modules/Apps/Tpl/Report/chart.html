@@ -1,0 +1,89 @@
+<script type="text/javascript">
+//PHP替换全局变量window.xxxxxx
+window.axisCount1={$report.axisCount};
+window.axisStr1= [{$report.axisStr}];
+window.linecDayStr1=[{$report.linecDayStr}];
+window.linecDataStr1=[{$report.linecDataStr}];//这里可以扩展多个数组
+var options = {
+	axis: "0 0 1 1", // Where to put the labels (trbl)
+	axisxstep: axisCount1, // How many x interval labels to render (axisystep does the same for the y axis)
+	axisxlables: axisStr1,
+	axisystep: 20,
+	shade:false, // true, false
+	smooth:true, //曲线
+	symbol:"circle"
+};
+
+$(function () {
+    
+    var pageHeight1=parseInt($('.nowrap').css('height').replace('px',''));
+    var pageWidth1=parseInt($('.dologClass').css('width').replace('px',''));   
+    window.linecHeight1=pageHeight1-200;
+    window.linecWhere1=pageWidth1-170;
+     $('#chartHolder1').css('height',(linecHeight1+50)+'px').css('width',(linecWhere1+50)+'px');
+ 
+	// Make the raphael object
+	var r = Raphael("chartHolder1"); 
+	
+	var lines = r.linechart(
+		20, // X start in pixels
+		20, // Y start in pixels
+		linecWhere1, // Width of chart in pixels
+		linecHeight1, // Height of chart in pixels
+		linecDayStr1, // Array of x coordinates equal in length to ycoords
+		linecDataStr1, // Array of y coordinates equal in length to xcoords
+		options // opts object
+	).hoverColumn(function () {
+        this.tags = r.set();
+
+		var box_x = this.x, box_y = 30,
+			box_w = 100, box_h = 80;
+		if (box_x + box_w > r.width) box_x -= box_w;
+		var box = r.rect(box_x,box_y,box_w,box_h).attr({stroke: "#f00", "stroke-width": 1, r:5});
+		this.tags.push(box);
+
+        for (var i = 0; i < this.y.length; i++) {
+			 
+			//this.tags.push(r.blob(this.x, this.y[i], "$"+this.values[i]).insertBefore(this).attr([{ fill: "#ffa500", stroke: "#000"}, { fill: this.symbols[i].attr("fill") }]));
+			if(this.values[i]){
+				   var t = r.text(box_x+50, box_y+40 + i*16,this.values[i]).attr({fill: this.symbols[i].attr("fill")});
+				}else{
+				   var t = r.text(box_x+50, box_y+40 + i*16,"0");
+				}
+        	
+        	this.tags.push(t);
+        }
+        
+        
+    }, function () {
+        this.tags && this.tags.remove();
+    });
+
+    lines.symbols.attr({ r: 6 });
+});
+</script>
+<div class="pageContent dologClass ">
+        <div class="pageFormContent nowrap" layoutH="90">
+                    <div id="chartHolder1" ></div>
+                    <p style="border-top:1px solid #999;margin-left:10px;width:97%;height:20px;line-height:20px;">
+                           {$report.dateTime} (<b style="color:red;">{$report.count}</b>)  {$report.average}
+						   <if condition="$table eq 'order_info' ">
+								订单总金额：￥<span style="color:red;"><if condition="$orderAmount['order_amount'] gt 0">{$orderAmount['order_amount']}<else />0</if></span>  | 
+								成功交易：￥<span style="color:red;"><if condition="$orderAmount['established'] gt 0">{$orderAmount['established']}<else />0</if></span>  | 
+								未确定：￥<span style="color:red;"><if condition="$orderAmount['notSure'] gt 0">{$orderAmount['notSure']}<else />0</if></span>  | 
+								已取消：￥<span style="color:red;"><if condition="$orderAmount['cancelled'] gt 0">{$orderAmount['cancelled']}<else />0</if></span>  | 
+								无效：￥<span style="color:red;"><if condition="$orderAmount['invalid'] gt 0">{$orderAmount['invalid']}<else />0</if></span>  | 
+								要处理退款：￥<span style="color:red;"><if condition="$orderAmount['refund'] gt 0">{$orderAmount['refund']}<else />0</if></span>  | 
+								退款商议中：￥<span style="color:red;"><if condition="$orderAmount['consult'] gt 0">{$orderAmount['consult']}<else />0</if></span>  | 
+								已退款：￥<span style="color:red;"><if condition="$orderAmount['refundOK'] gt 0">{$orderAmount['refundOK']}<else />0</if></span>  | 
+								不予退款：￥<span style="color:red;"><if condition="$orderAmount['gotGrant'] gt 0">{$orderAmount['gotGrant']}<else />0</if> </span>
+						   </if>						   
+                    </p>                              
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+            </ul>
+        </div> 
+</div>
+

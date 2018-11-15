@@ -1,0 +1,241 @@
+ 
+ <!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('BillingSend'),'结算 - 寄送')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="/Public/Home/css/iconfont2.css"/>
+<link rel="stylesheet" href="/Public/Home/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script>
+ $(function(){
+	
+	/****/
+	 
+	  $(".tcxgdz").click(function(){
+	   $(".xgdzbg").fadeIn("fast",function(){
+		   $(".xgdzwrap").slideDown()
+		   })
+	   }) 
+	  $(".xgdzclose").click(function(){
+	   $(".xgdzwrap").slideUp("fast",function(){
+		   $(".xgdzbg").fadeOut()
+		   })
+	   }) 	   
+	   
+	   
+	    $(".tctjdz").click(function(){
+	   $(".tjdzbg").fadeIn("fast",function(){
+		   $(".tjdzwrap").slideDown()
+		   })
+	   }) 
+	  $(".tjdzbg").click(function(){
+	   $(".tjdzwrap").slideUp("fast",function(){
+		   $(".tjdzbg").fadeOut()
+		   })
+	   }) 	     	
+	 })
+</script>
+<if condition="is_mobile()">
+
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<!--content begin-->
+    <div class="jies">
+     <div class="gwdt b">{:isL(L('Billing'),'结算')}</div>
+     <div class="jsl">
+      <div class="jslt" style="float:left; border-left:none">
+       <ul>
+        <li class="now" style="border-left:none">1.{:isL(L('SentOut'),'配送')}</li>
+        <li>2.{:isL(L('Pay'),'支付')}<span class="jsltspan1"></span></li>
+        <li class="last">3.{:isL(L('Checklist'),'核对')}<span class="jsltspan2"></span></li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--jslt end-->
+      <div class="cb"></div>
+      <div class="psdz">
+      
+      <!--无地址时-->
+      <php>if(!$adderss){</php>
+          <div class="pv20" >
+           <h1 class="shdzt" style="font-weight:normal"><span class="icon36 glyphs icon-info-circle" style="height:23px; line-height:23px;"></span><span class="pl15">{:isL(L('YouHaveDeliveryAddress'),'您还未填写或选择送货地址，请添加新地址。')}</span></h1>
+           </div>
+      <php>}else{</php> 
+           <!--有地址时-->
+           <h1 class="shdzt">{:isL(L('SelectShippingAddress'),'选择送货地址')}</h1>
+           <foreach name="adderss" item="a">
+                <div class="dzbox <if condition="$a['default_address']">dzboxnow</if>">
+                 <div class="dzm">
+		<!--<span class="fa ffInput__radio2 glyphs dzradio"></span>-->
+	  <span class="dzradio" style="border:none; background:#fff;"><span class="fa fa-check-circle" style="width:  100%; height: 100%;font-size: 20px; color: #fddd59;"></span></span>
+                  <div class="dzmt" onClick="selectRadio(this)">
+                       <input type="radio" name="selectAdderss" value="{$a['address_id']}" <if condition="$a['default_address']">checked="checked"</if> style="display:none;"/>
+                      {$a['surname']}{$a['consignee']}<br/>
+                      {$a['province']}{$a['city']}{$a['address']}<br/>
+                      <!--{$a['city']}，{$a['province']}<br/>-->
+                       {$a['zipcode']}<br/>
+                       <!--{$a['country']}-->
+                  </div>
+                  <p class="dzmb">
+                         <a href="JavaScript:void(0)" onClick="updateAddress({$a['address_id']},true)" class="col2ab mr15 tcxgdz">{:isL(L('Modify'),'修改')}</a>
+                        <a href="JavaScript:void(0)" class="col2ab" onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}',
+                      '{:isL(L('ISDELETE'),'操作不可恢复确定执行本次操作？')}',
+                      '{:sign_url(array('address_id'=>$a['address_id']),U('Member/delAddress','',''))}','','',2)">{:isL(L('Delete'),'删除')}</a>             
+                  </p>
+                 </div>
+                </div><!--dzbox end-->
+           </foreach> 
+       <php>}</php> 
+        <div class="cb pb10"></div>
+        <p class="tjxdz tctjdz" onClick="updateAddress(0,true)"><span class="glyphs icon-more"></span>{:isL(L('AddNewAddress'),'添加新地址')}</p>
+      </div><!---->
+      
+       
+       <!--弹出添加/修改地址 begin-->
+     <div class="bg tjdzbg"></div>
+      <div class="xxxg tjdzwrap">
+        <span class="close tjdzclose" style="display:none"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+        <form action="{:U('/Member/addressForm')}" id="address-up"> 
+           <!--<img src="__COMMON__/Images/13221814.gif" style="display:block;margin: 200px auto;" />-->
+                <!--<div id="loading-center-absolute">
+                    <div class="object" id="object_one"></div>
+                    <div class="object" id="object_two"></div>
+                    <div class="object" id="object_three"></div>
+                </div>   -->  
+        </form>
+      </div>
+      
+     <!--弹出添加/修改地址 end-->
+
+     </div><!--jsl end-->
+     <div class="jsr">
+     <div class="jsrm" >
+      <h1>{:isL(L('Billing'),'总结')}</h1>
+      <p class="pb10 f12">{:isL(L('Subtotal'),'小计')}<span class="fr f16 b">{:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</span></p>
+      <p class="pb10 f12">{:isL(L('SentOut'),'配送')}<span class="fr b f16 huan">{:C('KTEC_H')} 0.00</span></p>
+      <!--<p class="myf">{:isL(L('NewFreeShipping'),'免运费')}</p>-->
+      <div class="jsrb mt5">
+       <div class="pb30 f12">{:isL(L('TotalCost'),'总计')}       <span class="fr tr f16"><b>{:C('KTEC_CUR')} {:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</b></span>
+       <p class="tr col999 lh18 f12 pt5">({:isL(L('ValueAddedTax'),'含增值税')})</p>
+       </div>
+       <div style=" position:relative;">
+       <input   onclick="sendGet()" value="{:isL(L('SaveAndContinue'),'保存并继续')}"  class="jsr_btn" type="button">
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+      </div>
+      
+       <!--<p class="pb20">{:isL(L('TotalCost'),'总计')}<span class="fr b">CNY ￥ {:number_format($_GET['total'],2, '.', '');}</span></p>
+       <input type="button"  onclick="sendGet()" value="{:isL(L('SaveAndContinue'),'保存并继续')}" class="jsr_btn"/>-->
+      </div>
+      </div>
+     </div><!--jsr end-->
+     <div class="cb"></div>
+    <!-- <div class="jshddb tl"><span class="fhdb"><span class="icon19">&nbsp;</span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>-->
+    </div><!--jies end-->
+<!--content end-->
+<div class="cb pv40"></div>
+ <include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+
+<script type="text/javascript">
+/*GET提交*/
+function sendGet(){
+   var  selectAdderss=$('input[name="selectAdderss"]');
+   var adderId='';
+   for(var i=0;i < selectAdderss.length;i++){
+       if(selectAdderss.eq(i).attr('checked')){
+           adderId=selectAdderss.eq(i).val();
+       }
+   }
+   if(!adderId){
+       error('{:isL(L("Pctrgapca"),"请选择收货地址或创建一个新地址")}',3000);
+       return;
+   }
+    var url="{:sign_url(array('ids'=>$_GET['ids'],'total'=>$_GET['total']),U('CheckOut/selectPay','',''),'')}&selectAdderss="+adderId;
+    window.location.href=url;
+}
+/*显示层*/
+function showTayer(node){
+    $(".ddbg").fadeIn("fast",function(){
+        $(node).slideDown()
+     });
+}
+/*关闭层*/
+function hideTayer(node){
+    $(node).slideUp("fast",function(){
+        $('.ddbg').fadeOut()
+     })
+}
+
+/*添加/修改地址*/
+function updateAddress($id,chk){
+    if(chk) var checkOut="&check_out=ok";
+    else var checkOut='';
+    var url="{:U('Member/address','','')}?address_id="+$id+checkOut;
+	$(".tjdzbg").fadeIn("fast",function(){
+	   $(".tjdzwrap").slideDown();
+	    $.ajax({
+		 type:'post',
+		 url:url,
+		 dataType:'text',
+		 success:function(response,status,xhr){
+			 $('#address-up').html(response);
+			  formInit('#address-up',true,true,true,true); //表单验证
+		  }
+	    });  	   
+   })	
+}
+/*选择地址*/
+function selectRadio(_this){
+	var dzbox=$('.dzbox');
+	dzbox.removeClass('dzboxnow');
+	dzbox.find('input[name="selectAdderss"]').prop('checked',false);
+	$(_this).parents('.dzbox').addClass('dzboxnow');
+	$(_this).find('input[name="selectAdderss"]').prop('checked',true);
+}
+</script>
+</body>
+</html>

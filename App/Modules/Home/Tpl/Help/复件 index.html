@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$result.titletext|strip_tags=###}-{$result.files_name|strip_tags=###}-{:C('WEBNAME')}</title>
+<meta name="keywords" content="新澳洲-首页样稿" />
+<meta name="description" content="新澳洲-首页样稿" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/jquery.jslides_mlzx.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+   $('.qbcpfllist').hide();		
+});
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:header'/>{/*头部*/}
+<include file='Common:nav'/>{/*分类与导航*/}
+
+ <!--content begin-->
+ <div class="content"><div class="wrap">
+ <div class="cb"></div>
+  <div class="weizhi">您所在位置：<a href="__ROOT__/" class="col999">首页</a><span class="ph10 col999">></span>{$result.titletext|strip_tags=###}</div>
+<div class="mlzx">
+ <h1>帮助中心</h1>
+ <div class="bzzx">
+ <foreach name="arList" item="ar">
+	  <h2>{$ar.files_name}</h2>
+	  <foreach name="ar['list']" item="al">
+	        <p><a href="{:U('Help/index',array('html'=>'help_'.$al['id']))}" class="col666 <if condition="$al['id'] eq str_replace('help_','',$_GET['html'])">now</if>" >+ {$al.titletext}</a></p>
+	  </foreach>	  
+  </foreach>
+ </div>
+</div><!---->  
+<div class="mlzxr">
+ <h1><span>{$result.titletext|strip_tags=###}</span></h1>
+    <div style="padding:10px;line-height:180%">{$result.content|stripcslashes=###}</div>
+</div>
+  
+   <div class="cb pv30"></div>
+  
+ </div></div>
+  <!--content end-->
+  <!--footer begin-->
+<include file='Common:footer'/>{/*页脚*/}		
+<include file='Common:float'/>{/*右边可关闭*/}	
+  <!--footer end-->
+</body>
+</html>

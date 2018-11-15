@@ -1,0 +1,185 @@
+<style type="text/css">
+dl{width:100% !important;}
+
+dl dt{text-align:right;}	
+</style>
+
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/Category/cateAddForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" name="files_pid" value="{$files_pid}"/>
+        <input type="hidden" name="files_path" value="{$files_path}"/>
+		<if condition="$_GET['cate_id']"><input type="hidden" name="files_id" value="{$_GET['cate_id']}"/></if>
+        <div class="pageFormContent" layoutH="58">
+          
+            <foreach name="nameArr" item="t">
+             <dl>
+             	<dt>({$t['info']})分类名称：</dt>
+             	<dd><input type="text" name="{$t['field']}" value="{$res[$t['field']]}" size="20" class="required" /></dd>
+             </dl>   
+             </foreach>
+                                            
+            <dl>
+             	<dt>分类描述：</dt>
+             	<dd><input type="text" name="files_bewrite" value="{$res.files_bewrite}" size="20" class="required" /></dd>
+             </dl>    
+            <dl>
+                <dt>分类图片：</dt>
+                <dd>
+                    <input type="hidden" name="files_pic" id="files_pic_thumb" value="{$res.files_pic}"/>
+                    <input name="file2" type="file" id="files_picFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>180,'height'=>215))}','files_picFileToUpload','files_pic_img_show','files_pic_thumb','','acc-show','__ROOT__','files_pic_imgloads');"/> 
+                </dd>
+            </dl>            
+
+            <dl style="<if condition="!$res['files_pic']">display:none;</if> height:auto;" id="files_pic_imgloads">
+                <dt>分类图片：</dt>
+                <dd>
+                   <img src="__ROOT__/{$res.files_pic}" id="files_pic_img_show" width="150" height="100" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                </dd>
+            </dl>   
+			            
+            <dl>
+             	<dt>排序：</dt>
+             	<dd><input type="text" name="files_sort" size="20" value="<if condition="$res['files_sort']">{$res.files_sort}<else />0</if>" class="required digits"  /></dd>
+             </dl>    
+
+            <dl>
+                <dt>文章缩略图的宽：</dt>
+                <dd><input type="text" name="article_width" size="20" value="<if condition="$res['article_width']">{$res.article_width}<else />0</if>" class="digits"  /></dd>
+           </dl>    
+
+            <dl>
+                <dt>文章缩略图的高：</dt>
+                <dd><input type="text" name="article_height" size="20" value="<if condition="$res['article_height']">{$res.article_height}<else />0</if>" class="digits"  /></dd>
+           </dl>    
+
+            <dl>
+             	<dt>文档类型：</dt>
+             	<dd style="width:650px;">
+                    <label style="30px;">
+                      <input type="radio" name="article_type" value="0" <if condition="$res['article_type'] eq 0">checked="checked"</if> />系统单页(0)
+                    </label>
+                    <label style="30px;">  
+                     <input type="radio" name="article_type" value="1" <if condition="$res['article_type'] eq 1">checked="checked"</if> />标题列表(1)
+                    </label>
+                     <!--<input type="radio" name="article_type" value="2" <if condition="$res['article_type'] eq 2">checked="checked"</if> />带缩略图列表(2)
+                     <input type="radio" name="article_type" value="3" <if condition="$res['article_type'] eq 3">checked="checked"</if> />带缩略图视频列表(3)
+                     <input type="radio" name="article_type" value="4" <if condition="$res['[article_type'] eq 4">checked="checked"</if> />文件下载标题列表(4)-->
+                </dd>
+            </dl>   
+ 
+             <dl style="height:90px;">
+             	<dt>更多功能：</dt>
+             	<dd style="width:660px;">
+                 <label style="90px;">
+                    <input type="checkbox" name="article_fns[]" value="1" <if condition="in_array(1,$articleFns)">checked="checked"</if> />文章关联(1)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="2" <if condition="in_array(2,$articleFns)">checked="checked"</if> />参数规格(2)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="3" <if condition="in_array(3,$articleFns)">checked="checked"</if> />显示编辑器(3)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="4" <if condition="in_array(4,$articleFns)">checked="checked"</if> />使用相册(4)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="5" <if condition="in_array(5,$articleFns)">checked="checked"</if> />显示价格(5)   
+                 </label>
+                 <label style="90px;">                  
+                 <input type="checkbox" name="article_fns[]" value="6" <if condition="in_array(6,$articleFns)">checked="checked"</if> />支持添加(6)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="7" <if condition="in_array(7,$articleFns)">checked="checked"</if> />支持修改(7)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="8" <if condition="in_array(8,$articleFns)">checked="checked"</if> />支持删除(8)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="9" <if condition="in_array(9,$articleFns)">checked="checked"</if> />支持排序(9)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="10" <if condition="in_array(10,$articleFns)">checked="checked"</if> />支持推荐(10)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="11" <if condition="in_array(11,$articleFns)">checked="checked"</if> />支持顶置(11)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="12" <if condition="in_array(12,$articleFns)">checked="checked"</if> />显示作者(12)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="13" <if condition="in_array(13,$articleFns)">checked="checked"</if> />列表分类检索(13)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="14" <if condition="in_array(14,$articleFns)">checked="checked"</if> />支持外链(14)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="15" <if condition="in_array(15,$articleFns)">checked="checked"</if> />新窗口打开(15)  
+                 </label>
+                 <label style="90px;">  
+                 <input type="checkbox" name="article_fns[]" value="16" <if condition="in_array(16,$articleFns)">checked="checked"</if> />视频地址链接(16)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="17" <if condition="in_array(17,$articleFns)">checked="checked"</if> />上传视频文件(17)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="18" <if condition="in_array(18,$articleFns)">checked="checked"</if> />上传普通文件(18)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="19" <if condition="in_array(19,$articleFns)">checked="checked"</if> />浏览文章收费(19)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="20" <if condition="in_array(20,$articleFns)">checked="checked"</if> />支持缩略图(20)
+                 </label>
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="21" <if condition="in_array(21,$articleFns)">checked="checked"</if> />显示标签(21)
+                 </label>           
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="22" <if condition="in_array(22,$articleFns)">checked="checked"</if> />列表评论按钮(22)
+                 </label>      
+                 <label style="90px;">
+                 <input type="checkbox" name="article_fns[]" value="23" <if condition="in_array(23,$articleFns)">checked="checked"</if> />列表评论按钮2(23)
+                 </label>                                         
+                </dd>
+            </dl>   
+            <div style="height:30px;clear:both;"></div>                                    
+            <dl >
+                <dt>自定义导航：</dt>
+                <dd style="width:650px;">
+                <if condition="$files_type neq ''"> 
+                <input type="radio" name="files_type" value="3" <if condition="$files_type eq 3">checked="checked"<else />disabled="true"</if> />关于我们(3)
+                <input type="radio" name="files_type" value="4" <if condition="$files_type eq 4">checked="checked"<else />disabled="true"</if> />产品中心 (4)   
+                 <input type="radio" name="files_type" value="5" <if condition="$files_type eq 5">checked="checked"<else />disabled="true"</if> />新闻资讯(5)
+                 <input type="radio" name="files_type" value="6" <if condition="$files_type eq 6">checked="checked"<else />disabled="true"</if> />我的品牌(6)
+                 <input type="radio" name="files_type" value="7" <if condition="$files_type eq 7">checked="checked"<else />disabled="true"</if> />招商加盟(7)
+                 <input type="radio" name="files_type" value="8" <if condition="$files_type eq 8">checked="checked"<else />disabled="true"</if> />我的客服(8)
+                <else />
+                        <input type="radio" name="files_type" value="3" />关于我们(3)
+                        <input type="radio" name="files_type" value="4" />产品中心(4)      
+						<input type="radio" name="files_type" value="5" />新闻资讯(5)            
+						<input type="radio" name="files_type" value="6" />我的品牌(6)   
+                        <input type="radio" name="files_type" value="7" />招商加盟(7) 
+                        <input type="radio" name="files_type" value="8" />我的客服(8) 
+                    </if>
+
+               </dd>
+             </dl>    
+             {/*说明书*/}
+             <div style="width:98%;border:1px #f60 solid; clear:both;min-height:100px;margin-top:20px;text-indent:10px;">
+                 <h1 style="height:25px;line-height:25px;">操作提示：</h1>
+                 <div style="height:25px;line-height:25px;">文档类型：选择什么文档类型。</div>
+                 <div style="height:25px;line-height:25px;">更多功能：选择什么功能就会生成附加功能的表单选项和列表显示方式。</div>
+                 <div style="height:25px;line-height:25px;">自定义导航：根据不同的网站需要手动添加/修改不同的导航，只有文章类型才支持《文章关联》换言之此处的值为(5)时支持。</div>
+                 <div style="height:25px;line-height:25px;">以上功能选项均可自由添加，前提是在原来的已有值递增。</div>
+             </div>
+            {/*说明书结束*/}
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

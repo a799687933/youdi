@@ -1,0 +1,47 @@
+<div class="member_l">
+  <div class="member_l_title">{:isL(L('UserCenter'),'用户中心')}</div>
+   <div class="member_l_list">           
+    <dl>
+            <dt class="f_14 clr_3 f_wei">{:isL(L('DataManagement'),'资料管理')}</dt>
+            <dd><a href="{:U('/Member/personal')}" class="f_12 clr_6"  <if condition="$actionName eq 'personal'">class="now"</if>>· {:isL(L('PersonalInformation'),'个人信息')}</a></dd>
+            <dd><a href="{:U('/Member/identity')}" class="f_12 clr_6" <if condition="$actionName eq 'identity'">class="now"</if>>· {:isL(L('IDmanagement'),'身份证管理')}</a></dd>
+            <dd><a href="{:U('/Member/changePWD')}" class="f_12 clr_6" <if condition="$actionName eq 'changePWD'">class="now"</if>>· {:isL(L('AccountSecurity'),'账户安全')}</a></dd>
+            <dd><a href="{:U('/Member/question')}" class="f_12 clr_6" <if condition="$actionName eq 'question'">class="now"</if>>· {:isL(L('PasswordProblem'),'密码问题')}</a></dd>
+            <dd><a href="{:U('/Member/addressList')}" class="f_12 clr_6" <if condition="$actionName eq 'addressList'">class="now"</if>>· {:isL(L('AddressList'),'收货地址')}</a></dd>
+            <dd><a href="{:U('/Member/puToug')}" class="f_12 clr_6" <if condition="$actionName eq 'puToug'">class="now"</if>>· {:isL(L('InvoiceData'),'发票资料')}</a></dd>
+        </dl>
+        <dl>
+            <dt class="f_14 clr_3 f_wei">{:isL(L('MyTrade'),'我的交易')}</dt>
+            <dd><a href="{:U('/Member/orderList')}" class="f_12 clr_6" <if condition="$actionName eq 'orderList'">class="now"</if>>· {:isL(L('MyOrder'),'我的订单')}</a></dd>
+            <dd><a href="{:U('/Member/orderList',array('order_type'=>1))}" class="f_12 clr_6" <if condition="$_GET['order_type'] eq 1">class="now"</if>>· {:isL(L('RefundAndEturn'),'退款/退货')}</a></dd>
+            <dd><a href="{:U('/Member/redList')}" class="f_12 clr_6" <if condition="$actionName eq 'redList'">class="now"</if>>· {:isL(L('DiscountCoupons'),'我的优惠劵')}</a></dd>
+            <dd><a href="{:U('/Member/collectionList')}" class="f_12 clr_6" <if condition="$actionName eq 'collectionList'">class="now"</if>>· {:isL(L('MyFavorites'),'我的收藏')}</a></dd>
+            <dd><a href="{:U('/Member/assessList')}" class="f_12 clr_6" <if condition="$actionName eq 'assessList'">class="now"</if>>· {:isL(L('MyEvaluation'),'我的收藏')}</a></dd>
+            <dd><a href="{:U('/Member/history')}" class="f_12 clr_6" <if condition="$actionName eq 'history'">class="now"</if>>· 浏览历史</a></dd>
+            <dd><a href="{:U('/Member/wordsList')}" class="f_12 clr_6" <if condition="$actionName eq 'wordsList'">class="now"</if>>· {:isL(L('MyMessage'),'我的留言')}</a></dd>
+             <if condition="C('IS_LETTER')">
+               <dd><a href="{:U('Member/infoList')}" class="f_12 clr_6" <if condition="$actionName eq 'infoList'">class="now"</if>>· {:isL(L('StationSMS'),'站内信息')}</a></dd>
+            </if>
+        </dl>
+      
+      <if condition="C('IS_ACCOUNT') OR C('IS_RANK_POINTS') OR C('IS_PAY_POINTS')">
+            <dl>
+                <dt class="f_14 clr_3 f_wei">{:isL(L('MyAccount'),'我的帐户')}</dt>
+                <if condition="C('IS_ACCOUNT')">
+                    <dd><a href="{:U('/Member/capital')}" class="f_12 clr_6 <php>if($actionName=='capital'){</php>now<php>}</php>" >· {:isL(L('AccountBalance'),'账户余额')}</a></dd>
+                    <!--<dd><a href="{:U('/Member/frozen')}" class="f_12 clr_6 <php>if($actionName=='frozen'){</php>now<php>}</php>" >· {:isL(L('MyFrozenFunds'),'我的冻结资金')}</a></dd>-->
+                </if>
+                <if condition="C('IS_RANK_POINTS')">
+                     <dd><a href="{:U('/Member/rankPoints')}" class="f_12 clr_6 <php>if($actionName=='rankPoints'){</php>now<php>}</php>" >· {:isL(L('MyGrades'),'我的等级积分')}</a></dd>
+                </if>
+                <if condition="C('IS_PAY_POINTS')">
+                   <dd><a href="{:U('/Member/payPoints')}" class="f_12 clr_6 <php>if($actionName=='payPoints'){</php>now<php>}</php>" >· {:isL(L('MyConsumptionPoints'),'我的消费积分')}</a></dd>
+                </if>
+                <dd>
+                <a href="{:U('/Member/extractionList')}" 
+                class="f_12 clr_6 <php>if($actionName=='extractionList'){</php>now<php>}</php>" >· 提现</a>
+                </dd>                
+           </dl>  
+       </if>               
+  </div>
+</div>

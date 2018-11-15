@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:getUserC('SUPPLIER_NAME')}-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="keywords" content="{:C($langfx.'WEBKEYWORD')}" />
+<meta name="description" content="{:C($langfx.'WEBDEPICT')}" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+$(function(){  
+    valinit('.form1','post','',true,'bottomLeft');
+});
+</script>
+
+</head>
+<body>
+<include file="Supplier:top" />{/*头部*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="qyrz  pt45" style="min-height: 600px;">
+     <include file="Supplier:nav" />{/*导航*/}
+      <form action="{:U('/Supplier/withdrawApplyForm')}" class="form1">
+           <div class="qyrzbox fl">
+           
+                <label>你的帐户：</label>
+                <strong style="color:red;position:relative;top:6px;font-size:20px;">￥{$supplier}</strong>
+                <div class="cb pb15"></div>
+                               
+                <label><span class="colf00">*</span>选择银行：</label>
+                  
+                     <select name="shops_bank_id" style="position:relative;top:3px;height:30px;">
+                           <foreach name="bank" item="b">
+                               <option value="{$b['id']}">{$b['bank_name']}[{$b['bank_sn']}][<if condition="$b['bank_type']">对公帐户<else />个人帐户</if>]</option>
+                           </foreach>
+                     </select>
+                  </foreach>
+                <div class="cb pb15"></div>
+                
+                <label><span class="colf00">*</span>提现金额：</label>
+                <input type="text" name="number" id="number" class="qyrz_input validate[required,custom[number]]"/>
+                <div class="cb pb15"></div>
+                <label>&nbsp;</label>
+                <if condition="$supplier gt 0">
+                    <input type="submit" id="submits" value="提 交" class="qyrz_btn" style="margin:0;outline: none; cursor:pointer" />
+                <else />
+                    <input type="button" value="提 交" class="qyrz_btn" style="margin:0;background:#eee;border-color:#ccc;color:#ccc;outline: none;" />
+                </if>             
+                
+           </div><!--qyrzbox end-->
+           <div class="cb pv40"></div>
+                
+          
+           <div class="cb pv30"></div>
+   </form>
+  </div><!--qyrz end-->
+ </div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer2" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+<!---->
+
+</body>
+</html>

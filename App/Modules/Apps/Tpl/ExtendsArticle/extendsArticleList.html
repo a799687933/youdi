@@ -1,0 +1,168 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+    <input type="hidden" name="files_id" value="{$fn['files_id']}" />
+</form>
+
+<div class="pageHeader">   
+        
+          <form onsubmit="return navTabSearch(this);" action="" method="post">  
+            <div class="searchBar">
+                <table class="searchContent">
+                    <tr>
+                        <td>
+                          输入关键字：<input type="text" name="{:pfix('titletext')}" value="{$searchVal}"/>
+                        </td>
+                        <php>if(in_array(13,$fn['article_fns'])){</php>
+                            <td>
+                                <select name="cate_id" >
+                                   <option value="">--全部分类--</option>
+                                   <foreach name="fileChild" item="fc">
+                                        <option value="{$fc['files_id']}" <if condition="$_REQUEST['cate_id'] eq $fc['files_id']">selected="selected"</if>>
+                                             {$fc['files_name']}
+                                        </option>
+                                   </foreach>
+                                </select>
+                            </td>
+                        <php>}</php>
+                        <td>
+                            <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                        </td>     
+                    </tr>
+                </table>
+            </div>
+         </form>    
+     
+</div>
+
+<div class="pageContent">
+        <div class="panelBar">
+            <ul class="toolBar">
+                <if condition="access('ExtendsArticle/extendsAddSave')">
+                    <php>if(is_channel($fn['files_id'],1) && in_array(6,$fn['article_fns'])){</php>
+                      <li>
+                              <a class="add auto-size" 
+                              href="{:U(APP_APPS.'/ExtendsArticle/extendsAddSave','','')}/files_id/{$fn['files_id']}" 
+                              target="dialog" mask="true"  title="添加"><span>添加</span></a>
+                       </li>
+                  <php>}</php>
+                </if>
+    
+                <if condition="access('ExtendsArticle/extendsArticleDelete')">
+                  <php>if(is_channel($fn['files_id'],3) && in_array(8,$fn['article_fns'])){</php>
+                      <li>
+                           <a title="操作不可恢复确定执行本次操作？" 
+                           target="selectedTodo" rel="ids" postType="string" 
+                           href="{:U(APP_APPS.'/ExtendsArticle/extendsArticleDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/files_id/{$fn['files_id']}"
+                           class="delete"><span>删除</span></a>
+                      </li>
+                 <php>}</php>
+                </if>
+                <li class="line">line</li>
+            </ul>
+        </div>
+        <table class="list" width="100%" layoutH="90"> 
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th  orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="{:pfix('titletext')}"  class="<if condition='pfix("titletext") eq "desc"'>desc<else />asc</if>">文档标题</th>
+                <th >文档类别</th>    
+                <php>if(in_array(21,$fn['article_fns'])){</php>
+                    <th orderfield="author"  class="<if condition='$author eq "desc"'>desc<else />asc</if>">标签</th>
+                <php>}</php>                   
+                <php>if(in_array(12,$fn['article_fns'])){</php>
+                    <th orderfield="author"  class="<if condition='$author eq "desc"'>desc<else />asc</if>">文档作者</th>
+                <php>}</php>
+                <php>if(in_array(10,$fn['article_fns'])){</php>
+                   <th orderfield="is_recommend"  class="<if condition='$is_recommend eq "desc"'>desc<else />asc</if>">是否推荐</th>
+                <php>}</php>
+                <php>if(in_array(11,$fn['article_fns'])){</php>
+                    <th orderfield="general"  class="<if condition='$general eq "desc"'>desc<else />asc</if>">顶置</th>
+                <php>}</php>      
+                <php>if(in_array(19,$fn['article_fns'])){</php>
+                    <th orderfield="is_charge"  class="<if condition='$is_charge eq "desc"'>desc<else />asc</if>">收费浏览</th>
+                <php>}</php>                             
+                <th orderfield="is_show"  class="<if condition='$is_show eq "desc"'>desc<else />asc</if>">是否显示</th>
+                <php>if(in_array(9,$fn['article_fns'])){</php>
+                    <th orderfield="orders"  class="<if condition='$orders eq "desc"'>desc<else />asc</if>">排序</th>
+                 <php>}</php>
+                <th orderfield="addtime"  class="<if condition='$addtime eq "desc"'>desc<else />asc</if>">创建时间</th>
+                <th>操作</th>
+            </tr>           
+        </thead>
+        <tbody>
+           <php>$YOU_LABEL=C('YOU_LABEL');</php>
+           <volist name="Article" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"  <php>if(!is_channel($V['files_id'],3)){</php>disabled="disabled"<php>}</php>></td>
+                <td>{$V.id}</td>
+                <td>{$V[pfix('titletext')]|strip_tags=###|sub_str=###,25}</td>
+                <td>{$V[pfix('files_name')]}</td>
+                <php>if(in_array(21,$fn['article_fns'])){</php>
+                   <td>{$YOU_LABEL[$V['attr']]['cn_name']}</td>
+                <php>}</php>
+                {/*显示作者*/}
+                <php>if(in_array(12,$fn['article_fns'])){</php>
+                    <td>{$V[pfix('author')]}</td>
+                <php>}</php>
+                
+               {/*显示推荐*/} 
+                <php>if(in_array(10,$fn['article_fns'])){</php>
+                    <td>{$V.is_recommend|tpl_yes_no=###,'article','is_recommend',$V['id'],'id','ExtendsArticle/extendsaddSaveForm'}</td>
+                 <php>}</php>
+                 
+               {/*顶置*/} 
+                <php>if(in_array(11,$fn['article_fns'])){</php>
+                    <td>{$V.general|tpl_yes_no=###,'article','general',$V['id'],'id','ExtendsArticle/extendsaddSaveForm'}</td>
+                 <php>}</php>    
+
+               {/*收费浏览*/} 
+                <php>if(in_array(19,$fn['article_fns'])){</php>
+                    <td>{$V.is_charge|tpl_yes_no=###,'article','is_charge',$V['id'],'id','ExtendsArticle/extendsaddSaveForm'}</td>
+                 <php>}</php>  
+                                               
+                <td>{$V.is_show|tpl_yes_no=###,'article','is_show',$V['id'],'id','ExtendsArticle/extendsaddSaveForm'}</td>
+                
+                <php>if(in_array(9,$fn['article_fns'])){</php>
+                    <td>{$V.orders|tpl_modify_oen=###,'article','orders',$V['id'],'id','ExtendsArticle/extendsaddSaveForm'}</td>
+                <php>}</php> 
+                
+                <td>{$V.addtime|date='Y-m-d H:i',###} </td>
+                
+                <td>  
+                  <if condition="in_array(22,$fn['article_fns'])"> 
+                      {$action|tpl_action='NAVTAB','NewComment/articleComList','article_id/'.$V["id"],$V[pfix('titletext')].'[评论]','icon_edit.gif','icon_edit_not.gif','','','评论('.$V['comment'].')'}   
+                  </if>
+                  <if condition="in_array(23,$fn['article_fns'])"> {/*资讯2*/}
+                      {$action|tpl_action='NAVTAB','NewComment/replyList2','article_id/'.$V["id"],$V[pfix('titletext')].'[评论]','icon_edit.gif','icon_edit_not.gif','','','评论('.$V['comment'].')'}   
+                  </if>                  
+                  <if condition="is_channel($fn['files_id'],1) AND in_array(7,$fn['article_fns'])">             
+                    {$action|tpl_action='dialog','ExtendsArticle/extendsAddSave','files_id/'.$fn['files_id'].'/id/'.$V["id"],'修改（'.strip_tags($V[pfix('titletext')]).'）','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+                  </if>  
+                  <if condition="is_channel($fn['files_id'],3) AND in_array(8,$fn['article_fns'])">
+                    {$action|tpl_action='ajaxTodo','ExtendsArticle/extendsarticleDelete','files_id/'.$fn['files_id'].'/ids/'.$V["id"],'确定执行删除('.strip_tags($V[pfix('titletext')]).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                    </if>                    
+                </td>
+                
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+    
+    <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+    </div>
+</div>
+

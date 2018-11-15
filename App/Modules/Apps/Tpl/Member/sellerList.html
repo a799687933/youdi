@@ -1,0 +1,172 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="user_type" value="{$user_type}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->      
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    	<input type="hidden" name="user_type" value="{$user_type}" />
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  输入关键字：<input type="text" name="user_name" value="{$searchVal}"/>
+                </td>
+               <td>城市：</td>
+               <td>
+                <select class="combox" name="city_id" >
+                    <option value="">-全部城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.city_id}" <if condition='$_REQUEST["city_id"] eq $C["city_id"]'>selected="selected"</if>>{$C.html}{$C.city_name}</option>
+                   </foreach>  
+                </select>
+                </td>
+                <td>
+               <td>分类：</td> 	
+               <td>
+                <select class="combox" name="files_id" >
+                    <option value="">-全部分类-</option>
+                   <foreach name="cage" item='C'>                       
+                       <option value="{$C.files_id}" <if condition='$_REQUEST["files_id"] eq $C["files_id"]'>selected="selected"</if>>{$C.html}{$C.files_name}</option>
+                   </foreach>  
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Member/memberSave')">
+              <li><a class="add" href="{:U(APP_APPS.'/Member/memberSave',array('user_type'=>1,'action'=>'sellerList'))}"target="dialog" mask="true" width="1024" height="590" title="添加服务商"><span>添加会员</span></a></li>
+            </if>
+            <if condition="access('Member/memberDelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Member/memberDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/sellerList" class="delete"><span>删除</span></a></li>
+            </if>
+            <if condition="access('Member/exportExcel')">
+            <li class=""><a class="icon" href="{:U(APP_APPS.'/Member/exportExcel',array(C('VAR_PAGE')=>$currentPage,'user_type'=>1,'bsShow'=>$bsShow),'xls')}" target="" targettype="" title="实要导出这些记录吗?"><span>导出EXCEL ({$expIfInfo})</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+               <!-- <th>所属城市</th>-->       
+               <!-- <th >名称</th>            
+                <th >可用资金</th>
+                <th >冻结资金</th>
+                <th >等级积分</th>
+                <th>消费积分</th>-->
+                <th>用户名</th>
+                <th>电子邮件</th>         
+                <th orderfield="user_type"  class="<if condition='$user_type eq "desc"'>desc<else />asc</if>">用户类型</th>
+                <th>是否审核</th>
+             	<th>优质服务商</th>
+                <th>服务商排序</th>
+                <th><img src="__SYS_IMG__/icon44a.jpg"/></th>
+                <th><img src="__SYS_IMG__/icon44b.jpg" /></th>
+                <th><img src="__SYS_IMG__/icon44c.jpg"/></th>
+                <th orderfield="login_count"  class="<if condition='$login_count eq "desc"'>desc<else />asc</if>">登录次数</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="Member" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <!--<td>{$V.city_name}</td>-->
+                <td>{$V.user_name}</td>
+                <td>{$V.reg_email}</td>
+                <if condition="$user_type eq '0'">
+                <td>{$V.mobile_phone}</td>
+               <!-- <td><if condition="$V['member_account'][0]['member_money']">{$V['member_account'][0]['member_money']}<else />0.00</if></td>
+                <td><if condition="$V['member_account'][0]['frozen_money']">{$V['member_account'][0]['frozen_money']}<else />0.00</if></td> 
+                <td>
+                     <if condition="$V['member_account'][0]['rank_points']">
+                         <foreach name="level" item='L'>                         
+                               <if condition="$V['member_account'][0]['rank_points'] gt $L['min_points'] AND $V['member_account'][0]['rank_points'] elt $L['max_points']">
+                                      <if condition="$L['special_rank']">
+                                            {$L.grade_name}--({:L('Particular')}) ({$V['member_account'][0]['rank_points']})
+                                      <else />    
+                                            {$L.grade_name}({$V['member_account'][0]['rank_points']})
+                                      </if>  
+                                </if>  
+                           </foreach>       
+                     <else />    
+                          没有等级(0)
+                     </if>                   
+                                      
+                    <if condition="$V['member_account'][0]['rank_points'] egt $max['max_points']">
+                           <if condition="$max['special_rank']">
+                                    <if condition="$V['member_account'][0]['rank_points']">{$max.grade_name}--({:L('Particular')}) ({$V['member_account'][0]['rank_points']})</if>
+                           <else />
+                                   <if condition="$V['member_account'][0]['rank_points']">{$max.grade_name}({$V['member_account'][0]['rank_points']})</if>
+                           </if>
+                    </if>
+                    
+               </td>
+                <td><if condition="$V['member_account'][0]['pay_points']">{$V['member_account'][0]['pay_points']}<else />0</if></td>-->
+                <td>{$V.reg_time|date='Y-m-d',###}</td>
+                <td>{$V.last_time|date='Y-m-d',###}</td>
+                <td>{$V.last_ip}</td>     
+                </if>          
+                <td>
+                	<if condition="$V['user_type'] eq 0">
+                		普通用户
+                    <elseif condition="$V['user_type'] eq 1" /> 	
+                        <span style="color:#00F">企业商家</span>	
+                   <elseif condition="$V['user_type'] eq 2" /> 
+                        <span style="color:#000">个人商家</span>	            
+                	</if>
+                </td>
+                <td>{$V.bs_is_show|tpl_yes_no=###,'member','bs_is_show',$V['id'],'id','Member/good'}</td>
+                <if condition="$user_type neq '0'">
+                	<td>{$V.good|tpl_yes_no=###,'member','good',$V['id'],'id','Member/good'}</td>
+                    <td>{$V.good_order|tpl_modify_oen=###,'member','good_order',$V['id'],'id','Member/good'}</td> 
+                    <td>{$V.real|tpl_yes_no=###,'member','real',$V['id'],'id','Member/good'}</td>
+                    <td>{$V.assure|tpl_yes_no=###,'member','assure',$V['id'],'id','Member/good'}</td>
+                    <td>{$V.collateral|tpl_yes_no=###,'member','collateral',$V['id'],'id','Member/good'}</td>
+                </if>
+                <td>{$V.login_count}</td>
+                <td>                
+                 {$action|tpl_action='dialog','Member/memberSave','id/'.$V["id"].'/action/sellerList','修改（'.strip_tags($V['user_name']).'）','icon_edit.gif','icon_edit_not.gif'} <!--添加按钮-->
+				 {$action|tpl_action='dialog','Member/bid','id/'.$V["id"].'/name/'.$V['user_name'],'（'.strip_tags($V['user_name']).'）投标情况','icon_account.gif','icon_account_not.gif'} <!--商家投标情况-->
+                 {$action|tpl_action='ajaxTodo','Member/sellerList',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"].'/action/sellerList','确定执行删除('.strip_tags($V['user_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,62 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input name="category_id" type="hidden" value="{$_REQUEST['goods_attr_type_id']}" />
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('GoodsAttribute/attrValueSave')">
+              <li><a class="add" href="{:U(APP_APPS.'/GoodsAttribute/attrValueSave',array('attribute_id'=>$_GET['attribute_id']),'')}" target="dialog" mask="true" width="1024" height="590" title="添加属性值"><span>添加属性值</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="30">
+        <thead>
+            <tr>
+                <!--<th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>-->
+                <th>编号</th>
+                <th>属性值</th>        
+                <th>所属属性名称</th>
+                <th >是否显示</th>
+                <th >排序</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="values" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <!--<td><input name="ids" value="{$V.id}" type="checkbox"></td>-->
+                <td>{$V.id}</td>
+                <td>{$V[pfix('attr_value')]|tpl_modify_oen=###,'goods_attribute_value',pfix('attr_value'),$V['id'],'id','GoodsAttribute/attrValueSaveForm'}</td>
+                <td>{$attrName}</td>
+                <td>
+                   {$V.is_show|tpl_yes_no=###,'goods_attribute_value','is_show',$V['id'],'id','GoodsAttribute/attrValueSaveForm'}
+                </td>
+                <td>{$V.orders|tpl_modify_oen=###,'goods_attribute_value','orders',$V['id'],'id','GoodsAttribute/attrValueSaveForm'}</td> 
+                <td>            
+                {/*修改按钮*/}	   
+                {$action|tpl_action='dialog','GoodsAttribute/attrValueSave','attribute_id/'.$_REQUEST['attribute_id'].'/id/'.$V["id"],'修改'.strip_tags($V[pfix('attr_value')]),'icon_edit.gif','icon_edit_not.gif',1024,590} 
+                {$action|tpl_action='ajaxTodo','GoodsAttribute/attrValueDelete','attribute_id/'.$_REQUEST['attribute_id'].'/ids/'.$V["id"],'确定执行删除('.strip_tags($V[pfix('attr_value')]).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <!--<div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+    </div>-->
+</div>
+

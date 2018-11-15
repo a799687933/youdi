@@ -1,0 +1,60 @@
+<style type="text/css">
+dl{width:100% !important;}
+
+dl dt{text-align:right;}	
+</style>
+
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/Shops/shopCateAddForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" name="files_pid" value="{$files_pid}"/>
+        <input type="hidden" name="files_path" value="{$files_path}"/>
+        <input type="hidden" name="shops_id" value="{$shopsId}"/>
+        <input type="hidden" name="files_type" value="{$files_type}"/>
+		<if condition="$_GET['cate_id']"><input type="hidden" name="files_id" value="{$_GET['cate_id']}"/></if>
+        <div class="pageFormContent" layoutH="58">
+          
+             <dl>
+             	<dt>分类名称：</dt>
+             	<dd><input type="text" name="files_name" value="{$res.files_name}" size="20" class="required" /></dd>
+             </dl>   
+             
+             <dl>
+                <dt>分类英文名称：</dt>
+                <dd><input type="text" name="files_name_en" value="{$res.files_name_en}" size="20" class="" /></dd>
+             </dl>     
+                                            
+            <dl>
+             	<dt>分类描述：</dt>
+             	<dd><input type="text" name="files_bewrite" value="{$res.files_bewrite}" size="20" class="required" /></dd>
+             </dl>    
+            <dl>
+                <dt>分类图片：</dt>
+                <dd>
+                    <input type="hidden" name="files_pic" id="files_pic_thumb" value="{$res.files_pic}"/>
+                    <input name="file2" type="file" id="files_picFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>220,'height'=>275))}','files_picFileToUpload','files_pic_img_show','files_pic_thumb','','acc-show','__ROOT__','files_pic_imgloads');"/> 
+                </dd>
+            </dl>            
+
+            <dl style="<if condition="!$res['files_pic']">display:none;</if> height:auto;" id="files_pic_imgloads">
+                <dt>分类图片：</dt>
+                <dd>
+                   <img src="__ROOT__/{$res.files_pic}" id="files_pic_img_show" width="150" height="100" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                </dd>
+            </dl>   
+			            
+            <dl>
+             	<dt>排序：</dt>
+             	<dd><input type="text" name="files_sort" size="20" value="<if condition="$res['files_sort']">{$res.files_sort}<else />0</if>" class="required digits"  /></dd>
+             </dl>    
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

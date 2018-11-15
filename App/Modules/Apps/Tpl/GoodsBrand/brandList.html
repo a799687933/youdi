@@ -1,0 +1,96 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+     <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->      
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                     输入关键字：<input type="text" name="name_cn" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('GoodsBrand/brandAddSave')">
+              <li><a class="add auto-size" href="{:U(APP_APPS.'/GoodsBrand/brandAddSave')}" target="dialog" mask="true"  title="添加品牌"><span>添加品牌</span></a></li>
+            </if>
+
+            <if condition="access('GoodsBrand/brandDel')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/GoodsBrand/brandDel','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除品牌</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>               
+                <th orderfield="{:pfix('name')}"  class="<if condition="pfix('name') eq 'desc'">desc<else />asc</if>">品牌名称</th>
+                <th>所属分类集合</th>
+                <th orderfield="abc"  class="<if condition='$abc eq "desc"'>desc<else />asc</if>">品牌字母排序</th>
+                <!--<th orderfield="url"  class="<if condition='$url eq "desc"'>desc<else />asc</if>">品牌网站</th>-->
+                <th orderfield="display"  class="<if condition='$display eq "desc"'>desc<else />asc</if>">是否显示</th>
+                <th orderfield="orders"  class="<if condition='$orders eq "desc"'>desc<else />asc</if>">排序</th>
+                <th orderfield="create_time"  class="<if condition='$create_time eq "desc"'>desc<else />asc</if>">添加时间</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="brand" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r[pfix('name')]|tpl_modify_oen=###,'goods_brand','name_cn',$r['id'],'id','GoodsBrand/brandForm'}</td>
+                <td><foreach name="r['goods_category_name']" item="gcn">[{$gcn['name']}]&nbsp;</foreach></td>
+                <td>{$r.abc|tpl_modify_oen=###,'goods_brand','abc',$r['id'],'id','GoodsBrand/brandForm'}</td>
+                <!--<td>
+                    <if condition="$r['url']">
+                        <a href="{$r.url}" target="_blank">{$r.url}</a>
+                        <else />
+                        暂无网址
+                    </if>
+                </td>-->
+                <td>{$r.display|tpl_yes_no=###,'goods_brand','display',$r['id'],'id','GoodsBrand/brandForm'}</td>
+                <td>{$r.orders|tpl_modify_oen=###,'goods_brand','orders',$r['id'],'id','GoodsBrand/brandForm'}</td> 
+               <td>{$r.create_time|date='Y-m-d',###}</td>
+               <td>
+                    {$action|tpl_action='dialog','GoodsBrand/brandAddSave','id/'.$r["id"],'修改'.strip_tags($r[pfix('name')]),'icon_edit.gif','icon_edit_not.gif','',''} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','GoodsBrand/brandDel',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$r["id"],'确定执行删除('.strip_tags($r[pfix('name')]).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

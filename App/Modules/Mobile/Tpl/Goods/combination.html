@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>产品详情-套餐</title>
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/cart.js"></script>
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script>
+ $(document).ready(function(){
+    //选择组合购买
+    $('input[name="zhuhe_id"]').click(function(){setZh()});
+});
+
+/*选择组合购买*/
+function setZh(){
+   var zhuhe=$('input[name="zhuhe_id"]');
+   var market_price=parseFloat($('#statrs').attr('market_price'));
+   var retail_price=parseFloat($('#statrs').attr('retail_price'));
+   for(var i=0;i < zhuhe.length;i++){
+       if(zhuhe.eq(i).attr('checked')){
+           zhuhe.eq(i).parent().attr('class','now');
+           market_price+=parseFloat(zhuhe.eq(i).attr('market_price'));
+           retail_price+=parseFloat( zhuhe.eq(i).attr('retail_price'));
+       }else{
+           zhuhe.eq(i).parent().attr('class','');
+       }
+   }
+   var viscount=fmoney(market_price - retail_price);
+   $('#d-s').text(viscount);
+   $('#m-a').text(fmoney(market_price));
+   $('#r-e').text(fmoney(retail_price));
+}
+</script>
+<style type="text/css">
+.gwradio1:checked+label {
+  border: 1px solid #c3151e;
+  background-image: url(__MOBILE__/images/icon23.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #c3151e;
+  background-size: auto 5px;
+}    
+</style>
+</head>
+
+<body>
+<div class="wrap">
+<h1 class="toptxt2">
+    套餐选择<a href="javascript:;history.back();" class="icon12"></a>
+    
+{/*分享*/}
+<div class="bdsharebuttonbox bdshare-button-style0-16" style="float:right;width:65px;display: inline-block;" data-bd-bind="1452159019696">
+    <a href="javascript:void(0);"  class="fenx" data-cmd="more" style="background: none !important;font-size: 0.6rem;margin-top:15px !important;">分享</a>
+</div>
+<script>
+    window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+{/*分享结束*/}   
+ 
+</h1>
+<div class="cb pv25">&nbsp;</div>
+<div class="gwc mt10">
+<table cellpadding="0" cellspacing="0" width="100%">
+ <tr>
+  <td align="center" valign="middle" width="30%"><img src="__ROOT__/{$goods['goods_thumb']}" alt="" class="ml10"/></td>
+  <td align="left" valign="middle" width="70%">
+   <p class="pl15 lh20">{$goods['goods_name']|sub_str=###,20}</p>
+   <p class="pl15 col999 lh20 pv5">市场价：<del>{:$goods['goods_market_price']}</del></p>
+   <p class="hong3 f14 lh25 pl15">
+       ￥<b class="f16">
+             <php>
+                 if($promotion['promotion_price']){
+                    echo $promotion['promotion_price'];
+                    $marketPrice=$promotion['promotion_price'];
+                    $retailPrice=$promotion['promotion_price'];
+                 }else{
+                    echo $goods['goods_retail_price'];
+                    $marketPrice=$goods['goods_retail_price'];
+                    $retailPrice=$goods['goods_retail_price'];
+                 }
+             </php>    
+       </b>
+   </p>
+  </td>
+ </tr>
+ </table>
+ 
+<table cellpadding="0" cellspacing="0" width="100%" id="statrs" market_price="{$marketPrice}" retail_price="{$retailPrice}">
+    
+    <foreach name="zhuhe" item="zh" key="zhkey">
+         <tr class="bgf6">
+          <td align="center" valign="middle" width="10%">
+              <label style="position: relative;">
+               <input type="checkbox" 
+               name="zhuhe_id" 
+               value="{$zh.z_id}" 
+               market_price="{$zh['goods_retail_price']}" 
+               retail_price="{$zh['goods_retail_price']-$zh['zhuhe_price']}" 
+               class="gwradio1" 
+               style="width:1.2rem;height:1.2rem;border-radius: 50%;"
+               checked="checked"/>
+             </label>  
+          </td>
+          <td align="center" valign="middle" width="25%">
+               <img src="__ROOT__/{$zh['goods_thumb']}" alt=""/>
+          </td>
+          <td align="left" valign="middle" width="65%">
+               <p class="pl15 lh20">{$zh['goods_name']|sub_str=###,20}</p>
+               <p class="pl15 col999 lh20 pv5">市场价：<del>￥{$zh['goods_retail_price']}</del></p>
+               <p class="hong3 f14 lh25 pl15">￥<b class="f16">{:number_format($zh['goods_retail_price']-$zh['zhuhe_price'],2, '.', '')}</b></p>
+          </td>
+         </tr>
+         <tr><td colspan="3" width="100%"></td></tr>
+        {/*计算组合价*/}
+        <php>
+              $marketPrice+=$zh['goods_retail_price'];
+              $retailPrice+=$zh['goods_retail_price']-$zh['zhuhe_price'];
+        </php>     
+   </foreach>
+</table>
+</div>
+<div class="cb pv30"></div>
+<div class="footerxq">
+ <table cellpadding="0" cellspacing="0" width="100%"><tr>
+  <td align="right" valign="middle" width="75%">
+    <span class="lh20 col999 fl pl10 pt5">原价：<del>￥<b id="m-a">{:number_format($marketPrice,2,'.','')}</b></del></span>
+    <span class="hong3 lh20 pr10 pt5 fr">套餐价：￥<b class="f14" id="r-e">{:number_format($retailPrice,2,'.','')}</b></span>
+    <div class="cb"></div>
+    <p class="lh20 pr10 pb5 chen" >省￥<span id="d-s">{:number_format($marketPrice-$retailPrice,2,'.','')}</span></p>
+  </td>
+  <td align="center" valign="middle" width="25%" class="bgh3">
+      <input type="hidden" name="goods_num" value="1"  class="shubox_input fl mr5"/>
+      <input type="button" onClick="carts('goods_num','','','{:U(is_m().'/Cart/addCart','','')}?id={$goods.id}&check=ok','','logistics','zhuhe_id')" value="去结算" class="jsbtn"/>
+  </td>
+ </tr></table>
+</div>
+  </div>
+</body>
+</html>

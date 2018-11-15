@@ -1,0 +1,60 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('EmailSubscribe/smailContentEelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/EmailSubscribe/smailContentEelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="53">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th>编号</th>    
+                <th >邮件标题</th>           
+				<th >发送用户</th>  
+                <th>时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="reuslt" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+				<td>{$V.title}</td>
+				<td>{$V.user_name}</td>
+                <td>{$V.add_time|date='Y-m-d H:i:s',###}</td>
+                <td>                                         
+              {$action|tpl_action='dialog','EmailSubscribe/emailContentShow','id/'.$V["id"].'/action/oen','查看('.$V['title'].')邮件内容','icon_view.gif','icon_view_not.gif',1024,590} 
+              {$action|tpl_action='ajaxTodo','EmailSubscribe/smailContentEelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['title']).')邮件内容','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,30 @@
+<div style="display:none;" class="MY-CART">{$cartCount}{/*这个DIV是专门来放购物车个数的，指定节点class(MY-CART)*/}</div>
+
+<div class="logo"><a href="__ROOT__/"><img src="__HOME__/images/logo.jpg" /></a></div>
+  <div class="head_r">
+    <div class="head_top">{:isL(L('shoppingCa'),'我的购物车')}<font>
+        (<a href="{:U('/Cart')}" class="col666"> {$cartCount} </a>)</font>  | 
+        <a href="{:U('/Member/orderList')}">{:isL(L('MyOrder'),'我的订单')}</a> | 
+        <a href="{:U('/Member')}">{:isL(L('UserCenter'),'用户中心')}</a> |   
+        {:isL(L('servicePhone'),'客服热线')}：<font class="f16 fw">{:C('UNIFYTEL')}</font>
+    </div>
+    <div class="search">
+      <div class="search_input">
+       <form action="{:U('/Category/index')}" method="get">
+          <input type="text" class="search_i" name="keywrods" value="{:htmlspecialchars($_GET['keywrods'])}" placeholder="{:isL(L('InputKey'),'输入检索关键字')}"/>
+          <input type="submit" class="search_send" value="{:isL(L('Search'),'搜索')}" />
+        </form>
+      </div>
+      <div class="head_cn">
+        <ul>
+          <li><a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}"><span><img src="__HOME__/images/cn_inoc.jpg" /></span>简体中文</a></li>
+          <li><a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'vi-vi'))}"><span><img src="__HOME__/images/tv_inoc.jpg" /></span>Tiếng Việt</a></li>
+        </ul>
+      </div>
+      <div class="search_hot">{:isL(L('PopularSearch'),'热门搜索')}：
+         <foreach name="hotKeywordsc" item="hot" >
+             <a href="{:U('/Category/index',array('keywrods'=>$hot))}">{$hot}</a> 
+        </foreach>     
+      </div>
+    </div>
+</div>

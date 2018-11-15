@@ -1,0 +1,102 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  用户名：<input type="text" name="user_name" value="{$userName}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('EmailSubscribe/deleteEmail')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/EmailSubscribe/deleteEmail','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+
+            <if condition="access('Member/exportExcel')">
+            <li class="">
+                 <a class="icon" href="{:U(APP_APPS.'/EmailSubscribe/exportExcel',array(C('VAR_PAGE')=>$currentPage),'xls')}" target="dwzExport" targettype="navTab" title="实要导出这些记录吗?这可能需要几分钟，请耐心等待">
+                 <span>导出EXCEL</span>
+                 </a>           
+            </li>
+            </if>
+
+			<if condition="access('InstationInfo/sendInfo')">
+				  <li>
+					  <a class="add" href="{:U(APP_APPS.'/EmailSubscribe/sndEmail',array('action'=>'all'))}"target="dialog" mask="true" width="1024" height="590" title="批量发送邮件">
+						<span>批量发送邮件</span>
+					  </a>
+				  </li> 
+			</if> 
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th>编号</th>    
+                <th >用户</th> 
+                <th>年龄</th>   
+                <th>地区</th>   
+                <th>订阅分类</th>    
+				<th >电子邮件</th>  
+                <!--<th style="width:40%">其它需求</th>-->
+                <th>时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="reuslt" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+				<td>{$V.user_name}</td>
+                <td>{$V['age']}</td>
+                <td>{$V['citys']}</td>
+                <php>$demand=array(1=>'新品发布',2=>'最新资讯',3=>'全部');$dem=$V['demand'] ? explode(',',$V['demand']) : array();</php>
+                <td><foreach name="dem" item="d">[{$demand[$d]}]&nbsp;</foreach></td>
+				<td>{$V.email}</td>
+                <!--<td style="word-break:break-all;word-wrap:break-word;">{$V.contents}</td>-->
+                <td>{$V.add_time|date='Y-m-d H:i:s',###}</td>
+                <td>                                         
+              {$action|tpl_action='dialog','EmailSubscribe/sndEmail','id/'.$V["id"].'/action/oen','给('.$V['user_name'].')发送邮件','icon_account.gif','icon_account_not.gif',1024,590} 
+              {$action|tpl_action='ajaxTodo','EmailSubscribe/deleteEmail',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['user_name']).')邮件订阅','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,109 @@
+<form id="pagerForm" method="post" action="{:U(APP_APPS."/User/index","","")}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/User/index","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                                      输入关键字：<input type="text" name="username" value=""/>
+                </td>
+                <!--<td>
+                <select class="combox" name="province" ref="w_combox_city" refUrl="demo/combox/city_{value}.html">
+                    <option value="all">所有省市</option>
+                    <option value="bj">北京</option>
+                    <option value="sh">上海</option>
+                </select>
+                </td>-->
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('User/userAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/User/userAdd')}" target="dialog" mask="true" width="900" height="550" title="添加用户"><span>添加用户</span></a></li>
+            </if>
+ 
+            <if condition="access('User/userDelete')">
+              <li><a title="操作不可恢复确定操作本次操作！" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/User/userDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+            <!--<li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>-->
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>编号</th>
+                <th >用户名</th>
+                <th>添加时间</th>
+                <th >上次登录时间</th>
+                <th >最后登录IP</th>
+                <th >用户所属组别</th>
+                <th>是否锁定</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="user" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.username}</td>
+                <td>{$r.addtime|date='Y-m-d',###}</td>
+                <td>{$r.logintime|date='Y-m-d',###}</td>
+                <td>{$r.loginip}</td>
+                <td><foreach name='r.role' item='o'>{$o.remark}&nbsp;|&nbsp;</foreach></td> 
+                <td>
+                    <if condition="$_SESSION[C('SESSION_NAME_VAL')] eq C('RBAC_SUPERADMIN')">
+                    {$r.lock|tpl_yes_no=###,'user','lock',$r['id'],'id','User/userSaveForm'}
+                   <else />  
+                         <if condition="($_SESSION[C('SESSION_NAME_VAL')] eq $r['username']) OR ($r['username'] eq C('ADMIN_KEY'))">
+                             <img src="__SYS_IMG__/no.gif" title="你没有权限"/>
+                         <else />
+                             {$r.lock|tpl_yes_no=###,'user','lock',$r['id'],'id','User/userSaveForm'}
+                         </if>    
+                   </if>    
+               </td>
+                <td>
+                   <if condition="$_SESSION[C('SESSION_NAME_VAL')] eq C('RBAC_SUPERADMIN')">
+                   	 {$action|tpl_action='dialog','User/userSave','id/'.$r["id"].'/','修改（'.strip_tags($r['username']).'）','icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                   <else />	
+                         <if condition="($_SESSION[C('SESSION_NAME_VAL')] eq $r['username']) OR ($r['username'] eq C('ADMIN_KEY'))">
+                         	       <img src="__SYS_IMG__/icon_edit_not.gif" title="你没有权限"/>
+                         <else />
+                                  {$action|tpl_action='dialog','User/userSave','id/'.$r["id"].'/','修改（'.strip_tags($r['username']).'）','icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                         </if>
+                   </if>		
+               </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,89 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Ad/index","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                         输入关键字：<input type="text" name="ad_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                <select class="combox" name="city_id" class="required">
+                    <option value="">-请选择城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.region_id}" <if condition='$_REQUEST["city_id"] eq $C["region_id"]'>selected="selected"</if> >{$C.html}{$C.region_name}</option>
+                   </foreach>  
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Ad/adClassAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Ad/adClassAdd')}" target="dialog" mask="true" width="900" height="550" title="添加广告位"><span>添加广告位</span></a></li>
+            </if>
+ 
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <!--<th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>-->
+                <th>编号</th>
+                <th >广告位名称</th>
+                <!--<th>所属城市</th>-->
+                <th >区域宽度</th>
+                <th >区域高度</th>
+                <th >类型描述</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="ad_list" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+               <!-- <td><input name="ids" value="{$r.id}" type="checkbox"></td>-->
+                <td>{$r.ad_id}</td>
+                <td>{$r[pfix('ad_name')]|tpl_modify_oen=###,'ad','ad_name',$r['ad_id'],'ad_id','Ad/adClassSave'}</td>
+                <!--<td>{$r.city_name}</td>-->
+                <td>{$r.ad_width}</td>
+                <td>{$r.ad_height}</td>
+                <td>{$r.cn_ad_class_bewrite|tpl_modify_oen=###,'ad','ad_class_bewrite',$r['ad_id'],'ad_id','Ad/adClassSave'}</td> 
+                <td>{$r.ad_order|tpl_modify_oen=###,'ad','ad_order',$r['ad_id'],'ad_id','Ad/adClassSave'}</td>
+                <td>
+                   {$action|tpl_action='navTab','Ad/adList','ad_id/'.$r["ad_id"],strip_tags($r[pfix('ad_name')]).'广告列表','book_open.gif','book_open2.gif'} <!--列表打开-->
+                   <if condition="$_SESSION[C(SESSION_NAME_VAL)] eq C('RBAC_SUPERADMIN')">
+                   {$action|tpl_action='dialog','Ad/adClassAdd','id/'.$r["ad_id"],'修改('.strip_tags($r[pfix('ad_name')]).')','icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                   {$action|tpl_action='ajaxTodo','Ad/adClassDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$r["ad_id"],'确定执行删除('.strip_tags($r[pfix('ad_name')]).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                   </if>
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>       
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+    </div>
+</div>
+

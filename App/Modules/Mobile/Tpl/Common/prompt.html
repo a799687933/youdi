@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <present name="message">
+<title>操作成功--跳转提示</title>
+<else />
+<title>操作失败--跳转提示</title>
+</present>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/css.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+  $('.cat_tree').hide();
+});
+</script>
+</head>
+<body>
+<include file='Common:header'/>{/*头部 */}
+  <div class="wrap pt30" style="min-height:350px;text-align:center;">
+<div style="height:100px;"></div>
+  <present name="message"> 
+        <span class="lvse f24 pr30" style="color:#1abd9b;"><?php echo($message); ?></span><br/><br/>
+    <else/>
+        <span class="lvse f24 pr30" style="color:red;"><?php echo($error); ?></span><br/><br/>
+   </present>
+   <a href="__ROOT__/" class="qjs2 mr25">去首页</a> <a href="<?php echo($jumpUrl); ?>" class="qjs2 mr25">点这里跳转</a>
+   
+   <div class="cb pb20"></div>
+  </div><!--wrap end-->
+   
+  <!--footer begin-->
+<include file='Common:footer'/>{/*页脚 */}
+  <!--footer end-->
+</body>
+</html>

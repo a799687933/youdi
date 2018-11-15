@@ -1,0 +1,47 @@
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+            <if condition="access('Nav/navAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Nav/navAdd','','')}/nav_pid/0" target="dialog" mask="true" width="900" height="550"><span title="添加顶级导航">添加顶级导航</span></a></li>
+            </if>
+            <li class="line">line</li>
+		</ul>
+	</div>
+	<table class="list" width="100%" layoutH="138"  id="list-table-nav">
+		<thead>
+			<tr>
+				<th >导航名称</th>
+				<th width="30%">导航地址</th>
+				<th width="10%">是否显示</th>
+				<th width="10%">是否新窗口打开</th>
+				<th width="10%">排序</th>
+				<th width="10%" style="text-align: center;">操作</th>				
+			</tr>
+		</thead>
+		<tbody>
+		   <foreach name="navArr" item="app"> 
+    			<tr target="sid_user" rel="1"  id="{$app.nav_pid}_{$app.nav_id}" class="{$app.nav_pid} showtr">
+    				
+    				<td style="text-align:left;text-indent:2px; padding-left:{$app.nav_padding}px;"  class="first-cell">
+    				  <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app.nav_pid}_{$app.nav_id}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-nav')" />
+    				 {$app.nav_name|tpl_modify_oen=###,'nav','nav_name',$app['nav_id'],'nav_id','Nav/navSaveForm'}
+                    </td>
+    				<td>{$app.nav_url}</td>
+    				<td>{$app.nav_show|tpl_yes_no=###,'nav','nav_show',$app['nav_id'],'nav_id','Nav/navSaveForm'}</td>
+    				<td>{$app.nav_blank|tpl_yes_no=###,'nav','nav_blank',$app['nav_id'],'nav_id','Nav/navSaveForm'}</td>
+    				<td>{$app.nav_sort|tpl_modify_oen=###,'nav','nav_sort',$app['nav_id'],'nav_id','Nav/navSaveForm'}</td>
+    				<td style="text-align: center;">    				 
+                    {$action|tpl_action='dialog','Nav/navAdd','nav_pid/'.$app['nav_id'],'添加（'.strip_tags($app['nav_name']).'）子级导航','icon_add.gif','icon_add_not.gif',900,550} <!--添加按钮-->
+                    {$action|tpl_action='dialog','Nav/navSave','nav_id/'.$app["nav_id"],'修改（'.strip_tags($app['nav_name']).'）','icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','Nav/navDelete','ids/'.$app["nav_id"],'确定执行删除('.strip_tags($app['nav_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->    				 
+                    </td>
+    				
+    			</tr>
+           </foreach> 
+
+		</tbody>
+	</table>
+
+</div>
+

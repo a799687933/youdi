@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>订单祥情</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/ajaxfileupload.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/mobileInfoPosition.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/jscript">
+$(function(){
+  valinit('.form1','get','',true,'bottomLeft',true);     
+});
+</script>
+<style type="text/css">
+.divigm{margin-top:5px !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">商品评价<a href="javascript:;history.back();" class="icon12"></a></h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+<div style="height:10px;"></div>
+<div class="member-content" style="font-size:0.7rem;margin-bottom:40px;">
+  <form action="{:U(is_m().'/Member/appraiseForm')}" class="form1">
+     <input type="hidden" value="{$appraise.order_id}" name="order_id" />
+     <input type="hidden" value="{$_GET['goods_id']}" name="goods_id" />
+     <input type="hidden" name="score" value="{$appraise.score}" id="score-input"  />  
+      <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">{$appraise['goods_name']}</p>
+   <ul  class="ul-style" style="text-indent:5px;">
+     
+     <li style="line-height:280%;margin-top:1px;">
+         <label style="margin-right:0.5rem;">
+             <input type="radio" value="1" <if condition="$appraise['score'] eq 1">checked="checked"</if>name="score"/>1分
+         </label>
+         <label style="margin-right:0.5rem;">
+             <input type="radio" value="2" <if condition="$appraise['score'] eq 2">checked="checked"</if> name="score" />2分
+         </label>
+         <label style="margin-right:0.5rem;">
+             <input type="radio" value="3" <if condition="$appraise['score'] eq 3">checked="checked"</if> name="score" />3分
+         </label>
+         <label style="margin-right:0.5rem;">    
+            <input type="radio" value="4" <if condition="$appraise['score'] eq 4">checked="checked"</if> name="score" />4分
+         </label>
+         <label style="margin-right:0.5rem;">
+            <input type="radio" value="5" <if condition="$appraise['score'] eq 5">checked="checked"<elseif condition="$appraise['score'] eq ''" />checked="checked"</if> name="score" />5分  
+         </label>
+     </li>
+     
+     <foreach name="goodsSats" item="gs">
+     <li style="line-height:280%;margin-top:1px;">
+            <label style="display:block">
+              <input type="checkbox" name="feel[]" value="{$gs.id}" <if condition="in_array($gs['id'],$appraise['feel'])">checked="checked"</if>/>{$gs.name}
+            </label>
+     </li>
+     </foreach>  
+     
+     <li style="line-height:280%;margin-top:1px;">
+     <textarea name="content" id="content" placeholder="评价内容(200个字内）"  class="textarea validate[required,maxSize[200]]" data-errormessage="评价内容不可空">{$appraise['content']}</textarea>   
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;min-height:40px;">
+           <div style="width:140px;height: 30px;background: #a6080f;color:#fff;float:left;margin-right: 10px;position: relative;text-align: center;line-height: 30px; border-radius:3px;margin:5px 0 0 5px;">
+              我要晒图 <span id="counts"><if condition="$appraise['imgs_count']">{$appraise['imgs_count']}<else />0</if>/10</span>                                
+               <input 
+                  name="file5" 
+                  type="file" 
+                  id="goods_photo_up" 
+                  onchange="appraiseUpload('{:U('/UploadFile/upload',array('thum'=>'ok','width'=>700,height=>700,'remove'=>'ok','up'=>'UploadUser'),'')}','goods_photo_up','divigm','__ROOT__','{$_SESSION["MY_TOKEN"]}','#divigm','#counts',this)"
+                 style="height:100%;width:100%;position:absolute;top:3px;left:0;z-index:9999;filter:alpha(opacity=0); opacity: 0;cursor:pointer"                                                
+                />                                 
+          </div>
+          {$appraise['mobile_imgs']}
+           <div style="float:left;width:30px;height: 30px;margin:0 3px;display:none" id="divigm">
+               <img src="__COMMON__/Images/5-121204193R3.gif" style="max-height: 30px;max-width: 30px;display: block;margin:0 auto;margin-top:5px;"/>
+           </div>    
+           <div style="clear:both"></div>      
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;height:60px;">
+        <div style="height:10px;"></div>
+        <input type="submit" 
+        id="submits3" 
+        value="{:isL(L('Preservation'),'保存')}" 
+        class="add-submit" 
+		 style="width:90%;background:#c2161d;
+					border:none;color:#fff;height:40px;line-height:40px;
+                    display:block;
+                    margin:0px auto;
+                    font-size:0.6rem;
+					border-radius:4px;cursor:pointer;"/>       
+     </li>
+   </ul>  
+  </form> 
+{/*收货信息结束*/}
+             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<div class="footer-empty"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>
+</body>
+</html>

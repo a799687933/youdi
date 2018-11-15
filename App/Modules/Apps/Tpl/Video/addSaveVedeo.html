@@ -1,0 +1,66 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Video/addSaveVedeoForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>视频标题：</dt>
+                <dd>
+                    <input  type="text" name="title" class="required" size="40" value="{$save.title}"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>视频地址：</dt>
+                <dd>
+                    <input type="text" name="video_url" class="required url" size="40" value="{$save.video_url}"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>友情链接LOGO：</dt>
+                <dd>
+                    <input type="hidden" name="thumbnail" id="logos_thumb" value="{$save.thumbnail}"/>
+                    <input name="file2" type="file" id="logosFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>269,'height'=>185))}','logosFileToUpload','logos_img_show','logos_thumb','','acc-show','__ROOT__','logos_imgloads');"/> 
+                </dd>
+            </dl>            
+
+            <dl style="<if condition="!$save['thumbnail']">display:none;</if> " id="logos_imgloads">
+                <dt>LOGO图：</dt>
+                <dd>
+                   <img src="__ROOT__/{$save.thumbnail}" id="logos_img_show" width="150" height="100" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                </dd>
+            </dl>            
+            
+            <dl>
+                <dt>是否显示：</dt>
+                <dd>
+                    <label><input type="radio" name="is_show" value="1" <if condition="$save['is_show']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="is_show" value="0" <if condition="!$save['is_show']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>是否推荐：</dt>
+                <dd>
+                    <label><input type="radio" name="is_recommend" value="1" <if condition="$save['is_recommend']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="is_recommend" value="0" <if condition="!$save['is_recommend']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+                        
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

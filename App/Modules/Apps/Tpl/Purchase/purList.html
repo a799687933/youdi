@@ -1,0 +1,125 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+</form>
+<div class="pageHeader">
+    <if condition="$action eq 'reviewList'">
+         <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Purchase/reviewList","","")}" method="post">
+    <else />
+        <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Purchase/notReviewList","","")}" method="post">
+    </if>    
+     <input type="hidden" name="display" value="{$displys}"/>   
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+			    <td>输入编号：<input type="text" name="pu_sn" value="{$searchVal}" /></td>
+                <td>
+                    <select class="combox" name="stone_class" class="required">
+                      <option value="">-选择分类-</option>
+                      <foreach name="cate" item='C'>                       
+                       <option value="{$C.files_id}" <if condition="$_REQUEST['stone_class'] eq $C['files_id']">selected="selected"</if>>{$C.files_name}</option>
+                     </foreach>  
+                    </select>       
+              
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+           <!-- <if condition="access('Article/addSave')">
+              <li><a class="add auto-size" href="{:U(APP_APPS.'/Article/addSave','','')}/is_show/{$is_show}" target="dialog" mask="true"  title="添加文档"><span>添加文档</span></a></li>
+            </if>-->
+            <if condition="access('Purchase/deletePur')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Purchase/deletePur','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/{$action}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th  orderfield="pu_sn"  class="<if condition='$pu_sn eq "desc"'>desc<else />asc</if>">编号</th>
+				<th  orderfield="user_id"  class="<if condition='$user_id eq "desc"'>desc<else />asc</if>">发布会员</th>
+                <th orderfield="stone_class"  class="<if condition='$stone_class eq "desc"'>desc<else />asc</if>">商品种类</th>
+                <th orderfield="quality_req"  class="<if condition='$quality_req eq "desc"'>desc<else />asc</if>">等级</th>       
+                <th orderfield="board"  class="<if condition='$board eq "desc"'>desc<else />asc</if>">板面要求</th>
+                <th orderfield="chroma"  class="<if condition='$chroma eq "desc"'>desc<else />asc</if>">色度</th>
+				<th orderfield="exp_price"  class="<if condition='$exp_price eq "desc"'>desc<else />asc</if>">预期价位</th>
+				<th orderfield="number"  class="<if condition='$number eq "desc"'>desc<else />asc</if>">采购数量</th>
+				<th>供货数</th>
+				<th orderfield="index_show"  class="<if condition='$index_show eq "desc"'>desc<else />asc</if>">首页推荐</th>
+				<th >推荐排序</th>
+				<th>状态</th>
+                <th orderfield="review_time"  class="<if condition='$review_time eq "desc"'>desc<else />asc</if>">审核时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="res" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.pu_sn}</td>
+				<td>{$V.user_name}</td>
+                <td>{$V.files_name}</td>
+                <td>{$V.quality_req}</td>
+                <td>{$V.board}</td>
+				<td>{$V.chroma}</td>
+				<td>{$V.exp_price}<if condition="$V['norms']">/ ㎡<else />/ 块</if></td>
+				<td>{$V.number}</td>
+				<td>{$V.s_counts}</td>
+                <td>{$V.index_show|tpl_yes_no=###,'purchase','index_show',$V['id'],'id','Purchase/updatePurForm'}</td>
+                <td>{$V.index_show_order|tpl_modify_oen=###,'purchase','index_show_order',$V['id'],'id','Purchase/updatePurForm'}</td>
+				<td>
+				   <if condition="$V['status'] eq 0">
+				     开始报价
+				   <elseif condition="$V['status'] eq 1" />
+				     已有报价
+				  <elseif condition="$V['status'] eq 2" />	 
+				     已锁货
+				  <elseif condition="$V['status'] eq 3" />	 	 
+				     石度代购
+				  <elseif condition="$V['status'] eq 4" />		
+				    自行购买 
+				  <elseif condition="$V['status'] eq 5" />		
+				    交易完成
+				   </if>
+				</td>
+                <td><if condition="$V['review_time'] gt 0">{$V.review_time|date='Y-m-d H:i',###}<else /><span style="color:red;">未审核</span></if> </td>
+                <td>               
+                    {$action|tpl_action='dialog','Purchase/updatePur','action/'.$action.'/id/'.$V["id"],'修改（'.strip_tags($V['files_name']).'）','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+					{$action|tpl_action='navTab','Purchase/supplyList','id/'.$V["id"],'供货信息('.$V['s_counts'].')','icon_account.gif','icon_account_not.gif'} <!--供货信息-->
+                    {$action|tpl_action='ajaxTodo','Purchase/deletePur','action/'.$action.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['files_name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->                    
+                </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

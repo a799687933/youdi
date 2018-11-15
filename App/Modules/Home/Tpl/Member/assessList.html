@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+    var ps = $("#div_pro").position();  
+    $("#div_pro").mouseenter(function () {  
+        $("#float_box").show();  
+    });  
+    $("#float_box").mouseleave(function () {  
+        $("#float_box").hide();  
+    });  
+
+   $('.hovers').hover(function(){
+        $(this).children('.hovers-chie').show();                       
+    },function(){
+        $(this).children('.hovers-chie').hide();        
+    });
+
+   $('.hovers1').hover(function(){
+        $(this).children('.hovers-chie1').show();                      
+    },function(){
+        $(this).children('.hovers-chie1').hide();       
+    });    
+});  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                 <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > {:isL(L('MyEvaluation'),'我的评价')}
+             </p>          
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+            <table  class="my-table">
+                         <tr>
+                              <th style="height:30px;line-height:30px;">{:isL(L('ID'),'编号')}</th>
+                              <th>{:isL(L('CommodityName'),'商品名称')}</th>
+                              <th>{:isL(L('Scores'),'评分')}</th>
+                              <th>{:isL(L('Good'),'好评')}</th>
+                              <th>{:isL(L('EvaluationContent'),'评价内容')}</th>
+                              <th>{:isL(L('ReplyContent'),'回复内容')}</th>
+                              <th>{:isL(L('ModificationTime'),'修改时间')}</th>
+                              <th>{:isL(L('IsAudit'),'是否审核')}</th>
+                          </tr>
+                         <foreach name="result" item="res">
+                             <tr>
+                                 <td align="center">{$res.id}</td>
+                                 <td align="center">
+                                     <span title="{$res.goods_name|strip_tags=###}">
+                                        <a href="{:U('Goods/index',array('html'=>'g-'.$res['goods_id']))}" target="_blank">{$res.goods_name|sub_str=###,15}</a>
+                                     </span>
+                                </td>
+                                 <td align="center">{$res.score}</td>
+                                 <td align="center">
+                                     <if condition="$res['sva'] eq 0">
+                                        {:isL(L('LowGrade'),'差评')}
+                                     <elseif condition="$res['sva'] eq 1" />
+                                        {:isL(L('Medium'),'中评')}
+                                     <elseif condition="$res['sva'] eq 2" />
+                                        {:isL(L('Good'),'好评')}
+                                     </if>
+                                 </td>
+                                 <td align="center" class="hovers" style="position:relative;">
+                                       {$res.content|strip_tags=###|sub_str=###,10}
+                           <span class="hovers-chie" style="position:absolute;top:23px;left:60px;color:#ccc;display:none;z-index:2;">◆</span>
+                           <span class="hovers-chie" style="position:absolute;top:24px;left:60px;color:#fff;display:none;z-index:2;">◆</span>
+                           <div class="hovers-chie" style="width:300px;min-height:100px;position:absolute;top:37px;border:1px #ccc solid;background:#fff;display:none;padding:5px;z-index:1;text-align:left;">{$res.content}</div>           
+                                 </td>
+            
+                           <td align="center" class="hovers1" style="position:relative;">
+                           <if condition="$res['answer']">
+                           {$res.answer|strip_tags=###|sub_str=###,10}
+                           <span class="hovers-chie1" style="position:absolute;top:23px;left:60px;color:#ccc;display:none;z-index:2;">◆</span>
+                           <span class="hovers-chie1" style="position:absolute;top:24px;left:60px;color:#fff;display:none;z-index:2;">◆</span>
+                           <div class="hovers-chie1" style="width:300px;min-height:100px;position:absolute;top:37px;border:1px #ccc solid;background:#fff;display:none;padding:5px;z-index:1;text-align:left;">{$res.answer}</div>          
+                           <else />
+                               <span style="color:red;">{:isL(L('NoReply'),'未回复')}</span>
+                           </if> 
+                                 </td>
+                                                     
+                                 <td align="center">
+                                    <if condition="$res['padtetimes']">{$res.padtetimes|date='Y-m-d H:i:s',###}<else />{:isL(L('NotNodified'),'未修改')}</if>
+                                 </td>
+                                 <td>
+                                     <if condition="$res['is_show']">
+                                        <span style="color:green;">{:isL(L('Yes'),'已审核')}</span>
+                                     <else />
+                                        <span style="color:red;">{:isL(L('Not'),'未审核')}</span>
+                                     </if>
+                                 </td>
+                             </tr>
+                         </foreach>                                                                 
+                  </table>           
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

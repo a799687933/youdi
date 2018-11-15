@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:C($langfx.'WEBTITLE')}</title>
+<meta name="keywords" content="{:C($langfx.'WEBKEYWORD')}" />
+<meta name="description" content="{:C($langfx.'WEBDEPICT')}" />
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+</head>
+<body>
+<include file="Common:top" />{/*公共顶部*/}
+<div class="navbox">
+  <div class="nav">
+    <ul  class="nava clearfix">
+      <li class="nav_all">{:L('AllCategory')}{/*越洋购产品分类*/}</li>
+      <li  class="nav_a m <if condition="$modelName eq 'Index'">on</if>">
+        <h3><a href="__ROOT__/" >{:L('Home')}{/*越洋购首页*/}</a></h3>
+      </li>
+      <li   class="nav_a m <if condition="$modelName eq 'Recommend'">on</if>">
+        <h3><a href="{:U('/Recommend/index')}" >{:L('Recommend')}{/*推荐商品*/}</a></h3>
+      </li>
+      <li  class="nav_a m <if condition="$modelName eq 'Promotion'">on</if>">
+        <h3><a href="{:U('/Promotion/index')}" >{:L('Promotion')}{/*限时促销*/}</a></h3>
+      </li>
+      <li class="nav_a m <if condition="$modelName eq 'Brand'">on</if>">
+        <h3><a href="{:U('/Brand/index')}" >{:L('ExclusiveShop')}{/*越洋专卖店*/}</a></h3>
+        <ul class="sub">
+          <foreach name="pulbicBand" item="pb">
+              <li><a href="{:U('Brand/cover',array('html'=>'b-'.$pb['id']))}">{$pb.name}<!--<font>（咖啡）</font>--></a></li>
+          </foreach>  
+        </ul>
+      </li>
+      <li class="nav_member">
+        <if condition="is_login()">
+         <a href="{:U('/Member')}" title="{:getUserC('SE_USER_NAME')}"><span style="color:#f60">{:sub_str(getUserC('SE_USER_NAME'),4)}</span></a> |
+         <a href="{:U('Login/exitLogin')}" style="color:#666">{:L('Exit')}{/*退出*/}</a>
+        <else />
+            <div class="nav_member_a"><a href="{:U('/Login')}"><span></span>{:L('Login')}{/*登录*/}</a></div>
+            <div class="nav_member_b"><a href="{:U('/Register')}"><span></span>{:L('Registered')}{/*注册*/}</a></div>            
+        </if>  
+      </li>
+      <div class="nav_bp">{:L('Band')}{/*品牌推荐*/}</div> 
+    </ul>
+    <script type="text/javascript">jQuery(".nava").slide({ type:"menu",  titCell:".m", targetCell:".sub", delayTime:0, triggerTime:0,returnDefault:true,defaultPlay:false  });	</script> 
+  </div>
+</div>
+<div class="banner_c">
+  <ul id="nav">
+   <foreach name="cateList" item="ca" key="key1">   
+    <li id="mainCate-{$key1+1}" class="mainCate">
+      <h3><a href="{:U('Category/index',array('html'=>'c-'.$ca['id']))}">{$ca.name}</a></h3>
+      <p>
+          <foreach name="ca['child']" item="ch1" key="chkey">
+             <a href="{:U('Category/index',array('html'=>'c-'.$ch1['id']))}" title="{$ch1.name}">{$ch1.name|show_str=###,3}</a>
+             <php>if($chkey >=2) break;</php>
+         </foreach>    
+      </p>
+      <div class="subCate">
+        <div class="sub_cate_title">{$ca.name}</div>
+        <div class="sub_cate_con">
+          <ul>
+                <foreach name="ca['child']" item="ch2" >
+                     <li><a href="{:U('Category/index',array('html'=>'c-'.$ch2['id']))}">{$ch2.name}</a></li>
+                </foreach>    
+          </ul>
+        </div>
+      </div>
+    </li>
+   </foreach>
+  </ul>
+  <script type="text/javascript">jQuery("#nav").slide({  type:"menu", titCell:".mainCate", targetCell:".subCate", delayTime:0, triggerTime:0, defaultPlay:false, returnDefault:true });	</script> 
+  
+  <div class="picScroll-top">
+			<div class="hd">
+
+				<a class="prev"></a>
+			</div>
+			<div class="bd">
+				<ul class="picList">
+				 <foreach name="pulbicBand" item="pb">   
+					<li>
+						<div class="pic"><a href="{:U('BandCover/index',array('html'=>'b-'.$pb['id']))}" target="_blank"><img src="__ROOT__/{$pb.logo}" /></a></div>
+					</li>
+                 </foreach> 
+				</ul>
+			</div>
+            <div class="hd">
+				<a class="next"></a>
+
+			</div>
+		</div>
+
+		<script type="text/javascript">
+		 jQuery(".picScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:3,trigger:"click"});
+		</script>
+</div>
+<div class="banner">
+  <div class="DB_tab25">
+    <ul class="DB_bgSet">
+       <foreach name="navAd" item="nav">
+           <li style="background:url(__ROOT__/{$nav.ad_img}) no-repeat center;" title="{$nav.ad_title}"></li>
+      </foreach> 
+    </ul>
+    <ul class="DB_imgSet">
+          <foreach name="navAd" item="nav">
+              <li> </li>
+          </foreach> 
+    </ul>
+    <div class="DB_menuWrap">
+      <ul class="DB_menuSet">
+            <foreach name="navAd" item="nav">
+                <li><img src="__HOME__/images/btn_off.png" alt=""></li>
+            </foreach> 
+      </ul>
+    </div>
+  </div>
+  <script type="text/javascript">
+$('.DB_tab25').DB_tabMotionBanner({
+	key:'b28551',
+	autoRollingTime:1000,                            
+	bgSpeed:500,
+	motion:{
+		DB_1_1:{left:-50,opacity:0,speed:1000,delay:500},
+		DB_1_2:{left:-50,opacity:0,speed:1000,delay:1000},
+		DB_1_3:{left:100,opacity:0,speed:1000,delay:1500},
+		DB_2_1:{top:50,opacity:0,speed:1000,delay:500},
+		DB_2_2:{top:50,opacity:0,speed:1000,delay:1000},
+		DB_2_3:{top:100,opacity:0,speed:1000,delay:1500},
+		DB_3_1:{left:-50,opacity:0,speed:1000,delay:500},
+		DB_3_2:{top:50,opacity:0,speed:1000,delay:1000},
+		DB_3_3:{top:0,opacity:0,speed:1000,delay:1500},
+		DB_4_1:{top:50,opacity:0,speed:1000,delay:500},
+		DB_4_2:{top:0,opacity:0,speed:1000,delay:1000},
+		DB_4_3:{top:0,opacity:0,speed:1000,delay:1500},
+		DB_4_4:{top:30,opacity:0,speed:1000,delay:2000},
+		DB_4_5:{top:100,opacity:0,speed:1000,delay:3000},
+		end:null
+	}
+})
+</script> 
+</div>
+<div class="main">
+	<div class="hot_pro">
+    	<div class="hotpro" style="margin:0 auto">
+  <div class="hd">
+    <ul>
+      <li>{:L('Promotion')}{/*限时促销*/}</li>
+      <li>{:L('Recommend')}{/*推荐商品*/}</li>
+    </ul>
+  </div>
+  <div class="bd">
+    <ul class="lh">
+          <foreach name="prom"  item="p">
+              <li>
+                <div class="p-name"><a href="{:U('Goods/index',array('html'=>'g-'.$p['id']))}">{$p.goods_name|show_str=###,10}</a></div>
+                <div class="p-price"><strong>{:getPrice($p['promotion_price'])}</strong></div>
+                <div class="p-img ld"><a href="{:U('Goods/index',array('html'=>'g-'.$p['id']))}"><img src="__ROOT__/{$p['goods_thumb']}"></a></div>
+              </li>
+          </foreach>
+    </ul>
+    <ul class="lh">
+     <foreach name="recommend"  item="rec">   
+          <li>
+            <div class="p-name"><a href="{:U('Goods/index',array('html'=>'g-'.$rec['id']))}">{$rec.goods_name|show_str=###,10}</a></div>
+            <div class="p-price"><strong>{:getPrice($rec['goods_retail_price'])}</strong></div>
+            <div class="p-img ld"><a href="{:U('Goods/index',array('html'=>'g-'.$rec['id']))}"><img src="__ROOT__/{$rec['goods_thumb']}"></a></div>
+          </li>
+     </foreach> 
+    </ul>
+    
+  </div>
+</div>
+<script type="text/javascript">jQuery(".hotpro").slide({delayTime:0 });</script>
+    </div>
+    
+    <foreach name="floors" item="f" key="f_key">
+        <div class="ad1"><a <if condition="$f['ad_alone_link1']">href="{$f.ad_alone_link1}"</if>><img src="__ROOT__/{$f.ad_alone1}" /></a></div>
+        <div class="main_f" id="f{$f_key+1}">
+        	<div class="f_left">
+            	<div class="f_title inoc_{$f_key+1}f">{$f.name}</div>
+                <div class="f_left_pro">
+                	<h1>{$f.ad_title}<br /><font>{:getPrice($f['ad_price'],true)}</font></h1>
+                	<a <if condition="$f['ad_alone_link']">href="{$f.ad_alone_link}"</if>><img src="__ROOT__/{$f.ad_alone}" /></a>
+                </div>
+            </div>
+            <div class="f_right">
+            	<ul>
+            	   <foreach name="f['floors']" item="g" key="gk">
+                    	<li>
+                    	    <a href="{:U('Goods/index',array('html'=>'g-'.$g['id']))}">
+                    	        <img src="__ROOT__/{$g['goods_thumb']}" width="205" height="180" />
+                    	    </a>
+                    	    <h1>{$g['goods_name']|show_str=###,14}<br />
+                    	        <font>{:getPrice($g['goods_retail_price'],true)}</font>
+                    	    </h1>
+                    	 </li>
+                    </foreach> 	 
+                </ul>
+            </div>
+        </div>
+   </foreach>
+   
+    <div class="clear"></div>
+
+</div>
+
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+
+<div class="left_online" id="left_online">
+	<ul>
+	   <foreach name="floors" item="f" key="f_key"> 
+    	<li><a href="#f{$f_key+1}" >{$f.name}</a></li>
+      </foreach>	
+    </ul>
+</div>
+</body>
+</html>

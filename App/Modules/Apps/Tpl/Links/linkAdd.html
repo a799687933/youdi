@@ -1,0 +1,55 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(MODULE_NAME.'/Links/linkAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>{:L('LinkName')}：</dt>
+                <dd>
+                    <input  type="text" name="link_name" class="required" size="40"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>{:L('LinkUrl')}：</dt>
+                <dd>
+                    <input type="text" name="link_url" class="required url" size="40"/>
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>{:L('Sort')}：</dt>
+                <dd>
+                     <input type="text" name="link_sort" class="required digits" value="0" size="40"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>{:L('Display')}：</dt>
+                <dd>
+                    <label><input type="radio" name="is_show" value="1" checked="checked"/>{:L('true')}</label>
+                    <label><input type="radio" name="is_show" value="0" />{:L('false')}</label>
+                </dd>
+            </dl>
+            
+        <dl class="nowrap">
+            <dt>{:L('Description')}：</dt>
+            <dd><textarea name="description" class="required" cols="50" rows="8" style="resize:none;"></textarea></dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">{:L('Submit')}</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">{:L('Cancel')}</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

@@ -1,0 +1,24 @@
+{/*收藏列表*/}
+<foreach name="result" item="nos">  
+ <li style="line-height:280%;margin-top:1px;position:relative" class="">   
+   <a class="col666" href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$nos['goods_id']))}" >
+        <dl>
+            <dt style="width:2.5rem;float:left"><img src="__ROOT__/{$nos.goods_thumb}" style="width:2rem;" /></dt>
+            <dd style="float:left">
+                 <span style="color:#000">{$nos.goods_name|strip_tags=###|sub_str=###,18}</span><br/>
+                 {$nos.add_time|date="Y-m-d H:i:s",###}
+            </dd>
+            <dd style="clear:both"></dd>
+        </dl>
+    </a>
+    <div style="clear:both"></div>
+   <span style="position:absolute;right:2rem;bottom:0;">
+       <a  href="javascript:void(0);"  
+                onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                '{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                '{:U(is_m().'/Member/delCollection',array('id'=>$nos['rec_id']))}','','moblie')">
+           删除
+       </a>
+   </span>    
+ </li>  
+ </foreach>   

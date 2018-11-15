@@ -1,0 +1,61 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Floating/floatAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Floating/floatAdd')}" target="dialog" mask="true" width="900" height="550" title="添加友情链接"><span>添加</span></a></li>
+            </if>
+
+            <if condition="access('Floating/floatDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Floating/floatDelete','','')}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="50">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>编号</th>
+                <th>名称</th>
+                <th >类型</th>
+                <th>号码</th>
+                <th >是否显示</th>
+                <th >排序</th>
+                <th >添加时间</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="floatLi" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.name|tpl_modify_oen=###,'floating','name',$r['id'],'id','Floating/floatSendForm'}<if condition="$r['logos']"><img src="__SYS_IMG__/a_pic.png" style="position: relative;top:3px;left:3px;" /></if></td>                
+                <td>
+                      <if condition="$r['type'] eq 0">QQ<elseif condition="$r['type'] eq 1"/>电话<elseif condition="$r['type'] eq 2"/>其它链接</if>
+                </td>
+                <td>{$r.nums}</td>
+                <td>{$r.is_show|tpl_yes_no=###,'floating','is_show',$r['id'],'id','Floating/floatSendForm'}</td>
+                <td>{$r.orders|tpl_modify_oen=###,'floating','orders',$r['id'],'id','Floating/floatSendForm'}</td> 
+               <td>{$r.addtime|date='Y-m-d',###}</td>
+               <td>
+                    {$action|tpl_action='dialog','Floating/floatSave','id/'.$r["id"],'修改'.strip_tags($r['name']),'icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','Floating/floatDelete','ids/'.$r["id"],'确定执行删除('.strip_tags($r['name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,200 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Supplier/suppForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+         <input type="hidden" name="id" value="{$save.id}" />
+         <input type="hidden" name="action" value="{$_REQUEST['action']}" />
+         <input type="hidden" name="temp_login_count" value="{$save.temp_login_count}" />
+         <input type="hidden" name="temp_login_time" value="{$save.temp_login_time}" />
+         <input type="hidden" name="addtime" value="{$save.addtime}" />
+         <input type="hidden" name="login_count" value="{$save.login_count}" />
+         <input type="hidden" name="last_ip" value="{$save.last_ip}" />
+         <input type="hidden" name="last_time" value="{$save.last_time}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+
+            <dl>
+                <dt>登录用户名：</dt>
+                <dd>
+                    <input  type="text" name="login_name" class="required" size="40" value="{$save.login_name}"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>登录密码：</dt>
+                <dd>
+                    <input  type="password" id="password" name="password" class="alphanumeric" size="40"/>
+                    
+                </dd>
+            </dl>
+ 
+             <dl>
+                <dt>确定密码：</dt>
+                <dd>
+                    <input  type="password" name="not_password" equalto="#password" class="" size="40"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>服务项目：</dt>
+                <dd>
+                    <foreach name="cates" item="ca">
+                        <input  type="checkbox" name="goods_category_id[]" 
+                        <if condition="in_array($ca['id'],$save['goods_category_id'])">checked="checked"</if>
+                        class="" size="40" value="{$ca.id}"/>
+                        {$ca.name}
+                    </foreach>                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>供应商名称：</dt>
+                <dd>
+                    <input  type="text" name="name" class="required" size="40" value="{$save.name}"/>
+                    
+                </dd>
+            </dl>
+            
+             <dl>
+                <dt>企业人数：</dt>
+                <dd>
+                    <input type="text" name="people_num" class="digits" size="40" value="{$save.people_num}"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>营业执照图：</dt>
+                <dd>
+                    <input type="hidden" name="license" id="license" value="{$save.license}"/>
+                    <input name="file2" type="file" id="logosFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('width'=>'','height'=>'','up'=>'SupplierUploads'))}','logosFileToUpload','logos_img_show','license','','acc-show','__ROOT__','logos_imgloads');"/> 
+                </dd>
+            </dl>            
+
+            <dl style="<if condition="!$save['license']">display:none;</if> " id="logos_imgloads">
+                <dt>营业执照图信息：</dt>
+                <dd>
+                   <a href="__ROOT__/{$save.license}" target="_blank" class="acc-show">
+                   <img src="__ROOT__/{$save.license}" id="logos_img_show" width="100" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                   </a>
+                </dd>
+            </dl>        
+
+            <dl>
+                <dt>食品流通许可证图：</dt>
+                <dd>
+                    <input type="hidden" name="circulation" id="circulation" value="{$save.circulation}"/>
+                    <input name="file3" type="file" id="logosFileToUpload1"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('width'=>'','height'=>'','up'=>'SupplierUploads'))}','logosFileToUpload1','logos_img_show1','circulation','','ccc-show','__ROOT__','logos_imgloads1');"/> 
+                </dd>
+            </dl>            
+
+            <dl style="<if condition="!$save['circulation']">display:none;</if> " id="logos_imgloads1">
+                <dt>许可证图信息：</dt>
+                <dd>
+                   <a href="__ROOT__/{$save.circulation}" target="_blank" class="ccc-show">
+                   <img src="__ROOT__/{$save.circulation}" id="logos_img_show1" width="100" style="display:inline-block;position:relative;top:5px;" class="ccc-show"/> 
+                   </a>
+                </dd>
+            </dl>     
+
+             <dl>
+                <dt>区域：</dt>
+                <dd>
+                      <select name="country" class="country" onchange="getPlace(this,'.country_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                             <option value="">请选择国家</option>
+                             {$region[0]}
+                      </select>                                                                
+                      <select name="province" class="province" onchange="getPlace(this,'.province_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                             <option value="">请选择省份</option>
+                              {$region[1]}
+                      </select>
+                       
+                      <select name="city" class="city" onchange="getPlace(this,'.city_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}">
+                             <option value="">请选择城市</option>
+                              {$region[2]}
+                      </select>
+                      
+                       <select name="district" class="district" onchange="getPlace(this,'.district_name_0')" to-url="{:U(APP_APPS."/OrderInfo/searchRegion","","")}" >
+                             <option value="">请选择区县</option>
+                              {$region[3]}
+                      </select> 
+                </dd>
+            </dl>
+                                                                                           
+             <dl>
+                <dt>祥细街道：</dt>
+                <dd>
+                    <input type="text" name="address" class="" size="40" value="{$save.address}"/>
+                </dd>
+            </dl>
+
+             <dl>
+                <dt>联系人：</dt>
+                <dd>
+                    <input type="text" name="contacts" class="" size="40" value="{$save.contacts}"/>
+                </dd>
+            </dl>
+
+             <dl>
+                <dt>联系电话：</dt>
+                <dd>
+                    <input type="text" name="tel" class="" size="40" value="{$save.tel}"/>
+                </dd>
+            </dl>
+
+             <dl>
+                <dt>联系QQ：</dt>
+                <dd>
+                    <input type="text" name="qq" class="" size="40" value="{$save.qq}"/>
+                </dd>
+            </dl>
+
+             <dl>
+                <dt>电子邮箱：</dt>
+                <dd>
+                    <input type="text" name="email" class="" size="40" value="{$save.email}"/>
+                </dd>
+            </dl>
+                                                    
+           <!-- <dl>
+                <dt>排序：</dt>
+                <dd>
+                     <input type="text" name="orders" class="required digits" value="<if condition="$save['orders']">{$save.orders}<else />0</if>" size="40"/>
+                </dd>
+            </dl>-->
+            
+        <dl class="nowrap">
+            <dt>用户备注：</dt>
+            <dd><textarea name="bewrite" class="required" cols="60" rows="8" style="resize:none;">{$save.bewrite}</textarea></dd>
+        </dl>
+
+            <dl>
+                <dt>是否审核：</dt>
+                <dd>
+                    <label style="width:60px;"><input type="radio" name="is_vetted" value="1" <if condition="$save['is_vetted'] eq 1">checked="checked"</if>/>是</label>
+                    <label style="width:60px;"><input type="radio" name="is_vetted" value="0"  <if condition="$save['is_vetted'] eq 0">checked="checked"</if>/>否</label>                    
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>是否锁定：</dt>
+                <dd>
+                    <label style="width:60px;"><input type="radio" name="is_lock" value="1" <if condition="$save['is_lock'] eq 1">checked="checked"</if>/>是</label>
+                    <label style="width:60px;"><input type="radio" name="is_lock" value="0"  <if condition="$save['is_lock'] eq 0">checked="checked"</if>/>否</label>                    
+                </dd>
+            </dl>
+                                              
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

@@ -1,0 +1,120 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<script type="text/javascript">
+$(function(){
+    $('#goods_class').change(function(){
+         var openUrl="{:U(APP_APPS.'/Promotion/ajaxGoodsSelect','','')}"+"/id/"+$(this).val()+"/ids/"+ $("#ids").val();
+         var response=callAjaxDo(openUrl,'text');//检查是否有数据
+         $('#goods_id').empty();
+         $('#goods_id').append(response);  
+    });
+    $('#goods_id').change(function(){
+        var price=$(this).children('option::selected').attr('price');
+        $('#pri').html();
+        $('#pri').html('零售价:'+price);
+    });
+});    
+</script>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Promotion/promotionAddSaveFrom')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="" value="{$ids}"  id="ids"/>
+        <input type="hidden" name="send" value="{$_GET['send']}"/>
+        <if condition="$_GET['send'] eq 'update' "><input type="hidden" name="id" value="{$_GET['id']}"/></if>
+        <div class="pageFormContent nowrap" layoutH="60">
+            <dl>
+                <dt>商品分类：</dt>
+                <dd>
+                    <select class="combox " id="goods_class" name="goods_category_id"><!--商品分类-->
+                                   <if condition="$_GET['send'] eq 'update' ">
+                                       {$result.name}
+                                   <else />
+                                     <option value="0">-商品分类-</option>
+                                      <foreach name="goodCat" item='C'>                       
+                                       <option value="{$C.id}" <if condition="$goods['inve_goods_category_id'] eq $C['id']">selected="selected"</if>>{$C.html}{$C.name}</option>
+                                     </foreach>  
+                                 </if>    
+                      </select> 
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>商品名称：</dt>
+                <dd style="width: 600px;">
+                    <select class=" " id="goods_id" name="goods_id"><!--选择商品-->
+                       <if condition="$_GET['send'] eq 'update' ">
+                             {$result.goods_name}
+                           <else />  
+                              <option value="0">-请选择-</option>
+                        </if>
+                   </select> <strong style="position:relative;top:7px;color:red;" id="pri">{$result.goods_retail_price}</strong>        
+                </dd>
+            </dl>            
+            
+            <dl>
+                <dt>活动开始时间：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="promotion_start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['promotion_start_date']">{$result.promotion_start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>活动结束时间：</dt>
+                <dd>
+                     <input type="text" readonly="readonly" name="promotion_end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['promotion_end_date']">{$result.promotion_end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                </dd>
+            </dl>
+
+             <dl>
+                <dt>促销价格：</dt>
+                <dd>
+                     <input type="text" name="promotion_price" class="required number" size="40" value="<if condition="isset($result['promotion_price'])">{$result.promotion_price}</if>"/>
+                </dd>
+            </dl>
+            
+            <!-- <dl>
+                <dt>促销数量：</dt>
+                <dd>
+                     <input type="text" name="numbers" class="required number" size="40" value="<if condition="isset($result['numbers'])">{$result.numbers}<else />0</if>"/>
+                     <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">      
+                     <span style="color:#666;">达到此数量，促销活动自动结束。0表示没有数量限制。</span> 
+                </dd>
+            </dl>      -->      
+           
+           <foreach name="explains" item="exp">                      
+            <dl>
+                <dt>({$exp['info']})活动说明：</dt>
+                <dd>
+                     <textarea name="{$exp['field']}" cols="50" rows="5">{$result[$exp['field']]}</textarea>
+                </dd>
+            </dl>
+           </foreach>             
+           
+             <dl>
+                <dt>启动状态：</dt>
+                <dd>
+                    <if condition="$_GET['send'] eq 'update'">
+                         <label><input type="radio" name="no_ffo" value="1"<if condition="$result['no_ffo'] eq 1">checked="checked"</if> />进行中</label>
+                         <label><input type="radio" name="no_ffo" value="0" <if condition="$result['no_ffo'] eq 0">checked="checked"</if> />强制结束</label>
+                    <else />
+                        <label><input type="radio" name="no_ffo" value="1"checked="checked"/>是</label>
+                        <label><input type="radio" name="no_ffo" value="0" />否</label>                   
+                    </if>
+                </dd>
+            </dl>
+                       
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

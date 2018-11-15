@@ -1,0 +1,111 @@
+<script type="text/javascript">
+    
+</script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Promotion/promotionList","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  关键字：<input type="text" name="goods_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+          <!--  <if condition="access('Promotion/inventorySupplierAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Promotion/promotionAddSave',array('send'=>'add'),'')}" target="dialog" mask="true" width="1024" height="590" title="添加限时抢购"><span>添加限时抢购</span></a></li>
+            </if>-->
+            <if condition="access('Promotion/promotionDelete')">
+              <li><a title="'操作不可恢复，确实要删除这些记录吗?" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Promotion/promotionDelete','','')}/action/promotionList/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th><!--编号-->
+                <th>商品名称</th><!--商品名称-->
+                <th orderfield="promotion_end_date"class="<if condition='$promotion_end_date eq "desc"'>desc<else />asc</if>" >状态</th><!--状态-->       
+                <th>开始时间</th><!--开始时间-->        
+                <th>结束时间</th><!--结束时间-->      
+                <th>零售价</th><!--本店零售价-->   
+                <th orderfield="promotion_price" class="<if condition='$promotion_price eq "desc"'>desc<else />asc</if>">抢购价格</th><!--抢购价格-->      
+                <th>操作</th><!--操作-->      
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="promot" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V.goods_name}</td>
+                <td>
+                    <if condition="$V['no_ffo'] eq 0">
+                        <span style="color:red;">活动被强制结束</span>
+                        
+                    <elseif condition="$V['promotion_start_date'] gt time()" />
+                    <strong style="color:red;" >活动未开始</strong>
+                    <else />
+                        <if condition="time() gt $V['promotion_end_date']">
+                            <span style="color:red;" >抢购活动已成功结束</span>
+                        <else />
+                           <div class="colockbox"  id="time{$V.id}"> 
+                                      <script>timited("time{$V.id}",{$V['promotion_end_date']},{:time()});</script>                    
+                               </div>
+                        </if>
+                    </if>
+               </td>
+               <td>{$V.promotion_start_date|date='Y-m-d H:i:s',###}</td>
+               <td>{$V.promotion_end_date|date='Y-m-d H:i:s',###}</td>
+               <td>{$V.goods_retail_price}</td>
+               <td>{$V.promotion_price}</td>
+               <td>
+                   {$action|tpl_action='dialog','Promotion/promotionAddSave','id/'.$V["id"].'/send/update','修改（'.strip_tags($V['goods_name']).'）','icon_edit.gif','icon_edit_not.gif',1024,590} <!--修改按钮-->
+                   {$action|tpl_action='ajaxTodo','Promotion/promotionDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['goods_name']).')限时抢购业务？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+         <div class="panelBar">
+        <div class="pages">
+            <!--分页      
+            <span>显示</span>
+            <select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+            -->
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div> 
+</div>
+

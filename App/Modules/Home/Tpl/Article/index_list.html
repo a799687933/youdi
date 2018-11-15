@@ -1,0 +1,46 @@
+<foreach name="result" item="res"> 
+     	<li>
+         <div class="zxlbli">
+          <div class="zxlblil">
+          <a href="{:U('Article/content',array('html'=>$res['id']))}" title=""><img src="__ROOT__/{$res['thumb']}" alt=""/></a>
+          <span class="zixunbt">{$res['titletext']|strip_tags=###|sub_str=###}</span>
+          </div>
+          <div class="zxlblir">
+           <p class="zxlblirt f14">{:date('Y.m.d',$res['addtime'])}</p>
+           <a href="{:U('Article/content',array('html'=>$res['id']))}"><h1 class="f28">{$res['titletext']|strip_tags=###|sub_str=###,20}</h1></a>
+           <p class="zxlblirb f14"><!--By <span class="col222">Kenneth Deng</span>-->{$res['author']}</p>
+           <p class="zxlblirbb f15">{$res['bewrite']|strip_tags=###|sub_str=###,80}</p>
+           <div class="zxlblirbbb">
+           <if condition="$res['count_click'] elt C('LIMIT_SHOW1')">
+             <span class="fa fa-eye vam"></span><span class="col999 vam ml5 mr10">{$res['count_click']} Read</span>
+           <elseif condition="$res['count_click'] gt C('LIMIT_SHOW1') AND $res['count_click'] elt C('LIMIT_SHOW3')" />
+             <span class="fa fa-eye vam" style=" color:#ffb400"></span><span class="col999 vam ml5 mr10">{$res['count_click']} Read1</span>
+           <elseif condition="$res['count_click'] egt C('LIMIT_SHOW3')" />
+             <span class="fa fa-eye vam" style=" color:#c9140a"></span><span class="col999 vam ml5 mr10">{$res['count_click']} Read2</span>
+           </if>
+           <span class="fa fa-commenting f13 vam"></span><span class="col999 vam ml5">{$res['comment']} Comments</span>
+           </div>
+          </div>
+          <div class="cb"></div>
+         </div>
+        
+         
+        </li>
+</foreach>
+<div class="cb"></div>
+ <script>
+
+     $(function(){
+
+		$(".zxlblil").mouseenter(function(e){		
+			$(this).find(".zixunbt").fadeIn()
+			num=$(this).width()/2
+			$(this).find(".zixunbt").css({top:event.offsetY,left:event.offsetX-num-10})
+			}) 
+		$(".zxlblil").mouseleave(function(e){		
+			$(this).find(".zixunbt").fadeOut()
+			
+			}) 	
+		 
+		 })
+    </script>

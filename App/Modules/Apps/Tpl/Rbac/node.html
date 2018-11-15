@@ -1,0 +1,74 @@
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+		    <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+			  <li><a class="add" href="{:U(APP_APPS.'/Rbac/nodeAdd','','')}/pid/0/level/1" target="dialog" mask="true" title="添加应用"><span>添加应用</span></a></li>
+			</if>
+			<if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+			  <li><a class="delete" href="{:U(APP_APPS.'/Rbac/nodeDel','','')}" target="selectedTodo"  rel="ids" postType="string" title="操作不可恢复，确定执行本次操作？" ><span>删除节点</span></a></li>
+			</if>
+			<!--<li><a class="edit" href="__URL__/edit/id/{sid_node}" target="dialog" mask="true" warn="请选择节点"><span>修改</span></a></li>-->
+		</ul>
+	</div>
+
+
+	<table class="list" width="100%" layoutH="27" id="list-table-node">
+		<thead>
+		<tr>
+	
+			<th width="250"><input type="checkbox" group="ids" class="checkboxCtrl">节点名称</th>
+			<th >节点描述</th>
+            <th width="200">节点排序</th>
+            <th style="text-align: center;">操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<foreach item="app" name="nodeArr">
+			<tr target="sid_node" rel="{$app['id']}" class="{$app['pid']} showtr" id="{$app['pid']}_{$app['id']}" >
+				<td class="first-cell" style="text-align:left;text-indent:5px;padding-left:{$app['padding']}px;">
+                <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app['pid']}_{$app['id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-node')" />
+                <input name="ids" value="{$app.id}" type="checkbox">
+                <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+                  <span class="update" onclick=edit(this,"{:U(APP_APPS.'/Rbac/saveNode','','')}","/tableName/node/id/{$app.id}/name/") title="{:L('ClickModify')}">{$app['name']}</span>
+                <else />
+                   <span class="update">{$app['name']}</span>   
+                </if>
+                </td>
+				<td style="text-align:left;text-indent:5px;padding-left:{$app['padding']}px;">
+				<if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>    
+				   <span class="update" onclick=edit(this,"{:U(APP_APPS.'/Rbac/saveNode','','')}","/tableName/node/id/{$app.id}/title/") title="{:L('ClickModify')}">{$app['title']}</span>
+				<else />
+				   {$app['title']} 
+				</if>  
+				</td>
+                <td>
+                <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+                    <span class="update" onclick=edit(this,"{:U(APP_APPS.'/Rbac/saveNode','','')}","/tableName/node/id/{$app.id}/sort/") title="{:L('ClickModify')}">{$app['sort']}</span>     
+                    
+                <else />
+                    {$app['sort']}
+                </if>    
+                </td>
+                <td style="text-align: center;">
+                 <if condition="$app['level'] lt 3">  
+                  <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'> 
+                    <if condition='$app["padding"] eq 0'>  
+                    <a class="add" href="{:U(APP_APPS.'/Rbac/nodeAdd','','')}/pid/{$app.id}/level/2"  target="dialog" mask="true"  title="添加控制器"><img src='__SYS_IMG__/icon_add.gif'/></a>                           
+                    <elseif condition='$app["padding"] eq 30' /> 
+                    <a class="add" href="{:U(APP_APPS.'/Rbac/nodeAdd','','')}/pid/{$app.id}/level/3" target="dialog" mask="true" title="添加方法"><img src='__SYS_IMG__/icon_add.gif' /></a>
+                    </if>
+                  <else />
+                    <img src='__SYS_IMG__/icon_js.gif'/> 
+                  </if>  
+                 <else /> 
+                  <img src='__SYS_IMG__/icon_js.gif'/> 
+                </if>  
+                </td>
+			</tr>
+		</foreach>
+		</tbody>
+	</table>
+</div>
+

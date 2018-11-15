@@ -1,0 +1,259 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<script type="text/javascript">
+$(function(){
+   $('#combox_ID').change(function(){
+       var info=null;
+       var openUrl=null;
+       if($(this).val()==0){
+           info='<option value="0">所有商品进行优惠活动</option>';        
+           $('#p-goods-id').append('<span><input type="checkbox" name="dis_range_ext[]" value="0" class="select-id" checked="checked" style="position:relative;top:2px;"/>全部商品</span>');  
+       }else if($(this).val()==1){
+           info='<option value="0">请选择分类优惠活动</option>';
+           $('#p-goods-id').children().remove();
+           openUrl="{:U(APP_APPS.'/GoodsDiscount/ajaxCat','','')}"+"/id/"+$(this).val();
+       }else if($(this).val()==2){
+           info='<option value="0">请选择品牌优惠活动</option>';
+           openUrl="{:U(APP_APPS.'/GoodsDiscount/ajaxCat','','')}"+"/id/"+$(this).val();
+           $('#p-goods-id').children().remove();
+       }else if($(this).val()==3){
+           info='<option value="0">请选择商品优惠活动</option>';
+           $('#p-goods-id').children().remove();
+           openUrl="{:U(APP_APPS.'/GoodsDiscount/ajaxCat','','')}"+"/id/"+$(this).val();
+       }       
+       if(openUrl){
+            var response=callAjaxDo(openUrl,'text');//检查                 
+       }
+       response=info+response;     
+       $('#dis_range').children().remove();
+       $('#dis_range').append(response);      
+       $('.select-ids').parent().remove(); //重新选择
+   });
+   
+   //选择付值
+   $('.add-node').click(function(){
+      clickApp('dis_range','select-ids','p-goods-id','dis_range_ext');
+   });
+   
+   //优惠方式
+   $('.add-give').click(function(){
+         openUrl="{:U(APP_APPS.'/GoodsDiscount/ajaxCat','','')}"+"/id/3/where/"+ $('#give-value').val();
+         var res=callAjaxDo(openUrl,'text');//获取数据    
+         $('#give-list').children().remove();
+         $('#give-list').append(res);
+   });
+   //优惠方式付值
+   $('.add-give-node').click(function(){
+        clickApp('give-list','select-id','give-goods','dis_goods_id');
+   });
+   
+   $('#dis-type-id').change(function(){
+       if($(this).val()==0){
+           $('#give-goods-node').show();       
+           $('.count-info').text('赠品个数');    
+       }else if($(this).val()==1){
+           $('#give-goods-node').hide();
+           $('.count-info').text('价格折扣(1-99)');
+       }else if($(this).val()==2){
+           $('#give-goods-node').hide();
+           $('.count-info').text('减免现金');    
+       }
+   });
+   
+   //付值优惠数量类型
+  var disTypeInfo=$('#dis-type-id').val();
+  if(disTypeInfo==0){
+      $('.count-info').text('赠品个数');    
+  }else if(disTypeInfo==1){
+      $('.count-info').text('价格折扣(1-99)');
+  }else if(disTypeInfo==2){
+      $('.count-info').text('减免现金');    
+  }
+   
+});  
+
+/**
+ * 生成select子节点节点
+ */
+function clickApp(val_node,val_cla,appe_id,dis_goods_id){
+       var val=$('#'+val_node).val();
+       if(val==0) {alert('你没有选择任何商品！');return;}
+       var html=$('#'+val_node).children("option:selected").html();
+        var select_id=$('.'+val_cla);        
+        for(var i=0;i<select_id.length;i++){
+            if($($(select_id)[i]).val()==val){
+                alert('你所选择的商品已存在！');
+                return;
+            }
+        }
+       $('#'+appe_id).append('<span><input type="checkbox" name="'+dis_goods_id+'[]" value="'+val+'" class="'+val_cla+'" checked="checked" style="position:relative;top:2px;"/>'+html+'</span>');
+}
+
+//复制节点
+function addNodeDiso(node){
+      $(function(){
+        var p=$(node).parent().parent();     
+        var str=$(p).clone(true);     
+        str='<p>'+$(str).html()+'</p>';
+        str=str.replace('addNodeDiso', 'delNodeDiso');
+        str=str.replace('[+]', '[-]');
+        var s=/value\=\"[0-9.]+\"/g ;  
+        str=str.replace(s,'value="0"');
+       $('#meors').append(str);    
+      });
+}
+
+//删除节点
+function delNodeDiso(_this){
+      $(function(){
+        $(_this).parent().parent().remove();         
+      });
+} 
+</script>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/GoodsDiscount/AddSaveForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="" value="{$ids}"  id="ids"/>
+        <input type="hidden" name="send" value="{$_GET['send']}"/>
+        <if condition="$_GET['send'] eq 'update' "><input type="hidden" name="id" value="{$_GET['id']}"/><input type="hidden" name="{:C('VAR_PAGE')}" value="{$_GET[C('VAR_PAGE')]}"/></if>
+        <div class="pageFormContent nowrap" layoutH="60">
+        
+          <foreach name="disName" item="t">
+           <dl>
+                <dt>({$t.info})活动名称：</dt>
+                <dd>
+                     <input type="text" name="{$t.field}" class="required" size="40" value="{$result[$t['field']]}"/>
+                </dd>
+            </dl>     
+           </foreach>
+           
+            <dl>
+                <dt>活动开始时间：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['start_date']">{$result.start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>活动结束时间：</dt>
+                <dd>
+                     <input type="text" readonly="readonly" name="end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['end_date']">{$result.end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                </dd>
+            </dl>
+            
+              <dl>
+                <dt>享受的会员等级：</dt>
+                <dd style="width:750px;">
+                     <foreach name="leve" item="l">
+                         <input type="checkbox"  name="member_grade_id[]"
+                          <foreach name="result['member_grade_id']" item='g'>
+                              <if condition="$g eq $l['id']">checked="checked"</if> 
+                          </foreach>
+                           value="{$l.id}" />{$l.grade_name}
+                    </foreach>
+                </dd>
+            </dl>     
+            
+               <dl style="display:none">
+                <dt>优惠范围：</dt>
+                <dd>
+                     <select class="combox " id="combox_ID" name="dis_range"><!--选择优惠规则-->
+                             <option value="0" selected="selected">---请选择---</option>
+                              
+                              <option value="1" <if condition="$result['dis_range'] eq 1">selected="selected"</if>>以下分类</option>
+                              <option value="2" <if condition="$result['dis_range'] eq 2">selected="selected"</if>>以下品牌</option>
+                              <option value="3" <if condition="$result['dis_range'] eq 3">selected="selected"</if>>以下商品</option>
+                              <option value="0" <if condition="$result['dis_range'] eq '0'">selected="selected"</if> >所有商品进行优惠活动</option>
+                   </select> 
+                   
+                   <!--选择分类或商品或品牌-->
+                      <select class=" " id="dis_range" name="">
+                       <if condition="$_GET['send'] eq 'update' ">
+                            {$cat}
+                       <else />    
+                              <option value="0">-全部商品-</option>
+                        </if>
+                   </select> <a class="button add-node" href="javascript:;" style="position:relative;top:-2px;"><span>添加</span></a>          
+                   <p style="height: auto !important;width: 800px;line-height:150%" id="p-goods-id">{$chebox}</p>        
+                </dd>
+            </dl>                                          
+
+            <!-- <dl>
+                <dt>金额上限：</dt>
+                <dd>
+                     <input type="text" name="max_amount" class="number" size="40" value="<if condition="isset($result['max_amount'])">{$result.max_amount}<else />0</if>"/>
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">0表示没有上限</span>                        
+                </dd>
+            </dl>     -->
+                                                                     
+            <dl>
+                <dt>优惠方式：</dt>
+                <dd>
+                     <select class="combox" name="dis_type" id="dis-type-id">
+                         <!-- <option value="0" <if condition="$result['dis_type'] eq 0">selected="selected"</if> >享受赠品（特惠品）</option>
+                          <option value="1" <if condition="$result['dis_type'] eq 1">selected="selected"</if>>享受价格折扣</option>-->
+                          <option value="2" <if condition="$result['dis_type'] eq 2">selected="selected"</if>>现金减免</option>
+                     </select>  
+                      <p style="height: auto !important;width: 800px;line-height:150%" >
+                          <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                         <span style="color:#666;">
+                               <!--当优惠方式为“享受赠品（特惠品）”时，请输入允许买家选择赠品（特惠品）的大数量；
+                               当优惠方式为“享受价格折扣”时，请输入折扣（1－9），如：打9折，就输入90。
+                               当优惠方式为“享受现金减免”时，请输入现金减免的金额；-->
+                               满即减，金额与优惠数量从小到大，请严格遵守，否则程序无效。
+                         </span>
+                     </p>                         
+                </dd>
+            </dl>       
+
+               <dl>
+                <dt>订单金额满：</dt>
+                <dd id="meors">
+                  <foreach name="discountExpand" item="disco" key="keydis"> 
+                    <p>
+                          <span style="float:left;margin-right: 5px;">
+                         <if condition="$keydis eq 0">
+                             <a href="javascript:void(0);" onclick="addNodeDiso(this)" style="float: left;position: relative;top:3px;margin-right: 2px;">[+]</a>   
+                         <else />
+                             <a href="javascript:void(0);" onclick="delNodeDiso(this)" style="float: left;position: relative;top:3px;margin-right: 2px;">[-]</a>   
+                         </if>                                
+                          <input type="text" name="amount[]"  class="number" size="20" value="{$disco['amount']}"/>
+                          </span>
+                          <span style="float:left;">
+                          <span style="float: left;position: relative;top:5px;" class="count-info">赠品个数</span>    
+                          <input type="text" style="float:left;" name="dis_type_val[]" size="12" class="digits" value="{$disco['dis_type_val']}"/>
+                          </span>                              
+                    </p>       
+                 </foreach>                                
+                </dd>
+            </dl>                
+
+             <dl id="give-goods-node" <if condition="$result['dis_type'] neq 0">style="display:none;"</if> >
+                <dt>搜索并加入赠品：</dt>
+                <dd style="width:700px;">
+                     <input type="text"  size="20" id="give-value"/>   
+                    <a class="button add-give" href="javascript:;" style="position:relative;top:-2px;margin-left:3px;"><span>检索</span></a>      
+                    <select id="give-list">
+                        <option value="0">请先检索再选择增品</option>                     
+                    </select>  
+                    <a class="button add-give-node" href="javascript:;" style="position:relative;top:-2px;margin-left:3px;"><span>添加</span></a>      
+                     <p style="height: auto !important;width: 800px;line-height:150%" id="give-goods">{$echebox2}</p>
+                </dd>
+            </dl> 
+                       
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

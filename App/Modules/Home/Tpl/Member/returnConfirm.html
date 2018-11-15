@@ -1,0 +1,221 @@
+ <!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>确认退货商品 | YOUDI WU 中国</title>
+<meta name="keywords" content="{:C('WEBKEYWORD')}" />
+<meta name="description" content="{:C('WEBDEPICT')}" />
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<if condition="is_mobile()">
+
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+<body>
+<div class="box">
+ <include file="Common:headermin" />{/*公共头部*/}
+ <!--content begin-->
+ <div class="jies">
+ <if condition="is_mobile()">
+      <div class="lbtm pv20" style="width:100%">
+              <h1 style="font-weight:normal; font-size:18px;">
+                  {:isL(L('FreeReturnService'),'免费退货服务')}
+                 
+              </h1>
+              <p>
+                  {:isL(L('PleaseReturnInfo'),'请在接收订单的30天内向 youdiwu官网商店退货。')}
+                  <a href="{:U('Modular/refund',array('html'=>C('B_3')))}" target="_blank" class="col2ab">{:isL(L('ClickHere'),'点击此处')}</a>{:isL(L('UnderstandThe'),'了解退货政策')}
+              </p>
+              <p class="pt10"> <a href="{:U('Member/index')}" class="col2ab f14 mt20" style="font-weight:normal; line-height:25px">{:isL(L('ReturnAccount'),'返回我的账户')}</a></p>
+         </div>
+         <else/>
+         <div class="lbtm fl pv10" style="width:100%">
+          <h1 style="font-weight:normal; font-size:18px;"> 
+              {:isL(L('FreeReturnService'),'免费退货服务')}
+              <a href="{:U('Member/index')}" class="col2ab f14 fr mt20" style="font-weight:normal; line-height:25px">{:isL(L('ReturnAccount'),'返回我的账户')}</a>
+          </h1>
+          <p style="height:44px;">{:isL(L('PleaseReturnInfo'),'请在接收订单的30天内向 youdiwu官网商店退货。')}
+             <a href="{:U('Modular/refund',array('html'=>C('B_3')))}" target="_blank"class="col2ab">{:isL(L('ClickHere'),'点击此处')}</a>{:isL(L('UnderstandThe'),'了解退货政策')}
+          </p>
+     </div>
+         </if>
+ 
+ 
+     <div class="jsl">
+      <div class="jslt" >
+       <ul>
+        <li>1.{:isL(L('Commodity'),'商品')}</li>
+        <li>2.{:isL(L('Address'),'地址')}<span class="jsltspan2"></span></li>
+        <li class="now">3.{:isL(L('Confirm'),'确认')}<span class="jsltspan2"></span></li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--jslt end-->
+      <div class="cb"></div>
+      <div class="qrshdz">
+       <h1 class="f16 b lh25">{:isL(L('MakeSureThat'),'请确认以下有关退货信息是否正确')}</h1>
+       <p class="pt10 pb20 lh25 f13">{:replace_isl('YourConfirmationtc','有关确认订单的电邮将会发送到 %d 邮件将提供您的订单信息及订单号码',getUserC('SE_USER_NAME'))}</p>
+       <if condition="is_mobile()">
+       <div style="width:100%;">
+       <else/>
+       <div style="width:80%; float:left">
+       </if>
+       <if condition="is_mobile()">
+       <div class="ddzl mb10">
+       <else/>
+       <div class="ddzl pr5">
+       </if>
+        
+         <div class="ddzlm">
+          <h1>{:isL(L('OrderInformation'),'订单信息')}</h1>
+          <p>{:isL(L('OrderDate'),'订单日期')}：{$order['add_time']|date='Y/m/d',###}<br/>{:isL(L('OrderNumber'),'订单编号')}：{$order['order_sn']}</p>
+          <p class="pt10">{:isL(L('PackagesNum'),'包裹数量')}：1<!--{$packages_num}--></p>
+         </div>
+        </div><!--ddzl end-->
+        <if condition="is_mobile()">
+       <div class="ddzl">
+       <else/>
+       <div class="ddzl pl5">
+       </if>
+         <div class="ddzlm">
+          <h1>{:isL(L('ExtractCommodityAddress'),'提取商品地址')}</h1>
+          <p>
+              {$temp_addre['consignee']}<br/>
+              {$temp_addre['province']}{$temp_addre['city']}{$temp_addre['address']}<br/>
+              <!--{$temp_addre['country_text'] ? $temp_addre['country_text'] : $temp_addre['country']} {$temp_addre['district'] ? $temp_addre['district'] : ''}<br/>-->
+              {$temp_addre['zipcode']} <br/>
+              {:isL(L('Phone'),'手机')}：{$temp_addre['mobile']}
+          </p>
+         </div>
+        </div><!--ddzl end-->
+        <div class="cb pb10"></div>
+        <if condition="is_mobile()">
+         <div class="thuo">
+          <h1>{:isL(L('ReturnGoodsList'),'退货商品')}</h1>
+          
+          <div class="thuob">
+           <ul>
+           <php>$counts=0;</php>
+          <foreach name="goods_list" item="g">
+           	<li>
+            <p><b>{:isL(L('Description'),'描述')}：</b><span>{$g['goods_name']}</span></p>
+            <p><b>{:isL(L('ID'),'编号')}：</b><span>{$g['goods_sn']}</span></p>
+            <p><b>{:isL(L('Szie'),'尺码')}：</b><span>
+             <foreach name="g['goods_attr']" item="attr">
+                       <if condition="(strtoupper($attr[pfix('name')]) eq 'SZIE') OR ($attr[pfix('name')] eq '尺码')">
+                           {$attr['value'][pfix('attr_value')]}
+                       </if>
+                   </foreach>
+            </span></p>
+            <p><b>{:isL(L('Number'),'数量')}：</b><span>{$g['goods_number']}</span></p>
+            </li>
+            <php>$counts+=$g['goods_number'];</php>
+            </foreach>
+            
+           </ul>
+          </div>
+          
+         </div>
+        <else/>
+        <div class="thms">
+         <h1>{:isL(L('ReturnGoodsList'),'退货商品')}</h1>
+         <table width="100%">
+          <tr>
+           <th align="left" width="30%">{:isL(L('Description'),'描述')}</th>
+           <th align="left" width="30%">{:isL(L('ID'),'编号')}</th>
+           <th align="center" width="30%">{:isL(L('Szie'),'尺码')}</th>
+           <th align="center" width="10%">{:isL(L('Number'),'数量')}</th>
+          </tr>
+          <php>$counts=0;</php>
+          <foreach name="goods_list" item="g">
+          <tr>
+               <td align="left">{$g['goods_name']}</td>
+               <td align="left">{$g['goods_sn']}</td>
+               <td align="center">
+                   <foreach name="g['goods_attr']" item="attr">
+                       <if condition="(strtoupper($attr[pfix('name')]) eq 'SZIE') OR ($attr[pfix('name')] eq '尺码')">
+                           {$attr['value'][pfix('attr_value')]}
+                       </if>
+                   </foreach>
+               </td>
+               <td align="center">{$g['goods_number']}</td>
+               <php>$counts+=$g['goods_number'];</php>
+          </tr>
+         </foreach>
+         </table>
+        </div><!---->
+        </if>
+       </div>
+       <div class="cb"></div>
+      </div><!--qrshdz end-->
+     </div><!--jsl end--> 
+      <if condition="is_mobile()">
+     <p class="pv15 f14"><a href="javascript:void(0);" onClick="history.go(-1)" class="col2ab">{:isL(L('Cancel'),'取消')}</a></p>
+     <else/>
+     </if>
+     <div class="jsr" style="padding:0">
+      <div class="jsrm">
+      <h1>{:isL(L('Billing'),'总结')}</h1>
+      <p class="pb5 f12">{:isL(L('PackagesNum'),'包裹数量')}<span class="fr f16">1<!--{$packages_num}--></span></p>
+      <p class="pb5 f12">{:isL(L('CommodityQuantity'),'商品数量')}<span class="fr f16">{$counts}</span></p>
+      <div class="jsrb mt5">
+       <p class="col999 lh18 f13 tj pt5 pb15">
+         {:isL(L('EturnProcesst'),'在退货过程中本人同意 YOUDI WU 的<a href="WEBROOT/Modular/refund/html/172.html" target="_blank">退货政策</a>并确认此次退还的商品完全符合该退货政策中的条款。')}
+       </p>
+       </div>
+       <div style=" position:relative;height:60px;">
+           <form action="{:sign_url(array('order_id'=>$_GET['order_id']),U('Member/returnConfirmForm'))}" method="post" class="submits">
+              <input type="hidden" value="{$form_data}" name="form_data" />
+               <a><input value="{:isL(L('Complete'),'完成')}" class="jsr_btn" type="submit" info-text="submit-text"></a>
+               <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+              <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+           </form>
+      </div>
+      </div>
+     </div><!--jsr end-->
+     <div class="cb"></div>
+     <if condition="is_mobile()">
+     
+     <else/>
+     <p class="pt20 f14"><a href="javascript:void(0);" onClick="history.go(-1)" class="col2ab">{:isL(L('Cancel'),'取消')}</a></p>
+     </if>
+    
+
+ </div><!--jies end-->
+ <!--content end-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript">formInit('.submits',true,true,true,true);</script>
+</body>
+</body>
+</html>

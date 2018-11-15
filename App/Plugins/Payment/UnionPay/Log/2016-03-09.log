@@ -1,0 +1,32 @@
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/secureUtil.php ], Line[16]------ =====签名报文开始====== 
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/secureUtil.php ], Line[22]------ 签名key=val&...串 >accessType=0&backUrl=http://www.hcm9w.com/Mobile/MobilePay/backReceive.html&bizType=000201&certId=40220995861346480087409489142384722381&channelType=08&currencyCode=156&encoding=utf-8&frontUrl=http://www.hcm9w.com/Mobile/MobilePay/frontReceive.html&merId=777290058126043&orderId=2016030914412761634&signMethod=01&txnAmt=26767&txnSubType=01&txnTime=20160309144127&txnType=02&version=5.0.0 
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/secureUtil.php ], Line[25]------ 摘要sha1x16 >c5ba95e8942271847ffb15727fbd273d7a767926 
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/secureUtil.php ], Line[32]------ 签名串为 >IDta5+ZIL5mhTK26sFdZklL+cn30pr4w7vm43g+lBWK1WXsi8lZaRAfN/8itG59B4ygZvDeimKZYKw8QBumOdKoiTqd4JB0FfFetTlEhwoWB3uPonQ5j8+eixC6DIH2tw81g53i8b/9E4WqM3LqeM6f2sb/PV7hOdcKJe5FPZ9I= 
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/secureUtil.php ], Line[37]------ =====签名报文结束====== 
+2016-03-09 14:41:32, INFO, 218.22.242.122, File[ /www/web/test/public_html/App/Plugins/Payment/UnionPay/Sdk/acp_service.php ], Line[160]------ 自动跳转html><html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body onload="javascript:document.pay_form.submit();">
+    <form id="pay_form" name="pay_form" action="https://101.231.204.80:5000/gateway/api/frontTransReq.do" method="post">
+	    <input type="hidden" name="version" id="version" value="5.0.0" />
+    <input type="hidden" name="encoding" id="encoding" value="utf-8" />
+    <input type="hidden" name="txnType" id="txnType" value="02" />
+    <input type="hidden" name="txnSubType" id="txnSubType" value="01" />
+    <input type="hidden" name="bizType" id="bizType" value="000201" />
+    <input type="hidden" name="frontUrl" id="frontUrl" value="http://www.hcm9w.com/Mobile/MobilePay/frontReceive.html" />
+    <input type="hidden" name="backUrl" id="backUrl" value="http://www.hcm9w.com/Mobile/MobilePay/backReceive.html" />
+    <input type="hidden" name="signMethod" id="signMethod" value="01" />
+    <input type="hidden" name="channelType" id="channelType" value="08" />
+    <input type="hidden" name="accessType" id="accessType" value="0" />
+    <input type="hidden" name="currencyCode" id="currencyCode" value="156" />
+    <input type="hidden" name="merId" id="merId" value="777290058126043" />
+    <input type="hidden" name="orderId" id="orderId" value="2016030914412761634" />
+    <input type="hidden" name="txnTime" id="txnTime" value="20160309144127" />
+    <input type="hidden" name="txnAmt" id="txnAmt" value="26767" />
+    <input type="hidden" name="certId" id="certId" value="40220995861346480087409489142384722381" />
+    <input type="hidden" name="signature" id="signature" value="IDta5+ZIL5mhTK26sFdZklL+cn30pr4w7vm43g+lBWK1WXsi8lZaRAfN/8itG59B4ygZvDeimKZYKw8QBumOdKoiTqd4JB0FfFetTlEhwoWB3uPonQ5j8+eixC6DIH2tw81g53i8b/9E4WqM3LqeM6f2sb/PV7hOdcKJe5FPZ9I=" />
+   <!-- <input type="submit" type="hidden">-->
+    </form>
+</body>
+</html> 

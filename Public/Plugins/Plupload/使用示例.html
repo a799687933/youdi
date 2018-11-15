@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <!--幻灯片-->
+    <script type="text/javascript" src="__PUBLIC__/phone/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/plupload/plupload.full.min.js"></script>
+</head>
+<body>
+
+    <div class="dtnr">
+        <ul>
+            <li class="dongtai" style="border:none">
+                <div class="dongtai2">
+                    <div class="text_left f14">上传图片</div>
+                    <div class="h_fenxian"></div>
+                    <div class="Voucher" id="addimg">
+                        <div class="shangchuan3">
+                            <input type="file" name="user_logo_upload_file" class="shangchuan" id="user_logo_upload_file">
+                        </div>
+                    </div>
+                </div>
+            </li>
+</div>
+
+</body>
+</html>
+<script type="text/javascript" >
+	$(document).ready(function(){
+		//plupload插件上传					   
+        var uploader = new plupload.Uploader({
+            //创建实例的构造方法
+            runtimes: 'html5,flash,silverlight,html4',
+            //上传插件初始化选用那种方式的优先级顺序
+            browse_button: user_logo_upload_file, // 上传按钮file控件ID
+            url: "__URL__/ajax/?news_key={$news_key}", //远程上传地址
+            flash_swf_url: '__PUBLIC__/plupload/Moxie.swf', //flash文件地址
+            silverlight_xap_url: '__PUBLIC__/plupload/Moxie.xap', //silverlight文件地址
+            filters: {
+                max_file_size: '500kb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+                mime_types: [//允许文件上传类型
+                    {title: "files", extensions: "jpg,png,gif,jpeg"}
+                ]
+            },
+            multi_selection: false, //true:ctrl多文件上传, false 单文件上传
+            init: {
+                FilesAdded: function(up, files) { //文件上传前
+                    if ($("#addimg").find("img").length > 10) {
+                        alert("您上传的图片太多了！");
+                        uploader.destroy();
+                    } else {
+                        var li = '';
+                        plupload.each(files, function(file) { //遍历文件
+                            li += "<li id='" + file['id'] + "'><div class='progress'><span class='bar'></span><span class='percent'>0%</span></div></li>";
+                        });
+                        //$("#"+ids).append(li);
+                        uploader.start();
+                    }
+                },
+                UploadProgress: function(up, file) { //上传中，显示进度条
+                    //$("#" + file.id).find('.bar').css({"width": file.percent + "%"}).find(".percent").text(file.percent + "%");
+                },
+                FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+                    var data = JSON.parse(info.response);
+                    $("#addimg").append("<input type='hidden' value='"+data.db_save+"'/><img style='width:100px;height:100px' id='" + data.name + "' title='单击删除图片' class='delimg' src='" + data.pic + "'/>&nbsp;&nbsp;");
+
+                },
+                Error: function(up, err) { //上传出错的时候触发
+                    alert(err.message);
+                }
+            }
+        });
+        uploader.init();
+        
+		//删除图片
+        $(document).on('click','.delimg',function(){
+            var name =$(this).attr('id');
+            $(this).remove();
+            /* $.ajax({
+                data : {'name':name},
+                type : 'post',
+                dataType : 'json',
+                url : '__URL__/delImg',
+                success : function(json){
+                }
+            }); */
+        });
+});
+</script>

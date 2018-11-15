@@ -1,0 +1,51 @@
+@charset "utf-8";
+/***表格***/
+/*自定义表格样式*/
+table.my-table{
+    width:100% !important;
+}    
+table.my-table tr td{
+    padding:10px !important;
+}
+table.my-table tr th{
+    padding:10px !important;
+    text-align:center !important;
+}
+table.my-table tr td.td-left,table.my-table tr th.th-left{
+    text-align:left !important;
+}
+table.my-table tr td.td-center,table.my-table tr th.th-center{
+    text-align:center !important;
+}
+table.my-table tr td.td-right,table.my-table tr th.th-right{
+    text-align:right !important;
+}
+/*自定义表格th,td加边框*/
+table.my-table-border{
+    width:100% !important;
+    border-spacing:1px !important;
+    border-collapse:separate !important;   
+    background: #ccc !important; 
+}
+table.my-table-border tr th,table.my-table-border tr td{
+    background: #fff !important;
+}
+
+/*自定义tr加底边框*/
+table.my-table-bot-border{
+    background: none !important; 
+    border:none !important; 
+    margin-bottom:10px !important;
+}
+table.my-table-bot-border tr{
+    border-bottom: 1px #ccc dotted;
+}
+/***表格结束***/
+
+/*input 控件*/
+input{text-indent:5px;}
+
+
+
+
+

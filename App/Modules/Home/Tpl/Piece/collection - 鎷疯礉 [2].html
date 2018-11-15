@@ -1,0 +1,38 @@
+{/*头部愿望商品列表*/}
+<php>
+   $cookiecookie=cookie('cookie_collect');	  
+   $cookiefield="id,".pfix()."goods_name AS goods_name,goods_num,goods_market_price,goods_retail_price,pay_points,rank_points,integral_amount,";
+   $cookiefield.="goods_thumb,goods_thumb2,stock,volume";
+   $cookiewhere['shelves']=1;
+   $cookiewhere['recycle_bin']=0;
+   $cookiewhere['id']=array('in',$cookiecookie);
+   $cookiegoods=M('goods');
+   $cookieresult = $cookiegoods->field($cookiefield)->where($cookiewhere)->select();	
+   $publicCount=$cookieresult ? count($cookieresult) : 0;
+</php>
+<foreach name="cookieresult" item="g">
+<div class="slide">
+   <span class="dbclose dbcloselike" onclick="delSlider3(this,'{:U('Cookie/deleteDoodsCollect',array('id'=>$g['id'],'is_location'=>0))}')"><span class="glyphs icon-close"></span></span>
+     <div class="ckywlmt">
+        <table width="100%" height="100%">
+          <tr>
+              <td align="center" valign="middle" width="100%" height="100%">
+                  <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+               </td>
+           </tr>
+        </table>
+      </div>
+     <div class="ckywlmtb">
+         <table width="100%" height="100%">
+            <tr>
+                <td align="center" valign="middle" width="100%" height="100%">
+                    <a href="{:U('Goods/index',array('html'=>$g['id']))}"  target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+                </td>
+             </tr>
+          </table>
+     </div>
+     <div class="ckywlmb">
+     <p><b>￥{$g['goods_retail_price']}</b></p>
+     </div>
+   </div>
+</foreach>

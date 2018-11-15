@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('BrandList'),'品牌列表')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/loadMoerPage.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"> 
+//加载分页
+window.page=new loadMoerPage();
+page.options.url="{:str_replace('2.html','',go_page($_URL_,$pageNumShown,'+'))}"; //请求地址把固定值去掉(2.html)
+page.options.totalPages="{$pageNumShown}"; //总页数
+page.options.addEnd="#add-page"; //追加内容节点
+page.options.addEndLoadImg=".pb_list"; //显示生成加载图片父节点
+page.options.addEndLoadImgPath="__COMMON__/Images/5-121204193R3.gif"; //加载图标路径
+page.run();
+</script>  
+</head>
+<body>
+<div class="g-mn">
+<include file="Common:header2" />{/*头部*/}
+  <div class="index_pb" style="background-color:#fff;">
+    <div class="pb_list">
+      <ul id="add-page">
+        <include file="Piece:Brand_index" />{/*调用碎片*/}
+      </ul>
+    </div>
+  </div> 
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('CustomerReviews'),'YOUDI WU累计评论')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/iconfont.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+function toPage(_this){
+    var url=$(_this).val();
+    if(url) window.location.href=url;
+}    
+function pjbbtxtdj(){
+$(function(){
+
+  $('.pjbbtxtdj').toggle(function(){
+        $(this).text(window.DisplayPart);
+        $(this).parent().siblings(".pjbbtxt").css("height","auto");
+        },function(){
+        $(this).text(window.ReadMore);
+        $(this).parent().siblings(".pjbbtxt").css("height","22px");
+   });    
+});    
+}
+
+
+</script>
+</head>
+<body>
+<div class="box yyhddb">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+          <h1>{:isL(L('Ceofwy'),'YOUDI WU 累计评价')}</h1>
+          <p>{:isL(L('AverageCustomerReview'),'即日起，您可以参考其他顾客对 YOUDI WU 所作出的评价。期均为60内所积累的实时评价')}</p>
+     </div><div class="cb mb15"></div></div>
+ </div>
+ <!--<h1 class="title">
+     <div class="wrap">
+         <span>{:isL(L('ClientPrivilege'),'YOUDI WU客户尊享')}</span>
+         <p class="f12 lh18">{:isL(L('AverageCustomerReview'),'即日起，您可以参考其他顾客对 YOUDI WU 所作出的评价。期均为两个月内所积累的实时评价')}</p>
+     </div>
+ </h1>-->
+ <div class="zyjh">
+  <div class="zunxl pr">
+<div class="pjt">
+     <!--<h1>YOUDI WU {:isL(L(Rating),'评分')}({$score}/5)  <span style="float:right;">{:isL(L('CumulativeEvaluation'),'累计评价')}({$counts})</span></h1>-->
+     <h1><b>YOUDI WU</b> <span>{:isL(L('ScoreTattd'),'得分')}</span> <b>{$showScore}{$showScoreFloat} / 5</b> <span>{:isL(L('BeBased'),'基于')}</span> <span>{$counts}</span> <span>{:isL(L('Reviews'),'评价')}</span></h1>
+     <div class="rating-static-module mt15">
+     
+    <span class="<php>if($score >= 1 && (1+1) ==$points){</php>rateit-big-halfselected fl svg<php>}else if($score >= 1){</php>rateit-big-selected fl svg<php>}else{</php>rateit-big fl svg<php>}</php>"></span>
+    <span class="<php>if($score >= 2 && (2+1) ==$points){</php>rateit-big-halfselected fl svg<php>}else if($score >=2){</php>rateit-big-selected fl svg<php>}else{</php>rateit-big fl svg<php>}</php>"></span>
+    <span class="<php>if($score >= 3 && (3+1) ==$points){</php>rateit-big-halfselected fl svg<php>}else if($score >= 3){</php>rateit-big-selected fl svg<php>}else{</php>rateit-big fl svg<php>}</php>"></span>
+    <span class="<php>if($score >= 4 && (4+1) ==$points){</php>rateit-big-halfselected fl svg<php>}else if($score >= 4){</php>rateit-big-selected fl svg<php>}else{</php>rateit-big fl svg<php>}</php>"></span>
+    <span class="<php>if($score >= 5 && (5+1) ==$points){</php>rateit-big-halfselected fl svg<php>}else if($score >= 5){</php>rateit-big-selected fl svg<php>}else{</php>rateit-big fl svg<php>}</php>"></span>     
+      <div class="cb"></div>
+     </div>
+
+     <p class="pjtb">{:isL(L('PastTwoMonths'),'此为过去60天内所累计的评价')}</p>
+    </div>
+    <p class="lh20 f16 col222" style="padding:10px 1% 0;">{$counts} {:isL(L('Reviews'),'评价')}</p>
+    <if condition="is_mobile()">
+    <div class="cb pb10"></div>
+    <else/>
+    <div class="xshi">
+     <div class="xshil">
+      <b class="mr5">{:isL(L('View'),'显示')}：</b>
+      <a class="now"  href="{:U('Comment/index',array('view'=>10))}">10</a>
+      <a  href="{:U('Comment/index',array('view'=>80))}">80</a>
+     </div><!---->
+     <div class="xshir"><div class="fr">
+      <div class="xshirl">
+       <select name="" class="chosen-select" onChange="toPage(this)">
+        <for start="0" end="$pageNumShown">
+              <option value="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$i+1))}" 
+              <if condition="$_GET[C('VAR_PAGE')] eq ($i+1)">selected="selected"</if>>{$i+1}</option>
+         </for>
+       </select>
+      </div>
+      <span class="fl colaaa">{:isL(L('PageCount'),'总页数')} {$pageNumShown}</span>
+      <if condition="($_GET[C('VAR_PAGE')] egt $pageNumShown) OR ($pageNumShown eq 1)">
+      <a class="glyphs icon-thinArrow fl xshirr"></a>
+       <else />
+       <a href="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$_GET[C('VAR_PAGE')] > 1 ? $_GET[C('VAR_PAGE')] : 2))}" class="glyphs icon-thinArrow fl xshirr"></a>
+       </if> 
+      <div class="cb"></div>
+     </div><div class="cb"></div></div><!---->
+     <div class="cb"></div>
+    </div><!--xshi end-->
+    </if>
+    
+    
+   <!-- <span class="xians">{:isL(L('View'),'显示')}
+        <a href="{:U('Comment/index',array('view'=>10))}" class="now mh20">10</a><a href="{:U('Comment/index',array('view'=>80))}">80</a>
+    </span>
+    <div class="pjpage">
+     <select name="" class="pjpage_select" onchange="toPage(this)">
+         <for start="0" end="$pageNumShown">
+              <option value="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$i+1))}" 
+              <if condition="$_GET[C('VAR_PAGE')] eq ($i+1)">selected="selected"</if>>{$i+1}</option>
+         </for>
+     </select>
+     <span class="col999 ph10">{:isL(L('PageCount'),'总页数')} {$pageNumShown}</span>
+     <if condition="($_GET[C('VAR_PAGE')] egt $pageNumShown) OR ($pageNumShown eq 1)">
+         <a >&nbsp;</a>
+     <else />
+        <a href="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$_GET[C('VAR_PAGE')] > 1 ? $_GET[C('VAR_PAGE')] : 2))}">&nbsp;</a>
+     </if>   
+    </div>
+    <div class="cb"></div>-->
+    <div class="xspj">
+     <ul id="app-end">
+        <include file="Comment:index_ajax" />
+     </ul>
+    
+     <!--<div class="pv20 tc jzgd pjbjzgd"><span onclick="mobile.clickPage(this,'#app-end');">{:isL(L('LoadMore'),'加载更多')}</span></div>-->
+    </div><!--xjpj end-->
+    <div class="xshi" >
+    <if condition="is_mobile()">
+    <else/>
+    <span class="fhdb fl"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span>
+    </if>
+     
+
+     <div class="xshir"><div class="fr">
+      <div class="xshirl">
+      <if condition="is_mobile()">
+      <select name="" class="phoneselect" onChange="toPage(this)">
+        <for start="0" end="$pageNumShown">
+              <option value="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$i+1))}" 
+              <if condition="$_GET[C('VAR_PAGE')] eq ($i+1)">selected="selected"</if>>{$i+1}</option>
+         </for>
+       </select>
+      <else/>
+      <select name="" class="chosen-select" onChange="toPage(this)">
+        <for start="0" end="$pageNumShown">
+              <option value="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$i+1))}" 
+              <if condition="$_GET[C('VAR_PAGE')] eq ($i+1)">selected="selected"</if>>{$i+1}</option>
+         </for>
+       </select>
+      </if>
+      
+    
+       
+       
+       
+       
+      </div>
+      <span class="fl colaaa">{:isL(L('PageCount'),'总页数')} {$pageNumShown}</span>
+      <if condition="($_GET[C('VAR_PAGE')] egt $pageNumShown) OR ($pageNumShown eq 1)">
+      <a class="glyphs icon-thinArrow fl xshirr"></a>
+       <else />
+       <a href="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$_GET[C('VAR_PAGE')] > 1 ? $_GET[C('VAR_PAGE')] : 2))}" class="glyphs icon-thinArrow fl xshirr"></a>
+       </if> 
+      <div class="cb"></div>
+     </div><div class="cb"></div></div><!---->
+     <div class="cb"></div>
+    </div><!--xshi end-->
+    <!--
+    <div class="pjpage">
+     <select name="" class="pjpage_select" onchange="toPage(this)">
+         <for start="0" end="$pageNumShown">
+              <option value="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$i+1))}" 
+              <if condition="$_GET[C('VAR_PAGE')] eq ($i+1)">selected="selected"</if>>{$i+1}</option>
+         </for>     
+     </select>
+     <span class="col999 ph10">{:isL(L('PageCount'),'总页数')} {$pageNumShown}</span>
+     <if condition="($_GET[C('VAR_PAGE')] egt $pageNumShown) OR ($pageNumShown eq 1)">
+         <a >&nbsp;</a>
+     <else />
+        <a href="{:U('Comment/index',array('view'=>$_GET['view'],C('VAR_PAGE')=>$_GET[C('VAR_PAGE')] > 1 ? $_GET[C('VAR_PAGE')] : 2))}">&nbsp;</a>
+     </if>   
+    </div>
+    <div class="cb"></div>
+    </div>-->
+    <script type="text/javascript">pjbbtxtdj();</script>
+  </div><!--zyjhl end-->
+  <div class="zyjhr"><!--{:get_con(pfix('EDITOR_TWO'))}-->
+      <include file="$filesName" />
+   </div><!--zyjhr end-->
+  
+  <div class="cb"></div>
+  <if condition="is_mobile()">
+  <div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>
+    <else/>
+    
+    </if>
+   
+ </div><!--zyjh end-->
+
+<!--content endh-->
+<include file="Common:footer" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript" src="__HOME__/js/plugins.js"></script>
+<script>
+
+setTimeout(function(){$('.ui-loader-default').remove();},50);
+$(function(){
+ $('[data-toggle="lightbox-image"]').magnificPopup({type: 'image', image: {titleSrc: 'title'}});
+
+        // Initialize image gallery lightbox
+        $('[data-toggle="lightbox-gallery"]').magnificPopup({
+            delegate: 'a.gallery-link',
+            type: 'image',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: true,
+                arrowMarkup: '<button type="button" class="mfp-arrow mfp-arrow-%dir%" title="%title%"></button>',
+                tPrev: 'Previous',
+                tNext: 'Next',
+                tCounter: '<span class="mfp-counter">%curr% of %total%</span>'
+            },
+            image: {titleSrc: 'title'}
+        });
+});
+/**
+ *THIS   this
+ * addEnd      追加内容节点
+ *  */
+mobile={};
+page=2;
+mobile.clickPage=function(THIS,addEnd){
+    var _this=this;
+    var totalPages=parseInt("{$pageNumShown}");
+    var url="{:U('Comment/index','','')}?view={$_GET['view']}&p="+page;
+    if(page >totalPages){
+        $(THIS).attr('disabled',true).text("{:isL(L('LoadingCompleted'),'已全部加载完毕')}");
+        return;
+    }
+    this.run=function(){
+         if(page <= totalPages){  
+            if($(THIS).attr('ajax') == 'ok') return;              
+             _this.getPage();
+         }else{
+             $(THIS).attr('disabled',true).val(window.LoadingCompleted);
+         }             
+    };  
+    this.getPage=function(){
+          $.ajax({
+             type:'get',
+             dataType: "text",
+             url:url,
+             success:function(response,status,xhr){
+                 page++;
+                 $(THIS).attr('ajax','').attr('disabled',false).val('Load More');
+                 $(addEnd).append(response);
+                 pjbbtxtdj();
+              },
+              beforeSend:function(){
+                  $(THIS).attr('ajax','ok').attr('disabled',true).val(window.Loading);
+              },         
+             error:function(xhr,errorText,errorType){
+                 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+             }
+         });              
+    };  
+    //运行
+    _this.run();         
+}; 
+</script>
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+            $(".chosen-select").chosen();
+ </script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><if condition="$info['success'] eq 1">{:isL(L('RechargeSuccess'),'充值成功')}<else />{:isL(L('RechargeFailure'),'充值失败')}</if></title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/Js/MYscroll.js"></script>
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+function setTab(m,n){
+var tli=document.getElementById("menu"+m).getElementsByTagName("li");
+var mli=document.getElementById("main"+m).getElementsByTagName("blockquote");
+for(i=0;i<tli.length;i++){
+tli[i].className=i==n?"hover":"";
+mli[i].style.display=i==n?"block":"none";
+}
+}
+</script>
+</head>
+<body>
+<include file="Common:top" />{/*最顶部*/}
+ <div class="cb"></div>
+</div></div><!--top end-->
+<div class="zcheader"><div class="wrap">
+ <a href="__ROOT__/" class="logo">&nbsp;</a>
+ <span class="city" style="margin-right:50px">{$cityName}</span>
+ <div class="gwbs" >
+ </div><!---->
+ <div class="cb"></div>
+</div></div><!--header end-->
+
+ <!--content begin-->
+ <div class="wrap">
+   <div class="cgfk">
+   
+    <if condition="$info['success'] eq 1">   
+        <h1 class="tc lh40 pb15">
+          <span class="icon57 pl45 b f22 hong4">{:isL(L('RechargeSuccess'),'充值成功')}</span>
+        </h1>
+        <p class="icon58 pl25 f14 lh30 col666">{:isL(L('RechargeNumber'),'充值号')}：<strong style="color:red;">{$info['order_sn']}</strong>    </p>
+        <p class="icon58 pl25 f14 lh30 col666">{:isL(L('RechargeAmount'),'充值金额')}：<strong style="color:red;">{:getPrice($info['member_money'],true)}</strong></p>
+        <p class="icon58 pl25 f14 lh30 col666 mb35">感谢您选择了我们</p>
+        <a href="__ROOT__." class="fhsy mr30 ml45">返回首页</a>
+        <a href="{:U('Member/index')}" class="fhgwc">返回购物车</a>
+    <else />
+        <h1 class="tc lh40 pb15" style="text-align: left">
+          <span class="icon57-1 pl45 b f22 hong4">{:isL(L('RechargeFailure'),'充值失败')}</span>
+        </h1>
+        <p class="icon58 pl25 f14 lh30 col666">您的充值操作失败！</p>
+        <p class="icon58 pl25 f14 lh30 col666">如果有什么问题，请及时和我们联系</p>
+        <p class="icon58 pl25 f14 lh30 col666 mb35">客服热线：{:C('UNIFYTEL')}</p>
+        <a href="__ROOT__." class="fhsy mr30 ml45">返回首页</a>
+        <a href="{:U('Member/index')}" class="fhgwc">返回购物车</a> 
+    </if>
+   </div>
+  
+  <!--<div class="zgtj pt20">
+    <div class="zgtjt">
+     <ul id="menu2">
+      <li onclick="setTab(2,0)" class="hover">掌柜推荐</li>
+      <li onclick="setTab(2,1)">猜你喜欢</li>
+      <li onclick="setTab(2,2)">我的收藏</li>
+      <li onclick="setTab(2,3)">最近浏览</li>
+      <div class="cb"></div>
+     </ul>
+    </div>
+    <div class="zgtjb2" id="main2">
+     <blockquote class="block">
+      <div class="zgtjbimg zgtjbimg1">
+       <a href="javascript:void()" class="icon50a icon50a1">&nbsp;</a>
+       <a href="javascript:void()" class="icon50b icon50b1">&nbsp;</a>
+       <div class="zgtjbimgm zgtjbimgm1">
+        <ul>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <div class="cb"></div>
+        </ul>
+       </div>
+      </div>
+     </blockquote>
+     <blockquote>
+     <div class="zgtjbimg zgtjbimg2">
+       <a href="javascript:void()" class="icon50a icon50a2">&nbsp;</a>
+       <a href="javascript:void()" class="icon50b icon50b2">&nbsp;</a>
+       <div class="zgtjbimgm zgtjbimgm2">
+        <ul>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <div class="cb"></div>
+        </ul>
+       </div>
+      </div>
+     </blockquote>
+     <blockquote>
+      <div class="zgtjbimg zgtjbimg3">
+       <a href="javascript:void()" class="icon50a icon50a3">&nbsp;</a>
+       <a href="javascript:void()" class="icon50b icon50b3">&nbsp;</a>
+       <div class="zgtjbimgm zgtjbimgm3">
+        <ul>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <div class="cb"></div>
+        </ul>
+       </div>
+      </div>
+     </blockquote>
+     <blockquote>
+      <div class="zgtjbimg zgtjbimg4">
+       <a href="javascript:void()" class="icon50a icon50a4">&nbsp;</a>
+       <a href="javascript:void()" class="icon50b icon50b4">&nbsp;</a>
+       <div class="zgtjbimgm zgtjbimgm4">
+        <ul>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <li>
+          <img src="Images/img13.jpg" alt=""/>
+          <p class="lh18">52°剑南春 500ml</p>
+          <span class="hong4 f16 fl lh24">￥345.0</span>
+          <a href="#" title="">查看详情</a>
+          <div class="cb"></div>
+         </li>
+         <div class="cb"></div>
+        </ul>
+       </div>
+      </div>
+     </blockquote>
+    </div>
+   </div> zgtj end-->
+ </div>
+ <div class="cb pv35"></div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer" />{/*页脚*/}
+<!--footer end-->
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<include file="Common:float" />{/*右边浮动*/}
+
+<!---->
+<script>
+ $(".zgtjbimg1").myscroll({ prev: ".icon50a1", next: ".icon50b1", scrollbox: ".zgtjbimgm1" });
+ $(".zgtjbimg2").myscroll({ prev: ".icon50a2", next: ".icon50b2", scrollbox: ".zgtjbimgm2" });
+ $(".zgtjbimg3").myscroll({ prev: ".icon50a3", next: ".icon50b3", scrollbox: ".zgtjbimgm3" });
+ $(".zgtjbimg4").myscroll({ prev: ".icon50a4", next: ".icon50b4", scrollbox: ".zgtjbimgm4" });
+</script>
+</body>
+</html>

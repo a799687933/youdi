@@ -1,0 +1,82 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/BelowLine/lineSendForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>银行名称：</dt>
+                <dd>
+                    <input  type="text" name="bank_name" class="required" size="40" value="{$save.bank_name}"/>
+                    
+                </dd>
+            </dl>
+			
+            <dl>
+                <dt>上传LOGO：</dt>
+                <dd>
+                     <input type="hidden" name="bank_logo" value="" id="d_thumb"/>
+                    <input name="file1" type="file" id="fileToUpload4" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>158,'height'=>28,'wat'=>0))}','fileToUpload4','img_show','d_thumb','','B-show','__ROOT__','imgloads');">
+                  
+                </dd>
+            </dl>
+            
+            <dl style="<if condition="$save['bank_logo']">display:block;<else />display:none;</if>" id="imgloads">
+                <dt>LOGO信息：</dt>
+                <dd>
+                    <a href="http://" class="B-show" target="_blank"><img src="__ROOT__/{$save['bank_logo']}" height="28" id="img_show" style="display:inline;position:relative;top:-10px;" class="B-show"/></a>
+                </dd>
+            </dl>       			
+
+            <dl>
+                <dt>开户网点：</dt>
+                <dd>
+                    <input  type="text" name="bank_branch" class="required" size="40" value="{$save.bank_branch}"/>
+                    
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>银行帐号：</dt>
+                <dd>
+                    <input  type="text" name="bank_sn" class="required" size="40" value="{$save.bank_sn}"/>
+                    
+                </dd>
+            </dl>
+ 
+             <dl>
+                <dt>帐号名称：</dt>
+                <dd>
+                    <input  type="text" name="bank_open_account" class="required" size="40" value="{$save.bank_open_account}"/>
+                    
+                </dd>
+            </dl>                    
+    
+            <dl>
+                <dt>排序：</dt>
+                <dd>
+                     <input type="text" name="bank_orders" class="required digits" value="<if condition="$save['orders']">{$save.bank_orders}<else />0</if>" size="40"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>是否显示：</dt>
+                <dd>
+                    <label><input type="radio" name="is_show" value="1" <if condition="$save['is_show']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="is_show" value="0" <if condition="!$save['is_show']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

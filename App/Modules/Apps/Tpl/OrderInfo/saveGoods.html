@@ -1,0 +1,174 @@
+<style type="text/css">
+.list tr td{background:none;}    
+</style>
+<script type="text/javascript">
+$(function(){
+    //检索
+    $('#retrieve-goods').click(function(){       
+        var value=$('input[name="where_goods"]').val();
+        var url='{:U(APP_APPS."/OrderInfo/getGoods","","")}/wheres/'+value;
+        if(!value){
+            alert('请输入商品货号或商品名称？');
+            return;
+        }
+         $.ajax({
+             type:'get',
+             dataType: "json",
+             url:url,
+             success:function(response,status,xhr){
+                  var str='<p style="width: 400px;height:auto;font-size:13px;line-height: 200%;border:1px #ccc solid;margin:10px 0 10px 10px;padding:5px;float:left;">';
+                  var attr='';
+                  for(var i in response){
+                      str+='名称: '+ response[i].goods_name +'<input type="hidden" value="'+response[i].id+'" name="goods_id"> ';
+                      str+='<input type="hidden" value="'+response[i].goods_market_price+'" name="goods_market_price">';
+                      str+='<input type="hidden" value="'+response[i].goods_retail_price+'" name="goods_retail_price"><br/>';
+                      str+='品牌: '+ response[i].name_cn +' <br/>';
+                      str+='市场价: '+ response[i].goods_market_price +' <br/>';
+                      str+='本店价: '+ response[i].goods_retail_price +' <br/>';
+                      str+='赠送消费积分: '+ response[i].pay_points +' <br/>';
+                      str+='最多可使用消费积分: '+ response[i].integral_amount +' <br/>';
+                      str+='<strong>属性：</strong><br/>';
+                      for(var j in response[i].selectArr){
+                            str+=response[i].selectArr[j].name +' :';
+                            
+                            for(var k in response[i].selectArr[j].value){
+                                if(response[i].selectArr[j].attr_type == 2){
+                                    str+='<input type="checkbox" attr-price="'+response[i].selectArr[j].value[k].price+'" attr-name="'+response[i].selectArr[j].name+'" attr-val="'+response[i].selectArr[j].value[k].price+'" title="[加￥'+response[i].selectArr[j].value[k].price+']" class="attr_id" name="name'+response[i].selectArr[j].attribute_id+'" value="'+response[i].selectArr[j].value[k].attr_id+'"/>'+response[i].selectArr[j].value[k].name;
+                                }else{                                    
+                                    str+='<input type="radio" attr-price="'+response[i].selectArr[j].value[k].price+'" attr-name="'+response[i].selectArr[j].name+'" attr-val="'+response[i].selectArr[j].value[k].price+'" title="[加￥'+response[i].selectArr[j].value[k].price+']" class="attr_id" name="name'+response[i].selectArr[j].attribute_id+'" value="'+response[i].selectArr[j].value[k].attr_id+'"/>'+response[i].selectArr[j].value[k].name;
+                                }                            
+                            } 
+                            str+='<br/>';
+                      }  
+                                  
+                  }
+                  str+='<a class="buttonActive add-goods" href="javascript:void(0);"><span>添加</span></a><br/>  ';
+                  str+='</p>';
+                  $('#appends').html(str);   
+              }
+           });          
+    });
+    
+    //添加商品
+    $('#appends').on('click','.add-goods',function(){
+         var attrId=$(this).parent().children('.attr_id');
+         var goodsId=$(this).parent().children('input[name="goods_id"]').val();
+         var goods_market_price=$(this).parent().children('input[name="goods_market_price"]').val();
+         var goods_retail_price=$(this).parent().children('input[name="goods_retail_price"]').val();
+         var valueId='';
+         var attrIprice=0;
+         
+          for(var i=0;i < attrId.length;i++){
+              if(attrId.eq(i).attr('checked')){
+                  valueId+=attrId.eq(i).val()+',';
+                  attrIprice+=parseFloat(attrId.eq(i).attr('attr-price'));
+     
+              }
+          }
+          goods_retail_price=parseFloat(goods_retail_price)+attrIprice;//包含属性的价格
+          alert(value);
+      /*    var url='{:U(APP_APPS."/OrderInfo/addGoods","","")}/id/'+goodsId+'/attr/'+value;
+         $.ajax({
+             type:'get',
+             dataType: "json",
+             url:url,
+             success:function(response,status,xhr){
+
+              }
+           });             */       
+    });
+    
+    //删除商品
+    $('#goods-list').on('click','.del-goods',function(){
+        $(this).parent().parent().remove();
+    });
+
+});    
+</script>
+<div class="pageContent">
+    <form method="post" action="{:U(APP_APPS.'/OrderInfo/saveGoodsForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    <table class="list" width="100%" layoutH="90" id="goods-list">
+        <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>商品货号</th>
+                <th >品牌</th>
+                <th>市场售价</th>
+                <th >本店售价</th>
+                <th >商品属性</th>
+                <th >已付款</th>
+                <th>已发货</th>
+                <th>赠品</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="goodsList" id="r">
+            <tr target="sid_user">
+                <input type="hidden" name="goods_id[]" value="{$r.goods_id}"/>
+                <td>{$r.goods_name}</td>
+                <td>{$r.goods_sn}</td>
+                <td>{$r.name_cn}</td>
+                <td>{$r.market_price}</td>
+                <td>{$r.goods_price}</td>
+                <td>{$r.goods_attr}</td> 
+               <td>
+                   <if condition="$r['is_real']">
+                       <img src="__SYS_IMG__/yes.gif"/>
+                   <else />
+                       <img src="__SYS_IMG__/no.gif"/>
+                   </if>
+               </td>
+               <td>
+                   <if condition="$r['is_shipping']">
+                       <img src="__SYS_IMG__/yes.gif"/>
+                   <else />
+                       <img src="__SYS_IMG__/no.gif"/>
+                   </if>                   
+               </td>
+               <td>
+                   <if condition="$r['is_gift']">
+                       <img src="__SYS_IMG__/yes.gif"/>
+                   <else />
+                       <img src="__SYS_IMG__/no.gif"/>
+                   </if>                
+               </td>
+               <td><input type="text" value="{$r.goods_number}" name="goods_number[]" size="1"/></td>
+               <td>
+                       <a class="buttonActive del-goods" href="javascript:void(0);">
+                           <span>删除</span>
+                       </a>                        
+                </td>
+            </tr>
+          </volist> 
+         <tr>
+                <td colspan="2" style="font-size:14px;font-weight: bold;border-top:2px #ccc solid;background: #fff;">       
+                     输入商品货号或商品名称：
+                     <input type="text" name="where_goods" size="40"/>
+                   </td>
+                   <td style="font-size:14px;font-weight: bold;border-top:2px #ccc solid;background: #fff;" colspan="9">
+                       <a class="buttonActive auto-size" href="javascript:void(0);" id="retrieve-goods">
+                           <span>检索</span>
+                       </a>                         
+                   </td>    
+
+         </tr>
+         
+         <tr><td colspan="11" style="background: #fff;" id="appends">                          
+         </td></tr>
+         
+        </tbody>
+    </table>
+
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+

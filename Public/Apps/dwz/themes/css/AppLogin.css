@@ -1,0 +1,167 @@
+@CHARSET "UTF-8";
+/**
+ * 	自定义Jquery UI样式
+ */
+.ui-dialog{
+	padding:0 !important;
+	border:none !important;
+	border:1px #666 solid !important;
+	border-radius:0 !important;
+}
+.ui-dialog-titlebar{
+	padding:0 !important;
+	height:37px !important;
+	border:none !important;
+	border:1px #fff solid !important;
+	border-radius:0 !important;
+	border-bottom:none !important;
+	background:url(../../../Images/ui_header_bg.png) !important;
+}
+.ui-dialog-title{
+	color:#fff !important;
+	height:37px !important;
+	line-height:37px !important;
+	font-size:14px !important;
+	text-indent:10px;
+}
+.ui-dialog-buttonset button{
+	background:url(../../../Images/button.png) !important;
+	height:35px !important;
+	color:#fff !important;
+	border:none !important;
+	font-size:14px !important;
+	font-weight:bold !important;
+}
+.ui-dialog-buttonset button:hover{
+	background:url(../../../Images/button_hover.png) !important;
+}
+.ui-dialog-content{
+	width:100% !important;
+}
+/************************/
+*{
+	padding:0;
+	margin:0;
+}
+body {
+	height:100%;
+	font-size:12px;
+}
+
+#header{
+	width:198px;
+	height:60px;
+	background:url(../../../Images/logo.png) no-repeat;
+	margin:0 auto;
+	position:relative;
+	top:150px;
+}
+#main{
+	text-align:center;
+	position:relative;
+	top:200px;
+}
+#login input[type="text"],#login input[type="password"]{
+	width:180px;
+	height:25px;
+	line-height:25px;
+	background:#000;
+	border:1px solid #d2d2d2;
+	color:#fff;
+	font-size:18px;
+	font-weight:bold;
+	padding:12px;
+	border-radius:4px;
+	margin-right:10px;
+}
+#login input.verify{
+	width:100px !important;
+	}
+#login input[type="submit"]{
+	width:150px;
+	height:50px;
+	position:relative;
+	top:-4px;
+	font-size:24px;
+	font-family:'黑体';
+	background:url(../../../Images/login_button.png);
+	color:#fff;
+	border:none;
+	position:relative;
+	top:2px;
+	border-radius:4px;
+	cursor:pointer;
+}
+#login input[type="submit"]:hover{
+	background:url(../../../Images/login_button_hover.png);
+}
+#login .bottom{
+	width:380px;
+	margin:0 auto;
+	text-align:right;
+	font-size:14px;
+	color:#fff;
+	padding:10px;
+}
+#login .bottom a{
+	color:#eee;
+	text-decoration:none;
+	text-shadow:1px 1px 1px #666;
+}
+#login .bottom a:hover{
+	text-decoration:underline;
+}
+#footer{
+	height:40px;
+	background:#000;
+	line-height:40px;
+	position:absolute;
+	bottom:0;
+	width:100%;
+	opacity:0.4;
+	-moz-opacity:0.4;
+	filter:alpha(opacity:40);
+}
+.footer{
+	position:absolute;
+	bottom:0;
+	color:#fff;
+	text-align:center;
+	font-size:13px;
+	width:100%;
+	height:40px;
+	line-height:40px;
+}
+
+#register input.text{
+	width:270px;
+	height:25px;
+	padding:5px;
+	border:1px solid #ccc;
+	border-radius:4px;
+	background:#fff;
+	margin:10px 0 10px 10px;
+}
+#register span.star{
+	color:red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

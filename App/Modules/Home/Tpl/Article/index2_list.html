@@ -1,0 +1,95 @@
+{/*分页碎片*/}
+<foreach name="result" item="res" key="reskey" >
+   <li>
+    <h2 class="zixunt">
+        <img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt="">
+        <del class="ml10">youdi wu</del>
+        <div class="cb"></div>
+     </h2>
+    <div class="zxpic zxpic_{$_GET['p'] ? $_GET['p'] :1}_{$reskey}">
+     <div class="swiper-wrapper">
+     <foreach name="res['album']" item="alb">
+        <div class="swiper-slide"><img src="__ROOT__/{$alb['img']}" alt=""></div>
+     </foreach>
+   </div>
+   <span class="zxpicl fa  fa-caret-left zxpicl_{$_GET['p'] ? $_GET['p'] :1}_{$reskey}"></span><span class="zxpicr fa  fa-caret-right zxpicr_{$_GET['p'] ? $_GET['p'] :1}_{$reskey}"></span>
+   <div class="zxpicicon"><b></b>HAPPY</div>
+    </div><!--zxpic end-->
+    
+    <div class="zxpicbwrap">
+    <div class="zxpicb zxpicb_{$_GET['p'] ? $_GET['p'] :1}_{$reskey}"></div>
+    <if condition="$memberId gt 0">
+        <b class="zxdz fa {$res['is_like'] ? 'zxdznow fa-heart' : 'fa-heart-o'}" onClick="praise(this,'{:U('Article/clickLike',array('id'=>$res['id']))}')"></b>{/*点赞*/}
+         <a href="javascript:void(0);" class="zxplun fa fa-commenting-o" onClick="positions(this)"></a> {/*评论索引*/}
+         <b class="zxsc fa {$res['is_colle'] ? 'fa-star' : 'fa-star-o'}" onClick="setCollection(this,'{:sign_url(array('id'=>$res['id'],'to_action'=>'Article/index2'),U('Article/setCollection'))}')"></b> {/*收藏按钮*/}                    
+     <else />
+         <b class="zxdz fa fa-heart-o" onClick="window.location.href='{:sign_url(array('url'=>base64_encode(get_url())),U('Login/index'))}';"></b>{/*点赞*/}
+          <a href="{:sign_url(array('url'=>base64_encode(get_url())),U('Login/index'))}" class="zxplun fa fa-commenting-o"></a> {/*评论索引*/}
+         <b class="zxsc fa fa-star-o" onClick="window.location.href='{:sign_url(array('url'=>base64_encode(get_url())),U('Login/index'))}';"></b> {/*收藏按钮*/}           
+     </if> 
+    </div><!--zxpicbwrap end-->
+    <p class="pl15 col333 f12"><span class="paraise_num">{$res['like_count']}</span>次赞</p>
+    <div class="zxfbnr">
+      youdi&nbsp;wu 
+      <if condition="$res['attr']">
+         <php>$YOU_LABEL=C('YOU_LABEL');</php>
+         <span>#{$YOU_LABEL[$res['attr']]['cn_name']}</span>
+      </if>
+      {$res['bewrite']|strip_tags=###}<b>更多</b>
+    </div><!--zxfbnr end-->
+    <if condition="$memberId gt 0">{/*登录方可见评论*/} 
+        <div class="zxdh list_p">
+         <php>$times=0;</php>
+         <foreach name="res['reply_arr']" item="reply" key="replyKey">
+              <php>$times=$reply['times'];</php>
+              <if condition="$reply['user_id'] eq 0">
+                  <p style="position:relative;"  class="plneir">
+                     <img src="/Public/Home/images/logo.png" width="68" alt="" class="vam">
+                     <span class="vam mh5" style="color:#023867;">@{$reply['user_name']}</span>
+                     <span>{$reply['content']}</span>
+                     <span class="show_all" onclick="showAlls(this)">显示全部</span>
+                   </p>
+               <else />
+                  <p style="position:relative;"  class="plneir">
+                     <span class="vam mr5">{$reply['user_name']}</span><span class="vam" style="color:#023867;">@</span>
+                     <img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">
+                     <span>{$reply['content']}</span>
+                     <span class="show_all" onclick="showAlls(this)">显示全部</span>
+                  </p>
+               </if>
+          </foreach>
+         </div><!--zxdh end-->
+        
+             <div class="zxdhb" style="<if condition="!$res['reply_arr']">display:none;</if>">
+                <span class="show_time">{:from_time($times,'')}</span><b>全部<span class="show_app_num">{$res['comment']}</span>条评论</b>
+                <div class="cb"></div>
+             </div>
+
+     </if>  
+     <div class="zxplbox" id="zxpl1">
+         <form action="{:sign_url(array('article_id'=>$res['id']),U('Article/commentReply'))}" onSubmit="return formSend(this)">
+              <input name="content" placeholder="添加评论···" class="zxpltext">
+              <div class="zxplboxr">
+              <b class="fa fa-hand-pointer-o"></b>
+              <input type="submit" value="发送" class="zxplbtn">
+          </form>
+      </div>
+      <div class="cb"></div>
+     </div>
+
+   </li>
+</foreach>
+ <script>
+
+     $(function(){
+
+		$(".zxpic .swiper-wrapper").click(function(e){
+		
+			$(this).parents(".zxpic").find(".zxpicicon").fadeIn()
+			num=$(this).parents(".zxpic").find(".zxpicicon").width()/2
+			$(this).parents(".zxpic").find(".zxpicicon").css({top:event.offsetY+10,left:event.offsetX-num-10})
+		
+			}) 
+		 
+		 })
+    </script>

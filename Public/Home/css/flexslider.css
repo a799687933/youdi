@@ -1,0 +1,24 @@
+ .flexslider {	margin: 0 auto;	position: relative;	max-width:1440px; box-sizing:border-box; width:100%; 	zoom: 1;}
+.flex-viewport {max-height: 2000px;	-webkit-transition: all 1s ease;-moz-transition: all 1s ease;	transition: all 1s ease;}
+.flexslider .slides {	zoom: 1;}
+.flexslider .slides li{ position:relative}
+.flexslider .slides li img{ width:100%}
+.flexslider .slides li b{ padding:7px 12px 5px; line-height:18px; display:inline-block; border-radius:5px; color:#fff; font-family:Arial; position:absolute; right:13px; top:13px; font-size:13px; font-weight:normal; text-shadow:0 0 5px #999}
+.flexslidernow .slides li b{ background:rgba(150,150,150,1)}
+.flex-direction-nav {*height: 0;}
+.flex-direction-nav a{ display:block; width:50px; height:120px; border-radius:5px; position:absolute; top:50%; margin-top:-60px; transition:all 50ms ease-out 0s;opacity:0.5;background-repeat:no-repeat; background-size:auto 28px; background-position:center center; font-size:0}
+.flexslidernow .flex-direction-nav{ }
+.flexslidernow .flex-direction-nav a{ background-color: rgba(150, 150, 150, 1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);}
+.flex-direction-nav .flex-next{ background-image:url(../images/1121ab.png);right:10px}
+.flex-direction-nav .flex-prev{  background-image:url(../images/1121aa.png); left:10px}
+.flexslidernow .flex-direction-nav a:hover{background-color: #969696; opacity:1}
+.flex-control-nav {width: 100%;position: absolute;bottom: 10px;text-align: center; display:none}
+.flex-control-nav li {margin: 0 5px;display: inline-block;zoom: 1;*display: inline; }
+.flex-control-paging li a{background: #fff; border-radius:50%;display:block;height: 13px;overflow: hidden;text-indent:-99em;width: 13px;cursor: pointer;}
+.flex-control-paging li a.flex-active { background:#1b60a6;}
+@media screen and (max-width:767px){
+	.flex-direction-nav .flex-next{right:-10px;}
+	.flex-direction-nav .flex-prev{left:-10px;} 
+	.flexslider .slides li b{right:0}
+	}

@@ -1,0 +1,29 @@
+﻿{/*清仓促销列表*/}
+<foreach name="parade" item="ins">
+      <li>
+           <img src="__ROOT__/{$ins['goods_thumb']}" alt=""/>
+           <div class="qccxr">
+            <h1 class="hong f16 lh30 b">{$ins['goods_name']|strip_tags=###|sub_str=###,12}</h1>
+            <p class="col999 lh20 pt5 f14">市场价：<del>￥ {$ins['goods_market_price']}</del></p>
+            <p class=" col63 lh20 pb5 f14">已售：<b class="hong">{$ins['volume']}</b> 瓶</p>
+            <span class="hong lh30 f14">清仓价：<span class="b">￥<span class="f16">{$ins['goods_retail_price']}</span></span></span>
+            <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$ins['id']))}" class="icon5 fr">查看详情》</a>
+            <div class="cb"></div>
+           </div>
+           <div class="cb"></div>
+      </li>
+</foreach>
+<foreach name="result" item="ins">
+      <li>
+           <img src="__ROOT__/{$ins['goods_thumb']}" alt=""/>
+           <div class="qccxr">
+            <h1 class="hong f16 lh30 b">{$ins['goods_name']|strip_tags=###|sub_str=###,12}</h1>
+            <p class="col999 lh20 pt5 f14">市场价：<del>￥ {$ins['goods_market_price']}</del></p>
+            <p class=" col63 lh20 pb5 f14">已售：<b class="hong">{$ins['volume']}</b> 瓶</p>
+            <span class="hong lh30 f14">清仓价：<span class="b">￥<span class="f16">{$ins['goods_retail_price']}</span></span></span>
+            <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$ins['id']))}" class="icon5 fr">查看详情》</a>
+            <div class="cb"></div>
+           </div>
+           <div class="cb"></div>
+      </li>
+</foreach>

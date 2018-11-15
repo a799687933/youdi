@@ -1,0 +1,264 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+  <if condition="$type eq 0"><!--按用户发放现金券-->
+           <script type="text/javascript">
+                 //用户检索
+                $('.pro-ajax').click(function(){
+                    var min=$('.cart-ajax').children('option:selected').attr('min');
+                    var max=$('.cart-ajax').children('option:selected').attr('max');
+                    var name=$('.tdinpt').val();
+                    var str=null;
+                    if(min){
+                        var whereUrl="{:U(APP_APPS.'/Bonus/userLeve','','')}"+'/min/'+min+'/max/'+max+'/act/leve/name/'+name;
+                    }else{
+                        var whereUrl="{:U(APP_APPS.'/Bonus/userLeve','','')}"+'/act/all'+'/name/'+name;
+                    }
+                    
+                    var response=callAjaxDo(whereUrl,'json');
+                    for(var i in response){
+                        str+='<option value="'+response[i].member_id+'">'+response[i].user_name+'</option>';
+                    }
+                    $('.selectLeftProList').children().remove();
+                    $('.selectLeftProList').append(str);
+                }); 
+          </script>
+           <form method="post" action="{:U(APP_APPS.'/Bonus/bonusSendForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+             <input type="hidden" name="bonus_type_id" value="{$id}"/>  
+             <input type="hidden" name="type" value="{$type}"/>  
+             <div class="pageFormContent nowrap" layoutH="65">
+               <div inited="1000" style="display: block;">
+                  <table cellpadding="0" cellspacing="0" class="" border="0" style="width:100%;">
+                  <tr> 
+                   <td colspan="3"  style="height:30px;line-height:30px;"> 
+                    <select class="combox cart-ajax" name="" >
+                             <option value="0">-按所有用户发放-</option>
+                              <foreach name="grade" item='C'>                       
+                               <option value="{$C.id}" min='{$C.min_points}' max="{$C.max_points}">{$C.grade_name}</option>
+                             </foreach>  
+                      </select>                                                                      
+                 <input type="text" name="s_name" class="tdinpt" style="float:left;padding-left:5px;"/>
+                 </span> <a class="button pro-ajax" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" ><span>检索</span></a>  
+                  </td>
+                  </tr>
+                                 
+                  <tr>
+                    <th style="height:30px;line-height:30px;text-indent:10px;">可选用户</th>
+                    <th style="text-align:center;width:60px;">操作</th>
+                    <th>发放此类型红包的用户</th>
+                  </tr>
+                  <tr>
+                    <td width="45%">          
+                      <select name="" size="20" style="width:100%" multiple class="selectLeftProList">
+                      </select>             
+                    </td>
+                    <td align="center" style="text-align:center;width:60px;">
+                      <p><br /><input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  /></p><br />                          
+                      <p><input type="button" value=" >> " onclick="leftValueOen('selectLeftProList','selectRightProList','');" class="upbutton" /></p><br />
+                      <p><input type="button" value=" << " onclick="rightValueOen('selectRightProList');" class="upbutton" /></p><br />
+                    </td>
+                    <td width="45%">
+                      <select name="member_id[]" size="20" style="width:100%" multiple class="selectRightProList">
+
+                      </select>
+                    </td>
+                   </tr>      
+                    </table><!--关联商品end-->                         
+         </div>
+      </div>   
+      <div class="formBar">
+        <ul>
+            <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+            <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+        </ul>
+       </div>     
+      </form>      
+  <elseif condition="$type eq 1" /><!--按商品发放现金券-->    
+          <script type="text/javascript">
+                 //用户检索
+                $('.pro-ajax').click(function(){
+                     var url="{:U(APP_APPS.'/Search/retrieval','','')}";
+                     retrieval(url,'s_name','cart-ajax','bra-ajax',1,'selectLeftProList');
+                }); 
+          </script>
+           <form method="post" action="{:U(APP_APPS.'/Bonus/bonusSendForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+             <input type="hidden" name="bonus_type_id" value="{$id}"/>  
+             <input type="hidden" name="type" value="{$type}"/>  
+             <div class="pageFormContent nowrap" layoutH="65">
+               <div inited="1000" style="display: block;">
+                  <table cellpadding="0" cellspacing="0" class="" border="0" style="width:100%;">
+                  <tr> 
+                   <td colspan="3" class="tdleft" style="height:30px;line-height:30px;"> 
+                    <select class="combox cart-ajax" name="" >
+                             <option value="0">-所有分类-</option>
+                              <foreach name="goodCat" item='C'>                       
+                               <option value="{$C.id}">{$C.html}{$C.name}</option>
+                             </foreach>  
+                      </select>   
+                     <select class="combox bra-ajax" name="" >
+                         <option value="0">-所有品牌-</option>
+                          <foreach name="brand" item='C'>                       
+                           <option value="{$C.id}">{$C.html}{$C.name_cn}</option>
+                         </foreach>  
+                  </select>                                                                            
+                 <input type="text" name="s_name" class="tdinpt" style="float:left;padding-left:5px;"/>
+                 </span> <a class="button pro-ajax" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" ><span>检索</span></a>  
+                  </td>
+                  </tr>
+                 
+                  <tr>
+                    <th style="height:30px;line-height:30px;text-indent:10px;">可选商品</th>
+                    <th style="text-align:center;width:60px;">操作</th>
+                    <th>发放此类型现金券的商品</th>
+                  </tr>
+                  <tr>
+                    <td width="45%">          
+                      <select name="" size="20" style="width:100%" multiple class="selectLeftProList">
+                      </select>             
+                    </td>
+                    <td align="center" style="text-align:center;width:60px;">
+                      <p><br /><input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  /></p><br />                          
+                      <p><input type="button" value=" >> " onclick="leftValueOen('selectLeftProList','selectRightProList','');" class="upbutton" /></p><br />
+                      <p><input type="button" value=" << " onclick="rightValueOen('selectRightProList');" class="upbutton" /></p><br />
+                    </td>
+                    <td width="45%">
+                      <select name="goods_id[]" size="20" style="width:100%" multiple class="selectRightProList">
+                          <foreach name="rightSelect" item="r">
+                              <option value="r.id" selected="selected">{$r.goods_name}</option>
+                          </foreach>
+                      </select>
+                    </td>
+                   </tr>      
+                    </table>           
+         </div>
+      </div>   
+      <div class="formBar">
+        <ul>
+            <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+            <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+        </ul>
+       </div>     
+      </form> 
+  <elseif condition="$type eq 2"/><!--按订单金额发放现金券-->          
+  <elseif condition="$type eq 3"/><!--按线下发放现金券-->    
+            <form method="post" action="{:U(APP_APPS.'/Bonus/bonusSendForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+             <input type="hidden" name="bonus_type_id" value="{$id}"/>  
+             <input type="hidden" name="type" value="{$type}"/>  
+            <div class="pageFormContent nowrap" layoutH="65">
+    
+                <dl>
+                    <dt>类型金额：</dt>
+                    <dd>
+                        <select name="bonus_type_id"  class='combox'>
+                            <foreach name="result" item="r" >
+                                <option value="{$r.id}">{$r.bonus_name} ￥:{$r.bonus_money}</option>
+                            </foreach>
+                        </select>
+                         <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                        <span style="color:#666;">提示:红包序列号由六位序列号种子加上四位随机数字组成</span>                         
+                    </dd>
+                </dl>
+                
+                <dl>
+                    <dt>现金券数量：</dt>
+                    <dd>
+                        <input  type="text" name="bonus_sum" class="required digits" size="30" />
+                    </dd>
+                </dl>
+
+            </div>
+            <div class="formBar">
+                <ul>
+                    <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                    <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+                </ul>
+            </div>
+        </form>            
+  <elseif condition="$type eq 4"/><!--按推荐会员者发放现金券-->           
+        <form method="post" action="{:U(APP_APPS.'/User/userAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+            <div class="pageFormContent nowrap" layoutH="65">
+    
+                <dl>
+                    <dt>用户名称：</dt>
+                    <dd>
+                        <input type="text" name="name" maxlength="20" class="required" />
+                        
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>用户密码：</dt>
+                    <dd>
+                        <input id="w_validation_pwd" type="password" name="password" class="required alphanumeric" minlength="6" maxlength="20" alt="字母、数字、下划线 6-20位"/>
+                        
+                    </dd>
+                </dl>
+                
+                <dl>
+                    <dt>重复密码：</dt>
+                    <dd>
+                        <input type="password" name="notpassword" class="required" equalto="#w_validation_pwd"/>
+                    </dd>
+                </dl>
+        
+                <dl>
+                    <dt>{:L('Upload')}：</dt>
+                    <dd>
+                         <input type="hidden" name="userpic" value="" id="d_thumb"/>
+                        <input name="file1" type="file" id="fileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/Publics/upload',array('thum'=>1,'width'=>161,'height'=>187,remove=>1,'wat'=>0))}','fileToUpload','img_show','imgloads','d_thumb');">
+                      
+                    </dd>
+                </dl>
+                
+                <dl style="display:none;" id="imgloads">
+                    <dt>{:L('picture')}：</dt>
+                    <dd>
+                        <img src="Uploads/2014/53835293aa9c9.png" width="161" height="187" id="img_show" style="display:inline;position:relative;top:-10px;"/>
+                    </dd>
+                </dl>
+                
+                <dl>
+                    <dt>{:L('EntryTime')}：</dt>
+                    <dd>
+                    <input type="text" name="entrydate" class="date required" readonly="true"/>
+                    <a class="inputDateButton" href="javascript:;">选择</a>
+    
+                    </dd>
+                </dl>
+                
+                <dl>
+                   <dt>{:L('AssignUser')}：</dt>
+                  <dd style="width:700px;">
+                   <foreach name='role' item='app'>
+                   <label style="width:150px;"><input type="radio" name="role_id[]" value="{$app.id}" />({$app.name}){$app.remark}</label>
+                    </foreach>  
+                       
+                </dd>
+                </dl>
+                
+                <dl>
+                    <dt>{:L('Lock')}：</dt>
+                    <dd>
+                        <label><input type="radio" name="lock" value="1"/>{:L('true')}</label>
+                        <label><input type="radio" name="lock" value="0" checked="checked"/>{:L('false')}</label>
+                    </dd>
+                </dl>
+                
+            <dl class="nowrap">
+                <dt>{:L('Remarks')}：</dt>
+                <dd><textarea name="remarks" class="required" cols="50" rows="8" style="resize:none;"></textarea></dd>
+            </dl>
+                
+                
+            </div>
+            <div class="formBar">
+                <ul>
+                    <li><div class="buttonActive"><div class="buttonContent"><button type="submit">{:L('Submit')}</button></div></div></li>
+                    <li><div class="button"><div class="buttonContent"><button type="button" class="close">{:L('Cancel')}</button></div></div></li>
+                </ul>
+            </div>
+        </form>
+ </if>     
+</div>
+
+

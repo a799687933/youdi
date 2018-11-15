@@ -1,0 +1,147 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>  
+            	<li class="selected"></li>      
+                <li ><a href="javascript:;"><span>Images目录<php    >echo 1;</php ></span></a></li>     
+                 <li class="selected"><a href="javascript:;"><span>HTML文件</span></a></li>
+                 <li ><a href="javascript:;"><span>公共目录</span></a></li>    
+                 <li ><a href="javascript:;"><span>Js目录</span></a></li>        
+                 <li ><a href="javascript:;"><span>Css目录</span></a></li>    
+                   
+            </ul>
+        </div>
+    </div>
+
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+        	
+        	<div inited="1000" style="display: block;"></div>
+
+            <div inited="1000" style="display: block;"><!--Images目录-->
+                <table class="list" width="100%" layoutH="80">
+                    <thead>
+                        <tr>
+                            <th>文件类型</th>
+                            <th>操作</th>
+                        </tr>                       
+                    </thead>
+                    <tbody>
+                        
+                     <foreach name="images" item="r" key="key1">
+                        <tr target="sid_user" rel="{$r.id}">
+                           <td>
+                              <img src="{$r.files_path}" style="position: relative;top:6px;" width="50" height="50" class="upid{$key1}"/> 
+                              <sapn style="position:relative;top:-10px;">
+                              {$r.files}
+                              </span>
+                              </td>  
+                           <td style="text-align:right">
+                                <input type="file" url="{:U('UploadFile/shopImg',array('files_name'=>$r['files'],'up_ath'=>base64_encode($upPath.'/Images'),'id'=>$id))}" id="upid{$key1}" name="file1" onchange="shopImgs(this)" title="替换({$r.files})图片" imgs="upid{$key1}"/>
+                                 {$action|tpl_action='ajaxTodo','Shops/delImg','url/'.base64_encode($r['files_path']).'/id/'.$id,'确定执行删除('.strip_tags($r['files']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                            </td>
+                        </tr>
+
+              </foreach>
+                        <tr><td colspan="2" style="height:30px;">
+ <input type="file" url="{:U('UploadFile/shopImg',array('files_name'=>'','up_ath'=>base64_encode($upPath.'/Images'),'id'=>$id))}" id="newid" name="file1" onchange="shopImgs(this)"/>                        
+                        </td></tr>              
+                    </tbody>
+                </table>                  
+            </div><!--Images目录结束-->    
+  
+            <div inited="1000" style="display: block;"><!--HTML文件-->
+    <table class="list" width="100%" layoutH="120">
+        <thead>
+            <tr>
+                <th>文件类型</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+         <foreach name="html" item="r">
+		 <php>if(strpos(strtoupper($r['files']),'.HTML')){</php>
+            <tr target="sid_user" rel="{$r.id}">
+               <td><img src="__SYS_IMG__/html.png" style="position: relative;top:6px;"/> {$r.files}</td>  
+               <td style="text-align:right">
+                    {$action|tpl_action='dialog','Shops/saveTpl','url/'.base64_encode($r['files_path']),'修改('.strip_tags($r['files']).')','icon_edit.gif','icon_edit_not.gif'} 
+                </td>
+            </tr>
+		<php>}</php>	
+  </foreach>
+        </tbody>
+    </table>                                                                   
+            </div><!--HTML文件结束-->
+         
+            <div inited="1000" style="display: block;"><!--公共目录-->
+    <table class="list" width="100%" layoutH="80">
+        <thead>
+            <tr>
+                <th>文件类型</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+         <foreach name="publics" item="r">
+            <tr target="sid_user" rel="{$r.id}">
+               <td><img src="__SYS_IMG__/html.png" style="position: relative;top:6px;"/> {$r.files}</td>  
+               <td style="text-align:right">
+                   {$action|tpl_action='dialog','Shops/saveTpl','url/'.base64_encode($r['files_path']),'修改('.strip_tags($r['files']).')','icon_edit.gif','icon_edit_not.gif'} 
+                </td>
+            </tr>
+  </foreach>
+        </tbody>
+    </table>                       
+            </div><!--公共目录结束-->
+
+            <div inited="1000" style="display: block;"><!--Js目录-->
+     <table class="list" width="100%" layoutH="80">
+        <thead>
+            <tr>
+                <th>文件类型</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+         <foreach name="js" item="r">
+            <tr target="sid_user" rel="{$r.id}">
+               <td><img src="__SYS_IMG__/js.png" style="position: relative;top:6px;"/> {$r.files}</td>  
+               <td style="text-align:right">
+                   {$action|tpl_action='dialog','Shops/saveTpl','url/'.base64_encode($r['files_path']),'修改('.strip_tags($r['files']).')','icon_edit.gif','icon_edit_not.gif'} 
+                </td>
+            </tr>
+  </foreach>
+        </tbody>
+    </table>                   
+            </div><!--Js目录结束-->
+            
+            <div inited="1000" style="display: block;"><!--Css目录-->
+    <table class="list" width="100%" layoutH="80">
+        <thead>
+            <tr>
+                <th>文件类型</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+         <foreach name="css" item="r">
+            <tr target="sid_user" rel="{$r.id}">
+               <td><img src="__SYS_IMG__/css.png" style="position: relative;top:6px;"/> {$r.files}</td>  
+               <td style="text-align:right">
+                    {$action|tpl_action='dialog','Shops/saveTpl','url/'.base64_encode($r['files_path']),'修改('.strip_tags($r['files']).')','icon_edit.gif','icon_edit_not.gif'} 
+                </td>
+            </tr>
+  </foreach>
+        </tbody>
+    </table>                    
+            </div><!--Css目录结束-->            
+                                 
+        </div>
+    </div>
+</div>

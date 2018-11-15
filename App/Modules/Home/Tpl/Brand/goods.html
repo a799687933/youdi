@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/css.css" />
+<title>{$brands.name_cn}-{:C(pfix('WEBNAME'))}</title>
+<meta name="keywords" content="{$brands}" />
+<meta name="description" content="" />
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/cart.js"></script>
+<script>
+	$(function(){
+         $('.cat_tree').hide();
+	});
+</script>
+</head>
+<body>
+<include file='Common:header'/>{/*头部*/}
+	
+	<div class="pp_info  m_auto">
+			<h2 class="pp_h2 f_16 f_norm clr_6"><p>品牌简介</p></h2>
+				<div class="pp_info_desc">
+					<img src="__ROOT__/{$brands.logo}" class="dis_b fl" />
+					<p class="f_12 clr_6">{$brands.bewrite}</p>
+						<div class="cls"></div>
+				</div>
+	</div>
+	
+	<div class="prod_bd m_auto">
+		<div class="prod_left fl">
+			
+			<div class="prod_yh mt_20">
+				<h2 class="f_22 clr_6 f_norm prod_left_h2"><img src="__PUBLIC__images/yh2.png" class="ver_mid" /> <span class="ver_mid">促销商品</span></h2>	
+				<ul class="prod_yh_ul">
+				 <foreach name="promotion" item="pr">
+					<li>
+						<a href="{:U('/Promotion/content',array('html'=>'p_'.$pr['id']))}"><img src="__ROOT__/{$pr.goods_thumb}" class="dis_b fl" style="width:60px;height:51px;"/></a>
+						<a href="{:U('/Promotion/content',array('html'=>'p_'.$pr['id']))}" class="f_12 clr_6">{$pr.goods_name|strip_tags=###|sub_str=###,13}</a>
+						<p class="f_14 clr_r">￥{$pr.promotion_price}</p>
+					</li>
+                 </foreach>
+				</ul>
+			</div>
+			
+			<div class="prod_yh mt_20">
+				<h2 class="f_22 clr_6 f_norm prod_left_h2"><img src="__PUBLIC__images/tj2.png" class="ver_mid" /> <span class="ver_mid">热门推荐</span></h2>	
+				<ul class="prod_yh_ul">
+				   <foreach name="hot" item="h" >
+						<li>
+							<a href="{:U('Goods/index',array('html'=>'goods_'.$h['id']))}"><img src="__ROOT__/{$h.goods_thumb}" class="dis_b fl" style="width:60px;height:51px;"/></a>
+							<a href="{:U('Goods/index',array('html'=>'goods_'.$h['id']))}" class="f_12 clr_6">{$h.goods_name|strip_tags=###|sub_str=###,20}</a>
+							<p class="f_14 clr_r">￥{$h.goods_retail_price}</p>
+						</li>
+                   </foreach>
+				</ul>
+			</div>
+			
+		</div>	
+		
+		<div class="prod_right fr">
+			<div class="search_prod mt_20">
+				<div class="search_prod_1">
+				  <form>
+						<span class="ver_mid f_12 clr_3">关键词：</span>
+						<input type="text" name="keywords" class="ver_mid ipt_key" /> &nbsp;&nbsp;
+						<span class="ver_mid f_12 clr_3">价格范围：</span>
+						<input class="ver_mid ipt_min" name="min" /> - <input class="ver_mid ipt_max"  name="max"/>
+						&nbsp;&nbsp;
+						<input type="submit" value=" 搜索 " class="f_12 clr_f cir_5 btn_ss" />
+				  </form>	
+				</div>
+				
+				<ul class="search_prod_ul zm1 fl">
+					<li class="search_up">
+                     <a href="{:U('/Brand/goods',array('html'=>$_GET['html'],'order_type'=>'goods_retail_price','order'=>$orders))}" class="f_12 clr_6">价格</a>
+                    </li>
+					<li class="search_up">
+                     <a href="{:U('/Brand/goods',array('html'=>$_GET['html'],'order_type'=>'volume','order'=>$orders))}" class="f_12 clr_6">销量</a>
+                    </li>
+					<li class="search_up">
+                     <a href="{:U('/Brand/goods',array('html'=>$_GET['html'],'order_type'=>'click_count','order'=>$orders))}" class="f_12 clr_6">人气</a>
+                    </li>
+					<li class="search_up">
+                     <a href="{:U('/Brand/goods',array('html'=>$_GET['html'],'order_type'=>'create_time','order'=>$orders))}" class="f_12 clr_6">时间</a>
+                    </li>	
+				</ul>
+				
+				<div class="sum_prod fr f_12 clr_3">
+					总共{$counts}件商品，每页{$psize}件商品  &nbsp;第{$currentPage}/{$pageNumShown}页	
+				</div>
+				
+				<div class="cls"></div>
+				
+			</div>
+			
+			<div class="prod_lists">
+					<ul class="prod_ls_ul zm1">
+                      <foreach name="result" item="res" key="keyps">
+							<li>
+								<p><a href="{:U('Goods/index',array('html'=>'goods_'.$res['id']))}"><img src="__ROOT__/{$res.goods_thumb}" class="dis_b" /></a></p>
+								<div class="prod_desc">
+									<a href="{:U('Goods/index',array('html'=>'goods_'.$res['id']))}" class="f_12 clr_6">{$res.goods_name|strip_tags=###|sub_str=###,22}</a>
+									<div class="prod_price zm1">
+										<div class="f_18 clr_r fl"><span class="f_14  clr_r">￥</span>{$res.goods_retail_price}</div>
+										<div class="add_prod fr pos_rela">
+											<input class="add_ipt_num al_ct f_12 clr_6" name="names_{$keyps+1}" value="1" />	
+											<input class="button add_num" type="button" onClick="carts('names_{$keyps+1}','+','','',{$res.buy_limit})"/>
+											<input class="button reduce_num" type="button"  onClick="carts('names_{$keyps+1}','-','','',{$res.buy_limit})"/>
+										</div>
+									</div>
+									<div class="to_cart zm1">
+									<a href="javascript:void(0);" onClick="carts('names_{$keyps+1}','','','{:U('Cart/addCart','','')}?id={$res.id}&check=ok')" class="buy_now_a" ><img src="__PUBLIC__images/buy_now.gif"  class="dis_b fl" /></a>	
+									<a href="javascript:void(0);" onClick="carts('names_{$keyps+1}','','','{:U('Cart/addCart','','')}?id={$res.id}')" class="add_cart_a" ><img src="__PUBLIC__images/add_cart.gif" class="dis_b fr" /></a>	
+									</div>
+								</div>
+							</li>
+					  </foreach>		
+					</ul>
+					
+						<div class="pager f_12 clr_6 al_rt mt_30">{$page}</div>	
+					
+			</div>
+			
+		</div>
+		
+		<div class="cls"></div>
+		
+	</div>
+	<br /><br />
+<include file='Common:footer'/>{/*页脚*/}	
+</body>
+
+</html>

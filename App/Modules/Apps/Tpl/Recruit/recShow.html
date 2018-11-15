@@ -1,0 +1,159 @@
+<script type="text/javascript">
+$(function(){
+
+});
+
+
+</script>
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<style type="text/css">
+.temp-name-s,.open-temps{
+    display:none;
+ }
+.boand-on{
+	color:#f60;
+}
+.pay-listt{
+    border-spacing:1px !important;
+	width:98%;
+	margin:20px 0;
+	background:#ccc;
+}
+.pay-listt tr td{
+    padding:5px;
+	line-height:180%;
+	text-align:center;
+	background:#fff;
+}
+</style>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>    
+                <li></li> 
+                <li ><a href="javascript:;"><span>职位内容</span></a></li>     
+            </ul>
+        </div>
+    </div>
+
+    <div class="tabsContent" style="background:#fff;" layoutH="70">
+      <div inited="1000" style="display: block;"></div><!--占位-->    
+    
+    <div inited="1000" style="display: block;"><!--通用资料内容-->
+
+        <table class="pay-listt">
+            <tr>
+                <td style="width:100px;font-weight:bold;text-align:right;padding-right:5px;">求职类型</td>
+                <td style=";text-align:left;padding-left:5px;"><if condition="$result['type']">特定职位<else />非特定职位</if> </td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">姓名</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['user_name']}</td>
+            </tr>          
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">性别</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['sex']}</td>
+            </tr>    
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">出生日期</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['birthday']}</td>
+            </tr>        
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">手机</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['mobile']}</td>
+            </tr>     
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">开始工作年份</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['start_year']}</td>
+            </tr>  
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">居住城市</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['address']}</td>
+            </tr> 
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">邮箱</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['email']}</td>
+            </tr>      
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">目前年收入</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['annual_income']}</td>
+            </tr>        
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">工作经验-时间</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['expe_date']}</td>
+            </tr>    
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">公司</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['expe_company']}</td>
+            </tr>     
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">公司性质</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['comp_nature']}</td>
+            </tr>       
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">职能</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['ability']}</td>
+            </tr>          
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">行业</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['industry']}</td>
+            </tr>       
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">职位</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['positions']}</td>
+            </tr>           
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">部门</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['department']}</td>
+            </tr>         
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">教育经历-时间</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['education_date']}</td>
+            </tr>        
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">学校</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['school']}</td>
+            </tr>         
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">学历</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['education']}</td>
+            </tr>              
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">专业</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['major']}</td>
+            </tr>         
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">期望年薪</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['expect']}</td>
+            </tr>        
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">自我评价</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['self_evaluation']}</td>
+            </tr>   
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">上传附件</td>
+                <td style=";text-align:left;padding-left:5px;">
+                      <if condition="$result['file1']"><a href="__ROOT__/{$result['file1']}" target="_blank" style="margin-right:20px;">下载附件1</a></if>
+                      <if condition="$result['file2']"><a href="__ROOT__/{$result['file2']}" target="_blank">下载附件2</a></if>
+                 </td>
+            </tr>   
+            <tr>
+                <td style="font-weight:bold;text-align:right;padding-right:5px;">申请时间</td>
+                <td style=";text-align:left;padding-left:5px;">{$result['add_time']|date='Y-m-d H:i:s',###}</td>
+            </tr>                                                                                                                                                                                                 
+        </table>
+    </div><!--通用资料内容结束-->             
+</div>
+<div class="formBar">
+   <ul>
+       <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+  </ul>
+</div>
+
+    <div class="tabsFooter">
+        <div class="tabsFooterContent"></div>
+    </div>
+  </div>
+</div>
+

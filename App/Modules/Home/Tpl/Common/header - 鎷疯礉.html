@@ -1,0 +1,246 @@
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css"/>
+<link rel="stylesheet" href="__HOME__/css/iconfont2.css"/>
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__PLUGINS__/formValidation/formValidation.js"></script>
+<!--<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>-->
+<script>
+ $(function(){
+	/** $("a.hui").mouseover(function(){
+		 $(this).siblings("a.hui").css("opacity","0.4")
+		 })
+	$("a.hui").mouseout(function(){
+		 $(this).siblings("a.hui").css("opacity","1")
+		 })	 **/
+	$(document).on('click', ".flag", function(){
+     $(".guojb").show()
+});	 
+
+	
+	
+	
+	 })
+</script>
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.js"></script>
+     <script type="text/javascript">
+
+        $(document).ready(function(){
+          wk=$(".ckywl").width()
+          $('.slider3').bxSlider({			
+            slideWidth: wk/5,
+            minSlides: 7,
+            maxSlides: 8,
+            slideMargin: 0,
+			prevText:"",
+			nextText:""
+
+          });
+		 
+
+
+        });
+
+    </script>
+<div class="header">
+
+<div class="headert"><div class="headertm">
+<span class="close wdzhclose"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+
+ <h1><if condition="is_login()">{:getUserC('SE_NICKNAME')}<else />{:isL(L('UserName'),'用户名')}</if></h1>
+ <p class="lh30"><a href="{:U('Member/index')}" class="col2a">{:isL(L('MyAccount'),'我的账户')}</a></p>
+ <p class="lh30"><a href="{:U('Member/index',array('address'=>'show'))}#address" class="col2a">地址簿</a></p>
+ <p class="lh30"><a href="{:U('Member/index',array('order'=>'show'))}#order-h1" class="col2a">{:isL(L('MyOrdersReturns'),'我的订单与退货')}</a></p>
+ <if condition="is_login()">
+     <p class="lh30"><a href="{:U('Login/exitLogin')}" class="col2a">{:isL(L('Exit'),'退出')}</a></p>
+<else />
+     <p class="lh30">
+         <a href="{:U('Login/index')}" class="col2a">{:isL(L('Login'),'登录')}</a>
+         <a href="{:U('Login/index')}" class="col2a">{:isL(L('Registered'),'注册')}</a>
+     </p>     
+ </if>
+ <p class="tr pv10"><a href="{:U('Member/index')}" class="wdzh">{:isL(L('MyAccount'),'我的账户')} <span class="glyphs icon-thinArrow" style="float:right; font-size:1.25em; line-height:inherit"></span></a></p>
+</div></div><!---->
+<div class="ckywwrap">
+
+<div class="ckyw">
+ <!--<div class="ckywl"><p class="col222 f16 lh30">您的愿望单中暂无商品</p></div>没商品时-->
+ <div class="ckywl">
+ 
+ 
+ 
+     <div class="ckywlbox zjll3" <php>if(count($pbulcCollect) <= 5){</php>style="background: none !important;"<php>}</php>>
+     <php>if(count($pbulcCollect) > 5){</php>
+         <a href="javascript:void(0)" class="icon30a zjll3right" style="top:85px; margin-top:0"></a>
+         <a href="javascript:void(0)" class="icon30b zjll3left"  style="top:85px; margin-top:0"></a>
+     <php>}</php>
+     <div class="ckywlm zjll1m">
+    
+      <ul class="get-new-collection"> <!--请不要删除这个 get-new-collection-->
+          <foreach name="pbulcCollect" item="g">
+            <li>
+             <span class="dbclose" url="{:U('Cookie/deleteDoodsCollect',array('id'=>$g['id'],'is_location'=>0))}"><span class="glyphs icon-close"></span></span>
+               
+                <div class="ckywlmt">
+                    <table width="100%" height="100%">
+                      <tr>
+                          <td align="center" valign="middle" width="100%" height="100%">
+                              <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                           </td>
+                       </tr>
+                    </table>
+                 </div>
+                 <div class="ckywlmtb">
+                     <table width="100%" height="100%">
+                        <tr>
+                            <td align="center" valign="middle" width="100%" height="100%">
+                                <a href="{:U('Goods/index',array('html'=>$g['id']))}"  target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+                            </td>
+                         </tr>
+                      </table>
+                 </div>
+                <div class="ckywlmb">
+                <!--<p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>-->
+                <p><b>￥{$g['goods_retail_price']}</b></p>
+                </div>
+            </li>
+        </foreach>
+      </ul>
+      <div class="cb"></div>
+     </div>
+    </div>
+ </div><!--ckywl end-->
+ <div class="ckywr">
+  <h1 class="huan lh22 pr mt20"><b class="f14">{:isL(L('ViewWishList'),'查看愿望单')}</b>
+  
+  <span class="close  ywclose"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+  </h1>
+  <p class=" col222 f13 lh22 " style="font-weight:bold"><span class="public-collect">{:count($pbulcCollect) > 0 ? count($pbulcCollect) : 0}</span> 数量<!--{:isL(L('Number'),'商品')}--></p><!--请不要删除这个 public-collect -->
+  <div class="cb pt30"></div>
+  <!--<a href="{:U('Category/index',array('wishlist'=>'condition'))}">-->
+  <a href="{:U('Cart/index')}#collcopoec">
+  <div class="bcbtn" style="width:100%">
+        <input value="{:isL(L('ViewWishList'),'查看愿望单')}" class="btn" type="button">
+       <span class="glyphs icon-heart btnb colfff"></span>    
+  </div>
+  </a>
+  <!--
+  <p class="pt20"><a class="cky" href="{:U('Category/index',array('wishlist'=>'condition'))}">{:isL(L('ViewWishList'),'查看愿望单')} <span class="glyphs icon-heart" style="display:inline-block; float:right; font-size:1.25em; color:#df302d; line-height:inherit"></span></a></p>-->
+ </div><!--ckywr end-->
+ <div class="cb"></div>
+</div>
+
+</div><!--ckywwrap end-->
+
+<div class="ckgwdwrap" id="show-cart-list"> <!-- ckgwdwrap 购物车-->
+    <include file="Piece:headerCart" />{/*模板在Piece/headerCart*/}
+</div><!--ckgwdwrap 购物车 end-->
+
+ <div class="headertb">
+  <a href="__ROOT__/" class="logo"></a>
+
+ <div class="tbr">
+  <ul>
+  	<li><a href="javascript:void(0)" class="flag">
+    <if condition="$_COOKIE['think_language'] eq 'en-us'">  
+    <span class="icon1c">English</span>
+    <else />
+    <span class="icon1">CHINA</span>
+    </if>
+    </a></li>  
+    <if condition="is_login()">
+     <li><a href="javascript:void(0)" class="user"><span class="glyphs icon-user"></span><span class="name">{:getUserC('SE_NICKNAME')}</span></a><b class="sanj"></b><b class="sanj2"></b></li>
+  <else />
+      <li><a href="{:U('Login/index')}"><span class="glyphs icon-user"></span></a></li>
+  </if>
+    
+    
+    <li class="iconfont-like" style="<if condition="$pbulcCollect">display:none</if>"><a href="javascript:void(0)" class=" like"><span class="fa fa-heart-o"></span></a><b class="sanj"></b><b class="sanj2"></b></li>
+    <li class="iconfont-like2" style="<if condition="!$pbulcCollect">display:none</if>"><a href="javascript:void(0)" class=" like"><span class="fa fa-heart"></span><span class="name public-collect">{:count($pbulcCollect) > 0 ? count($pbulcCollect) : ''}</span></a><b class="sanj"></b><b class="sanj2"></b></li>
+    <li><a href="javascript:void(0)" class="ckgwd"><span class="glyphs icon-bag"></span><span class="name public-cart-moeys">{:C('KTEC_H')} 0.00</span></a><b class="sanj"></b><b class="sanj2"></b></li>
+  </ul>
+       <if condition="$_COOKIE['think_language'] eq 'en-us'">       
+       <div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}" class="icon1">China</a>
+       </div>
+       <else />       
+       <div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'en-us'))}" class="icon1c">English</a>
+       </div>
+       </if>  
+ </div><!--tbr end-->
+  <!--
+  <a href="javascript:void(0);" class="icon5 fr"></a>
+  <a href="{:U('Cart/index')}" class="icon4 fr glyphs icon-bag hui"></a>
+  <span>|</span>
+  <if condition="is_mobile()">
+     <a href="{:U('Category/index',array('wishlist'=>'condition'))}" class="icon3 fr hui"><span style="color:#000; font-size:12px; padding:0; line-height:33px;" class="public-collect">{:count($pbulcCollect) > 0 ? count($pbulcCollect) : ''}</span></a>
+   <else />
+     <a href="javascript:void(0)" class="icon3 fr glyphs icon-heart hui"><span style="color:#000; font-size:12px; padding:0; line-height:33px;" class="public-collect">{:count($pbulcCollect) > 0 ? count($pbulcCollect) : ''}</span></a>
+  </if>
+  <span>|</span>
+  <if condition="is_login()">
+      <a href="javascript:void(0)" class="icon2 fr glyphs icon-user hui"></a>
+  <else />
+      <b class="to-login fr"><a href="{:U('Login/index')}" class="icon2dj" style="display: inline-block">&nbsp;</a></b>
+  </if>
+  
+  <span>|</span> 
+  <div class="guoj fr">
+  <if condition="$_COOKIE['think_language'] eq 'en-us'">
+       <h1 class=" icon1c col222">English</h1>   
+       <div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'zh-cn'))}" class="icon1">China</a>
+       </div>
+  <else />
+       <h1 class="  icon1 col222">China</h1>   
+       <div class="guojb">
+        <a href="{:U('/Language/index',array(C('VAR_LANGUAGE')=>'en-us'))}" class="icon1c">English</a>
+       </div>
+  </if>  
+
+  
+  </div>-->
+  <a href="javascript:void(0)" class="icon6 fr"></a>
+  <div class="cb"></div>
+ </div><!----> 
+ <div class="nav"><div class="navm">
+  <a href="__ROOT__/" class="navlink" style="color:#f00; padding-left:0"><span style="color:#f00">HOME</span></a>
+  <a href="{:U('Category/index',array('order_type'=>'create_time','order'=>desc,'text'=>'new'))}" class="navlink"><span>{:isL(L('NewArrivals'),'最新发布')}</span></a>
+  <a href="{:U('Category/index')}" class="navlink"><span>{:isL(L('Categories'),'产品分类')}</span></a>
+  <a href="{:U('Modular/singleProduct',array('html'=>$files[3][C('A_5')]['id']))}" class="navlink"><span>{$files[3][C('A_5')]['titletext']}{/*单品推荐*/}</span></a>
+  <a href="{:U('Modular/lookbook')}" class="navlink"><span>LOOKBOOK</span></a>
+  <a href="{:U('Modular/brandImage')}" class="navlink"><span>{$files[3][C('A_8')]['titletext']}{/*品牌形象*/}</span></a>
+  <a href="{:U('Modular/enjoy',array('html'=>$files[3][C('A_6')]['id']))}" class="navlink"><span>{:isL(L('CustomerRespect'),'客户尊享')}</span></a>
+  <a href="{:U('Article/index')}" class="navlink"><span>{:isL(L('News'),'YOUDI WU最新资讯')}{/*WU最新资讯*/}</span></a>
+  <a href="{:U('Modular/opportunity',array('html'=>$files[3][C('A_2')]['id']))}" class="navlink"><span><b class="icon7" style="font-weight:normal">{:isL(L('CareerOpportunities'),'职业机会')}</b></span></a>
+  <span class="icon8"><span class="glyphs icon-search"></span>{:isL(L('Search'),'搜索')}</span>
+  <form action="{:U('Category/index','','')}">
+  <div class="sswrap"><span class="glyphs icon-search"></span>
+  <input type="submit" name="" value="" onclick="return topRetrieval(this)" class="ss_btn"/>
+  <input type="text" name="keywords" value="" class="ss_input"/>
+  </div>
+  </form> 
+  <script type="text/javascript">
+  function topRetrieval(_this){
+	  var form=$(_this).parents('form');
+	  var keywords=form.find('input[name="keywords"]');
+	  if(!keywords.val()){
+		  keywords.focus();
+		  return false;
+	  }
+	  var url="{:U('Category/index','','')}/keywords/"+keywords.val();
+	  window.location.href=url;
+	  return false;
+  }
+  </script>
+  <div class="cb"></div>
+ </div></div><!--nav end-->
+ </div><!--header end-->
+ 
+  <div class="headerb"></div>
+ <div class="navb">
+     <span class="huan pr5" style="width:40%; text-align:right; display:inline-block">{:isL(L('ExpressOnly'),'<span>YOUDI WU</span>唯一指定配送&nbsp;&middot;&nbsp;顺丰航空')}</span><span class="tc" style="display:inline-block; background:#000; width:1px; height:15px; vertical-align:middle"></span><span class="kz pl5" style="width:40%; text-align:left; display:inline-block">{:isL(L('FreeReturnOn'),'<span>用户均享受</span>免运费配送及免运费退货<span>服务</span>')}</span>
+ </div> 

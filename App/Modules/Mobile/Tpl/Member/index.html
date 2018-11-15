@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>个人中心</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script>
+$(document).ready(function (){
+
+});
+</script>
+</head>
+
+<body>
+<div class="wrap">
+<h1 class="toptxt">个人中心<a href="__ROOT__/{:is_m()}" class="icon12"></a></h1>
+<div class="header-empty"></div>
+<div class="hyzxt">
+<span class="vip">{$member['grade_name']}</span>
+<div class="cb pb10"></div>
+       <if condition="getUserC('SE_USER_HEAD_PIC')">
+          <if condition="strpos(getUserC('SE_USER_HEAD_PIC'),'http://')">
+              <img src="{:getUserC('SE_USER_HEAD_PIC')}"/>
+          <else />
+              <img src="__ROOT__/{:getUserC('SE_USER_HEAD_PIC')}" />
+          </if>           
+      <else />       
+          <img src="__MOBILE__/Images/img18.jpg" />
+      </if>   
+ <h1><if condition="$member['nickname']">{$member['nickname']}<else />{$member['user_name']}</if></h1>
+ <div class="hyzxtb"><div class="ph10">
+      <a href="{:U(is_m().'/Member/orderList',array('status'=>1))}" class="icon21a">待付款</a>
+      <a href="{:U(is_m().'/Member/orderList',array('status'=>2))}" class="icon21b">待发货</a>
+      <a href="{:U(is_m().'/Member/orderList',array('status'=>3))}" class="icon21c">待确认</a>
+      <a href="{:U(is_m().'/Member/orderList',array('status'=>4))}" class="icon21d">已完成</a>
+  <div class="cb"></div>
+ </div></div>
+</div><!--hyzxt end-->
+<div class="grzxb mt15">
+
+ <a href="{:U(is_m().'/Member/orderList')}">
+       <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+          <tr>
+             <td align="center" valign="middle" width="100%" height="100%">
+               <img src="__MOBILE__/Images/icon22a.jpg" alt="" width="25%"/>
+               <p>我的订单</p>
+            </td>
+         </tr>
+      </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/collectionList')}">
+     <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+         <tr>
+             <td align="center" valign="middle" width="100%" height="100%">
+               <img src="__MOBILE__/Images/icon22b.jpg" alt="" width="30%"/>
+               <p>我的收藏</p>
+             </td>
+         </tr>
+     </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/history')}">
+     <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+         <tr>
+            <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22c.jpg" alt="" width="30%"/>
+             <p>浏览记录</p>
+           </td>
+       </tr>
+    </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/infoList')}">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22d.jpg" alt="" width="30%"/>
+             <p>我的消息</p>
+          </td>
+       </tr>
+   </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/payPoints')}">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22e.jpg" alt="" width="25%"/>
+             <p>我的积分</p>
+          </td>
+      </tr>
+    </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/redList')}">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22f.jpg" alt="" width="30%"/>
+             <p>我的卡券</p>
+          </td>
+       </tr>
+   </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/capital')}">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22g.jpg" alt="" width="30%"/>
+             <p>我的余额</p>
+          </td>
+      </tr>
+   </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/assessList')}">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22h.jpg" alt="" width="30%"/>
+             <p>我的评价</p>
+           </td>
+      </tr>
+    </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/wordsList')}" >
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22i.jpg" alt="" width="25%"/>
+             <p>我的咨询</p>
+          </td>
+      </tr>
+   </table>
+ </a>
+ 
+ <a href="{:U(is_m().'/Member/puToug')}" >
+   <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+          <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/icon22j.jpg" alt="" width="30%"/>
+             <p>发票资料</p>
+          </td>
+       </tr>
+    </table>
+ </a>
+
+ <a href="{:U(is_m().'/Member/addressList')}" >
+   <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+          <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/address.jpg" alt="" width="30%"/>
+             <p>收货地址</p>
+          </td>
+       </tr>
+    </table>
+ </a>
+
+ <a href="{:U(is_m().'/Member/extractionList')}" >
+   <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+          <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/extractionList.jpg" alt="" width="30%"/>
+             <p>提现</p>
+          </td>
+       </tr>
+    </table>
+ </a>
+
+ <a href="{:U(is_m().'/Member/personal')}" style="border-bottom:none;">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/personal.jpg" alt="" width="30%"/>
+             <p>个人信息</p>
+           </td>
+      </tr>
+    </table>
+ </a>
+
+ <a href="{:U(is_m().'/Member/changePWD')}" style="border-bottom:none;">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%">
+       <tr>
+           <td align="center" valign="middle" width="100%" height="100%">
+             <img src="__MOBILE__/Images/changePWD.jpg" alt="" width="30%"/>
+             <p>账户安全</p>
+           </td>
+      </tr>
+    </table>
+ </a>
+     
+ <div class="cb"></div>
+</div>
+
+<div class="cb pv30"></div>
+<div style="margin-bottom: 40px"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>
+</body>
+</html>

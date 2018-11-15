@@ -1,0 +1,44 @@
+ {/*商品评价列表*/}
+ <foreach name="goodsScore['app_list']" item="gs">     
+      <li>
+           <div class="qbpjbt">
+                <div class="qbpjbtimg fl">
+                    <if condition="$gs['head_pic']">
+                        <img src="__ROOT__/{$gs['head_pic']}" />
+                    <else />
+                        <img src="__HOME__/Images/yh_inoc.jpg" />
+                    </if>   
+                </div>
+                <span class="f16 fl pl20 lh40">{$gs.user_name|center_tsterisk=###,1}</span>
+                
+                <div class="cb"></div>
+                 </div>
+               <div class="qbpjbm ph10">
+               {/*用户评分*/}
+               <for start="0" end="$gs['score']">
+                     <img src="__MOBILE__/Images/icon32.png" />
+               </for>                        
+               <span class="fr col999">{$gs.times|date='Y-m-d H:i:s',###}</span>
+               <div class="cb"></div>
+               </div>
+               <p class="pl10 pr10 lh20 f14 pb5">{$gs.content|strip_tags=###}</p>
+               
+              {/*有图评价*/}     
+               <if condition="$gs['album']">
+                <div class="qbpjbb">
+                 <ul>
+                     <foreach name="gs['album']" item="al">
+                         <li><img src="__ROOT__/{$al['img']}" alt=""/></li>
+                     </foreach>
+                  <div class="cb"></div>
+                 </ul>
+             </div>
+             {/*有图评价结束*/} 
+         </if>    
+         
+         {/*回复*/}
+         <if condition="$gs['answer']">
+             <div><span class="icon31 ">回复</span>：{$gs['answer']|strip_tags=###}</div>
+         </if>
+      </li>
+  </foreach>

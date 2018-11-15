@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人中心-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+   $('.flb').hide();
+});
+</script>
+</head>
+<body>
+<include file="Common:top" />{/*最顶部*/}
+<include file="Common:header" />{/*头部*/}
+<include file="Common:nav" />{/*导航与商品分类*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="grzxl pt30">
+   <h1>会员中心</h1>
+   <div class="grzxlb">
+      <include file='Member:leftNav'/>{/*左边导航*/}
+   </div>
+  </div><!--grzxl end-->
+  <div class="grzxr pt30">
+   <div class="wddd pl20 pr20 pt15 mt20" style="margin-top: 0;min-height: 600px;">
+       <h2 style="border-bottom: 1px #eee solid;clear:both;height:30px;">
+           <span class="icon49a pl10 f14 col333 lh30 fl"><a href="{:U('Member/index')}" style="color:#333">会员首页</a> > 我的咨询 > 浏览历史</span>
+       </h2>  
+    <div class="cb"></div>
+    {/*内容区域*/}
+    <div class="wdddb p10">
+       <table class="my-table my-table-bot-border" >
+         <tbody>
+         <tr>
+             <td align="center" ><strong>{:isL(L('Thumbnail'),'缩略图')}</strong></td>
+             <td align="center" ><strong>{:isL(L('CommodityName'),'商品名称')}</strong></td>
+             <td align="center" ><strong>{:isL(L('Operation'),'操作')}</strong></td>
+            </tr>
+                <foreach name="recentVisit" item="nos">
+                    <tr>
+                     <td align="center">
+                         <a class="col666" href="{:U('Goods/index',array('html'=>'goods_'.$nos['goods_id']))}"  target="_blank">
+                              <img src="__ROOT__/{$nos.goods_thumb}" style="height:50px;" />
+                         </a>
+                     </td>
+                     <td align="left">{$nos[pfix('goods_name')]}</td>
+                     <td align="center">
+                            <a class="col666" href="{:U('Goods/index',array('html'=>'goods_'.$nos['id']))}"  target="_blank">{:isL(L('Look'),'查看')}</a> |
+                            <!--<a class="col666" href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$nos['goods_id']}')"  target="_blank">放入购物车</a> |-->
+                            <a class="col666" 
+                            href="javascript:void(0);"  
+                            onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}','{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                            '{:U('Member/deleteHistory',array('id'=>$nos['id']))}','','',2)">{:isL(L('Delete'),'删除')}</a>
+                     </td>
+                    </tr>
+                </foreach>
+           </tbody>
+         </table>     
+         <div class="page tc mt30">{$page}</div>               
+     </form>
+    </div>
+    {/*内容区域结束*/}
+    
+   </div><!--wddd end-->
+  </div><!--grzxr end-->
+  <div class="cb"></div>
+ </div>
+ <div class="cb pv35"></div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+
+<!--float-->
+<include file="Common:float" />{/*右边浮动*/}
+<!--float end-->
+</body>
+</html>

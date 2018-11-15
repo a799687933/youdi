@@ -1,0 +1,104 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/VisitQuantity/toVisitList","","")}" method="post">
+     <input type="hidden" name="display" value="{$displys}"/>   
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  <span style="float:left;position: relative;top:6px;">日期：</span><input type="text" name="dates" value="{$searchVal}" class="date" readonly="readonly" style="float:left;"/>
+                  <a class="inputDateButton" href="javascript:;">选择</a>
+                </td>
+                <!--<td>
+                    <select class="combox" name="city" class="required">
+                      <option value="">-选择城市-</option>
+                      <foreach name="City" item='C'>                       
+                       <option value="{$C.city_name}" <if condition="$_REQUEST['city'] eq $C['city_name']">selected="selected"</if>>{$C.html}{$C.city_name}</option>
+                     </foreach>  
+                    </select>       
+                </td>-->
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('VisitQuantity/visitDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/VisitQuantity/visitDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/type/1" class="delete"><span>删除文档</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th  orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="city"  class="<if condition='$city eq "desc"'>desc<else />asc</if>">所属城市</th>
+                <th>IP</th>
+                <th orderfield="os"  class="<if condition='$os eq "desc"'>desc<else />asc</if>">操作作统</th>       
+                <th orderfield="browser"  class="<if condition='$browser eq "desc"'>desc<else />asc</if>">浏览器版本</th>
+                <th orderfield="web_page"  class="<if condition='$web_page eq "desc"'>desc<else />asc</if>">访问的页面</th>
+                <th orderfield="engine"  class="<if condition='$engine eq "desc"'>desc<else />asc</if>">搜索引擎名称</th>
+                <th orderfield="engine_key"  class="<if condition='$engine_key eq "desc"'>desc<else />asc</if>">搜索关键字</th>
+                <th orderfield="visit_time"  class="<if condition='$visit_time eq "desc"'>desc<else />asc</if>">访问时间</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="visits" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V.city}</td>
+                <td>{$V.ip}</td>
+                <td>{$V.os}</td>
+                <td>{$V.browser}</td>
+                <td><a href="{$V.web_page}" target="_blank" title="{$V.web_page}">{$V.web_page|sub_str=###,30}</a></td> 
+                <td>{$V.engine}</td>
+                <td>{$V.engine_key}</td>
+                <td>{$V.visit_time|from_time=###} </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <!--分页      
+            <span>显示</span>
+            <select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+            -->
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,70 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="bonus_type_id" value="{$_REQUEST['bonus_type_id']}" />
+    <input type="hidden" name="type" value="{$_REQUEST['type']}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+    <input type="hidden" name="bonus_type_id" value="{$_REQUEST['bonus_type_id']}"/>
+    <input type="hidden" name="type" value="{$_REQUEST['type']}"/>
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Bonus/ticketDelete')">
+              <li><a title="操作不可恢复，确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Bonus/ticketDelete','','')}/action/ticketList/{:C('VAR_PAGE')}/{$currentPage}/bonus_type_id/{$_REQUEST['bonus_type_id']}" class="delete"><span>删除</span></a></li>
+            </if>
+            <if condition="access('Bonus/exportExcel') AND ($_REQUEST['type'] eq 3)">
+            <li class=""><a class="icon" href="{:U(APP_APPS.'/Bonus/exportExcel',array('bonus_type_id'=>$_REQUEST['bonus_type_id']),'xls')}" target="dwzExport" targettype="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="55">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th   orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th><!--编号-->
+                <if condition="$_REQUEST['type'] eq C('_THREE')"><th orderfield="bonus_sn"  class="<if condition='$bonus_sn eq "desc"'>desc<else />asc</if>">现金券序列号</th></if><!--现金券序列号-->
+                <th>现金券类型名称</th><!--现金券类型名称-->
+                <!-- <th>订单单号</th>订单位号-->
+                <th >使用会员</th><!--使用会员-->               
+                <th orderfield="used_time"  class="<if condition='$used_time eq "desc"'>desc<else />asc</if>">使用时间</th><!--使用时间-->
+            </tr>                      
+        </thead>
+        <tbody>
+           
+           <volist name="list" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <if condition="$_REQUEST['type'] eq C('_THREE')"><td>{$V.bonus_sn}</td></if><!--现金券序列号-->
+                <td>{$V.bonus_name}</td>
+                <!--<td>未使用</td>-->
+                <td><if condition="$V['user_name']">{$V.user_name}<else />未使用</if></td>
+                <td>
+                    <if condition="$V['used_time'] gt 0">
+                         {$V.used_time|date='Y-m-d H:s',###} 
+                    <else />
+                       未使用
+                    </if>
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+           <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div> 
+</div>
+

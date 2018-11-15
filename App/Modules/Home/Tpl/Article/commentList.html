@@ -1,0 +1,140 @@
+{/*评论列表*/}
+<foreach name="comment" item="com" key="ckey">
+   <li <if condition="$com['user_id'] eq getUserC('SE_USER_ID')">style="border:2px solid #bbdcff"</if>>
+    <div class="liuylbt">
+    <if condition="$com['head_pic']">
+       <img src="__ROOT__/{$com['head_pic']}" alt="" style="width:40px;">
+    <else />
+      <img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt="">
+    </if> 
+      <span class="liuylbtm">{$com['user_name']}</span>
+      <span class="liuylbtmr">{:from_time($com['times'],'')}</span>
+      <div class="liuylbtr">
+         <span class="commentlr fa fa-thumbs-up {$com['is_true'] ? '' : 'col999'} iconstylelist" onClick="praiseList(this,{$com['id']},{$com['user_id']})"></span>
+         <span class="col333 vam f12 mh5">点赞</span>
+         <span class="commentlrr list_nums">{$com['like_count']}</span>
+      </div>
+     <div class="cb"></div>
+    </div><!--liuylbt end-->
+    <div class="liuylbb">
+     <div class="liuylbbt">{$com['content']}</div>
+     <div class="liuylbbdh">
+     <foreach name="com['reply_list']" item="reply" key="replykey">
+         <if condition="$reply['user_id'] eq 0">
+              <p>
+                <img src="/Public/Home/images/logo.png" width="68" alt="" class="vam">
+                <span class="vam mh5" style="color:#023867;">@{$com['user_name']}</span>{$reply['content']}<span class="col999 pl15 f12">{:from_time($reply['times'],'')}</span>
+              </p>
+          <else />
+              <p>
+              <span class="vam mr5">{$com['user_name']}</span><span class="vam" style="color:#023867;">@</span>
+              <img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">{$reply['content']}<span class="col999 pl15 f12">{:from_time($reply['times'],'')}</span>
+              </p>
+          </if>
+      </foreach>
+     </div><!----->
+     <div class="liuylbbb" style="<if condition="!$com['reply_list']">display:none;</if>">
+         <if condition="$com['open_reply']">{/*可以打开@评论*/}
+            <span class="fa fa-commenting-o f18 huifu"></span>
+         <else />{/*不可以打开@评论*/}
+             <span class="fa fa-commenting-o f18" style="color:#ccc;"></span>
+         </if>
+         <b class="ckdh">查看对话</b>
+         <b class="xsjsnr" style="display:none">显示较少内容</b>
+     </div>
+     <div class="duih">
+     <span class="duihl fa fa-user"></span>
+     <input type="text" name="" placeholder="回复···" class="duihm dptjlbm_text_{$com['id']} content_input"/>
+     <input type="button" name="" value="留言" onclick="mentReply(this,'{:sign_url(array('article_id'=>$com['article_id'],'comment_id'=>$com['id']),U('Article/commentReply'))}','{$com['user_name']}')" class="liuybbr2">
+     <a class="icon27j emotion" style="background: none; position:relative; margin-top:2.5px; float:right; margin-right:10px;">
+          <img src="__HOME__/images2/icon7b.png" alt="" style="width:25px; height:25px;"/>
+          <span class="up-arrow1">◆</span><span class="up-arrow2">◆</span>
+          <div node-type="face-box" class="face-wrapper-dw show_face2">
+                    <div node-type="face-cont" class="wrapper-cont-dw">
+                        <ul class="clear-g">
+                            <li>
+                                <span title="流汗" data_path="base" data-ubb="[流汗]" class="face-item face_01" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="钱" data_path="base" data-ubb="[钱]" class="face-item face_02" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="发怒" data_path="base" data-ubb="[发怒]" class="face-item face_03" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="浮云" data_path="base" data-ubb="[浮云]" class="face-item face_04" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="给力" data_path="base" data-ubb="[给力]" class="face-item face_05" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="大哭" data_path="base" data-ubb="[大哭]" class="face-item face_06" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="憨笑" data_path="base" data-ubb="[憨笑]" class="face-item face_07" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="色" data_path="base" data-ubb="[色]" class="face-item face_08" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="奋斗" data_path="base" data-ubb="[奋斗]" class="face-item face_09" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="鼓掌" data_path="base" data-ubb="[鼓掌]" class="face-item face_10" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="鄙视" data_path="base" data-ubb="[鄙视]" class="face-item face_11" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="可爱" data_path="base" data-ubb="[可爱]" class="face-item face_12" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="闭嘴" data_path="base" data-ubb="[闭嘴]" class="face-item face_13" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="疑问" data_path="base" data-ubb="[疑问]" class="face-item face_14" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="抓狂" data_path="base" data-ubb="[抓狂]" class="face-item face_15" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="惊讶" data_path="base" data-ubb="[惊讶]" class="face-item face_16" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                        </ul>
+                        <ul class="clear-g">
+                            <li>
+                                <span title="可怜" data_path="base" data-ubb="[可怜]" class="face-item face_17" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="弱" data_path="base" data-ubb="[弱]" class="face-item face_18" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="强" data_path="base" data-ubb="[强]" class="face-item face_19" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="握手" data_path="base" data-ubb="[握手]" class="face-item face_20" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="拳头" data_path="base" data-ubb="[拳头]" class="face-item face_21" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="酒" data_path="base" data-ubb="[酒]" class="face-item face_22" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="玫瑰" data_path="base" data-ubb="[玫瑰]" class="face-item face_23" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                            <li>
+                                <span title="打酱油" data_path="base" data-ubb="[打酱油]" class="face-item face_24" set_value="dptjlbm_text_{$com['id']}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+       </a>
+     <div class="cb"></div>
+     </div><!--duih end-->
+     <div class="cb"></div>
+    </div><!--liuylbb end-->
+   </li>
+ </foreach>   

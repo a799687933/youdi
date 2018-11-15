@@ -1,0 +1,74 @@
+<script type="text/javascript">
+    
+</script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  关键字：<input type="text" name="shipping_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Shipping/disSend')">
+              <li><a class="add" href="{:U(APP_APPS.'/BelowLine/lineSend','','')}" target="dialog" mask="true" width="1024" height="590" title="添加支付银行"><span>添加支付银行</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+			    <th >银行名称</th>
+                <th >支付银行</th>
+                <th >开户网点</th>      
+                <th>银行帐号</th>     
+                 <th>排序</th>
+                <th>是否显示</th> 
+                <th>操作</th>    
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><strong style="padding-left:3px;">{$V.bank_name}</strong></td>
+               <td>{$V.bank_branch}</td>
+               <td>{$V.bank_sn}</td>
+               <td>{$V.bank_open_account}</td>
+               <td>{$V.bank_orders|tpl_modify_oen=###,'below_line','bank_orders',$V['id'],'id','BelowLine/lineSendForm'}</td>
+			   <td>{$V.is_show|tpl_yes_no=###,'below_line','is_show',$V['id'],'id','BelowLine/lineSendForm'}</td>
+               <td>
+                   {$action|tpl_action='dialog','BelowLine/lineSend','id/'.$V["id"],'修改（'.strip_tags($V['bank_name']).'）','icon_view.gif','icon_view_not.gif',1024,590} <!--修改按钮-->
+                   {$action|tpl_action='ajaxTodo','BelowLine/lineDel','ids/'.$V["id"],'确定执行删除('.strip_tags($V['bank_name']).')支付银行？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+         <div class="panelBar">
+    </div> 
+</div>
+

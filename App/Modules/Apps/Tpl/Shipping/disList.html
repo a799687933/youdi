@@ -1,0 +1,95 @@
+<script type="text/javascript">
+    
+</script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  关键字：<input type="text" name="shipping_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Shipping/disSend')">
+              <li><a class="add" href="{:U(APP_APPS.'/Shipping/disSend','','')}" target="dialog" mask="true" width="1024" height="590" title="添加配送公司"><span>添加配送公司</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th orderfield="shipping_name"class="<if condition='$shipping_name eq "desc"'>desc<else />asc</if>">配送方式名称</th>
+                <th width="40%">配送方式描述</th>      
+                <th>保价费用</th>   
+                <th>货到付款？</th>   
+                 <th>排序</th>
+                <th>是否显示</th> 
+                <th>操作</th>    
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="shipping" id="V">
+            <tr target="sid_user" rel="{$V.shipping_id}">
+                <td><strong style="padding-left:3px;">{$V.shipping_name}</strong></td>
+               <td>{$V.shipping_desc|sub_str=###,30}</td>
+               <td>{$V.insure}</td>
+               <td>
+                   <if condition="$V['support_cod']">
+                       <img src="__SYS_IMG__/yes.gif" />
+                   <else />
+                       <img src="__SYS_IMG__/no.gif" />
+                   </if>
+               </td>
+               <td>{$V.orders|tpl_modify_oen=###,'shipping','orders',$V['shipping_id'],'shipping_id','Shipping/disSendForm'}</td>
+               <td>{$V.enabled|tpl_yes_no=###,'shipping','enabled',$V['shipping_id'],'shipping_id','Shipping/disSendForm'}</td>
+               <td>
+                   {$action|tpl_action='dialog','Shipping/disSend','shipping_id/'.$V["shipping_id"],'修改（'.strip_tags($V['shipping_name']).'）','icon_view.gif','icon_view_not.gif',1024,590} <!--修改按钮-->
+                   {$action|tpl_action='ajaxTodo','Shipping/disDel',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["shipping_id"],'确定执行删除('.strip_tags($V['shipping_name']).')配送方式？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+         <div class="panelBar">
+        <div class="pages">
+            <!--分页      
+            <span>显示</span>
+            <select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+            -->
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div> 
+</div>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <present name="message">
+<title>操作成功--跳转提示</title>
+<else />
+<title>操作失败--跳转提示</title>
+</present>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<style type="text/css">
+ #error-main{
+     width:1200px;
+     margin:0 auto;
+     min-height:400px;
+ }   
+ .system-message{
+     margin:50px auto;
+     width:900px;
+     height:300px;
+     border-radius: 6px;
+     -moz-border-radius:6px;
+     box-shadow: 0px 0px 15px #888888; 
+     -webkit-box-shadow: 0px 0px 15px #888888;
+     position:relative;
+ }
+ .jump{
+     position:absolute;
+     bottom:0;
+     height:30px;
+     line-height:30px;
+     background:#eee;
+     width:100%;
+     text-align:right;
+     border-bottom-left-radius: 6px;
+     border-bottom-right-radius: 6px;
+ }
+ h1{
+     width:90px;
+     float:left;
+     margin-top:95px;
+      margin-left:80px;
+ }
+ .success, .error{
+     width:720px;
+     float:right;
+     font-size:30px;
+     height:90px;
+     line-height:90px;
+     font-weight:bold;
+     margin-top:85px;
+ }
+ .success{color:#3A7F3C;}
+  .error{color:#6A0016;}
+</style>
+</head>
+<body>
+<!--top begin-->
+<include file='Common:header'/>
+<!--top end-->
+<!--nav begin-->
+<include file='Common:nav'/>
+<!--nav end-->
+<div id="error-main">
+        <div class="system-message">
+                <present name="message">
+                <h1><!--:)--><img src="__PUBLIC__Prompt/icon_01.png"/></h1>
+                <p class="success"><?php echo($message); ?></p>
+                <else/>
+                <h1><!--:(--><img src="__PUBLIC__Prompt/132554NF-6.png"/></h1>
+                <p class="error"><?php echo($error); ?></p>
+                </present>
+                <p class="detail"></p>
+                <p class="jump">
+                <?php if(strpos($_SERVER["HTTP_REFERER"],$_SERVER['HTTP_HOST'])){ ?>    
+                       页面自动 <a id="href" href="<?php echo($jumpUrl); ?>">跳转</a> 等待时间： <b id="wait" style="padding-right: 20px;"><?php echo($waitSecond); ?></b>
+                <?php }else{ ?>                 
+                        页面自动跳转 <a id="href" href="<?php echo('http://'.$_SERVER['HTTP_HOST']); ?>/__ROOT__">首页</a> 等待时间： <b id="wait" style="padding-right: 20px;"><?php echo($waitSecond); ?></b>
+                <?php } ?>    
+                </p>
+        </div>
+</div>
+<!--footer begin-->
+<include file='Common:footer'/>
+<!--footer end-->
+<script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+	if(time <= 0) {
+		location.href = href;
+		clearInterval(interval);
+	};
+}, 3000);
+})();
+</script>
+</body>
+</html>

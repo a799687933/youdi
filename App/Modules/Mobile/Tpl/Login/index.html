@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('Login'),'登录')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript">  
+$(document).ready(function () {  
+    var url="{:U(is_m().'/Login/checkCode','','')}";
+    myValidationEngine('ajaxYzm',url,'my=data','{:isL(L("VerificationCodeError"),"验证码错误")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');   
+    valinit('.form1','get','',true,'topLeft');      
+});
+</script> 
+<style type="text/css">
+#submits {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    color: #FFF;
+    font-size: 1.3em;
+    border-radius: 3px;
+    background-color: #99c838;
+    text-align: center;
+	width:100%;
+	border:none
+}
+</style>
+</head>
+<body>
+<div class="g-mn">
+ <include file="Common:header1" />
+  <div class="login">
+  	<div class="login_bg"><img src="__MOBILE__/images/login_bg.jpg"></div>
+    <div class="loginbox">
+    <div class="login_img"><img src="__MOBILE__/images/login_img.png"></div>
+    <div class="login_li">
+    	<ul>
+            <form method="post" action="{:U(is_m().'/Login/loginDo')}" class="form1" >
+            <input type="hidden" name="returnUrl" value="{$returnUrl}" />		
+        	<li class="log1">
+                <span><img src="__MOBILE__/images/login1.jpg"></span>
+                <input type="text" class="validate[required]"  name="user_name" id="user_name" placeholder="{:isL(L('PleaseUserName'),'请输入用户名')}">
+            </li>
+            <li class="log1">
+                 <span><img src="__MOBILE__/images/login2.jpg"></span>
+                 <input type="text" placeholder="{:isL(L('PleaseEnterApassword'),'请输入密码')}" type="password" id="password" name="password" class="validate[required]">
+            </li>
+                 <!--<li class="input">
+                        <input type="text" id="code" name="code"  placeholder="请输入验证码" class="dlboxr_input156 fl mr10 validate[required,ajax[ajaxYzm]]"/>
+                        <img src="{:U(is_m().'/Login/showCode','','')}" alt="" class="fl" style="position:relative;top:2px; cursor:pointer;" onclick="javascript:this.src='{:U(is_m().'/Login/showCode','','')}/tm/'+Math.random()"/>
+                        </li>-->            
+            <li class="log2">
+                <input type="checkbox">{:isL(L('AutomaticLogin'),'自动登录')}  
+                <a href="{:U(is_m().'/Forget/question')}">{:isL(L('ForgePassword'),'忘记密码？')}</a>
+            </li>
+            <li class="log3"><input type="submit" class="login2" id="submits" value="登 录"/></li>
+            <li class="log4">
+                 {:isL(L('PleaseClickHere'),'还没有注册账号？请点击这里')}
+                 <a href="{:U(is_m().'/Register/index')}">{:isL(L('FreeRegistration'),'免费注册')}>></a>
+           </li>
+           </form>
+        </ul>
+    </div>
+    </div>
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

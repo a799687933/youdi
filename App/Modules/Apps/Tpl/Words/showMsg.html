@@ -1,0 +1,52 @@
+<style type="text/css">
+dl dt{text-align:right;}
+.mytable{
+    width:100%;
+    background: #ccc !important;   
+    border-spacing:1px !important;
+    border-collapse:separate !important;   
+}
+.mytable tr td{
+    padding:10px 5px;
+    background: #fff;
+}
+</style>
+<div class="pageContent">
+    <form method="post" action="{:U(APP_APPS.'/Words/reply')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    <input type="hidden" name="id" value="{$_GET['id']}" />
+     <div class="pageFormContent nowrap" layoutH="97">
+         <table class="mytable" cellpadding="1" cellspacing="1">
+             <if condition="$result['title']"><tr><td>留言标题：</td><td>{$result['title']}</td></tr></if>
+             <if condition="$result['user_name']"><tr><td>留言姓名：</td><td>{$result['user_name']}</td></tr></if>
+             <if condition="$result['email']"><tr><td>电子邮件：</td><td>{$result['email']}</td></tr></if>
+             <if condition="$result['contact_method']"><tr><td>联络偏好：</td><td>{$result['contact_method']}</td></tr></if>
+             <if condition="$result['country']"><tr><td>所在国家：</td><td>{$result['country']}</td></tr></if>
+             <if condition="$result['advisory']"><tr><td>咨询类型：</td><td>{$result['advisory']}</td></tr></if>
+             <if condition="$result['file_path']"><tr><td>用户附件：</td><td><a href="{$result['file_path']}" target="_blank" style="color:#3C7FB1;">下载</a></td></tr></if>
+             <if condition="$result['addtiem']"><tr><td>发布时间：</td><td>{$result['addtiem']|date='Y-m-d H:i:s',###}</td></tr></if>
+             <if condition="$result['content']"><tr><td style="width:60px;">留言内容：</td><td>{$result['content']|stripcslashes=###}</td></tr></if>
+         </table>
+           <!-- <h2 style="height:30px;line-height:30px;">
+             <span style="float:right;position:relative;top:10px;padding-right:3px;">提交时间：{$result.addtiem|date='Y-m-d H:i:s',###}</span>
+            咨询标题：{$result.title}
+            </h2>
+            <div style="min-height:100px;padding:10px;line-height:180%;border:1px #a2bac0 solid;"> {$result.content}</div>  
+             <hr style="border:#a2bac0 1px solid;"/>
+             <h2 style="height:30px;line-height:30px;">
+                <if condition="$result['reply_time'] gt 0">
+                    <span style="float:right;position:relative;top:10px;padding-right:3px;">回复时间：{$result.reply_time|date='Y-m-d H:i:s',###}</span>
+                 </if> 
+                 回复内容：
+             </h2>
+             <textarea name="reply" class="" style="width:99%;height:200px;">{$result.reply}</textarea>-->
+        </div>
+        <div class="formBar">
+            <ul>
+                <!--<li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>-->
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+     </form>
+</div>
+
+

@@ -1,0 +1,43 @@
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+           <if condition="access('MemberGrade/gradeAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/MemberGrade/gradeAdd')}" target="dialog" mask="true" width="900" height="590" title="添加等级"><span>添加等级</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th >等级名称</th>
+                <th width="30%">积分下限</th> 
+                <th >积分上限</th>
+                <th >初始折扣率(%)</th>
+                <!--<th>特殊会员组</th>-->
+                <th>显示价格</th>
+                <th>操作</th>
+            </tr>                     
+        </thead>
+        <tbody>
+     
+           <volist name="grade" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td>{$V.id}</td>
+                <td>{$V[pfix('grade_name')]|tpl_modify_oen=###,'member_grade',pfix('grade_name'),$V['id'],'id','MemberGrade/gradeAddForm'}</td>
+                <td>{$V.min_points|tpl_modify_oen=###,'member_grade','min_points',$V['id'],'id','MemberGrade/gradeAddForm'}</td>
+                <td>{$V.max_points|tpl_modify_oen=###,'member_grade','max_points',$V['id'],'id','MemberGrade/gradeAddForm'}</td>
+                <td>{$V.discount|tpl_modify_oen=###,'member_grade','discount',$V['id'],'id','MemberGrade/gradeAddForm'}</td>
+                <!--<td>{$V.special_rank|tpl_yes_no=###,'member_grade','special_rank',$V['id'],'id','MemberGrade/gradeAddForm'}</td>-->
+                <td>{$V.show_price|tpl_yes_no=###,'member_grade','show_price',$V['id'],'id','MemberGrade/gradeAddForm'}</td>
+                <td>
+                <!--添加按钮-->
+               {$action|tpl_action='dialog','MemberGrade/gradeAdd','id/'.$V["id"],'修改','icon_edit.gif','icon_edit_not.gif',900,550} 
+               </td> 
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+</div>
+

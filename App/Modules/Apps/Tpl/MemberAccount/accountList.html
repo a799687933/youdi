@@ -1,0 +1,137 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/MemberAccount/accountList","","")}" method="post">
+     <input type="hidden" name="id" value="{$_REQUEST['id']}" />   
+     <input  type="hidden" name="name" value="{$_REQUEST['name']}"  size="27"/>
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                <select class="combox" name="change_type" class="required">
+                    <option value="">-查询所有-</option>          
+                       <option value="1" <if condition="$_REQUEST['change_type'] eq 1">selected="selected"</if>>在线充值</option>
+                       <option value="2" <if condition="$_REQUEST['change_type'] eq 2">selected="selected"</if>>提现</option>
+                       <option value="3" <if condition="$_REQUEST['change_type'] eq 3">selected="selected"</if>>管理员调节</option>
+                       <option value="4" <if condition="$_REQUEST['change_type'] eq 4">selected="selected"</if>>登录积分</option>
+                       <option value="5" <if condition="$_REQUEST['change_type'] eq 5">selected="selected"</if>>订单操作</option>
+                        <option value="99" <if condition="$_REQUEST['change_type'] eq 99">selected="selected"</if>>其它</option>
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+                <td style="text-align:right;width:100%;">
+                        当前用户:<strong><if condition="$member['user_name']">{$member['user_name']}<else />{$member['mobile_phone']}</if></strong> | 
+                        <if condition="C('IS_ACCOUNT')">
+                            可用资金:￥<strong style="color:red;">{$member.member_funds}</strong> |  
+                            冻结资金:￥<strong style="color:red;">{$member.frozen_funds}</strong> | 
+                        </if>
+                        <if condition="C('IS_RANK_POINTS')">等级积分:<strong style="color:red;">{$member.rank_points}</strong> | </if>
+                        <if condition="C('IS_PAY_POINTS')">消费积分:<strong style="color:red;">{$member.pay_points}</strong></if>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('MemberAccount/accountAdjust')">
+              <li><a class="add" href="{:U(APP_APPS.'/MemberAccount/accountAdjust','','')}/id/{$_REQUEST['id']}/{:C('VAR_PAGE')}/{$currentPage}/action/accountList/name/{$_REQUEST['name']}"target="dialog" mask="true" width="900" height="590"><span>调节会员帐户</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th>帐户变动时间</th>
+                <th>帐户变动原因</th>
+                <if condition="C('IS_ACCOUNT')">
+                    <th >可用资金</th>
+                    <th >冻结资金</th>
+                </if>
+                <if condition="C('IS_RANK_POINTS')"><th >等级积分</th></if>
+                <if condition="C('IS_PAY_POINTS')"><th >消费积分</th></if>
+            </tr>                  
+        </thead>
+        <tbody>
+            
+           <volist name="account" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td>{$V.change_time|date='Y-m-d H:i:s',###}</td>
+                <td>{$V[pfix('change_desc')]}</td>
+                
+                {/*会员资金帐户*/}
+                <if condition="C('IS_ACCOUNT')">
+                    <td>
+                         <if condition='$V["member_money"] gt 0'>
+                             <span style="color:#0000FF">+{$V.member_money}</span>
+                         <elseif condition='$V["member_money"] lt 0'/>
+                             <span style="color:#FF0000">{$V.member_money}</span>
+                         <else />
+                              {$V.member_money}
+                         </if>
+                    </td>
+                    <td>
+                          <if condition='$V["frozen_money"] gt 0'>
+                                <span style="color:#0000FF">+{$V.frozen_money}</span>
+                          <elseif condition='$V["frozen_money"] lt 0'/>
+                                <span style="color:#FF0000">{$V.frozen_money}</span>
+                          <else />
+                                {$V.frozen_money}
+                          </if>
+                    </td>
+                </if>
+               {/*会员资金帐户结束*/}
+               
+               {/*会员等级*/}
+               <if condition="C('IS_RANK_POINTS')">
+                    <td>
+                          <if condition='$V["rank_points"] gt 0'>
+                               <span style="color:#0000FF">+{$V.rank_points}</span>
+                          <elseif condition='$V["rank_points"] lt 0'/>
+                               <span style="color:#FF0000">{$V.rank_points}</span>
+                          <else />
+                               {$V.rank_points}
+                          </if>
+                    </td> 
+                </if>
+                {/*会员等级结束*/}
+                
+                {/*会员消费积分*/}
+                <if condition="C('IS_PAY_POINTS')">
+                    <td>
+                          <if condition='$V["pay_points"] gt 0'>
+                              <span style="color:#0000FF">+{$V.pay_points}</span>
+                         <elseif condition='$V["pay_points"] lt 0'/>
+                              <span style="color:#FF0000">{$V.pay_points}</span>
+                         <else />
+                              {$V.pay_points}
+                         </if>
+                    </td>
+                </if>
+                {/*会员消费积分结束*/}
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="{$pageNumShown}" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

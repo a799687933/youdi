@@ -1,0 +1,691 @@
+<script>
+
+/*$(document).on('click', ".sxcmr", function(){
+    $(this).parent("li").slideUp()
+});
+$(document).on('click', ".splb h1", function(){
+    $(this).toggleClass("active")
+   $(this).siblings(".splbul,.clear2").slideToggle()
+});*/
+
+
+
+$(function(){
+	w=$(window).width()
+	 wm=$(".zxfb").width()
+	 wl=$(".shxl").width()
+	 wr=$(".shxr").width()
+     hr=$(".shxr").height()
+	 h=$(window).height()
+  ch=$(".shxl").height()
+
+    $(window).scroll(function () {
+		 h=$(window).height()
+		ch=$(".shxl").height()
+		cch=h-135
+		
+		var targetTop = $(this).scrollTop();
+if (targetTop > 320  && targetTop < 1480) {
+$(".shxl").addClass("shxlfd")
+$(".shxl").css({
+	"position":"fixed",
+	"width":wm-wr,
+	"top":130,
+	"left":(w-wm)/2,
+	"float":"none",
+	})
+
+if(ch>cch){
+	$(".shxl").css({
+	"top":"auto",
+	"left":(w-wm)/2,
+	"bottom":20,
+	"float":"none",
+	})
+			}	
+	
+	 
+
+}
+else if(targetTop >1480){
+	$(".shxl").removeClass("shxlfd")
+	$(".shxl").css({
+	"position":"absolute",
+	"top":"auto",
+	"left":0,
+	"bottom":40,
+	"float":"none",
+	})
+	}
+else if(targetTop < 320){
+	$(".shxl").removeClass("shxlfd")
+$(".shxl").css({
+	"position":"relative",
+	"width":"25%",
+	"top":"auto",
+	"left":"auto",
+	"bottom":"auto",
+	"float":"left",
+	})
+	}
+	
+
+	
+});
+ 
+})
+
+{/*a、select、button AJAX移步*/}
+function ajaxTo(_this){
+   url=$(_this).val() ? $(_this).val() : $(_this).attr('href');
+   getHtml(url);
+   return false;
+}
+
+{/*清除筛选*/}
+function clearSelect(_this,isall){
+	//全部清除
+   if(isall){
+	   var splb=$(_this).parents('.splb');
+	   splb.find('a').removeClass('ffInput--active');
+	   $('input[type="text"]').val('');
+	   retrieval('');	  
+	   return;
+   }
+   //单个清单
+   var type=$(_this).attr('type');
+   var value = parseInt($(_this).attr('value'));
+   var splb=$('.splb');
+   var a=splb.find('a');   
+   for(var i = 0; i < a.length;i++){
+	  var tt=a.eq(i).attr('type');
+	  var tv=parseInt(a.eq(i).attr('value'));
+	  if(type == tt && value == tv){
+	      a.eq(i).removeClass('ffInput--active');
+		  break;
+	  }else if(type == 'text'){
+	      $('input[type="text"]').val('');
+		  break;
+	  }
+   }
+   retrieval('');	
+}
+
+{/*清除价格筛选模块*/}
+function clearPrice(){
+   $('input[type="text"]').val('');
+}
+
+{/*清除选中checkbox检索节点*/}
+function clearClass(_this){
+   var splb=$(_this).parents('.splb');
+   splb.find('a').removeClass('ffInput--active');
+    retrieval('');
+}
+
+{/*提交检索*/}
+function retrieval(_this){
+	if(_this){
+		 if($(_this).is('.ffInput--active')) $(_this).removeClass('ffInput--active');
+		 else $(_this).addClass('ffInput--active');	
+	}
+
+     var splb=$('.splb');
+	 var a=splb.find('a');
+	 var url="{:U('Category/index','','')}";
+	 //分类检索
+	 var html='';
+	 //属性组检索
+	 var attrs='';
+	 for(var i=0;i < a.length;i++){
+		 var sa=a.eq(i);
+		 if(sa.is('.ffInput--active')){
+			 if(sa.attr('type')=='html') html+=sa.attr('value')+',';
+			 else if(sa.attr('type')=='attr') attrs+=sa.attr('value')+',';			 
+		 }
+	 }
+	 if(html) url+='/html/'+html;
+	 if(attrs) url+='/attrs/'+attrs;
+	 var min=$('input[name="min"]').val();
+	 var max=$('input[name="max"]').val();
+	 if(isNaN(min)) $('input[name="min"]').val(''); 
+	 if(isNaN(max)) $('input[name="min"]').val(''); 
+	 if((min && !isNaN(min)) && (max && !isNaN(max))){
+		 url+='/min/'+min+'/max/'+max;
+	 }
+     getHtml(url);
+     return false;
+}
+{/*ajax请求*/}
+function getHtml(url){
+  $.ajax({
+	 type:'get',
+	 dataType: "text",
+	 url:url,
+	 success:function(response,status,xhr){
+		 $('#ajax-div').html(response);
+		 if(!$('input[name="min"]').val() && !$('input[name="max"]').val()){
+			 $('body,html').stop().animate({
+				'scrollTop': 0,
+				'duration': 300,
+				'easing': 'ease-in'
+			  });		 
+		 }
+		 eval($(".chosen-select").chosen());
+	  },
+	  beforeSend:function(){
+		  //开始请求
+		  $('.curtain').show();
+	  },         
+	 error:function(xhr,errorText,errorType){
+		 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+	 }
+ });    
+}
+</script>
+<style type="text/css">
+.zxfbrb{
+   position:relative;
+}
+.curtain{
+    position:absolute;
+	width:100%;
+	height:100%;
+	z-index:10;
+	background:#fff;
+	filter:alpha(opacity=90);  
+	-moz-opacity:0.9;  
+	-khtml-opacity: 0.9;  
+	opacity: 0.9;  	
+	display:none;
+}
+.chosen-select {
+    display: inline!important;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+</style>
+<div class="fabut">
+ <div class="fabutl"><b class="mr5">{:isL(L('View'),'显示')}：</b><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>30))}" <if condition="$_GET['page_size'] eq 30 OR !$_GET['page_size']">class="now"</if>>30</a><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>60))}" <if condition="$_GET['page_size'] eq 60">class="now"</if>>60</a></div><!--fabutl end-->
+ <div class="fabutr">
+  <div class="fabutrl">
+   <span class="fabutrltxt">{:isL(L('Classification'),'分类')}</span>
+    <div style="width:160px; display:inline-block">
+        <select class="chosen-select" name="" onchange="return ajaxTo(this)">
+         <option value="{:U('Category/index',array('order_type'=>'create_time','order'=>'DESC'))}" <if condition="$_GET['order_type'] eq 'create_time'">selected="selected"</if>>{:isL(L('New'),'新品')}</option>
+         <option value="{:U('Category/index',array('order_type'=>'volume','order'=>'DESC'))}" <if condition="$_GET['order_type'] eq 'volume'">selected="selected"</if>>{:isL(L('SalesVolume'),'销量')}</option>
+         <option value="{:U('Category/index',array('wishlist'=>'condition'))}" <if condition="$_GET['wishlist'] eq 'condition'">selected="selected"</if>>{:isL(L('Wishlist'),'愿望单')}</option>
+         </select>
+     </div>
+  </div>
+  <div class="fabutrr">
+   <ul class="to-page-ul">
+   <if condition="$currentPage elt 1">
+        <li><a  class="disable"><span class="glyphs icon-pageFirst"></span></a></li>
+        <li><a  class="disable"><span class="glyphs icon-prev"></span></a></li>
+    <else />
+        <li><a onclick="return ajaxTo(this)" href="{:go_page($_URL_,$pageNumShown,1)}" class=""><span class="glyphs icon-pageFirst"></span></a></li>
+        <li><a onclick="return ajaxTo(this)" href="{:go_page($_URL_,$pageNumShown,'-')}" class=""><span class="glyphs icon-prev"></span></a></li>    
+    </if>
+    <li class="txt"><span>{$currentPage}</span> of <span>{$page_sze}</span></li>
+    <if condition="$currentPage egt $pageNumShown">
+         <li><a  class="disable"><span class="glyphs icon-next"></span></a></li>
+         <li><a  class="disable"><span class="glyphs icon-pageLast"></span></a></li>   
+    <else />
+        <li><a onclick="return ajaxTo(this)" href="{:go_page($_URL_,$pageNumShown,'+')}"><span class="glyphs icon-next"></span></a></li>
+        <li><a onclick="return ajaxTo(this)" href="{:go_page($_URL_,$pageNumShown,$pageNumShown)}"><span class="glyphs icon-pageLast"></span></a></li>    
+    </if>
+   </ul>
+  </div>
+  <div class="cb"></div>
+ </div><!--fabutr end--> 
+ <div class="cb"></div>
+ 
+</div><!--fabut end-->
+<div class="pr">
+<if condition="is_mobile()">
+<div class="shxlph">
+<else/>
+<div class="shxl">
+</if>
+
+<div class="shxlm">
+ <div class="shxlb"> 
+  <b class="lh22">{:isL(L('Screening'),'筛选')}</b>
+  <span class="colaaa fr f12 lh22">({:replace_isl('CateCount','项',$dataCount)})</span>  
+  <div class="cb pb10"></div>
+  <div class="sxcm">
+   <ul>
+   {/*已选择的分类*/}
+   <foreach name="scs" item="s">
+      <li><span class="xscml">{$s['name']}</span><span class="sxcmr" type="html" value="{$s['id']}"><span class="glyphs icon-close"></span></span></li>
+   </foreach>
+   {/*已选择价格*/}
+   <if condition="$selectPrice">
+   	   <li><span class="xscml">{$selectPrice}</span><span class="sxcmr"  type="text" value=""><span class="glyphs icon-close"></span></span></li>
+   </if>
+   {/*已选择属性*/}
+   <foreach name="showSelectAttrs" item="ss">
+      <li>
+          <span class="xscml"><b>{$ss['attribute_name']}：</b>{$ss['attr_value']}</span><span class="sxcmr" type="attr" value="{$ss['attr_id']}"><span class="glyphs icon-close"></span></span>
+      </li>
+    </foreach>
+   </ul>
+  </div>
+  
+  {/*有选择项才显示*/}
+  <php>if($scs || $selectPrice || $showSelectAttrs){</php>
+         <button type="submit" class="button-white mv20" onclick="return ajaxTo(this)" href="{:U('Category/index',array('order_type'=>$_GET['order_type'],'order'=>$_GET['order'],'text'=>$_GET['text']))}"><div class="tc" >{:isL(L('ClearAll'),'清除全部')}</div>  
+        </button>
+ <php>}else{</php>  
+      <p style="color:#ccc;height:40px;line-height:40px;">您的筛选项目将显示于此</p> 
+ <php>}</php>
+   
+ </div><!--筛选 end-->
+ <div class="splb">
+ <h1 class="active">{:isL(L('CommodityCategory'),'商品类别')} <span class="glyphs icon-more facet-icon fr"></span></h1>
+ 
+ <ul class="splbul" style="display:block">
+  <php>if($_GET['html']){</php><li class="clear" onclick="clearClass(this)">{:isL(L('Clear'),'清除')}</li><php>}</php>
+  <foreach name="cateList" item="c">
+     <li>
+       <a href="javascript:void(0);" type="html" value="{$c['id']}" onclick="retrieval(this)" class="not-now <if condition="in_array($c['id'],$ch)">ffInput--active</if>">
+         <span class="ffInput__checkbox"></span>{$c['name']}
+       </a>
+    </li>
+  </foreach>
+ </ul>
+ </div><!--商品类别 end-->
+ <!--
+  <div class="splb">
+ <h1 class="active">商品类别 <span class="glyphs icon-more facet-icon fr"></span></h1>
+ <ul class="splbul" style="display:block">
+  <li class="clear">清除</li>
+  <li>
+   <a href="" class="tree-title">珠宝<span class="glyphs tree-item-icon icon-next"></span></a>
+   <ul class="subsplb">
+   	<li><a href="" class="ffInput--active"><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+   </ul>
+  </li>
+  <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+  <li>
+   <a href="" class="tree-title">珠宝<span class="glyphs tree-item-icon icon-next"></span></a>
+   <ul class="subsplb">
+   	<li><a href="" class="ffInput--active"><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+   </ul>
+  </li>
+  <li class="active">
+   <a href="" class="tree-title">珠宝<span class="glyphs tree-item-icon icon-next"></span></a>
+   <ul class="subsplb">
+   	<li><a href="" class="ffInput--active"><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+   </ul>
+  </li>
+  <li>
+   <a href="" class="tree-title">珠宝<span class="glyphs tree-item-icon icon-next"></span></a>
+   <ul class="subsplb">
+   	<li><a href="" class="ffInput--active"><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+   </ul>
+  </li>
+  <li>
+   <a href="" class="tree-title">珠宝<span class="glyphs tree-item-icon icon-next"></span></a>
+   <ul class="subsplb">
+   	<li><a href="" class="ffInput--active"><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+    <li><a href=""><span class="ffInput__checkbox"></span>单排扣大衣</a></li>
+   </ul>
+  </li>
+ 
+ </ul>
+ </div><!--未进行商品筛选时的商品类别 end-->
+ 
+ {/*属性检索*/}
+<foreach name="attrs" item="attr"> 
+ <div class="splb">
+     <h1 <if condition="array_intersect($attr['attr_ids'],$selectAttr ? $selectAttr : array())">class="active"</if>>{$attr['attribute_name']} <span class="glyphs icon-more facet-icon fr"></span></h1>
+     <foreach name="showSelectAttrs" item="ss">
+     <php>if($ss['attribute_name']==$attr['attribute_name']){</php>
+         <div class="clear2" style="<if condition="array_intersect($attr['attr_ids'],$selectAttr ? $selectAttr : array())">display:block;</if>" onclick="clearClass(this)">{:isL(L('Clear'),'清除')}</div>
+      <php>}</php>
+     </foreach>
+     <div class="splbul" style="<if condition="array_intersect($attr['attr_ids'],$selectAttr ? $selectAttr : array())">display:block;</if>">
+     <ul  style="  width:100%;<if condition="array_intersect($attr['attr_ids'],$selectAttr ? $selectAttr : array())">display:block;</if>">
+     <foreach name="attr['attr_list']" item="a" key="ak">
+     <if condition="$ak gt 0">
+          <li style="<if condition="($attr['attribute_name'] eq '尺码') OR (strtoupper($attr['attribute_name']) eq 'SIZE')">width:49%;float:left;</if>">
+              <a href="javascript:void(0);" type="attr" value="{$a['attr_id']}" 
+              <if condition="!$a['is_true']">class="disabled"<else /> class="not-now <if condition="in_array($a['attr_id'],$selectAttr)">ffInput--active</if>" onclick="retrieval(this)"</if>>
+                 <span class="ffInput__checkbox"></span>{$a['attr_value']}
+              </a>
+          </li>
+      </if>
+     </foreach>
+     <div class="cb"></div>
+     </ul>
+     <php>if((strpos($attr['attribute_name'],'尺码') !== false) || (strpos(strtoupper($attr['attribute_name']),'SIZE') !==false)){</php>
+         <a href="javascript:void(0)" class="col2ab cmznn fr">尺码指南</a>
+     <php>}</php>    
+     <div class="cb pb10"></div>
+     </div>
+     
+ </div><!--尺码 end-->
+</foreach>  
+{/*属性检索结束*/}
+<!---->
+<div class="tccmbg">
+ <div class="tccm"><span class="close cmclose" style="right:5px; top:5px;"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+ <img src="__HOME__/images/1123a.jpg" alt=""/>
+ </div>
+</div>
+<!--尺码指南 end-->
+
+  
+ <div class="splb">
+ <h1 <if condition="$_GET['min'] gt 0 AND $_GET['max'] gt 0">class="active"</if>>{:isL(L('Price'),'价格')} <span class="glyphs icon-more facet-icon fr"></span></h1>
+ <ul class="splbul" <if condition="$_GET['min'] gt 0 AND $_GET['max'] gt 0">style="display:block;"</if>>
+ <php>if($_GET['min'] && $_GET['max']){</php>
+    <li class="clear" onclick="clearPrice()">{:isL(L('Clear'),'清除')}</li>
+ <php>}</php>
+  <li>
+   <div class="jiagel">
+    <span>¥</span>
+    <div style="width:82%; float:left"><input type="text"  name="min" value="{:htmlspecialchars($_GET['min'])}" class="jiagel_input" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9\.]/g,'')" placeholder="{:isL(L('FloorPrice'),'最低价格')}"/></div>
+   </div>
+   <div class="jiagel">
+    <span>¥</span>
+    <div style="width:82%; float:left"><input type="text" name="max" value="{:htmlspecialchars($_GET['max'])}" class="jiagel_input" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9\.]/g,'')" placeholder="{:isL(L('CeilingPrice'),'最高价格')}"/></div>
+   </div>
+   <div class="cb"></div>
+   {/*如果是价格检索并且没有商品时显示*/}
+   <if condition="$prcieError AND !$goods">
+     <p class="tsy2" style="display:block;">{$prcieError}</p>
+   </if>
+   <!--<p class="tsy2">很抱歉，我们暂时无法搜索到符合您要求的商品，请调整价格，重新尝试。</p>
+   <p class="tsy2">找不到符合此价格范围的商品，请修改范围重新尝试。</p>-->
+   <button type="submit" class="button-offWhite mt10" onclick="retrieval(false)">
+                    <span class="fl">确定</span>
+                    <span class="glyphs icon-thinArrow fr"></span>
+    </button>
+  </li> 
+  
+ </ul>
+ </div><!--颜色 end-->
+</div>
+
+
+</div><!--shxl end-->
+<div class="shxr">
+ <div class="txtms">奢侈品牌：<b>来自顶尖设计师品牌</b></div>
+ <div class="zxfbrb"><!---显示4行-->
+ <div class="curtain"></div>{/*幕布*/}
+   <ul>
+        <foreach name="goods" item="g">
+           	<li>
+               <if condition="in_array($g['id'],$goodsIds)">
+                   <span add-url="{:U("Cookie/goodsCollect",array('id'=>$g['id']))}" del-url="{:U("Cookie/deleteDoodsCollect",array('id'=>$g['id']))}" class="jrxy jrxynow" onclick="coll_and_cac(this)"><span class="fa fa-heart"></span></span>
+               <else />
+                   <span add-url="{:U("Cookie/goodsCollect",array('id'=>$g['id']))}" del-url="{:U("Cookie/deleteDoodsCollect",array('id'=>$g['id']))}" class="jrxy" onclick="coll_and_cac(this)" style="cursor:pointer"><span class="fa fa-heart-o"></span></span>
+               </if>
+              
+                
+             <div class="zxfbrbt">
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                             <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                         </td>
+                      </tr>
+                  </table>
+             </div>
+             <div class="zxfbrbtb">
+              
+                  <table width="100%" height="100%">
+                      <tr>
+                          <td align="center" valign="middle" width="100%" height="100%">
+                              <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+                          </td>
+                      </tr>
+                  </table>
+            </div>
+             <div class="zxfbrbb">
+              <p><b>YOUDI WU</b></p>
+              <p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>
+              <p class="pt5">￥ {$g['goods_retail_price']}</p>
+              <!--<p class="pt5 colf00">SOLD OUT</p>产品没货时--->
+             </div>
+            </li>
+        </foreach>
+        <!--<foreach name="goods" item="g">
+           	<li>
+               <if condition="in_array($g['id'],$goodsIds)">
+                   <span url="{:U("Cookie/deleteDoodsCollect",array('id'=>$g['id']))}" class="jrxy jrxynow" onclick="coll_and_cac(this)"><span class="glyphs icon-heart"></span></span>
+               <else />
+                   <span url="{:U("Cookie/goodsCollect",array('id'=>$g['id']))}" class="jrxy" onclick="coll_and_cac(this)" style="cursor:pointer"><span class="glyphs icon-heart"></span></span>
+               </if>
+              
+                
+             <div class="zxfbrbt">
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                             <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                         </td>
+                      </tr>
+                  </table>
+             </div>
+             <div class="zxfbrbtb">
+              
+                  <table width="100%" height="100%">
+                      <tr>
+                          <td align="center" valign="middle" width="100%" height="100%">
+                              <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+                          </td>
+                      </tr>
+                  </table>
+            </div>
+             <div class="zxfbrbb">
+              <p><b>YOUDI WU</b></p>
+              <p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>
+              <p class="pt5">￥ {$g['goods_retail_price']}</p>
+             </div>
+            </li>
+        </foreach>-->
+        <div class="cb"></div>
+   </ul>
+   
+  </div><!--zxfbrb end-->
+   <div class="cb pb15"></div>
+    <if condition="is_mobile()">
+    <else/>
+  <div class="fabutl" style="margin-top:8px">
+      <b class="mr5">{:isL(L('View'),'显示')}：</b><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>30))}" <if condition="$_GET['page_size'] eq 30 OR !$_GET['page_size']">class="now"</if>>30</a><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>60))}" <if condition="$_GET['page_size'] eq 60">class="now"</if> >60</a>
+  </div>
+  </if>
+  <div class="fabutrr">
+   <ul class="to-page-ul">
+       <if condition="$currentPage elt 1">
+            <li><a class="disable"><span class="glyphs icon-pageFirst"></span></a></li>
+            <li><a class="disable"><span class="glyphs icon-prev"></span></a></li>
+        <else />
+            <li><a href="{:go_page($_URL_,$pageNumShown,1)}" onclick="return ajaxTo(this)"><span class="glyphs icon-pageFirst"></span></a></li>
+            <li><a href="{:go_page($_URL_,$pageNumShown,'-')}" onclick="return ajaxTo(this)"><span class="glyphs icon-prev"></span></a></li>    
+        </if>
+        <li class="txt"><span>{$currentPage}</span> of <span>{$page_sze}</span></li>
+        <if condition="$currentPage egt $pageNumShown">
+             <li><a class="disable"><span class="glyphs icon-next"></span></a></li>
+             <li><a class="disable"><span class="glyphs icon-pageLast"></span></a></li>   
+        <else />
+            <li><a href="{:go_page($_URL_,$pageNumShown,'+')}" onclick="return ajaxTo(this)"><span class="glyphs icon-next"></span></a></li>
+            <li><a href="{:go_page($_URL_,$pageNumShown,$pageNumShown)}" onclick="return ajaxTo(this)"><span class="glyphs icon-pageLast"></span></a></li>    
+        </if>
+   </ul>
+  </div>
+  <if condition="is_mobile()">
+ <div class="xshib">
+  <div class="fabutl"><b class="mr5">{:isL(L('View'),'显示')}：</b><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>30))}" <if condition="$_GET['page_size'] eq 30 OR !$_GET['page_size']">class="now"</if>>30</a><a onclick="return ajaxTo(this)" href="{:condition_url($_URL_,array('page_size'=>60))}" <if condition="$_GET['page_size'] eq 60">class="now"</if>>60</a></div><!--fabutl end-->
+  <span class="fhdb fr"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span>
+  <div class="cb"></div>
+ </div>
+ <else/>
+ </if>
+  
+  <if condition="is_mobile()">
+  <else/>
+  <span class="fhdb fr mr10" style="margin-top:2px;"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span>
+  </if>
+  <div class="cb"></div>
+</div><!--shxr end-->
+<div class="cb pv20"></div>
+</div>
+<!--
+<div class="zxfbt">
+   {:replace_isl('CateCount','项',$cateCount)}
+    <div class="page fr">
+        {$page}
+        </div><div class="cb"></div>
+    </div>-->
+  <!--  
+ <div class="zxfbl zxfblmin">
+  <h1 class="fhpx">{:isL(L('ComprehensiveRanking'),'综合排序')}</h1>
+  <h1>{:isL(L('Categories'),'产品分类')}<span class="zxfblz zxfblf"></span></h1>
+  <ul>
+      <foreach name="cateList" item="c">
+  	      <li>
+               <a href="{:U('Category/index',array('html'=>$c['id']))}" class="not-now <if condition="$_GET['html'] eq $c['id']">active</if>">
+                   <span></span>{$c['name']}
+               </a>
+          </li>
+       </foreach>
+  </ul>
+ </div><!--zxfbl end-->
+ <!--
+ <div class="zxfbr">
+  <div class="zxfbrt">
+      <span class="ph15 col222">{:isL(L('ComprehensiveRanking'),'综合排序')}</span>
+      <a href="{:condition_url($_URL_,array('order_type'=>'click_count','order'=>$orders))}" class="icon28 mh15">{:isL(L('popularity'),'人气')}</a>
+      <a href="{:condition_url($_URL_,array('order_type'=>'create_time','order'=>$orders))}" class="icon28 mh15">{:isL(L('New'),'新品')}</a>
+      <a href="{:condition_url($_URL_,array('order_type'=>'goods_retail_price','order'=>$orders))}" class="icon28 mh15">{:isL(L('InfoPrice'),'价格')}</a>
+      <a href="{:U('Category/index',array('wishlist'=>'condition'))}" class="icon28 mh15">{:isL(L('Wishlist'),'愿望单')}</a>
+      <a href="{:condition_url($_URL_,array('order_type'=>'volume','order'=>$orders))}" class="icon28 mh15">{:isL(L('SalesVolume'),'销量')}</a>
+  </div>
+  <div class="zxfbrb">
+   <ul>
+        <foreach name="goods" item="g">
+           	<li>
+               <if condition="in_array($g['id'],$goodsIds)">
+                   <span url="{:U("Cookie/deleteDoodsCollect",array('id'=>$g['id']))}" class="icon29 icon29now" onclick="coll_and_cac(this)" style="cursor:pointer"></span>
+               <else />
+                   <span url="{:U("Cookie/goodsCollect",array('id'=>$g['id']))}" class="icon29" onclick="coll_and_cac(this)" style="cursor:pointer"></span>
+               </if>
+                
+             <div class="zxfbrbt">
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                             <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+                         </td>
+                      </tr>
+                  </table>
+             </div>
+             <div class="zxfbrbtb">
+              
+                  <table width="100%" height="100%">
+                      <tr>
+                          <td align="center" valign="middle" width="100%" height="100%">
+                              <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+                          </td>
+                      </tr>
+                  </table>
+            </div>
+             <div class="zxfbrbb">
+              <p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>
+              <p><b>￥ {$g['goods_retail_price']}</b></p>
+             </div>
+            </li>
+        </foreach>
+        <div class="cb"></div>
+   </ul>
+   
+  </div><!--zxfbrb end-->
+  <!--<div class="pv20 tc jzgd zxfbrbjzgd"><span onClick="mobile.clickPage(this,'#ajax-div')">{:isL(L('LoadMore'),'加载更多')}</span></div>
+  <div class="pv20 tl"><span class="fhdb"><span class="icon19">&nbsp;</span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>
+ </div><!--zxfbr end-->
+<script type="text/javascript">
+	/**
+	 *THIS   this
+	 * totalPages  总页数
+	 * addEnd      追加内容节点
+	 * url               请求地址
+	 *  */
+	mobile={};
+	mobile.clickPage=function(THIS,addEnd){    
+		var _this=this;
+		var totalPages=parseInt("{$pageNumShown}");
+		var page="{$_GET['p']}";
+		page=page ? (parseInt(page)) + 1 : 2;
+		var url="{:U('Category/index','','')}?order_type={$_GET['order_type']}&order={$_GET['order']}&keywords={$_GET['keywords']}&wishlist={$_GET['wishlist']}&p="+page;
+
+		if(page >totalPages){
+			$(THIS).attr('disabled',true).text("{:isL(L('LoadingCompleted'),'已全部加载完毕')}");
+			return;
+		}
+		this.run=function(){
+			 if(page <= totalPages){  
+				if($(THIS).attr('ajax') == 'ok') return;              
+				 _this.getPage();
+			 }else{
+				 $(THIS).attr('disabled',true).val(window.LoadingCompleted);
+			 }             
+		};  
+		this.getPage=function(){
+			  $.ajax({
+				 type:'get',
+				 dataType: "text",
+				 url:url,
+				 success:function(response,status,xhr){
+					 $(THIS).attr('ajax','').attr('disabled',false).val('Load More');
+					 $(addEnd).html(response);
+				  },
+				  beforeSend:function(){
+					  $(THIS).attr('ajax','ok').attr('disabled',true).val(window.Loading);
+				  },         
+				 error:function(xhr,errorText,errorType){
+					 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+				 }
+			 });              
+		};  
+		//运行
+		_this.run();         
+	};      
+</script> 
+ <script>
+  $(function(){
+	  $(".cmznn").bind('click', function(){
+      $(".tccmbg").fadeIn("fast",function(){
+		  $(".tccm").slideDown()
+		  })
+});
+	 $(".cmclose").bind('click', function(){
+      $(".tccm").slideUp("fast",function(){
+		  $(".tccmbg").fadeOut()
+		  })
+		  });
+	  })
+ </script>
+<style type="text/css">
+.fljg{display:block !important;padding-bottom:10px !important;}
+</style>

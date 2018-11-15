@@ -1,0 +1,17 @@
+<foreach name="reuslt" item="res" key="reskey">
+    <if condition="$res['user_id'] gt 0">
+        <div class="content_list">
+           {$name} @ <strong style="color:#3C7FB1;">YOUDI WU</strong> {$res['content']}
+           <span class="times">{:from_time($res['times'],'')}</span>
+           <a href="javascript:void(0);" class="del_a" onclick="massgeDel('{:sign_url(array('types'=>'del','article_id'=>$_GET['article_id'],'id'=>$res['id']),U('NewComment/articleComReply'))}')">删除</a>
+        </div>
+    <else />
+         <div class="content_list">
+             YOUDI WU @ <strong style="color:#3C7FB1;">{$name}</strong>  {$res['content']}
+             <span class="times">{:from_time($res['times'],'')}</span>
+             <a href="javascript:void(0);" class="del_a" onclick="massgeDel('{:sign_url(array('types'=>'del','article_id'=>$_GET['article_id'],'id'=>$res['id']),U('NewComment/articleComReply'))}')">删除</a>
+         </div>
+    </if> 
+</foreach>
+
+  

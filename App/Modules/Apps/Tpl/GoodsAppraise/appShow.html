@@ -1,0 +1,55 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+ <form method="post" action="{:U(APP_APPS.'/GoodsAppraise/updateApp','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    <input type="hidden" value="{$result.id}" name="id" />
+     <div class="pageFormContent nowrap" layoutH="97">
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                   <!--<tr><td style="text-align:right;">用户买后的感受 ：</td>
+                              <td>    
+                                 <foreach name="feel" item="fe">
+                                       <input type="checkbox" name="feel[]" value="{$fe.id}" <if condition="in_array($fe['id'],$result['feel'])">checked="checked"</if>/>{$fe.name}
+                                 </foreach>  
+                               </td>
+                    </tr>-->
+                    <tr><td style="height:10px;"></td></tr>  
+                      <tr><td style="text-align:right;">用户评分 ：</td>
+                              <td><input type="text" name="score" value="{$result.score}" class="required digits" max="5" min="1"/></td>
+                      </tr>  
+                      <tr><td style="height:10px;"></td></tr>                    
+                    <tr><td  style="text-align:right;">评价内容：</td>
+                           <td><textarea name="content" rows="10"  cols="100" class="required" style="margin:3px 0;">{$result.content|stripcslashes=###}</textarea></td>
+                   </tr>
+                  <!--<tr><td  style="text-align:right;">我要回复：</td>
+                           <td>
+                           <textarea name="answer" rows="10" cols="100" style="margin:3px 0;">{$result.answer|stripcslashes=###}</textarea>
+                           <input type="hidden" value="{:time()}" name="answer_time" />
+                           </td>
+                   </tr>-->     
+                   <if condition="$photo">
+                        <tr><td  style="text-align:right;">用户晒图：</td>
+                               <td>
+                               <foreach name="photo" item="ph">
+                                   <span style="margin:2px;">
+                                        <a href="__ROOT__/{$ph.img}" target="_blank">
+                                            <img src="__ROOT__/{$ph.img}" style="width:30px; height:30px;" />
+                                        </a>
+                                   </span>
+                               </foreach>
+                               </td>
+                       </tr>  
+                   </if>                                 
+                </table>             
+             
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">修改</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+   </form> 
+</div>
+
+

@@ -1,0 +1,48 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+ <form method="post" action="{:U(APP_APPS.'/Goods/consultationReply','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    <input type="hidden" value="{$result.id}" name="id" />
+     <div class="pageFormContent nowrap" layoutH="97">
+                <table cellpadding="0" cellspacing="0" class="mytable">
+
+                      <tr><td style="text-align:right;">咨询商品 ：</td>
+                              <td><input type="text" value="{$result.goods_name}" disabled="disabled" style="width:250px;"/></td>
+                      </tr>  
+                       <tr><td style="height:10px;"></td></tr>   
+                      <tr><td style="text-align:right;">咨询标题 ：</td>
+                              <td><input type="text" value="{$result.title}" name="title" class="required" style="width:250px;"/></td>
+                      </tr>                      
+                      <tr><td style="height:10px;"></td></tr>                    
+                    <tr>
+                           <td  style="text-align:right;">咨询内容：</td>
+                           <td><textarea name="content" rows="10" name="content"  cols="100" class="required" style="margin:3px 0;">{$result.content|stripcslashes=###}</textarea></td>
+                   </tr>
+                    <tr>
+                          <td  style="text-align:right;">回复内容：</td>
+                           <td>
+                           <textarea name="reply" rows="10" cols="100" style="margin:3px 0;">{$result.reply|stripcslashes=###}</textarea>
+                           <input type="hidden" value="{:time()}" name="reply_time" />
+                           </td>
+                   </tr> 
+                   <tr><td style="height:10px;"></td></tr>   
+                  <tr><td style="text-align:right;">是否显示 ：</td>
+                          <td>
+                               <input type="radio"  value="1" name="is_show" <if condition="$result['is_show'] eq 1">checked="checked"</if>/>显示
+                               <input type="radio"  value="0" name="is_show" <if condition="$result['is_show'] eq 0">checked="checked"</if>/>不显示
+                          </td>
+                  </tr>                                                 
+                </table>             
+             
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">修改</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+   </form> 
+</div>
+
+

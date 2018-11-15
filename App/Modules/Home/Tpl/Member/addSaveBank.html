@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人中心-我的信息-银行账号</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<link rel="Stylesheet" href="__PUBLIC__ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine-zh-cn.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+    valinit('.form1','get','__ROOT__/',true,'topRight');  
+});
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Member:memberTop'/>{/*会员中心头部*/}
+<div class="wrap">
+ <h1 class="lh45 col333 f14"><a href="{:U('/Member')}" class="col333">我的石度</a> > 个人中心 > 添加银行账户</h1>
+<include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="grzxr">
+  <div class="grzxrt"><div class="grzxrtul"><a href="javascript:void(0);" class="now">添加银行账户</a><div class="cb"></div></div></div><!---->
+  <div class="fbgh">
+	  <form action="{:U('Member/addSaveBankForm')}" class="form1">
+	      <input type="hidden" name="id" value="{$res.id}">
+		  <label>开户类型：</label><select name="bank_type" id="bank_type" class="select130 validate[required]">
+			  <option value="个人账户" <if condition="$res['bank_type'] eq '个人账户' ">selected="selected"</if>>个人账户</option>
+			  <option value="公司账户" <if condition="$res['bank_type'] eq '公司账户' ">selected="selected"</if>>公司账户</option>
+		  </select>
+		   <div class="cb pb10"></div>
+		   <label>开户银行：</label><input type="text" name="bank_name" value="{$res.bank_name}" id="bank_name"  class="input210 validate[required]"/>
+		   <div class="cb pb10"></div>
+		   <label>银行卡号：</label><input type="text" name="bank_sn"  value="{$res.bank_sn}" id="bank_sn" class="input210 validate[required]"/>
+		   <div class="cb pb10"></div>
+		   <label>开户支行：</label><input type="text" name="bank_child" value="{$res.bank_child}" id="bank_child" class="input210 validate[required]"/>
+		   <div class="cb pb10"></div>
+		   <label>开户名：</label><input type="text" name="user_name" value="{$res.user_name}" id="user_name" class="input210 validate[required]"/>
+		   <div class="cb pb10"></div>
+		   <label>默认帐户：</label>
+		   <span class="pl5" style="position:relative;top:10px;"><input type="checkbox" name="default" value="1" <if condition="$res['if_default']">checked="checked"</if> />设为默认帐户</span>		
+		   <div class="cb pb10"></div>
+		   
+		   <div class="cb pb10"></div>   
+		   <label>&nbsp;</label><input type="submit" id="submits" value="保存" class="lvbtn155 mt30 mr20"/><input type="button" onclick="javascript:;history.back();" value="取消" class="huibtn155 mt30"/>
+		   <div class="cb pb10"></div>
+	  </form>
+  </div><!---->
+ </div><!--grzxr end-->
+ <div class="cb pb30"></div>
+</div>
+   
+  <!--footer begin-->
+   <include file='Common:footer'/>{/*页脚*/}		
+  <!--footer end-->
+</body>
+</html>

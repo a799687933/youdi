@@ -1,0 +1,17 @@
+  <h1>物流信息</h1>
+  <div class="wuliu"><div class="wulium">
+   <ul>
+       <if condition="$result">
+           <foreach name="result" item="res" key="resk">  
+               <li>{$res['time']} <b style="width: 465px;">{$res['context']}</b></li>
+           </foreach>
+       <else />
+       
+       </if>
+   </ul>
+  </div></div>
+  <div class="sppj2 pr" style="width:308px; float:right; margin:30px 0 15px">
+   <input value="确定"  class="btn" type="button" onClick="closeLogistics();">
+    <span class="glyphs icon-thinArrow btnb"></span>    
+  </div>
+  <div class="cb"></div>

@@ -1,0 +1,62 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+		</ul>
+	</div>
+
+	<table class="list" width="100%" layoutH="50" id="list-table-cate3">
+		<thead>
+		<tr>	
+			<th width="250">分类名称</th>
+			<th >分类描述</th>
+			<th >是否显示</th>
+            <th width="200">排序</th>
+            <th>后台禁用</th>
+            <th style="text-align: center;">操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<foreach item="app" name="Cate">
+			<tr target="sid_node" rel="{$app['files_id']}" class="{$app['files_pid']} showtr" id="{$app['files_pid']}_{$app['files_id']}" >
+				<td class="first-cell" style="text-align:left;text-indent:5px;padding-left:{$app['files_padding']}px;">
+                <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app['files_pid']}_{$app['files_id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-cate3')" />           
+                    {$app.files_name|tpl_modify_oen=###,'shops_files_sort','files_name',$app['files_id'],'files_id','Shops/shopCateAddForm'}
+                </td>			
+				<td>{$app.files_bewrite|tpl_modify_oen=###,'shops_files_sort','files_bewrite',$app['files_id'],'files_id','Shops/shopCateAddForm'}</td>				
+				<td>{$app.display|tpl_yes_no=###,'shops_files_sort','display',$app['files_id'],'files_id','Category/cateSave'}</td>
+                <td>{$app.files_sort|tpl_modify_oen=###,'shops_files_sort','files_sort',$app['files_id'],'files_id','Shops/shopCateAddForm'}</td>       
+                <td>
+                    <if condition="$app['disables']">
+                        <img src="{:C('__IMG__')}/yes.gif"/>
+                    <else />
+                        <img src="{:C('__IMG__')}/no.gif"/>
+                    </if>
+                </td>    
+                <td style="text-align: center;">
+                <if condition="$app['files_pid'] eq 0">
+                 {$action|tpl_action='dialog','Shops/shopCateAdd','files_pid/'.$app["files_id"].'/shops_id/'.$shopId,'添加（'.strip_tags($app['files_name']).'）子级分类','icon_add.gif','icon_add_not.gif',900,550} <!--添加按钮-->
+                 <else />
+                    <img src="{:C('__IMG__')}/icon_add_not.gif"/>
+                 </if>
+                  {$action|tpl_action='dialog','Shops/shopCateAdd','cate_id/'.$app['files_id'].'/shops_id/'.$shopId,'修改（修改分类）','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+                  <if condition="$app['files_pid'] eq 0">
+                  <img src="{:C('__IMG__')}/icon_drop_not.gif"/>
+                 <else />
+                  {$action|tpl_action='ajaxTodo','Shops/cageDelete','ids/'.$app["files_id"].'/shops_id/'.$shopId,'确定执行删除('.strip_tags($app['files_name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->                       
+                 </if>            
+                </td>
+			</tr>
+		</foreach>
+		</tbody>
+	</table>
+
+	<div class="panelBar">
+		<!--<div class="pages">
+			<span></span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="10" currentPage="{$currentPage}"></div>
+	</div>-->
+</div>
+

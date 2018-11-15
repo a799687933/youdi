@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人中心-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+   $('.flb').hide();
+   valinit('.form1','post','',true,'bottomLeft');  
+});
+</script>
+</head>
+<body>
+<include file="Common:top" />{/*最顶部*/}
+<include file="Common:header" />{/*头部*/}
+<include file="Common:nav" />{/*导航与商品分类*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="grzxl pt30">
+   <h1>会员中心</h1>
+   <div class="grzxlb">
+      <include file='Member:leftNav'/>{/*左边导航*/}
+   </div>
+  </div><!--grzxl end-->
+  <div class="grzxr pt30">
+   <div class="wddd pl20 pr20 pt15 mt20" style="margin-top: 0;min-height: 600px;">
+       <h2 style="border-bottom: 1px #eee solid;clear:both;height:30px;">
+           <span class="icon49a pl10 f14 col333 lh30 fl">
+               <a href="{:U('Member/index')}" style="color:#333">会员首页</a> > 我的钱包 > 提现申请          
+           </span>                          
+       </h2>  
+    <div class="cb"></div>
+    {/*内容区域*/}
+    <div class="wdddb p10">
+          <form method="get" action="{:U('/Member/extractionForm')}" class="form1">
+             <table class="my-table" style="width:100%">                 
+                  <tr>
+                      <td style="width:100px;text-align:center;">提现金额：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="money" value="{$memberBank.money}" id="money" class="validate[required,maxSize[10],custom[onlyNumberSp]]" style="height:30px;line-height:30px;width:300px;border:#eee solid 1px;" />
+                         <span style="color:red;">*</span>
+                      </td>
+                  </tr>               
+    
+                  <tr>
+                      <td style="width:100px;text-align:center;">开户银行：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="band_name" value="{$memberBank.bank_name}" id="band_name" class="validate[required,maxSize[100]]" style="height:30px;line-height:30px;width:300px;border:#eee solid 1px;" />
+                         <span style="color:red;">*</span>
+                      </td>
+                  </tr>              
+
+                  <tr>
+                      <td style="width:100px;text-align:center;">银行帐号：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="band_account" value="{$memberBank.bank_sn}" id="band_account" class="validate[required,maxSize[100]]" style="height:30px;line-height:30px;width:300px;border:#eee solid 1px;" />
+                         <span style="color:red;">*</span>
+                      </td>
+                  </tr>      
+
+                  <tr>
+                      <td style="width:100px;text-align:center;">帐户名称：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="user_name" value="{$memberBank.user_name}" id="user_name" class="validate[required,maxSize[100]]" style="height:30px;line-height:30px;width:300px;border:#eee solid 1px;" />
+                         <span style="color:red;">*</span>
+                      </td>
+                  </tr>   
+
+                  <tr>
+                      <td style="width:100px;text-align:center;">开户网点：</td>
+                      <td style="text-align:left">
+                         <input type="text" name="bank_child" value="{$memberBank.bank_child}" id="bank_child" class="validate[required,maxSize[100]]" style="height:30px;line-height:30px;width:300px;border:#eee solid 1px;" />
+                         <span style="color:red;">*</span>
+                      </td>
+                  </tr>   
+                                                          
+                   <tr style="border:none">
+                      <td style="width:100px;text-align:center;">&nbsp;</td>
+                      <td style="text-align:left">
+                          <input type="submit" 
+                                     value="{:isL(L('Submit'),'提交')}" 
+                                     class="btn_lkgm" 
+                                     id="submits" 
+                                     style="
+                                               width:200px;margin:0 auto;height: 40px;
+                                               line-height:40px;font-size:20px;
+                                               background:#a6080f;color:#fff;border-radius:4px;border:none; cursor:pointer;
+                                     "/>
+                      </td>
+                  </tr>                                                           
+             </table>
+         </form>
+    </div>
+    {/*内容区域结束*/}
+    
+   </div><!--wddd end-->
+  </div><!--grzxr end-->
+  <div class="cb"></div>
+ </div>
+ <div class="cb pv35"></div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+
+<!--float-->
+<include file="Common:float" />{/*右边浮动*/}
+<!--float end-->
+</body>
+</html>

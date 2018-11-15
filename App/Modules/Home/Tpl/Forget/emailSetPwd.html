@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('RetrievePassword'),'重设密码')} | YOUDI WU 中国</title>
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css"/>
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/psw.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<style type="text/css">
+
+.dlzcmm_input {
+    font-family: "Polaris-Book",sans-serif;
+}
+</style>
+<script type="text/javascript">
+$(function(){
+   //登录	   
+   formInit('.forms1',true,true,true,true);
+}); 
+</script>
+</head>
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+
+<!--content begin-->
+ <h1 class="title"><div class="wrap"><span>{:isL(L('ResetPassword'),'重设或创建密码')}</span></div></h1>
+ <div class="app"><div class="csmmwrap">
+     <if condition="$links">
+             <form method="post" action="{:U('Forget/emailSetPwdForm')}?email={$_GET['email']}&random={$_GET['random']}&sign={$_GET['sign']}" class="forms1">
+                  <div class="csmm">
+                   <p class="mb30">欲重设或设置新的密码，只需在下方相应栏内输入您的新密码，并点击提交即可。</p>
+                   <input type="text"  class="csmm_input" value="{$_GET['email']}" readonly placeholder="电邮地址"/>   
+                   <p class="tsy">请输入正确的电邮地址</p>  
+                   <div class="cb mb15"></div>          
+                  <!-- <label>{:isL(L('Password'),'密码')} *</label>-->
+                  
+                  <div style="position:relative" class="mmbox">
+      <input type="password" name="password" id="password"  class="mm_input2  mmpsw validate[required]"  info-text="pwd-text" error-info="{:isL(L('PleaseEnterApassword'),'请输入密码')}" placeholder="{:isL(L('Password'),'密码')}" min="6" max="300"/>
+      <span class="glyphs icon-show mmyj iconmm2"></span>
+      <p class="tsy pwd-text">密码长度必须介于6到300个字母。</p>
+      </div>
+                  
+                   <!--<input type="password" name="password" id="password" class="csmm_input dlzcmm_input validate[required]"  info-text="pwd-text" error-info="{:isL(L('PleaseEnterApassword'),'请输入密码')}" placeholder="{:isL(L('Password'),'密码')}" min="6" max="300"/>
+                   <p class="hong pwd-text  pl10" style="display:none">密码长度必须介于6到300个字母。</p>-->
+                   
+                   <div class="cb mb15"></div> 
+                       
+                   <!--<label>{:isL(L('ConfirmPassword'),'确认密码')} *</label-->
+                   <div style="position:relative" class="mmbox">
+      <input type="password" name="not_password" id="not_password"  class="mm_input2  mmpsw validate[required,equals[password]]"  info-text="get-pwdc-text" error-info="{:isL(L('PleaseConfirmYourPassword'),'两次输入的密码不一致, 请重新输入')}" placeholder="{:isL(L('ConfirmPassword'),'确认密码')}"/>      
+      <span class="glyphs icon-show mmyj iconmm3"></span>
+      <p class="tsy get-pwdc-text">两次输入的密码不一致, 请重新输入。</p>
+      </div>
+                   
+                  <!-- <input type="password" name="not_password" id="not_password" class="csmm_input dlzcmm_input validate[required,equals[password]]" info-text="get-pwdc-text" error-info="{:isL(L('PleaseConfirmYourPassword'),'两次输入的密码不一致, 请重新输入')}" placeholder="{:isL(L('ConfirmPassword'),'确认密码')}"/>      
+                   <p class="hong get-pwdc-text pl10" style="display:none">两次输入的密码不一致, 请重新输入</p>--> 
+                   
+                         
+                   <div class="cb pb30"></div>
+                   <a href="__ROOT__/" class="qux" style="margin-top:9px;">{:isL(L('Cancel'),'取消')}</a> 
+                   <div style="position:relative; float:right; width:50%;">
+                   <input type="submit" id="submits" msg="{:isL(L('PleaseLater'),'提交中...')}"  value="{:isL(L('Submit'),'提交')}" class="csmm_btn" style=" width:100%; float:none" info-text="submit-text"/>
+                   <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+                   <p class="hong submit-text" style="position:absolute; left:20px; top:40px;display:none">成功或失败提示</p> 
+          </div>
+           <div class="cb pb10"></div>
+                    
+                  <!-- <input type="submit" id="submits" msg="{:isL(L('PleaseLater'),'提交中...')}" info-text="submit1-text" value="{:isL(L('Submit'),'提交')}" class="csmm_btn"/>
+                   <div class="cb" style="height:10px;"></div>
+                   <p class="hong submit1-text" style="display:none;width:400px;float:right;text-align:center">提交成功或失败</p>-->
+                   
+                  </div>
+                  <div class="cb"></div>
+                 
+           </form>         
+     <else />
+          <div class="csmm">
+             <p class="mb30">抱歉，你所使用的链接已无效，为安全起见。重设密码的链接将会在48小时后立刻失效。并只可使用一次。请点击 <a href="{:U('Forget/emailPassword')}">此处</a> to resetyour password and receive anow link.</p>
+          </div>
+     </if>
+</div> 
+ </div><!--zyjh end-->
+
+<!--content endh-->
+<include file="Common:footermin" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

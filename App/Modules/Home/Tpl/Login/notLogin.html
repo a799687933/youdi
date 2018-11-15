@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('LoginAndRegistration'),'登录和注册')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<style>
+ .dlzcmm_input{ font-family:"Polaris-Book",sans-serif;padding-right:40px;}
+</style>
+</head>
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<script type="text/javascript">
+/*$(function(){
+   valinit('#login-form','post','',true,'bottomLeft');  
+   var url="{:U('Register/chkData','','')}";
+	myValidationEngine('ajaxUser',url,'my=data','{:isL(L("BeRegistered"),"此用户已被其他人注册")}','{:isL(L("CanBeRegistered"),"此用户可以注册")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');    
+   valinit('#reg-form','post','',false,'bottomLeft'); 
+});    */
+$(function(){
+   //登录	   
+   formInit('#login-form',true,true,true,true,true);
+   //注册
+   formInit('#reg-form',true,true,true,true,true);
+   
+	$(".iconmm").toggle(function(){
+			 $(this).addClass("icon-hide")
+			  changeType("psw","text");
+			 },function(){ 
+				 $(this).removeClass("icon-hide")
+				  changeType("psw","password");
+				 })
+
+
+			function changeType(t,action){
+			var p = document.getElementById("psw");
+			p.type=action;
+			} 
+
+	$(".mmpsw").focus(function(){
+    $(this).parent(".mmbox").addClass("mmboxnow")
+});
+   
+  function stopPropagation(e) {
+		  if (e.stopPropagation) 
+			  e.stopPropagation();
+		  else 
+			  e.cancelBubble = true;
+	  }
+
+	  $(document).bind('click',function(){
+		  $('.mmbox').removeClass("mmboxnow")
+	  });
+
+	   $('.mmbox').bind('click',function(e){
+		  stopPropagation(e);
+	  }); 
+	})
+</script>
+<!--content begin-->
+<div class="dlzc">
+ <h1 class="dlzct">登录</h1>
+ <div class="dlzctmin"><span class="now dldj">登录</span><span class="zcdj">注册</span></div>
+ <div class="dlzcboxl"><div class="dlzcboxlm" >
+  <h1 class="dlzcbt">已注册用户</h1>
+  <form action="{:U('Login/loginDo')}" id="login-form">
+  <input type="hidden" name="returnUrl" value="{:base64_encode($url)}" />
+  <p style="font-weight:bold; font-size:11px; padding-bottom:2px; line-height:21px;">电邮地址 *</p>
+      <div class="pr">
+      <input type="text" name="user_name" class="dlzc_input validate[custom[email],required]"  info-text="user-text" error-info="{:isL(L('EmailFormatError'),'电子邮件格式错误')}"/>
+      <p class="tsy user-text">请输入电子邮件</p>
+      </div>
+      <p style="font-weight:bold; font-size:11px; padding-top:20px;padding-bottom:2px; line-height:21px; box-sizing:border-box">密码 *</p>
+      
+      <div style="position:relative" class="mmbox">
+      <input type="password" name="password" min="6" max="300" id="psw"  name=""  class="mm_input  mmpsw validate[required]" info-text="pwd-text" error-info="{:isL(L('PleaseEnterApassword'),'密码长度必须介于6到300个字母。')}"/>
+      <span class="glyphs icon-show mmyj iconmm"></span>
+      <p class="tsy pwd-text">密码长度必须介于6到300个字母。</p>
+      </div>
+      <!--<div style="position:relative">
+      <input type="password" name="password" min="6" max="300" class="dlzc_input dlzcmm_input validate[required]" info-text="pwd-text" error-info="{:isL(L('PleaseEnterApassword'),'密码长度必须介于6到300个字母。')}"/>
+      <span class="mmyj glyphs icon-show iconmm"></span>
+      <p class="hong pl10 pwd-text" style=" left:0; top:35px;display:none">密码长度必须介于6到300个字母。</p>
+      </div>-->
+      
+      
+     <div class="pt20" style="line-height:21px;">
+         <a href="{:U('/Forget/emailPassword')}" class="col333 line">忘记密码？</a>
+         
+         <span class="fr" style="position:relative; padding-left:25px;">
+          <input type="checkbox" name="remember" id="remember" style="display:none" class="vam" value="1"/>
+          <label class="ffInput" for="remember">
+          <span class="ffInput__checkbox" style="top:3px"></span>
+          <span class="pl5 vam">保持登录状态</span>
+          </label>
+          </span>
+      </div>
+      <input type="hidden" name="submits" value="login-submit" />
+      
+      <div class="dlzc_btnwrap1"><input type="submit"  id="login-submit" msg="{:isL(L('PleaseLater'),'提交中...')}" value="登录" class="dlzc_btn" style=" width:100%; position:relative; right:0; top:0" info-text="pwd-text"/><span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0;line-height:38px; color:#fff; font-size:1.25em"></span>
+      <!--<p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none"></p> -->
+      </div>
+
+  </form>
+ </div></div><!--dlzcbox end-->
+ <div class="dlzcboxr dlzcn"><div class="dlzcboxlm" >
+ <h1 class="dlzcbt"><b>{:isL(L('NewUser'),'新用户')}</b></h1>
+ <p class="pt10 pb15">
+       {:isL(L('FirstTimeShopping'),'第一次在YOUDI WU 购物吗？')}<br/>
+       <!--{:isL(L('PleaseSignEmails'),'若想继续购物，请先填写您的电子邮件。')}-->若想继续购物，请先填写您的<a href="http://test3.dashenbuluo.com/Login/notLogin?ids=76,&total=0.01&random=1479290549&sign=3588f72d7f66951241d9f081dd98832f" class="col222">电邮地址</a>。
+  </p>
+  <p style="font-weight:bold; font-size:11px; padding-bottom:2px; padding-top:2px; line-height:21px;">{:isL(L('Email'),'电子邮件')} *</p>
+  <form action="{$url}" id="reg-form" method="post">
+  <div class="pr">
+      <input type="text" name="user_name"  class="dlzc_input validate[required,custom[email]]" info-text="user-text1" error-info="{:isL(L('EnterYourEmail'),'请输入您的电邮地址')}" error-other="{:isL(L('EmailFormatError'),'请输入正确的电邮地址')}" />
+      <p class="tsy user-text1" style="border-top:1px solid #000">请输入电子邮件</p>
+   </div>   
+      
+      <div class="dlzc_btnwrap1" ><input type="submit" id="reg-submit" msg="{:isL(L('PleaseLater'),'提交中...')}"  value="{:isL(L('continue'),'继续')}" class="dlzc_btn" style=" width:100%; position:relative; right:0;top:0" info-text="user-text1"/><span class="glyphs icon-thinArrow" style="position:absolute; right:10px;top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <!--<p class="hong submit-text2" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p>-->
+      </div>
+      
+     
+  </form>
+ </div><!--dlzcbox end-->
+ <div class="cb pt20"></div>
+ <!--<div class="pv20 tl"><span class="fhdb"><span class="icon19">&nbsp;</span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>-->
+</div></div><!--dlzc end-->
+ <div class="cb pv30"></div>
+<!--content end-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

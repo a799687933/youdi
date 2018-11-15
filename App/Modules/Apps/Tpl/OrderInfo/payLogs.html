@@ -1,0 +1,58 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+</div>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('OrderInfo/delPayLogs')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/OrderInfo/delPayLogs','','')}/{:C('VAR_PAGE')}/{$currentPage}/is_show/{$is_show}" class="delete"><span>删除所选</span></a></li>
+            </if>            
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="65">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th width="16%">订单号</th>
+                <th width="16%">支付会员</th>
+                <th >支付平台</th>
+                <th>支付平台交易号</th>
+                <th >支付金额</th>
+                <th>支付类型</th>
+				<th>支付时间</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+           <foreach name="res" item="V">
+            <tr target="sid_user" rel="{$V.log_id}">
+                <td><input  value="{$V.log_id}" name="ids" type="checkbox"></td>
+                <td>{$V.order_sn}</td>
+                <td>{$V.user_name}</td>
+                <td>{$V.deal_name}</td>
+                <td>{$V.deal_num}</td>
+                <td>{$V.order_amount}</td>
+                <td><if condition="$res['order_type'] eq 0">在线支付<else />预付款支付</if></td>
+                <td>{$V.add_time|date='Y-m-d H:i:s',###}</td>
+            </tr>
+          </foreach>  
+        </tbody>
+    </table>
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>

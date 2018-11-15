@@ -1,0 +1,34 @@
+<div class="pageContent">
+    <div class="panelBar">
+
+    </div>
+    <table class="list" width="100%" layoutH="50">
+        <thead>
+            <tr>
+                <th>类型</th>
+                <th>文件夹路径</th>
+                <th>检查无效图片</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+         <foreach name="dir['dir']" item="r">
+            <tr target="sid_user" rel="{$r.id}">
+               <td><img src="__SYS_IMG__/folder.gif" style="position: relative;top:4px;"/>文件夹</td>  
+               <td>__ROOT__/{$r.files}</td>
+               <td>
+                    <a class="button" href="javascript:;" onclick="testConfirmMsg('{:U(APP_APPS.'/ClearImg/delImg','','')}?dir={:urlencode($r['files'])}','ajax','{$r.msg}')"><span>开始检查</span></a>
+                </td>
+            </tr>
+  </foreach>
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$dir['count']} 个文件夹</span>
+        </div>
+
+    </div>
+</div>

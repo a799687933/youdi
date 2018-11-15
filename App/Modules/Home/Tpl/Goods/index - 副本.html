@@ -1,0 +1,704 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$goods[pfix('goods_name')]|strip_tags=###}-{:C($langfx.'WEBNAME')}</title>
+<meta name="keywords" content="{$goods[pfix('commodity_key')]}" />
+<meta name="description" content="{$goods[pfix('commodity_description')]}" />
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/cart.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<script src="__COMMON__/Js/countdown.js"  type="text/javascript"></script>
+<script type="text/javascript" src="__PLUGINS__/Logistics/my-city-2245784.js"></script>
+<link rel="stylesheet" type="text/css" href="__PLUGINS__/Logistics/my-city-2245784.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script src="__HOME__/js/MagicZoom.js" type="text/javascript"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+url="{:U('Goods/getContets','','')}"; //获取下级城市URL
+urlGetFreight="{:U('Goods/getFreight','','')}"; //指定区域的物流费
+goodsId="{$goods.id}";
+$(document).ready(function () {  
+    var ps = $("#div_pro").position();  
+    $("#div_pro").mouseenter(function () {  
+        $("#float_box").show();  
+    });  
+    $("#float_box").mouseleave(function () {  
+        $("#float_box").hide();  
+    });  
+    //促销商品显示结束时间
+    langs.surplus="{:L('Surplus')}";
+    langs.hour="{:L('Hour')}";
+    langs.minute="{:L('Minute')}";
+    langs.seconds="{:L('Seconds')}";    
+    var times="{:time()}";
+    timited('show-date',$('#show-date').attr('endTime'),times);
+	
+    //选择属性
+    $('.radio_class').click(function(){
+          var bClass=$(this).attr('name');
+          $('.'+bClass).attr('class',bClass+' guige ');
+          $(this).parent().attr('class','guige2 guige '+bClass);
+          showPrice();
+    }); 
+        
+});
+
+/*计算价格*/
+ function showPrice(){
+     var logisticsId=0;
+     var logistics=$('input[name="logistics"]');//物流ID节点
+     if(logistics.length > 0){
+         if(isNum(logistics.val())){
+            logisticsId=parseFloat(logistics.val());
+         }
+     }
+     var number=parseInt($('input[name="goods_num"]').val()); //商品数量
+     if(!isNum(number) || number <= 0) {
+         myAlert('{:isL(L("Error"),"错误")}','{:isL(L("ErrorGoodsNum"),"商品数量输入格式错误")}','','');
+         return;
+     }  
+ 
+     var goods="{$goods.id}";
+     var tenkn="<php>echo $_SESSION["MY_TOKEN"];</php>";
+     var radioClass=$('.radio_class');
+     var attrIds='';
+     for(var i=0;i < radioClass.length;i++){
+            if(radioClass.eq(i).attr('checked')) attrIds+=radioClass.eq(i).val()+',';
+     }
+
+    var url="{:U('Goods/attrGoodsPrice','','')}";
+    url+="?goods="+goods+"&attrIds="+attrIds+"&logisticsId="+logisticsId+"&number="+number+'&'+tenkn+'='+$('input[name="'+tenkn+'"]').val();
+    $.ajax({
+         type:'post',
+         url:url,
+         dataType:'json',
+         success:function(response,status,xhr){
+             if(response[0][1]==true){
+                  var data=response[0][5];
+				  var showPrice=data.trade_integral ? data.trade_integral : data.price;
+                  $('#show-price').text(showPrice); //显示商品价格
+                  if($('#logistics').length > 0) {
+                      $('#logistics').text(data.logistic_price); //显示物流费
+                  }
+             }else{
+                  myAlert('{:isL(L("Error"),"错误")}',response[0][2],'','');
+             }
+          }
+     });        
+}
+
+/*修改数量*/
+function updateNumber(fuhao,inputName){
+       var numRe=/^\d+$/;
+       var _curNum = parseInt($("input[name='"+inputName+"']").val());
+       if(!numRe.test(_curNum)){ $("input[name='"+inputName+"']").val(1);return;}
+       if(fuhao=="+"){
+          $("input[name='"+inputName+"']").val(_curNum +1);
+       }else if(fuhao=="-"){
+          if(_curNum >1){
+               $("input[name='"+inputName+"']").val(_curNum -1);
+          }else if(_curNum==1){
+                return;
+          }
+      }
+      showPrice();
+}
+
+/**
+*goodsId商品ID
+*check  是否立即购买;false否;true是;
+*/
+function toCart(check){
+     var number=parseInt($('input[name="goods_num"]').val()); //商品数量
+     if(!isNum(number) || number <= 0) {
+         myAlert('{:isL(L("Error"),"错误")}','{:isL(L("ErrorGoodsNum"),"商品数量输入格式错误")}','','','',3);
+         return;
+     }  
+     var radioClass=$('.radio_class');
+     var attrIds='';
+     for(var i=0;i < radioClass.length;i++){
+            if(radioClass.eq(i).attr('checked')) attrIds+=radioClass.eq(i).val()+',';
+     }   
+     var isImmediately='';
+     if(check) isImmediately="&check=ok";
+     var url="{:get_up_url(array('add'=>'ok'),U('Cart/addCart','',''),true)}&goods_id={$goods['id']}&num="+number+'&attr_id='+attrIds+isImmediately;
+     window.location.href=url;
+}  
+</script>
+<style type="text/css">
+ .slideTxtBoxpj .bd ul li .yhlist{
+     width: 760px;
+ }   
+ .slideTxtBoxpj .bd ul li .yhlist .yhxx{
+     width: 760px;
+ }
+ .slideTxtBoxpj .hd{
+     height: 46px;
+ }
+</style>
+<style type="text/css">
+.guige{padding:0 5px;margin-bottom:4px;}
+.guige2{background:url(__COMMON__/Images/icon95.jpg) no-repeat right bottom;border: 1px solid #ff4400;padding-right:12px;}
+.cpxximgltxt label{text-align:right}
+</style>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+ <div>{:isL(L('Position'),'你的位置')}：<foreach name="goods['poistion']" item="p"> > {$p['name']}</foreach> > {$goods[pfix('goods_name')]}</div>
+<div class="pro_read_top">
+   
+    <div class="pro_read_img">
+    <div id="tsShopContainer">
+    <div id="tsImgS"><a href="__ROOT__/{$goods['goods_photo'][0]['img']}" title="Images" class="MagicZoom" id="MagicZoom"><img width="458" height="458" src="__ROOT__/{$goods['goods_photo'][0]['img']}" /></a></div>
+    <div id="tsPicContainer">
+        <div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
+        <div id="tsImgSCon">
+            <ul>
+                <foreach name="goods['goods_photo']" item="al" key="alkey">
+                <li onclick="showPic({$alkey})" rel="MagicZoom" <if condition="$alkey eq 0">class="tsSelectImg"</if>>
+                    <img height="80" width="80" src="__ROOT__/{$al['img']}" tsImgS="__ROOT__/{$al['img']}" />
+                </li>
+                </foreach>
+            </ul>
+        </div>
+        <div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
+    </div>
+</div>
+
+<script src="__HOME__/js/ShopShow.js"></script>
+    </div>
+    <div class="pro_read_cs">
+        <div class="pro_cs_title">
+            <h1>{$goods[pfix('goods_name')]}</h1>
+            <h2>{$goods[pfix('commodity_description')]}</h2>
+        </div>
+        
+        {/*促销商品*/}
+        <if condition="$goods['promotion']">
+            <div class="pro_read_jg">
+                <h1 id="show-date" endTime="{$promotion['promotion_end_date']}" style="font-size:25px;">{:getPrice($goods['goods_retail_price'],true)}</h1>
+            </div>
+            <div class="pro_read_jg">
+                <h1 id="show-price" style="font-size:25px;">{:getPrice($promotion['promotion_price'],true)}</h1>
+                <h2>{:isL(L('OriginalPrice'),'原价')}：{:getPrice($goods['goods_retail_price'],true)}</h2>
+            </div> 
+        <else />   
+            <div class="pro_read_jg">
+                <h1 id="show-price" style="font-size:25px;">{:getPrice($goods['goods_retail_price'],true)}</h1>
+                <h2>{:isL(L('OriginalPrice'),'原价')}：{:getPrice($goods['goods_market_price'],true)}</h2>
+            </div>        
+        </if>    
+        <div class="pro_read_add" style="height:250px;">
+            <ul> 
+                <li>{:isL(L('SendTo'),'配送至')}：
+                    {/*物流城市开始*/}    
+                    >>
+                    <span style="position:relative;margin-right:5px;">
+                          <input type="hidden" name="logistics"  value="{$logistics['id']}" class="ckxqtm_input"  />
+                          <input type="hidden" name="city_name"  value="{$logistics['city_name']}" class="ckxqtm_input"  />
+                           <span class="city-text" 
+                           style="border:1px #ccc solid;padding:4px 8px;padding-right:15px;position:relative;top:1px;
+                           cursor:pointer;background:url(__PUBLIC__Logistics/jd-stock.png) no-repeat 95% center;" onClick="showCity()">
+                               <if condition="$goods['logistics']['success']">
+                                 {$goods['logistics']['province_city_str']}
+                              <else />
+                                 {:isL(L('SelectDelivery'),'选择配送城市')}
+                              </if>
+                         </span>
+                        <div id="my-city-2245784">
+                                <h2 id="my-city-2245784-h2">
+                                      <span style="font-size:28px;color:#CECBCE;position:absolute;top:-17px;left:200px;">◆</span>
+                                      <span style="font-size:28px;position:absolute;top:-16px;left:200px;color:#fff;">◆</span>
+                                      <span class="my-city-2245784-h2-spans" onClick="switchs(0)">{:isL(L('Province'),'省份')}</span>
+                                      <span class="my-city-2245784-h2-spans nones6371" onClick="switchs(1)" style="display:none">{:isL(L('City'),'城市')}</span>
+                                      <span class="my-city-2245784-h2-spans nones6372" onClick="switchs(2)" style="display:none">{:isL(L('District'),'区县')}</span>
+                                      <span id="my-city-2245784-close" onClick="closeCity()">&nbsp;</span>
+                              </h2>
+                              {/*省份*/}
+                              <div class="my-city-2245784-list nones6370">
+                                    <ul>
+                                         <foreach name="goods['province']" item="pr">
+                                              <li><a href="javascript:void(0);" onClick="getCitys(1,{$pr.region_id})">{$pr.region_name}</a></li>        
+                                         </foreach>              
+                                    </ul>                                   
+                              </div>
+                             {/*-省份结束*/}
+                             
+                             {/*城市*/}
+                              <div class="my-city-2245784-list nones6371" >
+                                    <ul>
+                                    </ul>
+                              </div>
+                             {/*城市结束*/}
+                           {/*区县*/}
+                          <div class="my-city-2245784-list nones6372">
+                                <ul>                         
+                                </ul>
+                          </div>
+                         {/*区县结束*/}
+                         <div style="clear:both;height:5px;"></div>            
+                       </div>         
+                 </span>
+                {/*物流城市结束*/}     
+                
+               </li>
+                <li>{:isL(L('Sold'),'已售')}：{$goods['volume']} </li>
+                <li>{:isL(L('CommodityEvaluation'),'商品评价')}：
+                     <for start="0" end="$goods['stars_count']">
+                        <if condition="($i+1) eq $goods['stars_count']">
+                           <php>if(strpos($goods['stars_count']) !==false){</php>
+                                <img src="__HOME__/images/xxx3.JPG" />
+                           <php>}else{</php>
+                               <img src="__HOME__/images/xxx1.JPG"/>
+                           <php>}</php>
+                        <else />
+                           <img src="__HOME__/images/xxx1.JPG"/>
+                        </if>  
+                    </for>                   
+                     {:isL(L('TotalEvaluation'),'共评价')}
+                     ({$goods['review_count']})&nbsp;
+                     {:isL(L('Scores'),'共得分')}({$goods['review_score']})               
+                </li>
+                <if condition="$goods[pfix('warehouse')]"><li>{:isL(L('Warehouse'),'仓库')}：{$goods[pfix('warehouse')]}</li></if>
+                <li>{:isL(L('Freight'),'运费')}： 
+                     {/*显示运费位置*/}
+                       </span>
+                        <span class="ckxqtm_txt2" style="padding:0px 5px;">
+                           <if condition="$goods['logistics']['first_price']">
+                                <span class="chen">
+                                    <span id="freight">{$goods['logistics']['first_price']} </span>
+                                </span>
+                            <else />
+                                0.00
+                             </if>
+                        </span>   
+                       {/*显示运费位置结束*/}
+                </li>
+                <if condition="$goods[pfix('express')]"><li>{:isL(L('ExpressDescription'),'快递说明')}:   {$goods[pfix('express')]}</li></if>
+                <li class=" f86a06">{:isL(L('EntryInstructions'),'￥14/500g不足500g按500g计费，超过500g按1kg计费，清关需要提供收件人身份证号码')}</li>
+            </ul>
+        </div>
+        <div class="pro_read_buy">
+            <ul>
+                
+               {/*商品属性*/}
+               <if condition="$goods['attrs'][$goods['id']]">
+                    <li style="margin-bottom: 50px;line-height: 220%;" >
+                     <div id="attr-list" style="margin:5px;padding:3px;">
+                         <foreach name="goods['attrs'][$goods['id']]" item="ar" key="keyec"> 
+                             <span>{$ar['attribute_name']}：</span>
+                             <foreach name="ar['attr_list']" key="akey" item="av">     
+                                 <span class="radio_name_{$keyec} guige <if condition="$av['select']">guige2</if>" 
+                                 style="position:relative;<if condition="$av['attr_pic']">padding-left:0;</if>" >
+                                     <if condition="$av['attr_pic']">
+                                        <img src="{:showImg($av['attr_pic'])}" bimg="{:showImg($av['attr_pic'])}" style="width:20px;height:20px;"/>&nbsp;
+                                     </if>  
+                                      {$av['attr_value']}                  
+                                     <input type="radio" value="{$av.attr_id}"  price="{$av['attr_price']}" attr-stock="{$av['attr_stock']}"
+                                     <if condition="$av['select']">checked="echecked"</if>  
+                                     name="radio_name_{$keyec}" class="radio_class" 
+                                     style="width:100%;height:100%;position:absolute;top:0;left:0;filter:alpha(opacity=0);
+                                     -moz-opacity:0;-khtml-opacity: 0;opacity: 0; cursor:pointer;" />	 
+                                  </span>                          
+                             </foreach><br/>    
+                         </foreach>
+                         </div>     
+                     </li>
+                </if>
+                {/*商品属性结束*/}
+                
+               <if condition="$goods['brand_name']"><li>{:isL(L('Band'),'品牌')}：{$goods['brand_name']}</li></if>
+                <li class="sl"><span>{:isL(L('Number'),'数量')}：</span>
+                    <div class="sl_add">
+                         <a href="javascript:void(0);" onClick="updateNumber('-','goods_num');">
+                             <IMG src="__HOME__/images/btn_down.jpg" width=29 height=34>
+                         </a>
+                        <input value='1' readonly="readonly" size=5 name="goods_num">                 
+                        <a href="javascript:void(0);" onClick="updateNumber('+','goods_num');">
+                              <IMG src="__HOME__/images/btn_up.jpg" width=29 height=34>
+                        </a>
+                    </div>
+                </li>
+                <li class="pro_buy"> 
+                
+                {/*立即购买*/}    
+                <div class="buy">
+                    <a href="javascript:void(0);" onClick="toCart(true);">
+                        <img src="__HOME__/images/buy1.jpg" />
+                    </a>
+                </div>
+                {/*立即购买结束*/}  
+                
+                {/*加入购物车*/}    
+                <div class="buy">
+                    <a href="javascript:void(0);" onClick="toCart(false);">
+                        <img src="__HOME__/images/buy2.jpg" />
+                    </a>
+                </div>
+               {/*加入购物车结束*/}                   
+                <br/>
+                <div class="sc" style="cursor:pointer" 
+                onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                '{:isL(L('ConfirmCollectable'),'确定收藏该商品？')}',
+                '{:U('/Goods/collection',array('id'=>$goods['id']),'')}','')">
+                      <img src="__HOME__/images/xx1.jpg" />{:isL(L('Collection'),'收藏宝贝')}（{$goods.gc_counts}）
+                </div>
+                <div class="fs" style="width:200px;">
+                <div class="left" style="padding-right:3px;"><img src="__HOME__/images/fs.jpg" />{:isL(L('Share'),'分享')}</div>
+                <div class="bdsharebuttonbox" style="padding-top:5px;">
+                    <a href="#" class="bds_more" data-cmd="more"></a>
+                    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+                    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                    </div>
+                   <script>
+				        window._bd_share_config={
+							"common":{"bdSnsKey":{},
+							"bdText":"",
+							"bdMini":"2",
+							"bdMiniList":false,
+							"bdPic":"",
+							"bdStyle":"0",
+							"bdSize":"16"
+							},
+							"share":{}};
+						  with(document)0[(getElementsByTagName('head')[0]||body)
+						  .appendChild(createElement('script'))
+						  .src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+					</script>        
+                </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="main">
+
+  {/*组合购买*/}
+  <if condition="$goods['zhuhe']">
+      <script type="text/javascript">
+	      $(function(){zhuhecal();$('input[name="zh_he[]"]').click(function(){zhuhecal();});});
+		  //计算组合价
+          function  zhuhecal(){
+		      var checkbox=$('input[name="zh_he[]"]');
+			  var op=0,pp=0;
+			  var opTotal=0,ppTotal=0;
+			  for(var i=0;i < checkbox.length;i++){
+				  if(checkbox.eq(i).attr('checked')){
+					  op=parseFloat(checkbox.eq(i).attr('op'));
+					  opTotal+=op;
+					  pp=parseFloat(checkbox.eq(i).attr('pp'));
+					  ppTotal+=pp;
+				  }
+			  }
+			  $('#opTotal').text(fmoney(opTotal));
+			  $('#ppTotal').text(fmoney(ppTotal));
+		 }
+		 //提交组合购买
+		 function sendZhuhe(){
+		    var goodsIds='',j=0;
+			var checkbox=$('input[name="zh_he[]"]');
+			for(var i=0;i < checkbox.length;i++){
+				if(checkbox.eq(i).attr('checked')){
+					goodsIds+=checkbox.eq(i).val()+',';
+					j++;
+				}
+			}
+			if(j <= 1){
+				myAlert("{:isL(L('Error'),'错误提示')}","{:isL(L('PleaseSelectGoodss'),'请选择要组合的商品')}",'','','',3);
+				return;
+			}
+			window.location.href="{:U('/Goods/combination','','')}?ids="+goodsIds;
+		}
+      </script>       
+      <div style="height:auto;border:1px #ccc solid;margin-bottom:10px;">
+          <h2 style="height:35px;line-height:35px;background:#eee;border-bottom:1px #ccc solid;font-size:16px;text-indent:10px;text-align:left">
+          {:isL(L('CombinedPurchase'),'组合购买')}
+      </h2>
+          {/*组合商品列表*/}
+          <div style="max-width:980px;min-height:250px;float:left;">
+              <div style="height:10px;"></div>     
+             <ul>
+                 <li style="width:175px;height:250px;padding:3px;margin:3px;float:left;border:1px solid #ccc;">
+                      <p style="height:175px;"><img src="{:showImg($goods['goods_photo'][0]['img'])}"  width="175" height="175"/></p>
+                      <p style="height:25px;line-height:25px;">
+                          <b style="color:red;">{:getPrice($goods['goods_retail_price'],true)}</b>
+                      </p>
+                      <p style="height:30px;line-height:30px;">
+                          <input type="checkbox" name="zh_he[]" op="{:getPrice($goods['goods_retail_price'],false)}" 
+                          pp="{:getPrice($goods['goods_retail_price'],false)}" checked="checked" value="{$goods['id']}" disabled="disabled" /> 
+                          {$goods[pfix('goods_name')]|show_str=###,12}
+                      </p>
+                 </li>   
+                 <foreach name="goods['zhuhe']" item="zh" key="zhKey">
+                    {/*组合商品不等于当前商品*/} 
+                    <if condition="$zh['goods_id'] neq $goods['id']">
+                         <li style="width:175px;height:250px;padding:3px;margin:3px;float:left;border:1px solid #ccc;">
+                              <p style="height:175px;"><img src="{:showImg($zh['goods_thumb'])}"  width="175" height="175"/></p>
+                              <p style="">
+                                  {:isL(L('CombinedPrice'),'组合价格')}：<b style="color:red;">{:getPrice($zh['zhuhe_price'],true)}</b><br/>
+                                  <del style="color:#ccc;">{:isL(L('OriginalPrice'),'原价')}：{:getPrice($zh['goods_retail_price'],true)}</del> 
+                              </p>
+                              <p style="height:30px;line-height:30px;">
+                                   <input type="checkbox" name="zh_he[]" op="{:getPrice($zh['goods_retail_price'],false)}"  pp="{:getPrice($zh['zhuhe_price'],false)}" 
+                                   checked="checked" value="{$zh['goods_id']}" /> 
+                                   {$zh['goods_name']|show_str=###,10}
+                              </p>
+                         </li>
+                     </if>                   
+                 </foreach>                  
+             </ul>
+             <div style="clear:both;"></div>
+          </div>
+          
+          {/*购买按钮*/}         
+          <div style="width:200px;float:left;height:20px;margin:5px;margin-top:20px;">
+                <p>{:isL(L('OriginalPrice'),'原价')}：{$goods['CUR_REP'][getLang()]}<span id="opTotal" style="font-size:16px;"></span></p>   
+                <p style="height:30px;line-height:30px;">
+                       {:isL(L('CombinedPrice'),'组合价格')}：{$goods['CUR_REP'][getLang()]}<span id="ppTotal" style="font-size:16px;color:red;"></span>
+                </p> 
+                <p>
+                     <input type="button" value="立即购买" onclick="sendZhuhe()" 
+                     style="width:150px;background:#8c3600;border:none;height:30px;color:#fff;font-weight:bold" />
+                </p>
+          </div>
+          <div style="clear:both;"></div>
+      </div>
+  </if>
+  {/*组合购买结束*/}
+  
+    <div class="pro_read_left">
+    <div class="pro_left_nav">
+    <div class="pro_left_nav_title">{:isL(L('ProductClassification'),'产品分类')}</div>
+    <div class="sideMenu" style="margin:0 auto">
+         <foreach name="cateList" item="cat">
+            <h3><em></em>{$cat.name}</h3>
+            <ul>
+                <foreach name="cat['child']" item="ch" key="goodsKey">
+                    <li><a href="{:U('Category/index',array('html'=>'c-'.$ch['id']))}" target="_blank">&bull;&nbsp;{$ch.name}</a></li>
+                </foreach>
+            </ul>
+           </foreach>
+        </div><!-- sideMenu End -->
+
+        <script type="text/javascript">
+            jQuery(".sideMenu").slide({
+                titCell:"h3", //鼠标触发对象
+                targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
+                effect:"slideDown", //targetCell下拉效果
+                delayTime:300 , //效果时间
+                triggerTime:150, //鼠标延迟触发时间（默认150）
+                defaultPlay:true,//默认是否执行效果（默认true）
+                trigger:"click",
+                returnDefault:false //鼠标从.sideMen移走后返回默认状态（默认false）
+                });
+        </script>
+    
+    
+    </div>
+    
+    
+    <dl class="tabRank" id="tabRank">
+  <dt class="hd">
+    <h3 class="on"><a >{:isL(L('BestSellers'),'热卖商品')}</a></h3>
+  </dt>
+  <dd class="bd">
+    <ul class="ulList">
+     <foreach name="hot1" item="hot" key="hotKey">
+      <li class="t <if condition="$hotKey eq 0">on</if>"> <span class="num">{$hotKey+1}</span>
+        <div class="c ">
+          <div class="pubpic">
+               <a href="{:U('Goods/index',array('html'=>'g-'.$hot['id']))}"><img src="__ROOT__/{$hot['goods_thumb']}" width="198" height="140"></a>
+          </div>
+          <div class="pubtitle">
+          <font>{:getPrice($hot['goods_retail_price'],true)}</font><p>{$hot['goods_name']|show_str=###,15}</p>
+          <h1>{:getPrice($hot['goods_retail_price'],true)}</font><p>{$hot['goods_name']|show_str=###,18}</h1>
+          </div>
+        </div>
+      </li>
+     </foreach>    
+    </ul>
+    
+  </dd>
+</dl>
+<script type="text/javascript">     jQuery("#tabRank li").hover(function(){ jQuery(this).addClass("on").siblings().removeClass("on")},function(){ });       jQuery("#tabRank").slide({ titCell:"dt h3", mainCell:"dd",autoPlay:false,effect:"left",delayTime:300 });    </script>
+    
+    {/*关联商品*/}
+    <div class="left_tj">
+        <div class="left_tj_title">{:isL(L('YouMightLike'),'猜你喜欢')}</div>
+        <div class="left_tj_list">
+            <ul>
+                <foreach name="linkGoods" item="link">
+                        <li>
+                            <a href="{:U('Goods/index',array('html'=>'g-'.$link['id']))}"><img src="__ROOT__/{$link['goods_thumb']}" width="198" height="180" /></a>
+                            <h1>{$link['goods_name']|show_str=###,9}<br />{:isL(L('Price'),'价格')}:<font>{:getPrice($link['goods_retail_price'],true)}</font></h1>
+                       </li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+   {/*关联商品结束*/}     
+  </div>
+      
+    <div class="pro_read_d">
+        <div class="pro_read_nav">
+            <div class="slideTxtBox">
+            <div class="hd" id="bds">
+                <ul>
+                     <li><a href="#bds">{:isL(L('Details'),'商品详情')}</a></li>
+                     <li><a href="#hds">{:isL(L('CommodityEvaluation'),'商品评价')}</a></li>
+                </ul>
+            </div>
+            <div class="bd" >
+                <ul>
+                    <div class="content" >{$goods[pfix('content')]|stripcslashes=###}</div>
+                    <div class="pj">
+                        <div class="pj_title">{:isL(L('CommodityEvaluation'),'商品评价')}</div>
+                        <div class="pj_con">
+                            <dl>
+                                <dt><font>{$goods['good_per']}</font>%<br />{:isL(L('HighPraiseRate'),'好评率')}</dt>
+                                
+                                 {/*大家认为*/}
+                                    <dd style="display: none;">
+                                          {:isL(L('WeThink'),'我们认为')}：
+                                          <foreach name="goods['goodsSats']" item="gs">
+                                              <a href="{:U('Goods/index',array('html'=>$_GET['html'],'feel'=>$gs['id']))}">
+                                                  <span class="f_12 cir_5">{$gs['name']}({$gs['counts']})</span> 
+                                              </a>  
+                                          </foreach>    
+                                    </dd>
+                                 {/*大家认为结束*/}
+                                 
+                                <dd>
+                                    <span><a href="{:U('/Member')}">{:isL(L('ImmediateEvaluation'),'立即评价')}</a></span>
+                                    <h1>{:isL(L('EvaluationInfos'),'只有购买过该商品的用户才能评论!')}</h1>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="yhpj">
+
+                 <div class="slideTxtBoxpj" >
+                 <div class="hd" id="hds">
+                    <ul style="width:860px;">
+                         <li>
+                          <a href="{:U('Goods/index',array('html'=>$_GET['html'],'comm'=>'yes'))}#comments" 
+                          class="<if condition="$_GET['sva'] eq '' AND !$_GET['is_pic']">now</if>">全部({$goods['goods_app']['app_count']})</a>
+                          </li> 
+                         <li> 
+                          <a href="{:U('Goods/index',array('html'=>$_GET['html'],'comm'=>'yes','sva'=>2))}#comments" 
+                          class="<if condition="$_GET['sva'] eq '2'">now</if>">好评({$goods['goods_app']['good_count']})</a>
+                          </li> 
+                         <li> 
+                          <a href="{:U('Goods/index',array('html'=>$_GET['html'],'comm'=>'yes','sva'=>1))}#comments" 
+                          class="<if condition="$_GET['sva'] eq '1'">now</if>">中评({$goods['goods_app']['medium_count']})</a>
+                          </li> 
+                         <li>                        
+                          <a href="{:U('Goods/index',array('html'=>$_GET['html'],'comm'=>'yes','sva'=>0))}#comments" 
+                          class="<if condition="$_GET['sva'] eq '0'">now</if>">差评({$goods['goods_app']['subpar_count']})</a>
+                           </li>
+                          <li>
+                          <a href="{:U('Goods/index',array('html'=>$_GET['html'],'comm'=>'yes','is_pic'=>1))}#comments" 
+                          class="<if condition="$_GET['is_pic']">now</if>">有图片({$goods['goodsScore']['counts'][0]['img_count']})</a> 
+                         </li>                                        
+                    </ul>
+                 </div>
+                 <div class="bd">
+                <ul style="width:860px;">
+                    
+                   <foreach name="goods['goodsScore']['app_list']" item="gs"> 
+                    <li>
+                        <div class="yhts">
+                            <if condition="$gs['head_pic']">
+                                <img src="__ROOT__/{$gs['head_pic']}" />
+                            <else />
+                                <img src="__HOME__/images/yh_inoc.jpg" />
+                            </if>                           
+                            <br />{$gs.user_name|center_tsterisk=###,1}
+                            </div>
+                        <div class="yhinoc"><img src="__HOME__/images/yh_inoc2.jpg" /></div>
+                        <div class="yhlist">
+                            
+                            <div class="yhxx">
+                                <h1>
+                                    {/*用户评分*/}
+                                    <for start="0" end="$gs['score']">
+                                        <img src="__HOME__/images/xx2.jpg" />
+                                    </for>
+                                </h1>
+                                <h2>{$gs.times|date='Y-m-d H:i:s',###}</h2>
+                            </div>
+                            <div class="yhcon">
+                                <h1>{$gs.content}</h1>
+                                <if condition="$gs['answer_time'] AND $gs['answer']">
+                                   <h2><font>{:isL(L('Reply'),'回复')}({$gs.answer_time|date='Y-m-d H:i:s',###})：</font>{$gs.answer}</h2>
+                                </if>
+                            </div>
+                        </div>                    
+                    </li>
+                  </foreach>
+                    <div class="pro_next" style="background:none; width:920px; text-align:center;">{$page}</div>
+                    <script type="text/javascript">jQuery(".slideTxtBoxpj").slide({trigger:"click"});</script>            
+                   </div>                   
+                </ul>               
+            </div>
+        </div>
+        <script type="text/javascript">jQuery(".slideTxtBox").slide({trigger:"click"});</script>
+            
+        </div>
+        
+        {/*商品购买咨询*/}
+         <if condition="C('IS_CONSUlTATION')">
+               <div>
+                      <foreach name="goods['consultant']" item="con">
+                            <table class="consult_tbl">
+                            <tr>
+                                <td rowspan="2" class="ver_top">
+                                  <if condition="$con['head_pic']">
+                                      <img src="__ROOT__/{$con.head_pic}" class="cir_33"/>
+                                 <else />     
+                                     <img src="__ROOT__/{:C('USER_IMG')}" class="cir_33"/>
+                                  </if>     
+                               </td>
+                                <td class="ver_top" width="120">
+                                    <img src="__HOME__/images/zx.gif" class="ver_mid" />
+                                    <span class="clr_fen ver_mid f_16">咨询内容</span>
+                                </td>
+                                <td class="clr_3 ver_top" width="510">{$con.content}</td>
+                                <td class="f_14 clr_9 ver_top al_rt">{$con.add_time|date='Y-m-d H:i:s',###}</td>
+                            </tr>
+                            
+                            <if condition="$con['reply'] AND $con['reply_time']">
+                            <tr>
+                                <td class="ver_top">
+                                    <img src="__HOME__/images/hf.gif" class="ver_mid" />
+                                    <span class="clr_fen ver_mid f_16">带我酒回复</span>
+                                </td>
+                                <td class="clr_3 ver_top">{$con.reply}</td>
+                                <td class="f_14 clr_9 ver_top al_rt">{$con.reply_time|date='Y-m-d H:i:s',###}</td>
+                            </tr>   
+                            </if>
+                            </table>
+                     </foreach>                                
+               </div>
+           </if>
+       {/*商品购买咨询结束*/}
+       
+    </div>
+    <div class="clear"></div>
+
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

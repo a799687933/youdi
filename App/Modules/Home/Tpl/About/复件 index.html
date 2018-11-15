@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> {$result.titletext|strip_tags=###}_{$result.files_name|strip_tags=###}_{:C('WEBNAME')}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<link rel="Stylesheet" href="__PUBLIC__ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine.js"></script>
+<script type="text/javascript" src="__PUBLIC__ValidationEngine/Js/jquery.validationEngine-zh-cn.js"></script>
+<script>
+$(document).ready(function(){
+	$(".icon1").hover(function(){
+		$(".guzhu").show();
+		$(this).addClass("icon1b")
+		},function(){
+			$(".guzhu").hide();
+			$(this).removeClass("icon1b")
+			})
+	$(".icon2").hover(function(){
+		$(".fuwus").show();
+		$(this).addClass("icon2b")
+		},function(){
+			$(".fuwus").hide();
+			$(this).removeClass("icon2b")
+			})
+	$(".suoyl").click(function(){
+		$(".suoyr").toggle()
+		})	
+	$(".subrb").hover(function(){
+		 $(this).children(".subrbox").show()
+		},function(){
+			$(this).children(".subrbox").hide()
+			})		
+
+//验证
+		jQuery("#formID").validationEngine("attach",{ 
+			promptPosition:"topRight",  //控制位置，有5种模式：topLeft, topRight, bottomLeft, centerRight, bottomRight
+			scroll:false ,
+			maxErrorsPerField: 1, // 参数值为数值,只显示一个错误信息提示与showOneMessage合用
+			showOneMessage: false, //与maxErrorsPerField合用
+			autoHidePrompt: true, //错误提示自动隐藏
+			autoHideDelay: 5000, // 错误提示自动隐藏单位毫秒（ms）
+	  });	
+
+	});
+
+
+function setTab(m,n,t){
+	    $('input').attr('checked',false);
+	    $(t).children('input').attr('checked',true);
+		var tli=document.getElementById("menu"+m).getElementsByTagName("li");
+		//var mli=document.getElementById("main"+m).getElementsByTagName("blockquote");
+		for(i=0;i<tli.length;i++){
+			tli[i].className=i==n?"hover":"";
+			//mli[i].style.display=i==n?"block":"none";
+	}
+}
+</script>
+</head>
+
+<body>
+<!--top begin-->
+<include file='Common:header'/>
+<!--top end-->
+<!--nav begin-->
+<include file='Common:nav'/>
+<!--nav end-->
+<!--banner begin-->
+<a <if condition="$ads1[0]['ad_url']">href="{$ads1[0]['ad_url']}"</if> target="_blank">
+<div class="subbanner" style="background:url(__ROOT__/{$ads1[0]['ad_img']}) no-repeat !important;"><div class="subbannerbox"></div></div>
+</a>
+<!--banner end-->
+<!--content begin-->
+<div class="content">
+ <div class="wrap pt20 mt5">
+  <div class="bzzxl">
+   <h1>关于我们</h1>
+  <foreach name="arList" item="ar"> 
+       <ul>
+       <!-- <li>{$ar.files_name}</li>-->
+        <foreach name="ar['list']" item="ar_l">
+           <li><a href="{:U('/About/index',array('id'=>$ar_l['id']))}" title="" <if condition="$_GET['id'] eq $ar_l['id']">class="now"</if> target="_blank">{$ar_l.titletext}</a></li>
+        </foreach>
+       </ul>
+   </foreach>
+  </div><!--bzzxl end-->
+  <div class="bzzxr">
+   <h1>{$result.files_name} > {$result.titletext}</h1>
+<if condition="$_GET['id'] eq 27">   
+     <form method="post" action="{:U('/Member/wordsFrom')}" id="formID">
+     <div class="tsjy">
+        <div class="tsjymenu">
+        <!-- <span class="icon32">提建议有奖励</span>-->
+         <ul id="menu1">
+          <li onclick="setTab(1,0,this)" class="" style="cursor:pointer;">投诉<input type="radio" name="type" style="display: none;" value="投诉"/></li>
+          <li onclick="setTab(1,1,this)" class="hover"  style="cursor:pointer;">建议<input type="radio" name="type" style="display: none;" value="建议" checked="checked"/></li>
+         </ul>
+        </div>
+        <div class="tsjyb" id="main1">
+         <blockquote class="block">
+          <p class="f16 lan tc pb20">检测家珍视每一位用户的体验，欢迎提出宝贵建议！</p>
+          <label>题目：</label><input type="text" name="title" value="" class="tsjyb_input validate[required]">
+          <div class="cb pb10"></div>
+          <label>内容：</label><textarea name="content" class="tsjyb_text validate[required]"></textarea>
+           <div class="cb pb20"></div>
+           <label>&nbsp;</label><input type="submit" name="" value="确定提交" class="tsjyb_btn">
+           <div class="cb"></div>
+         </blockquote>
+        </div>
+       </div>
+       <input type="hidden" name="addtiem" value="{:time()}" />
+    </form>     
+ <else />  
+       <div class="bzzxrul" style="line-height:200%;">
+              {$result.content|stripcslashes=###}
+      </div>
+ </if> 
+   </div>
+  </div><!--bzzxr end-->
+  <div class="cb"></div>
+ </div><!---->
+ <div class="xrbz">
+  <ul>
+   <li>
+    <span class="icon26">&nbsp;</span>
+    <div class="xrbzr">
+     <p>可信任</p>
+     <p>保障真实信息</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon27">&nbsp;</span>
+    <div class="xrbzr">
+     <p>超快速</p>
+     <p>众多服务商</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon28">&nbsp;</span>
+    <div class="xrbzr">
+     <p>随时在</p>
+     <p>客服全程跟进</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon29">&nbsp;</span>
+    <div class="xrbzr">
+     <p>高服务</p>
+     <p>高质量服务群体</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon30">&nbsp;</span>
+    <div class="xrbzr">
+     <p>有保障</p>
+     <p>商家保证金系统</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+   <div class="cb"></div>
+  </ul>
+ </div><!--xrbz end-->
+ <!--right begin-->
+<include file='Common:rightBegin'/>   
+ <!--right end-->
+</div>
+<!--content end-->
+
+<!--footer begin-->
+<include file='Common:footer'/>  
+<!--footer end-->
+<!---->
+<!--服务导航-->
+<include file='Common:serveIndex'/>   
+<!--服务导航 结束-->
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?type=left&amp;move=0&amp;btn=l3.gif" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!---->
+<script type="text/javascript" src="__PUBLIC__js/select.js"></script>
+</body>
+</html>

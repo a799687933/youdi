@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('News'),'YOUDI WU最新资讯')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/swiper.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/swiper4.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var zxpic1 = new Swiper('.zxpic1', {	
+        pagination: {
+    el: '.zxpicb1',
+	clickable :true,
+  },
+   navigation: {
+    nextEl: '.zxpicr1',
+    prevEl: '.zxpicl1',
+  },
+    });
+	var zxpic2 = new Swiper('.zxpic2', {	
+        pagination: {
+    el: '.zxpicb2',
+	clickable :true,
+  },
+   navigation: {
+    nextEl: '.zxpicr2',
+    prevEl: '.zxpicl2',
+  },
+    });
+	var zxpic3 = new Swiper('.zxpic3', {	
+        pagination: {
+    el: '.zxpicb3',
+	clickable :true,
+  },
+   navigation: {
+    nextEl: '.zxpicr3',
+    prevEl: '.zxpicl3',
+  },
+    });
+	var zxpic4 = new Swiper('.zxpic4', {	
+        pagination: {
+    el: '.zxpicb4',
+	clickable :true,
+  },
+   navigation: {
+    nextEl: '.zxpicr4',
+    prevEl: '.zxpicl4',
+  },
+    });
+	
+ $(".zxdz").click(function(){
+	 $(this).addClass("zxdznow fa-heart")
+	 $(this).removeClass("fa-heart-o")
+	 })	
+$(".zxsc").click(function(){
+	 $(this).addClass("fa-star")
+	 $(this).removeClass("fa-star-o")
+	 })	
+$(".zxfbnr b").click(function(){
+	 $(this).hide()
+	 $(this).parent(".zxfbnr").css("height","auto")
+	 })	 
+$(".zxdh p:gt(2)").hide()
+$(".zxdhb b").click(function(){
+	 $(this).hide()
+	 $(this).parent(".zxdhb").siblings(".zxdh").children("p").show()
+	 })	 
+});
+//点击加载更多，按钮必须是button
+/**
+ *THIS   this
+ * totalPages  总页数
+ * addEnd      追加内容节点
+ * url               请求地址
+ *  */
+mobile={};
+var page=2;
+mobile.clickPage=function(THIS,totalPages,addEnd,url){    
+    var _this=this;
+    this.run=function(){
+         if(page <= totalPages){  
+            if($(THIS).attr('ajax') == 'ok') return;      
+			if(page == totalPages) $(THIS).parents('a').hide(); //最后一页
+             _this.getPage();
+         }else{
+			 $(THIS).parents('a').hide();
+             //$(THIS).attr('disabled',true).val(window.LoadingCompleted);
+         }             
+    };  
+    this.getPage=function(){
+          $.ajax({
+             type:'get',
+             dataType: "text",
+             url:url+page+'/req/app',
+             success:function(response,status,xhr){
+                 $(THIS).attr('ajax','').attr('disabled',false).val('Load More');
+                 page++;
+                 $(addEnd).append(response);
+              },
+              beforeSend:function(){
+                  $(THIS).attr('ajax','ok').attr('disabled',true).val(window.Loading);
+              },         
+             error:function(xhr,errorText,errorType){
+                 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+             }
+         });              
+    };  
+    //运行
+    _this.run();         
+};	
+</script>
+<!--[if IE]>
+		<script src="js/html5shiv.min.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body>
+
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+
+<div class="wrap">
+ <div class="zixun">
+  <ul>
+   <li>
+    <h2 class="zixunt"><img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt=""><del class="ml10">youdi</del><div class="cb"></div></h2>
+    <div class="zxpic zxpic1">
+     <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+   </div>
+   <span class="zxpicl fa  fa-caret-left zxpicl1"></span><span class="zxpicr fa  fa-caret-right zxpicr1"></span>
+    </div><!--zxpic end-->
+    <div class="zxpicbwrap">
+    <div class="zxpicb zxpicb1"></div>
+     <b class="zxdz fa fa-heart-o"></b>
+     <a href="#zxpl1" class="zxplun fa fa-commenting-o"></a>
+     <b class="zxsc fa fa-star-o"></b>
+    </div><!--zxpicbwrap end-->
+    <p class="pl15 col333 f12">816次赞</p>
+    <div class="zxfbnr">
+    youdi&nbsp;wu<span>#moomin</span><span>#sudahdaj</span>kglglfdfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhllfdldfldfk <b>更多</b></div><!--zxfbnr end-->
+    <div class="zxdh">
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价.感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价</p>
+      <p><span class="vam mr5">Tory</span><span class="vam" style="color:#023867;">@</span><img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">谢您的意见与评价感谢您</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+     </div><!--zxdh end-->
+     <div class="zxdhb"><span>3小时前</span><b>全部13条评论</b></div>
+     <div class="zxplbox" id="zxpl1">
+      <textarea name="" placeholder="添加评论···" class="zxpltext"></textarea>
+      <div class="zxplboxr">
+      <b class="fa fa-hand-pointer-o"></b>
+      <input type="button" name="" value="发送" class="zxplbtn">
+      </div>
+      
+      <div class="cb"></div>
+     </div>
+   </li>
+   <li>
+    <h2 class="zixunt"><img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt=""><del class="ml10">youdi</del><div class="cb"></div></h2>
+    <div class="zxpic zxpic2">
+     <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+   </div>
+   <span class="zxpicl fa  fa-caret-left zxpicl2"></span><span class="zxpicr fa  fa-caret-right zxpicr2"></span>
+    </div><!--zxpic end-->
+    <div class="zxpicbwrap">
+    <div class="zxpicb zxpicb2"></div>
+     <b class="zxdz fa fa-heart-o"></b>
+     <a href="#zxpl2" class="zxplun fa fa-commenting-o"></a>
+     <b class="zxsc fa fa-star-o"></b>
+    </div><!--zxpicbwrap end-->
+    <p class="pl15 col333 f12">816次赞</p>
+    <div class="zxfbnr">
+    youdi&nbsp;wu<span>#moomin</span><span>#sudahdaj</span>kglglfdfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhllfdldfldfk <b>更多</b></div><!--zxfbnr end-->
+    <div class="zxdh">
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价.感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价</p>
+      <p><span class="vam mr5">Tory</span><span class="vam" style="color:#023867;">@</span><img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">谢您的意见与评价感谢您</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+     </div><!--zxdh end-->
+     <div class="zxdhb"><span>3小时前</span><b>全部13条评论</b></div>
+     <div class="zxplbox" id="zxpl2">
+      <textarea name="" placeholder="添加评论···" class="zxpltext"></textarea>
+      <div class="zxplboxr">
+      <b class="fa fa-hand-pointer-o"></b>
+      <input type="button" name="" value="发送" class="zxplbtn">
+      </div>
+      
+      <div class="cb"></div>
+     </div>
+   </li>
+   <li>
+    <h2 class="zixunt"><img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt=""><del class="ml10">youdi</del><div class="cb"></div></h2>
+    <div class="zxpic zxpic3">
+     <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+   </div>
+   <span class="zxpicl fa  fa-caret-left zxpicl3"></span><span class="zxpicr fa  fa-caret-right zxpicr3"></span>
+    </div><!--zxpic end-->
+    <div class="zxpicbwrap">
+    <div class="zxpicb zxpicb3"></div>
+     <b class="zxdz fa fa-heart-o"></b>
+     <a href="#zxpl3" class="zxplun fa fa-commenting-o"></a>
+     <b class="zxsc fa fa-star-o"></b>
+    </div><!--zxpicbwrap end-->
+    <p class="pl15 col333 f12">816次赞</p>
+    <div class="zxfbnr">
+    youdi&nbsp;wu<span>#moomin</span><span>#sudahdaj</span>kglglfdfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhllfdldfldfk <b>更多</b></div><!--zxfbnr end-->
+    <div class="zxdh">
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价.感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价</p>
+      <p><span class="vam mr5">Tory</span><span class="vam" style="color:#023867;">@</span><img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">谢您的意见与评价感谢您</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+     </div><!--zxdh end-->
+     <div class="zxdhb"><span>3小时前</span><b>全部13条评论</b></div>
+     <div class="zxplbox" id="zxpl3">
+      <textarea name="" placeholder="添加评论···" class="zxpltext"></textarea>
+      <div class="zxplboxr">
+      <b class="fa fa-hand-pointer-o"></b>
+      <input type="button" name="" value="发送" class="zxplbtn">
+      </div>
+      
+      <div class="cb"></div>
+     </div>
+   </li>
+   <li>
+    <h2 class="zixunt"><img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt=""><del class="ml10">youdi</del><div class="cb"></div></h2>
+    <div class="zxpic zxpic4">
+     <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+    <div class="swiper-slide"><img src="/Uploads/2016-12/583fe25f42df2.png" alt=""></div>
+   </div>
+   <span class="zxpicl fa  fa-caret-left zxpicl4"></span><span class="zxpicr fa  fa-caret-right zxpicr4"></span>
+    </div><!--zxpic end-->
+    <div class="zxpicbwrap">
+    <div class="zxpicb zxpicb4"></div>
+     <b class="zxdz fa fa-heart-o"></b>
+     <a href="#zxpl4" class="zxplun fa fa-commenting-o"></a>
+     <b class="zxsc fa fa-star-o"></b>
+    </div><!--zxpicbwrap end-->
+    <p class="pl15 col333 f12">816次赞</p>
+    <div class="zxfbnr">
+    youdi&nbsp;wu<span>#moomin</span><span>#sudahdaj</span>kglglfdfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhlldfdgdfjhsdhslslhllfdldfldfk <b>更多</b></div><!--zxfbnr end-->
+    <div class="zxdh">
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价.感谢您的意见与评价， 感谢您的意见与评价感谢您的意见与评价， 感谢您的意见与评价， 感谢您的意见与评价</p>
+      <p><span class="vam mr5">Tory</span><span class="vam" style="color:#023867;">@</span><img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">谢您的意见与评价感谢您</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+      <p><img src="/Public/Home/images/logo.png" width="68" alt="" class="vam"><span class="vam mh5" style="color:#023867;">@Tory</span>感谢您的信任</p>
+     </div><!--zxdh end-->
+     <div class="zxdhb"><span>3小时前</span><b>全部13条评论</b></div>
+     <div class="zxplbox" id="zxpl4">
+      <textarea name="" placeholder="添加评论···" class="zxpltext"></textarea>
+      <div class="zxplboxr">
+      <b class="fa fa-hand-pointer-o"></b>
+      <input type="button" name="" value="发送" class="zxplbtn">
+      </div>
+      
+      <div class="cb"></div>
+     </div>
+   </li>
+  </ul>
+ </div><!--zixun end-->
+ <div class="cb"></div>
+ <div class="dptjl">
+  <a href="javascript:void(0)" class="more mt15">
+         <input type="button" onclick="clickMoerPage2(this,2,'/Article/index?id=212&amp;p={0}','#article-list')" class="morebtn" value="Load More">
+     </a>
+ </div>
+ <div class="cb"></div>
+</div><!--wrap end--> 
+<!--content end-->
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<!---->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

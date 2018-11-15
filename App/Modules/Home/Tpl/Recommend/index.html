@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('Recommend'),'推荐商品')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="__COMMON__/Js/cart.js"  type="text/javascript"></script>
+<script src="__COMMON__/Js/div-dialog.js"  type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+	$("#float_box").show();  
+   /* var ps = $("#div_pro").position();  
+	$("#div_pro").mouseenter(function () {  
+		$("#float_box").show();  
+	});  
+	$("#float_box").mouseleave(function () {  
+		$("#float_box").hide();  
+	});  */
+})  
+</script>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+<div class="main">
+	<div class="list_left">
+
+{/*热卖商品*/}	    
+ <dl class="tabRank" id="tabRank">
+  <dt class="hd">
+    <h3 class="on"><a >{:isL(L('BestSellers'),'热卖商品')}</a></h3>
+  </dt>
+  <dd class="bd">
+    <ul class="ulList">
+        <foreach name="hots" item="ho" key="hotKey">
+          <li class="t <if condition="$hotKey eq 0">on</if>"> <span class="num">{$hotKey+1}</span>
+            <div class="c ">
+              <div class="pubpic"><a href="{:U('Goods/index',array('html'=>'g-'.$ho['id']))}"><img src="__ROOT__/{$ho['goods_thumb']}" width="198" height="140"></a></div>
+              <div class="pubtitle">
+              <font>{:getPrice($ho['goods_retail_price'],true)}</font><p>{$ho.goods_name|show_str=###,13}</p>
+              <h1>{$ho.goods_name|show_str=###,13}</h1>
+              </div>
+            </div>
+          </li>
+       </foreach>
+    </ul>  
+  </dd>
+</dl>
+{/*热卖商品结束*/}  
+<script type="text/javascript">		jQuery("#tabRank li").hover(function(){ jQuery(this).addClass("on").siblings().removeClass("on")},function(){ });jQuery("#tabRank").slide({ titCell:"dt h3", mainCell:"dd",autoPlay:false,effect:"left",delayTime:300 });	</script>
+    
+    {/*猜你喜欢*/}
+    <div class="left_tj">
+    	<div class="left_tj_title">{:isL(L('YouMightLike'),'猜你喜欢')}</div>
+        <div class="left_tj_list">
+        	<ul>
+        	   <foreach name="love" item="lo">
+            	<li>
+            	      <a href="{:U('Goods/index',array('html'=>'g-'.$lo['id']))}">
+            	          <img src="__ROOT__/{$lo.goods_thumb}" width="198" height="180" />
+            	      </a>
+            	          <h1>{$lo.goods_name|show_str=###,10}<br />{:isL(L('InfoPrice'),'价格')}:<font>{:getPrice($lo['goods_retail_price'],true)}</font></h1>
+            	</li>
+               </foreach> 
+            </ul>
+        </div>
+    </div>
+   {/*猜你喜欢 结束*/}
+    
+    </div>
+    <div class="list_right">
+    	<div class="pro_banner">
+        	<div class="focusBox" style="margin:0 auto">
+  <ul class="pic">
+      <foreach name="recAd" item="reAd">
+        <li><a <if condition="$reAd['ad_url']">href="{$reAd.ad_url}"</if> target="_blank"><img src="__ROOT__/{$reAd.ad_img}"/></a></li>
+     </foreach>
+  </ul>
+  <a class="prev" href="javascript:void(0)"></a> <a class="next" href="javascript:void(0)"></a>
+  <ul class="hd">
+        <foreach name="recAd" item="reAd">
+            <li></li>
+        </foreach>
+  </ul>
+</div>
+<script type="text/javascript">	jQuery(".focusBox").slide({ mainCell:".pic",effect:"fold", autoPlay:true, delayTime:600, trigger:"click"});	</script>
+        </div>
+        
+        
+        
+        <div class="pro_ps">
+        	<div class="pro_ps1">
+            	<ul>
+                	<li <if condition="$_GET['order_type'] eq 'create_time'">class="now"</if>>
+                	    <a href="{:condition_url($_URL_,array('order_type'=>'create_time','order'=>$orders))}">{:isL(L('Newest'),'最新')}</a>
+                    </li>
+                    <li <if condition="$_GET['order_type'] eq 'volume'">class="now"</if>>
+                        <a href="{:condition_url($_URL_,array('order_type'=>'volume','order'=>$orders))}">{:isL(L('SalesVolume'),'销量')}</a>
+                   </li>
+                    <li <if condition="$_GET['order_type'] eq 'goods_retail_price'">class="now"</if>>
+                        <a href="{:condition_url($_URL_,array('order_type'=>'goods_retail_price','order'=>$orders))}">{:isL(L('InfoPrice'),'价格')}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pro_search">
+            	<form>
+                	<h1>{:isL(L('Keywords'),'关键字')}：</h1>
+                    <input type="text" name="keywrods2" value="{:htmlspecialchars($_GET['keywrods2'])}"  class="input_p"/>
+                    <h1>{:isL(L('Price'),'价格范围')}：</h1>
+                    <input type="text" name="min" value="{:htmlspecialchars($_GET['min'])}" class="input_p1"/>
+                    <h1>-</h1>
+                    <input type="text" name="max" value="{:htmlspecialchars($_GET['max'])}" class="input_p1"/>
+                    <input type="submit" class="input_p2"  value="{:isL(L('Search'),'搜索')}"/>
+                </form>
+            </div>
+            <div class="pro_prev">
+            <h1>{:isL(L('CommonGoods'),'共商品')}(<font>{$dataCount}</font>)</h1>
+            <h1><font>{$currentPage}</font>/{$pageNumShown}</h1>
+            <a href="{:go_page($_URL_,$pageNumShown,'-')}"><img src="__HOME__/images/prev1.jpg" /></a>
+            <a href="{:go_page($_URL_,$pageNumShown,'+')}"><img src="__HOME__/images/prev2.jpg" /></a>
+            </div>            
+        </div>
+        
+        <div class="pro_list">
+        	<ul>
+        	   <php>$reci=0;</php> 
+        	    <foreach name="result" item="res" key="keyrec">
+        	      <php>$reci++;</php>  
+                    <li <if condition="$reci eq 4">style="margin-right:0;"</if>>
+                    <a href="{:U('Goods/index',array('html'=>'g-'.$res['id']))}"><img src="__ROOT__/{$res.goods_thumb}" width="227" height="190" /></a>
+                    <h1 class="jg">{:getPrice($res['goods_retail_price'],true)}</h1>
+                    <h1 class="title">{$res.goods_name|show_str=###,18}</h1>
+                    <h1 class="buy">
+                        <a href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$res['id']}&check=ok')">{:isL(L('Bought'),'立即购买')}</a>
+                        <a href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$res['id']}')" class="buy2">{:isL(L('AddCart'),'加入购物车')}</a>
+                    </h1>
+                    </li>  
+                    <php>if($reci==4) $reci=0;</php>     	        
+        	    </foreach>
+            </ul>
+        </div>
+        <div class="pro_next">{$page}</div>
+    
+    </div>
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,73 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->    
+	<input type="hidden" name="shops_id" value="{$_REQUEST['shops_id']}" /><!--商户检索ID-->    
+	<input type="hidden" name="action" value="{$_REQUEST['action']}" /><!---->    
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+               <if condition="access('Callery/callCommentDelete')">
+                  <li>
+				      <a title="确定把所选择进行删除？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Callery/callCommentDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete">
+				           <span>删除</span>
+					  </a>
+				 </li>
+                </if>  
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="51"  id="list-table-invet">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th width="3%">编号</th>
+                <th>库存标题</th>
+                <th>评述会员</th>
+                <th>评述内容</th>
+               <th>是否审核</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V.title_text}</td>
+                <td>{$V.user_name}</td>
+                 <td>{$V.content|tpl_modify_oen=###,'callery_comment','content',$V['id'],'id','Callery/callCommentForm'}</td>
+               <td>
+                      {$V.is_show|tpl_yes_no=###,'callery_comment','is_show',$V['id'],'id','Callery/callCommentForm'}
+			   </td>
+                <td>{$V.add_time|date='Y-m-d H:i:s',###} </td>
+                <td>
+                   {$action|tpl_action='ajaxTodo','Callery/callCommentDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['title_text']).')评述？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->       
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共{$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

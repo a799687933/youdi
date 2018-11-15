@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('UserCenter'),'用户中心')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css"/>
+<link rel="stylesheet" href="__HOME__/css/iconfont2.css"/>
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/style0417.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<script type="text/javascript" src="__HOME__/js/psw.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+
+<style>
+ .mzi{ padding:20px 20px 30px; line-height:1.58em; color:#222; font-size:13px;box-sizing:border-box; position:relative;}
+ .mzil{ float:left; width:130px; margin-right:20px; box-sizing:border-box; display:inline-block}
+ .mzir{ float:left;box-sizing:border-box;display:inline-block}
+ .btnbox{ position:absolute; right:30px; bottom:30px; width:10rem}
+ .bcbtn{ position:relative; float:right; width:30%;}
+ .bg{ background:rgba(0,0,0,0.5); width:100%; height:100%; position:fixed; left:0; top:0; z-index:200; display:none}
+ .xxxg{ background:#fff; position:absolute; width:820px; left:50%; margin-left:-410px; top:10%; overflow-x:hidden;  padding:20px 45px; box-sizing:border-box; display:none; zoom:1}
+ 
+ .xxxg .close{ top:25px}
+ .xxxg h1{ padding:10px 0; line-height:22px; font-weight:bold; font-size:16px; color:#222;}
+ .xxxg label{  font-size:12px; box-sizing:border-box; line-height:20px; color:#555;}
+ .xx_input{ border:1px solid #dbdbdb; color:#818181; padding:0 10px; width:100%; box-sizing:border-box; height:37px; font-size:13px; font-family:font-family:"Polaris-Bold",sans-serif;}
+ .xx_input:focus{border-bottom: 1px solid #090;}
+ .xxlr{ width:50%; float:left; box-sizing:border-box;}
+ .xxlrr{ width:50%; float:right; box-sizing:border-box; padding-left:20px;} 
+ .xxm{ width:33.33%; float:left; box-sizing:border-box}
+ .xxmm{ width:33.33%; float:left; box-sizing:border-box; padding:0 20px;}
+ .tstxt{ color:#f00; padding-left:10px; display:none}
+/****/
+ .shdz{ padding:10px; color:#222;}
+ .shdzt{ line-height:23px; margin-bottom:20px; font-weight:bold; font-size:14px;}
+ .dzbox{ float:left; width:25%; box-sizing:border-box; padding-right:10px;}
+ .dzboxnow{}
+ .dzm{ border:1px solid #eee; box-sizing:border-box; border-radius:3px; margin-top:10px; cursor:pointer; padding:10px; transition:border 0.3s ease 0s; position:relative}
+ .dzmt{ font-size:12px; line-height:18px;}
+ .dzmb{ text-align:right; line-height:23px;}
+ .dzradio{ display:none}
+ .dzboxnow .dzm{ border:1px solid #fddd59; background:#f8f8f8}
+ .dzboxnow .dzradio{ display:block}
+ .tjxdz{ line-height:23px; padding:10px; border:1px solid #eee; background:#f8f8f8; box-sizing:border-box; color:#222; font-size:13px; cursor:pointer;}
+ 
+ @media screen and (max-width:767px){.xxxg2{height:80%;}}
+  @media screen and (max-height:760px){.xxxg{height:80%; overflow:auto}}
+</style>
+</head>
+<body>
+<div class="box" style="overflow:hidden; width:100%">
+<include file="Common:headermin" />{/*公共头部*/} 
+<script type="text/javascript">
+$(function(){
+    formInit('#personalForm1',true,true,true,true); //个人信息表单验证
+	
+$(".tcxxxg").click(function(){
+	$(".xxbg").fadeIn("fast",function(){
+	     $(".xxxgwrap").show()
+	})
+});
+
+$(".xxxgclose").click(function(){
+	 $(".xxxgwrap").slideUp("fast",function(){
+		   $(".xxbg").fadeOut()
+	 })
+ });
+
+$(".xxxgwrap").click(function(e) {  
+       $(this).show();  
+        e.stopPropagation();  
+}); 
+	   
+$(document).on('click',".xxbg", function(){
+    $(".xxxgwrap").slideUp("fast",function(){
+		 $(".xxbg").fadeOut()
+	})
+});  
+	   
+	   
+$(".tcxgdz").click(function(){
+	$(".xgdzbg").fadeIn("fast",function(){
+		$(".xgdzwrap").slideDown()
+	})
+}) ;
+
+$(".xgdzclose").click(function(){
+	 $(".xgdzwrap").slideUp("fast",function(){
+		   $(".xgdzbg").fadeOut()
+	 })
+}) 
+
+$(".xgdzwrap").click(function(e) {  
+    $(this).show();  
+    e.stopPropagation();  
+});
+
+$(document).on('click',".xgdzbg", function(){
+    $(".xgdzwrap").slideUp("fast",function(){
+		  $(".xgdzbg").fadeOut()
+	})
+ }); 
+ 
+$(".tjdzwrap").click(function(e) {  
+    $(this).show();  
+        e.stopPropagation();  
+});
+
+$(document).on('click',".tjdzbg", function(){
+    $(".tjdzwrap").slideUp("fast",function(){
+		$(".tjdzbg").fadeOut()
+	})
+});   
+		  	   
+	   
+	   /*打开添加/修改地址
+	    $(".tctjdz").click(function(){
+	      $(".tjdzbg").fadeIn("fast",function(){
+		   $(".tjdzwrap").slideDown()
+		   })
+	    }) */
+	  $(".tjdzclose").click(function(){
+	       $(".tjdzwrap").slideUp("fast",function(){
+		      $(".tjdzbg").fadeOut()
+		   })
+	   }) 	     	     
+});
+</script>
+<!--content begin-->
+ <div class="zhu">
+  <h1 class="zhut"><b>{:isL(L('MyAccount'),'我的账户')}</b><a href="{:U('Category/index')}" class="col2a" style="">{:isL(L('ContinueShopping'),'继续购物')}</a></h1>
+  <div class="zhub ">
+   <ul>
+   	<li id="personal-li">
+     <h1>{:isL(L('PersonalInformation'),'个人信息')}<span class="cjrz personal-cjrz" >+</span><span class="cjrf personal-cjrf" >-</span></h1>
+     <div class="mzi zhubb personal">
+     <span class="mzil">{:isL(L('FullNname'),'名字')}</span>
+     <span class="mzir">{$userData['full_name']}</span>
+     <div class="cb"></div>
+     <span class="mzil">{:isL(L('Surname'),'姓氏')}</span>
+     <span class="mzir">{$userData['surname']}</span>
+     <div class="cb"></div>
+     <span class="mzil">{:isL(L('Email'),'电邮地址')}</span>
+     <span class="mzir">{$userData['user_name']}</span>
+     <div class="cb"></div>
+     <span class="mzil">{:isL(L('Telephone'),'电话')}</span>
+     <span class="mzir">{$userData['telephone']}</span>
+     <div class="cb"></div>
+     <span class="mzil">{:isL(L('Birthday'),'生日')}</span>
+     <span class="mzir">{$ymd}</span>
+     <div class="cb"></div>
+     <span class="mzil">{:isL(L('Gender'),'性别')}</span>
+     <span class="mzir"><if condition="$userData['sex'] eq 0">{:isL(L('Secrecy'),'保密')}<elseif condition="$userData['sex'] eq 1" />{:isL(L('Male'),'男')}<elseif condition="$userData['sex'] eq 2" />{:isL(L('Female'),'女')}</if></span>
+     <div class="cb"></div>
+      <span class="mzil">{:isL(L('Password'),'密码')}</span>
+     <span class="mzir">******</span>
+     <div class="cb"></div>
+     <div class="btnbox tcxxxg">
+     <input type="button"  value="{:isL(L('personalInformation'),'个人信息修改')}" class="btn"/>
+     <span class="glyphs icon-thinArrow btnb"></span>     
+     </div>
+     <div class="cb"></div>
+     </div><!---->
+     
+     <!--弹出信息修改-->
+     <div class="bg xxbg">
+     <form action="{:U('Member/savePersonal')}" id="personalForm1" method="post">
+          <div class="xxxg xxxgwrap"><span class="close xxxgclose"><span class="glyphs icon-close" style="line-height:35px;"></span></span>
+           <p class="f18 lh30 pt15">{:isL(L('personalInformation'),'个人信息修改')}</p>
+           <p class="col999 f12 pb15">* {:isL(L('Required'),'必填项')}</p>
+          
+           <div class="cb pb10"></div>
+           <if condition="is_mobile()">
+             <div class="xxlr">
+            <div class="mb20">
+            <label>{:isL(L('Surname'),'姓氏')}*</label>
+            <input type="text" name="surname" value="{$userData['surname']}" class="xx_input required alphanumeric" info-text="last-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+            <p class="tsy last-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('FullNname'),'名字')}*</label>
+            <input type="text" name="full_name" value="{$userData['full_name']}" class="xx_input required alphanumeric" info-text="full-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+            <p class="tsy full-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Gender'),'性别')}*</label>
+            <select name="sex" class="chosen-select pcselect">
+             <option value="0" <if condition="$userData['sex'] eq 0">selected="selected"</if>>{:isL(L('Secrecy'),'保密')}</option>
+             <option value="1" <if condition="$userData['sex'] eq 1">selected="selected"</if>>{:isL(L('Male'),'男')}</option>
+             <option value="2" <if condition="$userData['sex'] eq 2">selected="selected"</if>>{:isL(L('Female'),'女')}</option>
+            </select>
+            <select name="sex" class="phoneselect">
+             <option value="0" <if condition="$userData['sex'] eq 0">selected="selected"</if>>{:isL(L('Secrecy'),'保密')}</option>
+             <option value="1" <if condition="$userData['sex'] eq 1">selected="selected"</if>>{:isL(L('Male'),'男')}</option>
+             <option value="2" <if condition="$userData['sex'] eq 2">selected="selected"</if>>{:isL(L('Female'),'女')}</option>
+            </select>
+            <p class="tsy">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Phone'),'手机')}*</label>
+            <input type="text" name="telephone" value="{$userData['telephone']}" min="11" max="11" class="xx_input required digits" info-text="tel-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('CorrectNumber'),'请输入正确电话')}"/>
+            <p class="tsy tel-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Email'),'电邮地址')}*</label>
+            <input type="text"  value="{$userData['user_name']}" readonly class="xx_input" />
+            <p class="tsy">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('ConfirmEmail'),'确认电邮地址')}*</label>
+            <input type="text" value="{$userData['user_name']}" readonly class="xx_input"/>
+            <p class="tsy">提示语</p>
+            </div>
+           </div><!---->
+           
+           <else />
+           <div class="xxlr">
+            <div class="mb20">
+            <label>{:isL(L('Surname'),'姓氏')}*</label>
+            <input type="text" name="surname" value="{$userData['surname']}" class="xx_input required alphanumeric" info-text="last-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+            <p class="tsy last-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Gender'),'性别')}*</label>
+            <select name="sex" class="chosen-select pcselect">
+             <option value="0" <if condition="$userData['sex'] eq 0">selected="selected"</if>>{:isL(L('Secrecy'),'保密')}</option>
+             <option value="1" <if condition="$userData['sex'] eq 1">selected="selected"</if>>{:isL(L('Male'),'男')}</option>
+             <option value="2" <if condition="$userData['sex'] eq 2">selected="selected"</if>>{:isL(L('Female'),'女')}</option>
+            </select>
+            <select name="sex" class="phoneselect">
+             <option value="0" <if condition="$userData['sex'] eq 0">selected="selected"</if>>{:isL(L('Secrecy'),'保密')}</option>
+             <option value="1" <if condition="$userData['sex'] eq 1">selected="selected"</if>>{:isL(L('Male'),'男')}</option>
+             <option value="2" <if condition="$userData['sex'] eq 2">selected="selected"</if>>{:isL(L('Female'),'女')}</option>
+            </select>
+            <p class="tsy">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Email'),'电邮地址')}*</label>
+            <input type="text"  value="{$userData['user_name']}" readonly class="xx_input" />
+            <p class="tsy">提示语</p>
+            </div>
+           </div><!---->
+           
+           
+           
+           <div class="xxlrr">
+           <div class="mb20">
+            <label>{:isL(L('FullNname'),'名字')}*</label>
+            <input type="text" name="full_name" value="{$userData['full_name']}" class="xx_input required alphanumeric" info-text="full-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+            <p class="tsy full-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('Phone'),'手机')}*</label>
+            <input type="text" name="telephone" value="{$userData['telephone']}" min="11" max="11" class="xx_input required digits" info-text="tel-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('CorrectNumber'),'请输入正确电话')}"/>
+            <p class="tsy tel-text">提示语</p>
+            </div>
+            <div class="mb20">
+            <label>{:isL(L('ConfirmEmail'),'确认电邮地址')}*</label>
+            <input type="text" value="{$userData['user_name']}" readonly class="xx_input"/>
+            <p class="tsy">提示语</p>
+            </div>
+           </div><!---->
+           </if>
+           <div class="cb"></div>
+           <div class="xxm">
+            <label>{:isL(L('Date'),'日期')}*</label>
+            <select name="d1" class="chosen-select required pcselect" info-text="d1-text" error-info="{:isL(L('Required'),'必填栏')}">
+            <!-- <option value="">{:isL(L('Date'),'日期')}</option>-->
+            <for start="1" end="32">
+                <option value="{$i}" <if condition="$userData['birthday'][2] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <select name="d1" class="phoneselect required" info-text="d1-text" error-info="{:isL(L('Required'),'必填栏')}">
+             <!--<option value="">{:isL(L('Date'),'日期')}</option>-->
+            <for start="1" end="32">
+                <option value="{$i}" <if condition="$userData['birthday'][2] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <p class="tsy d1-text">提示语</p>
+           </div><!---->
+           <div class="xxmm">
+            <label>{:isL(L('Month'),'月')}*</label>
+            <select name="d2" class="chosen-select required pcselect" info-text="d2-text" error-info="{:isL(L('Required'),'必填栏')}">
+             <!--<option value="">{:isL(L('Month'),'月')}</option>-->
+            <for start="1" end="13">
+                <option value="{$i}" <if condition="$userData['birthday'][1] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <select name="d2" class="phoneselect required" info-text="d2-text" error-info="{:isL(L('Required'),'必填栏')}">
+             <!--<option value="">{:isL(L('Month'),'月')}</option>-->
+            <for start="1" end="13">
+                <option value="{$i}" <if condition="$userData['birthday'][1] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <p class="tsy d2-text">提示语</p>
+           </div><!---->
+           <div class="xxm">
+            <label>{:isL(L('Year'),'年')}*</label>
+            <select name="d3" class="chosen-select required pcselect" info-text="d3-text" error-info="{:isL(L('Required'),'必填栏')}">
+            <!-- <option value="">{:isL(L('Year'),'年')}</option>-->
+            <for start="1970" end="date('Y')">
+                <option value="{$i}" <if condition="$userData['birthday'][0] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <select name="d3" class="phoneselect required" info-text="d3-text" error-info="{:isL(L('Required'),'必填栏')}">
+            <!-- <option value="">{:isL(L('Year'),'年')}</option>-->
+            <for start="1970" end="date('Y')">
+                <option value="{$i}" <if condition="$userData['birthday'][0] eq $i">selected="selected"</if>>{$i}</option>
+            </for>
+            </select>
+            <p class="tsy d3-text">提示语</p>
+           </div><!---->
+           <div class="cb pb20"></div>
+           <div class="mb20">
+            <label>{:isL(L('YouArePassword'),'您现在所使用的密码')}</label>
+            <div style="position:relative" class="mmbox">
+              <input type="password" id="psw"  name="oldpassword" value="......" info-text="old-text" class="mm_input2  mmpsw"  error-info="{:isL(L('Required'),'必填栏')}"/>
+              <span class="glyphs icon-show mmyj iconmm1"></span>
+              <p class="tsy old-text">提示语</p>
+           </div>
+           
+            </div>
+            <div class="xxlr">
+            <label>{:isL(L('NewPasswordrec'),'新密码（推荐）')}</label>
+            <div style="position:relative" class="mmbox">
+              <input type="password" id="password"  name="password" info-text="pass-text" min="8" max="300"  class="mm_input2  mmpsw " error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('PleaseEnter8'),'请输入8位数字，拼音或者数字和拼音组合的字符。')}"  />
+              <span class="glyphs icon-show mmyj iconmm2"></span>
+              <p class="tsy pass-text">提示语</p>
+            </div>
+            </div><!---->
+            <div class="phone_mb20"></div>
+            <div class="xxlrr">
+             <label>{:isL(L('ConnewPasswordrec'),'确认新密码（推荐）')}</label>
+            <div style="position:relative" class="mmbox">
+              <input type="password" id="not_password" info-text="not-text"  name="not_password" equal-input="#password" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('PleaseConfirmYourPassword'),'两次输入的密码不一致, 请重新输入')}" class="mm_input2  mmpsw"  />
+              <span class="glyphs icon-show mmyj iconmm3"></span>
+              <p class="tsy not-text">提示语</p>
+            </div>
+            </div><!---->
+            <div class="cb pb20"></div>
+            
+            {/*头像*/}
+            <div style="width:80px; height:80px;float:left;position:relative; cursor:pointer;border:1px solid #ccc; text-align:center">
+                <php>if($userData['head_pic']){</php>
+                    <img src="__ROOT__/{$userData['head_pic']}" style="width:58px; vertical-align:middle; margin-top:10px"  id="img_show"/>
+                <php>}else{</php>
+                     <img src="__HOME__/images/img1115a.jpg"style="width:58px; vertical-align:middle; margin-top:10px"  id="img_show"/>
+                <php>}</php>
+               <input name="file4" type="file" id="memberFileToUpload" onChange="ajaxFileUpload('{:U('/UploadFile/upload',array('thum'=>'ok','width'=>100,height=>100,'remove'=>'ok','up'=>'UploadUser','file_type'=>'jpg,png,gif,jpeg'),'')}','memberFileToUpload','img_show','head_pic','','B-show','__ROOT__','','loadimg','{$_SESSION["MY_TOKEN"]}','#up-error');" 
+               style="width:100%;height:80px;position:absolute;top:0;left:0;z-index:999;opacity: 0;-khtml-opacity: 0;-moz-opacity:0;filter:alpha(opacity=0);cursor:pointer"/> 
+               <input type="hidden" name="head_pic"  id="head_pic" value="{$userData['head_pic']}" />                
+            </div>
+            <img src="__COMMON__/Images/13221814.gif" style="position:relative;top:5px;left:25px;display:none;margin-bottom:10px;" id="loadimg" />    
+            <span id="up-error" style="margin-left:5px;color:red;display:none;">上传错误提示</span>
+           {/*头像结束*/}
+              <div class="pccb"></div>
+         <div class="bcbtn bcbtn1">
+             <input type="submit"  value="{:isL(L('SaveInformation'),'保存信息')}" info-text="sub-text" class="btn" />
+             <span class="glyphs icon-thinArrow btnb"></span>     
+         </div>
+         <div style="clear:both;height:10px;"></div>
+         <p class="tsy sub-text" style="width:30%;float:right;border-top:none;">提示语</p>
+         <div class="cb pb15"></div>
+          </div><!--xxxg end-->
+      </form>
+     </div> 
+     <!--弹出信息修改 end-->
+
+    </li>
+    <li id="xiaoxi">
+     <h1>我的消息<span class="cjrz">+</span><span class="cjrf">-</span></h1>
+     <div class="zhubb">
+      <div class="xiaox">
+       <h2>消息提示<span class="xinf2 fa fa-envelope"></span><b class="xinf2r">3</b></h2> 
+       <ul>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinfen vam fa fa-envelope"></span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinfen vam fa fa-envelope"></span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinfen vam fa fa-envelope"></span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinfen vam fa fa-envelope"></span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinfen vam fa fa-envelope"></span></p>
+        </li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--xiaox end-->
+      <div class="xiaox">
+       <h2>我的收藏</h2>
+       <ul>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span></p>
+        </li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--xiaox end-->
+      <div class="xiaox">
+       <h2>我的评论<span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></h2>
+       <ul>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></p>
+        </li>
+        <li>
+         <a href=""><img src="__HOME__/images2/img1.jpg" alt=""/></a>
+         <p><span class="vam mr10">The Carhartt WIP Archives] 柏林展览及书册发布活动现场回顾</span><span class="xinf3 fa fa-thumbs-up"></span><b class="xinf2r">3</b></p>
+        </li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--xiaox end-->
+      
+       <div class="noxxi"><span>暂无消息提示</span></div>
+     </div> 
+    </li> 
+    <li  id="order-h1">
+     <h1>{:isL(L('AddressBook'),'地址簿')}<span class="cjrz address-cjrz">+</span><span class="cjrf address-cjrf">-</span></h1>
+     <div class="zhubb address" >
+       <div class="shdz">
+        <h2 class="shdzt">{:isL(L('DeliveryAddress'),'送货地址')}</h2>
+        
+        
+        <php>if(!$addList){</php>
+            <!--没地址时 begin-->
+            <div class="bcbtn tctjdz" style="float:left; ">
+             <input value="{:isL(L('AddNewAddress'),'添加新地址')}" onClick="updateAddress(0,'')" class="btn" type="button">
+             <span class="glyphs icon-thinArrow btnb"></span>     
+            </div>
+            <div class="cb"></div>
+            <!--没地址时 end-->
+         <php>}else{</php>
+            <!--有地址时 begin-->
+            <div style="display:block">
+            <foreach name="addList" item="a">
+                <div class="dzbox <if condition="$a['default_address']">dzboxnow</if>">
+                 <div class="dzm"><span class="ffInput__radio2 glyphs dzradio" ></span>
+                  <div class="dzmt">
+                   {$a['surname']}{$a['consignee']}<br/>
+                   {$a['province']} {$a['city']}{$a['address']}<br/>
+                   {$a['zipcode']}<br/>
+                   <!--{$a['country']}-->
+                  </div>
+                  <p class="dzmb">
+                    <a href="JavaScript:void(0)" onClick="updateAddress({$a['address_id']},'')" class="col2ab mr15 tcxgdz">{:isL(L('Modify'),'修改')}</a>
+                    <a href="JavaScript:void(0)" class="col2ab" onClick="myAlert('','', '{:sign_url(array('address_id'=>$a['address_id']),U('Member/delAddress','',''))}','','',2)">{:isL(L('Delete'),'删除')}</a>
+                  </p>
+                 </div>
+                </div><!--dzbox-->
+            </foreach>
+            <div class="cb pb10"></div>
+            <p class="tjxdz tctjdz" onClick="updateAddress(0,'')"><span class="glyphs icon-more"></span>{:isL(L('AddNewAddress'),'添加新地址')}</p>
+            </div>
+            <!--有地址时 end-->
+        <php>}</php>
+         
+       </div><!--shdz end-->
+       
+       <!--弹出添加/修改地址 begin-->
+     <div class="bg tjdzbg">
+      <div class="xxxg xxxg2 tjdzwrap">
+        <span class="close tjdzclose"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+        <form action="{:U('/Member/addressForm')}" id="address-up"> 
+           <!--<img src="__COMMON__/Images/13221814.gif" style="display:block;margin: 200px auto;" />-->
+                <div id="loading-center-absolute">
+                    <div class="object" id="object_one"></div>
+                    <div class="object" id="object_two"></div>
+                    <div class="object" id="object_three"></div>
+                </div>           
+        </form>
+       </div>
+    </div>
+    <!--弹出添加/修改地址 end-->
+ 
+     </div>
+    </li>
+    <li >
+     <h1>{:isL(L('OrderAndReturn'),'订单与退货')}<span class="cjrz order-cjrz">+</span><span class="cjrf order-cjrf">-</span></h1>
+     <div class="zhubb order-list" style="padding:0">
+     <if condition="is_mobile()">
+     
+    <foreach name="orderList" item="o">
+          <div class="mzi">
+            <span class="mzil">{:isL(L('OrderDate'),'订单日期')}</span>
+            <span class="mzir">{:date('Y/m/d',$o['add_time'])}</span>
+            <div class="cb"></div>
+            <span class="mzil">{:isL(L('OrderNumber'),'订单编号')}</span>
+            <span class="mzir">{$o['order_sn']}</span>
+            <div class="cb"></div>
+            <span class="mzil">{:isL(L('OrderStatus'),'状态')}</span>
+            <span class="mzir">
+                <php>if($o['order_status']==0){</php>
+                      <span style="color:red;">{:isL(L('Cancelled'),'已取消')}</span>
+                <php>}else if($o['order_status']==1){</php>
+                     <php>if($o['pay_status'] < 2){</php>
+                            {:isL(L('WaitPayment'),'等待付款')}
+                     <php>}else if(($o['pay_status'] ==2) && ($o['shipping_status'] < 2)){</php> 
+                            {:isL(L('WaitingForDelivery'),'等待发货')} 
+                     <php>}else if(($o['pay_status'] ==2) && ($o['shipping_status'] >= 2)){</php>  
+                            {:isL(L('ConfirmReceipt'),'确定收货')}           
+                     <php>}</php>
+                <php>}else if($o['order_status']==2){</php>
+                     <span style="color:green;">{:isL(L('TransactionCompletion'),'交易完成')}</span>
+                <php>}else if($o['order_status']==3){</php>    
+                      <span style="color:#f60;">{:isL(L('ReturnGoods'),'退货处理中')}</span>
+                <php>}else if($o['order_status']==4){</php>  
+                     <span style="color:green;">{:isL(L('ReturnSuccess'),'退货完成')}</span>
+                <php>}</php>    
+            </span>
+            <div class="cb"></div>
+            <span class="mzil">{:isL(L('CommodityQuantity'),'商品数量')}</span>
+            <span class="mzir">{$o['goods_number']}</span>
+            <div class="cb"></div>
+            <span class="mzil">{:isL(L('OrderDetail'),'查看细节')}</span>
+            <span class="mzir"><a href="javascript:void(0)" onClick="orderShow({$o['order_id']})" class="ckxj-1">{:isL(L('OrderDetail'),'查看细节')}</a></span>
+            <div class="cb"></div>
+          </div>
+      </foreach>
+        
+     <else/>
+      <div class="ddth pv20">
+       <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+            <th align="left" valign="middle" width="10%"><span class="pl15">{:isL(L('OrderDate'),'订单日期')}</span></th>
+             <th align="center" valign="middle" width="25%"><span class="ph10">{:isL(L('OrderNumber'),'订单编号')}</span></th>
+             <th align="center" valign="middle" width="25%">{:isL(L('OrderStatus'),'状态')}</th>
+             <th align="center" valign="middle" width="20%">{:isL(L('CommodityQuantity'),'商品数量')}</th>
+             <th align="center" valign="middle" width="20%">{:isL(L('OrderDetail'),'查看细节')}</th>
+            </tr>     
+            <foreach name="orderList" item="o">
+                <tr>
+                <td align="left" valign="middle" style="word-break: break-all; word-wrap:break-word;"><span class="pl15">{:date('Y/m/d',$o['add_time'])}</span></td>
+                 <td align="center" valign="middle" style="word-break: break-all; word-wrap:break-word;"><a class="col2a">{$o['order_sn']}</a></td>
+                 <td align="center" valign="middle">
+                        <php>if($o['order_status']==0){</php>
+                              <span style="color:red;">{:isL(L('Cancelled'),'已取消')}</span>
+                        <php>}else if($o['order_status']==1){</php>
+                             <php>if($o['pay_status'] < 2){</php>
+                                    {:isL(L('WaitPayment'),'等待付款')}
+                             <php>}else if(($o['pay_status'] ==2) && ($o['shipping_status'] < 2)){</php> 
+                                    {:isL(L('WaitingForDelivery'),'等待发货')} 
+                             <php>}else if(($o['pay_status'] ==2) && ($o['shipping_status'] >= 2)){</php>  
+                                    {:isL(L('ConfirmReceipt'),'确定收货')}      
+                             <php>}</php>
+                        <php>}else if($o['order_status']==2){</php>
+                             <span style="color:green;">{:isL(L('TransactionCompletion'),'交易完成')}</span>
+                        <php>}else if($o['order_status']==3){</php>    
+                              <span style="color:#f60;">{:isL(L('ReturnGoods'),'退货处理中')}</span>
+                        <php>}else if($o['order_status']==4){</php>  
+                             <span style="color:green;">{:isL(L('ReturnSuccess'),'退货完成')}</span>
+                        <php>}</php>    
+                 </td>
+                 <td align="center" valign="middle">{$o['goods_number']}</td>
+                 <td align="center" valign="middle"><a href="javascript:void(0)" onClick="orderShow({$o['order_id']})" class="ckxj-1">{:isL(L('OrderDetail'),'查看细节')}</a></td>
+                </tr>
+            </foreach>
+       </table>
+      </div>
+      </if>
+     </div>
+    </li>
+    
+    <!--<li> 
+     <h1>{:isL(L('Coupons'),'礼券')}<span class="cjrz">+</span><span class="cjrf">-</span></h1>
+     <div class="zhubb">
+      <div class="pv20"><br/><br/><br/><br/><br/><br/></div>
+     </div>
+    </li>
+    <li>
+     <h1>{:isL(L('RecommendFriends'),'推荐朋友')}<span class="cjrz">+</span><span class="cjrf">-</span></h1>
+     <div class="zhubb">
+      <div class="pv20"><br/><br/><br/><br/><br/><br/></div>
+     </div>
+    </li>
+    <li>
+     <h1>{:isL(L('CashCoupons'),'代金券')}<span class="cjrz">+</span><span class="cjrf">-</span></h1>
+     <div class="zhubb">
+      <div class="pv20"><br/><br/><br/><br/><br/><br/></div>
+     </div>
+    </li>
+    <li>
+     <h1>{:isL(L('PersonalExclusive'),'个人专属设定')}<span class="cjrz">+</span><span class="cjrf">-</span></h1>
+     <div class="zhubb">
+      <div class="pv20"><br/><br/><br/><br/><br/><br/></div>
+     </div>
+    </li>-->
+    
+   </ul>
+  </div>
+
+<div class="cb pb20"></div>
+ </div><!--zhu end-->
+ 
+<!--content endh-->
+<div class="footermint"></div>
+<include file="Common:footermin" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<div class="ddbg" style="display:block"></div>
+<div class="ddbh"  style="display:block">
+  <h1>您的物流信息</h1>
+  <div class="wuliu"><div class="wulium">
+   <ul>
+    <li>2018.01.24 15:00:22 <b>物流描述</b></li>
+     <li>2018.01.24 15:00:22 <b>物流描述</b></li>
+      <li>2018.01.24 15:00:22 <b>物流描述</b></li>
+       <li>2018.01.24 15:00:22 <b>物流描述</b></li>
+        <li>2018.01.24 15:00:22 <b>物流描述</b></li>
+   </ul>
+  </div></div>
+  <div class="sppj2 pr" style="width:308px; float:right; margin:30px 0 15px">
+   <input value="确定"  class="btn" type="button">
+    <span class="glyphs icon-thinArrow btnb"></span>    
+  </div>
+  <div class="cb"></div>
+</div>
+
+{/*订单祥情弹层*/}
+<div class="ddbg"></div>
+<div class="ddbh">
+  <img src="__COMMON__/Images/13221814.gif" style="display:block;margin: 200px auto;" />  
+  
+</div>
+{/*订单祥情弹层结束*/}
+<script>
+$(function(){
+  $(".ddbg").click(function(){
+	  $(".ddbh").slideUp()
+	  $(this).fadeOut()
+	  })	
+	})
+</script>
+
+{/*商品评价弹层*/}
+<div class="appraise">
+ <h1>商品评价<span class="ddclose">X</span></h1>
+ <div class="pv20">
+ </div>
+ </div>
+{/*商品评价结束*/}
+
+
+  {/*退款退货原因*/}
+     <div id="publishs1" style="width:15rem;height:350px;background:#fff;border-radius: 6px;display:none;z-index:9999" class="jqddtable">
+         <div style="height:40px;line-height:40px;font-size:16px;padding:5px;padding-left:20px;">
+         <a href="javascript:void(0);" style="float:right;font-size:30px;color:red;padding-right:10px;" onClick="closeEdcfsAed('#publishs1')">×</a>
+         {:isL(L('RefundReason'),'退货/退款原因')}
+         </div>
+          <form method="get" action="{:U('/Member/refund')}" class="form1">
+             <input type="hidden"  id="order-id" name="order_id" />
+              <table  class="my-table" style="width:100%">
+                  <tr>
+                       <td align="left" style="text-align:left;padding-left:20px;">
+                           <textarea name="refund_reason" id="refund_reason" style="width:90%;height:200px;border:1px #eee solid;resize: none;" class="validate[required]"></textarea>
+                        </td>
+                   </tr>           
+                  <tr style="border:none;">
+                          <td align="left" style="text-align:left;padding-left:20px;">
+                          <input type="submit" 
+                          value="{:isL(L('Submit'),'提交')}"  class="btn_lkgm" id="submits4" msg="{:isL(L('PleaseLater'),'提交中...')}"
+                          style=" width:90%;margin:0 auto;height: 40px;
+                                           line-height:40px;font-size:20px;
+                                           background:#222;color:#fff;border-radius:4px;border:none; cursor:pointer;"/></td>
+                  </tr>
+              </table>
+          </form>
+     </div>
+  {/*退款退货原因结束*/}
+  
+ {/*评价弹层*/}
+ <style type="text/css">
+ #evaluation span{
+    display:block;
+    width:19px;
+    height:18px;
+    float:left;
+    margin:0 3px 0 10px;
+    cursor:pointer;
+    position:relative;
+    top:8px;
+ }
+ .icon1a1{
+    background:url(__COMMON__/Images/icon1a.jpg) no-repeat;
+ }
+  .icon1b1{
+    background:url(__COMMON__/Images/icon1b.jpg) no-repeat;
+ }
+ .icon1c1{
+    background:url(__COMMON__/Images/icon1c.png) no-repeat;
+ }
+ .show-data{
+    width:250px;
+    height:100px;
+    border:1px #ccc solid;
+    position:absolute;
+    top:27px;
+    left:-105px;
+    background:#fff;
+    border-radius:3px;
+    box-shadow: 3px 3px 10px #ccc;
+    padding:10px;
+    font-size:14px;
+    display:none;
+ }
+ .arrowa{
+    position:absolute;
+    font-size:22px;
+    top:-17px;
+    left:107px; 
+    z-index:1000;
+    color:#ccc;
+ }
+ .arrowb{
+    font-size:22px;
+   position:absolute;
+    top:-16px;
+    left:107px;   
+   color:#fff;
+   z-index:1000;
+ }
+ #gooedst span{
+    font-size:12px;
+    border:1px #ccc solid;
+    padding:3px 10px;
+    margin:0 3px;
+    
+ }
+ #gooedst span.now{
+    color:#99c838;
+    border:1px #99c838 solid;
+ }
+ #gooedst span input{
+    width:100%;
+    height:100%;
+    position:absolute;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    opacity: 0;
+    cursor:pointer;
+ }
+ </style>
+ <script type="text/javascript">
+ /*评价*/
+function evaluation(goodsId,goodsName,isReviews,orderId){
+    if(isReviews){
+          var url="{:U('Member/appraise','','')}?order_id="+orderId+"&goods_id="+goodsId;
+          $.ajax({
+             type:'post',
+             dataType:'json',
+             url:url,
+             success:function(obj,status,xhr){
+                        var feel=$('input[name="feel[]"]');
+                        var inputLength=feel.length;
+                        for(var i=0; i < obj.feel.length;i++){
+                            for(j=0;j < inputLength;j++){
+                                if(feel.eq(j).val()==obj.feel[i]){
+                                     feel.eq(j).attr('checked',true);
+                                      feel.eq(j).parent().attr('class','now');
+                                     break;
+                                }
+                            }
+                        }                   
+                        var hovers=$('#evaluation').find('.hovers');
+                        $(hovers).attr('class','icon1a1 hovers');
+                        var j=0;
+                        for(var i=0;i < obj.score;i++){
+                              if(i >1){
+                                 hovers.eq(i).attr('class','icon1c1 hovers');
+                              }else{
+                                 hovers.eq(i).attr('class','icon1b1 hovers');
+                              }
+                              j++;
+                        }
+                        $('#score-input').val(j);
+                        $('.score').text(j);
+                        $('#content').val(obj.content); 
+                        $('#counts').text(obj.imgs_count+'/10'); 
+                        $('#img-list').html(obj.imgs);
+              }
+           });      
+    }else{
+       $('#content').val('');
+       $('#img-list').html('');
+       $('#counts').text('0/10'); 
+       $('#score-input').val(1);
+       $('.score').text(1);
+    }
+    $('#goods-name').text(goodsName);
+    $('input[name="goods_id"]').val(goodsId);
+    $('input[name="order_id"]').val(orderId);
+    edcfsAed('#publishs2',true,60,'');
+} 
+ $(function(){
+        //选择评分
+        $('.hovers').hover(function(){
+              var parent=$(this).parent();                      
+              var hovers=parent.find('.hovers');
+              $(this).children('.show-data').show();
+              var index=$(this).index();
+              $(hovers).attr('class','icon1a1 hovers');
+              var j=0;
+              for(var i=0;i < hovers.length;i++){
+                  if(i >1){
+                     hovers.eq(i).attr('class','icon1c1 hovers');
+                  }else{
+                     hovers.eq(i).attr('class','icon1b1 hovers');
+                  }
+                  j++;
+                  if(i==index-1) break;
+              }
+              $('#score-input').val(j);
+              $('.score').text(j);
+          },function(){
+             $(this).children('.show-data').hide();
+        });
+        
+        //选择买后感受
+        $('#gooedst span').click(function(){
+             var _this=$(this).children('input');
+             if(_this.attr('checked')){
+                $(this).attr('class','now');
+             }else{
+                $(this).attr('class','');
+             }
+        });
+ });
+ </script>
+     <div id="publishs2" style="width:18.8rem;height:470px;background:#fff;border-radius: 6px;display:none" class="jqddtable">
+         <div style="height:40px;line-height:40px;font-size:16px;padding:5px;padding-left:0.5rem;border-bottom:1px solid #ccc;width:18rem;margin:0 auto;">
+         <a href="javascript:void(0);" style="float:right;font-size:30px;color:red;padding-right:0.7rem;" onClick="closeEdcfsAed('#publishs2')">×</a>
+         <span id="goods-name">{:isL(L('CommodityEvaluation'),'商品评价')}</span>
+         </div>
+          <form method="get" action="{:U('/Member/appraiseForm')}" class="form2">
+             <input type="hidden" value="{$order.order_id}" name="order_id" />
+             <input type="hidden" value="" name="goods_id" />
+             <input type="hidden" name="score" value="1" id="score-input"  />
+              <table  class="my-table" style="width: 100%">
+                 <tr><td style="text-align:left;padding-left:20px;font-size:14px;height: 40px;line-height: 40px;" id="evaluation">
+                     <b style="float:left;">{:isL(L('PleaseGivePoints'),'请为商品打分')}：</b>
+                     
+                     <span class="icon1b1 hovers">&nbsp;
+                        <!-- <div class="show-data">
+                              <b class="arrowa">◆</b>
+                              <b class="arrowb">◆</b>
+                             <p class="colf60">{:isL(L('1Points'),'1分 不满意')}</p>
+                             <p>{:isL(L('1PointsInfo'),'与卖家描述的完全不符，很不满意。')}</p>                              
+                         </div>-->
+                     </span>    
+                        
+                     <span class="icon1a1 hovers">&nbsp;
+                        <!-- <div class="show-data">
+                              <b class="arrowa">◆</b>
+                              <b class="arrowb">◆</b>
+                             <p class="colf60" >{:isL(L('2Points'),'2分 不满意')}</p>
+                             <p>{:isL(L('2PointsInfo'),'部分有破损，与卖家描述的不太符合，较不满意。')}</p>                            
+                         </div>     -->             
+                     </span>    
+                     
+                     <span class="icon1a1 hovers">&nbsp;
+                         <!--<div class="show-data">
+                              <b class="arrowa">◆</b>
+                              <b class="arrowb">◆</b>
+                             <p class="colf60">{:isL(L('3Points'),'3分 一般')}</p>
+                             <p>{:isL(L('3PointsInfo'),'质量一般，没有卖家描述的那么好。')}</p>                     
+                         </div>  -->                         
+                     </span>    
+                     <span class="icon1a1 hovers">&nbsp;
+                         <!--<div class="show-data">
+                              <b class="arrowa">◆</b>
+                              <b class="arrowb">◆</b>
+                             <p class="colf60">{:isL(L('4Points'),'4分 满意')}</p>
+                             <p>{:isL(L('4PointsInfo'),'质量不错，与卖家描述的基本一致，还是挺满意的。')}</p>                         
+                         </div> -->                   
+                     </span>    
+                     <span class="icon1a1 hovers">&nbsp;
+                         <!--<div class="show-data">
+                              <b class="arrowa">◆</b>
+                              <b class="arrowb">◆</b>
+                             <p class="colf60" >{:isL(L('5Points'),'5分 非常满意')}</p>
+                             <p>{:isL(L('5PointsInfo'),'质量非常好，与卖家描述的完全一致，非常满意。')}</p>                            
+                         </div>-->                  
+                     </span>      
+                     (<strong style="color:red;" class="score">1</strong>)
+                  </td></tr>
+                  <tr>
+                       <td align="left" style="text-align:left;padding-left:20px;">
+                           <textarea name="content" id="content" style="width:90%;height:200px;border:1px #eee solid;resize: none;" class="validate[required,maxSize[200]]"></textarea>
+                           <p style="font-size:12px;height: 30px;line-height: 30px;">{:isL(L('Within200Words'),'200个字内')}</p>
+                        </td>
+                   </tr>
+                   {/*上传图片评论*/}
+                   <tr>
+                       <td style="text-align: left;float:left;padding-left: 20px;">
+                           <div style="width:90px;height: 30px;background: #a6080f;color:#fff;float:left;margin-right: 10px;position: relative;text-align: center;line-height: 30px; border-radius:3px;">
+                                  {:isL(L('Upload'),'我要晒图')} <span id="counts">0/10</span>
+                                 
+                                   <input 
+                                      name="file5" 
+                                      type="file" 
+                                      id="goods_photo_up" 
+                                      onchange="appraiseUpload('{:U('UploadFile/upload',array('thum'=>'ok','width'=>700,height=>700,'remove'=>'ok','up'=>'UploadUser'),'')}','goods_photo_up','divigm','__ROOT__','{$_SESSION["MY_TOKEN"]}','#divigm','#counts',this)"
+                                     style="height:100%;width:100%;position:absolute;top:3px;left:0;z-index:9999;filter:alpha(opacity=0); opacity: 0;cursor:pointer"                                                
+                                    />                                 
+                           </div>
+                           <div style="height: 40px;"></div>
+                           <div id="img-list"></div>
+                           <div style="float:left;width:30px;height: 30px;margin:0 3px;display: none;" id="divigm">
+                               <img src="__COMMON__/Images/13221814.gif" style="max-height: 30px;max-width: 30px;display: block;margin:0 auto;"/>
+                           </div>
+                       </td>
+                  </tr>
+                  {/*上传图片评论*/}                   
+                  <tr style="border-bottom:1px solid #ccc;height:10px;">
+                       <td align="left" style="text-align:left;padding-left:20px;font-size:14px;" id="gooedst">
+                         <foreach name="goodsSats" item="gs">
+                                <span style="position:relative;">
+                                   <input type="checkbox" name="feel[]" value="{$gs.id}"/>{$gs.name}
+                               </span>                   
+                         </foreach>
+                        </td>
+                   </tr>    
+                  <tr><td colspan="2" style="height: 10px;"></td></tr>                        
+                  <tr style="border:none;">
+                          <td align="left" style="text-align:left;padding-left:20px;">
+                          <input type="submit" 
+                          value="{:isL(L('Submit'),'提交')}"  class="btn_lkgm" id="submits3" 
+                          msg="{:isL(L('PleaseLater'),'提交中...')}"
+                          style=" width:90%;margin:0 auto;height: 40px;
+                                           line-height:40px;font-size:20px;
+                                           background:#222;color:#fff;border-radius:4px;border:none; cursor:pointer;"/></td>
+                  </tr>
+              </table>
+          </form>
+     </div>
+  {/*评价弹层结束*/}  
+
+<script type="text/javascript">
+/*订单祥情*/
+function orderShow(orderId){
+    var url="{:U('Member/orderShow','','')}?order_id="+orderId;
+    $(".ddbg").fadeIn("fast",function(){
+          $('.ddbh').slideDown();
+          $.ajax({
+             type:'post',
+             url:url,
+             dataType:'text',
+             success:function(response,status,xhr){
+                 $('.ddbh').html(response);
+              }
+           });      
+     }); 
+}
+
+/*显示层*/
+function showTayer(node){
+	$(".ddbg").fadeIn("fast",function(){
+		$(node).slideDown()
+	 });
+}
+/*关闭层*/
+function hideTayer(node){
+	$(node).slideUp("fast",function(){
+		$('.ddbg').fadeOut()
+	 })
+}
+/*取决消*/
+function cancel(_this){
+	var li=$(_this).parents('li');
+	var h1=li.find('h1');
+	h1.children(".cjrf").toggle()
+	h1.children(".cjrz").toggle()
+	h1.siblings(".zhubb").slideToggle()
+	h1.parent("li").siblings("li").children(".zhubb").slideUp()
+	h1.parent("li").siblings("li").children("h1").children(".cjrf").hide()
+	h1.parent("li").siblings("li").children("h1").children(".cjrz").show()
+}
+
+
+<php>if($_GET['personal']){</php>
+   showPersonal();
+<php>}else if($_GET['address']){</php>
+    showAddress();
+<php>}else if($_GET['order']){</php>    
+    showOrder();
+<php>}</php>
+
+/*展开个资料*/
+function showPersonal(){
+   $('.personal').show();
+   $('.personal-cjrz').hide();
+   $('.personal-cjrf').css('display','inline-block');	
+}
+/*修改/删除后默人展开*/
+function showAddress(){
+   $('.address').show();
+   $('.address-cjrz').hide();
+   $('.address-cjrf').css('display','inline-block');
+}
+/*默人展开订单列表*/
+function showOrder(){
+   $('.order-list').show();
+   $('.order-cjrz').hide();
+   $('.order-cjrf').css('display','inline-block');    
+}
+
+/*添加/修改地址*/
+function updateAddress($id,chk){
+    if(chk) var checkOut="&check_out=ok";
+    else var checkOut='';
+    var url="{:U('Member/address','','')}?address_id="+$id+checkOut;
+	//alert(url);return;
+	$(".tjdzbg").fadeIn("fast",function(){
+	   $(".tjdzwrap").slideDown();
+	    $.ajax({
+		 type:'post',
+		 url:url,
+		 dataType:'text',
+		 success:function(response,status,xhr){
+			 //alert(response);return;
+			 $('#address-up').html(response);
+			  formInit('#address-up',true,true,true,true); //表单验证
+		  }
+	    });  	   
+   })	
+}
+</script>
+
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+            $(".chosen-select").chosen();
+ </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+
+<style type="text/css">
+dl dt{text-align:right;}    
+.pageFormContent dd{width:auto;}
+.pageFormContent label{width:auto;}
+</style>
+
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>       
+                <li></li>     
+                <li><a href="javascript:;"><span>通用信息</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/GoodsCategory/addSaveCombinationForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <if condition="!$_GET['id']">
+            <input type="hidden" name="pid" value="{$pid}"/>
+            <input type="hidden" name="path" value="{$path}"/>
+        </if>
+        <input type="hidden" name="id" value="{$_GET['id']}"/>
+        <div class="pageFormContent tabsContent" layoutH="95">
+          <div inited="1000" style="display: block;"></div>
+              <div inited="1000" style="display: block;"><!--通用资料内容-->
+              
+                 <dl style="width: 100%;display:<if condition="$save['is_category'] eq '0'">none<else />block</if>;">
+                    <dt>商品大类：</dt>
+                    <dd>
+                        <foreach name="cate" item='C'>
+                            <label>
+                                <input type="checkbox" name="goods_category_id[]" 
+                                <if condition="in_array($C['id'],$save['goods_category_id'])">checked="checked"</if>
+                                value="{$C['id']}" style="position:relative;  top:3px;" />{$C['name']}
+                            </label>
+                        </foreach>                      
+                    </dd>
+                 </dl>
+                               
+                 <dl style="width: 100%;">
+                    <dt>名称：</dt>
+                    <dd><input type="text" name="name" size="50" value="{$save.name}" class="required" /></dd>
+                 </dl>
+                                         
+                <dl style="width: 100%;margin-top: 10px;">
+                    <dt>排序：</dt>
+                    <dd><input type="text" name="reorder" size="50" value="<if condition="$save['reorder']">{$save.reorder}<else />0</if>" class="required digits"  /></dd>
+                 </dl>         
+
+                <dl style="width: 100%;margin-top: 10px;">
+                    <dt>是否显示：</dt>
+                    <dd>
+                         <input type="radio" name="is_show" value="1" 
+                         <if condition="$save['is_show'] eq 1">checked="checked"<elseif  condition="$save['is_show'] eq ''"/>checked="echecked"</if>/>显示
+                         <input type="radio" name="is_show" value="0" <if condition="$save['is_show'] eq '0'">checked="checked"</if> />不显示
+                    </dd>
+                 </dl>      
+                                                   
+                <dl style="width: 100%;height:50px;">
+                    <dt>描述：</dt>
+                    <dd><textarea name="description" cols="50" rows="10">{$save.description}</textarea></dd>
+                 </dl>    
+
+            <dl style="width: 100%;margin-top: 100px;display:<if condition="$_SESSION[C(SESSION_NAME_VAL)] eq C('RBAC_SUPERADMIN')">block<else />none</if>;">
+                <dt>组合名称：</dt>
+                <dd>
+                     <input type="radio" name="type_where" value="0"  
+                     <if condition="$save['type_where'] eq '0'">checked="checked"</if>/>产地
+                     
+                     <input type="radio" name="type_where" value="1" 
+                     <if condition="$save['type_where'] eq '1'">checked="checked"</if> />品种
+                     
+                     <input type="radio" name="type_where" value="2" 
+                     <if condition="$save['type_where'] eq '2'">checked="checked"</if> />价格区间           
+                     
+                     <input type="radio" name="type_where" value="3" 
+                     <if condition="$save['type_where'] eq '3'">checked="checked"</if> />酒精度数      
+
+                     <input type="radio" name="type_where" value="4" 
+                     <if condition="$save['type_where'] eq '4'">checked="checked"</if> />净含量          
+
+                     <input type="radio" name="type_where" value="5" 
+                     <if condition="$save['type_where'] eq '5'">checked="checked"</if> />适用场合         
+
+                     <input type="radio" name="type_where" value="6" 
+                     <if condition="$save['type_where'] eq '6'">checked="checked"</if> />酒香型    
+                                                                          
+                </dd>
+             </dl>    
+                 
+                <dl style="width: 100%;margin-top: 5px;display:<if condition="$_SESSION[C(SESSION_NAME_VAL)] eq C('RBAC_SUPERADMIN')">block<else />none</if>;">
+                    <dt>可选商品分类：</dt>
+                    <dd>
+                         <input type="radio" name="is_category" value="0"  
+                         <if condition="$save['is_category'] eq '0'">checked="checked"<else /></if>/>不可选
+                         <input type="radio" name="is_category" value="1" <if condition="$save['is_category'] eq '1'">checked="checked"</if> />可选
+                    </dd>
+                 </dl>    
+                                         
+           </div><!--通用信息-->
+                 
+          </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+        
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

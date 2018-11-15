@@ -1,0 +1,113 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="user_type" value="{$user_type}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->      
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    	<input type="hidden" name="user_type" value="{$user_type}" />
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  输入关键字：<input type="text" name="user_name" value="{$searchVal}"/>
+                </td>
+               <td>城市：</td>
+               <td>
+                <select class="combox" name="city_id" >
+                    <option value="">-全部城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.region_id}" <if condition='$_REQUEST["city"] eq $C["region_id"]'>selected="selected"</if>>{$C.html}{$C.region_name}</option>
+                   </foreach>  
+                </select>
+                </td>
+                <td>
+              <!-- <td>分类：</td> 	
+               <td>
+                <select class="combox" name="files_id" >
+                    <option value="">-全部分类-</option>
+                   <foreach name="cage" item='C'>                       
+                       <option value="{$C.files_id}" <if condition='$_REQUEST["files_id"] eq $C["files_id"]'>selected="selected"</if>>{$C.html}{$C.files_name}</option>
+                   </foreach>  
+                </select>
+                </td>-->
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+         <!--   <if condition="access('Shops/shopAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Shops/shopAdd')}"target="dialog" mask="true" width="1024" height="590" title="添加会员"><span>添加会员</span></a></li>
+            </if>-->
+            <if condition="access('Shops/shopDelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Shops/shopDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/shopsNotPass" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th>商铺地址</th>
+                <th>商铺名称</th>
+                <th>会员名称</th>         
+                <th orderfield="user_type"  class="<if condition='$user_type eq "desc"'>desc<else />asc</if>">所属城市</th>
+                <th>是否审核</th>
+                <th>加入时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="shops" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td><if condition="$V['catalog']">{$V.catalog}<else />{$V.member_id}</if></td>
+                <td>{$V.shop_name}</td>
+                <td>{$V.user_name}</td>
+                <td>{$V.city_name}</td>
+                <td>{$V.display|tpl_yes_no=###,'shops','display',$V['id'],'id','Member/good'}</td>
+                <td>{$V.add_time|date='Y-m-d',###}</td>      
+                <td>                
+                 {$action|tpl_action='dialog','Shops/shopAddSave','id/'.$V["id"].'/action/shopsNotPass','修改('.strip_tags($V['shop_name']).')','icon_edit.gif','icon_edit_not.gif'} <!--添加按钮-->
+                 <!--{$action|tpl_action='navTab','MemberAccount/accountList','id/'.$V["id"].'/name/'.$V['reg_email'],'会员明细帐','icon_account.gif','icon_account_not.gif'}--> <!--会员明细帐-->
+				  {$action|tpl_action='dialog','InstationInfo/sendInfo','id/'.$V["id"].'/type/shops/name/'.$V['shop_name'].'/action/shopsList','给('.$V['shop_name'].')服务商发站内信','icon_account.gif','icon_account_not.gif',1024,590} <!--给服务商发消息-->    
+                 {$action|tpl_action='ajaxTodo','Shops/shopDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"].'/action/shopsNotPass','确定执行删除('.strip_tags($V['shop_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

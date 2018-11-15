@@ -1,0 +1,169 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    
+     <input type="hidden" value="{$_REQUEST['order_sn']}" name="order_sn"/>     
+     <input type="hidden" value="{$_REQUEST['consignee']}" name="consignee"/>   
+     <input type="hidden" value="{$_REQUEST['add_time']}" name="add_time"/> 
+     <input type="hidden" value="{$_REQUEST['order_status']}" name="order_status"/> 
+     <input type="hidden" value="{$_REQUEST['shipping_status']}" name="shipping_status"/>
+     <input type="hidden" value="{$_REQUEST['pay_status']}" name="pay_status"/>
+	 <input type="hidden" value="{$_REQUEST['shops_id']}" name="shops_id"/><!--保存商户ID-->
+</form>
+
+<div class="pageHeader">
+   {/*今天订单不显示检索*/}
+    <if condition="!$today">
+        <form onsubmit="return navTabSearch(this);" action='' method="post">
+        <div class="searchBar">
+            <table class="searchContent">
+                <tr>
+                    <td>
+                      订单号：<input type="text" name="order_sn" value="{$_REQUEST['order_sn']}" size="20"/>
+                    <!--  收货人：<input type="text" name="consignee" value="{$_REQUEST['consignee']}" size="8"/>-->
+                      下订时间：<input type="text" name="add_time" value="{$_REQUEST['add_time']}" class="date textInput readonly valid" size="8"/>
+                      订单状态：<select name="order_status">
+                                           <option value="">全部</option>
+										   <option value="-1" <if condition="$_REQUEST['order_status'] EQ '-1'">selected="selected"</if> >已取消</option>
+                                           <option value="0" <if condition="$_REQUEST['order_status'] EQ '0'">selected="selected"</if> >未确定</option>
+                                           <option value="1" <if condition="$_REQUEST['order_status'] EQ '1'">selected="selected"</if>>已确定</option>
+                                           <option value="2" <if condition="$_REQUEST['order_status'] EQ '2'">selected="selected"</if>>交易完成</option>
+                                           <option value="3" <if condition="$_REQUEST['order_status'] EQ '3'">selected="selected"</if>>退款</option>
+                                           <option value="4" <if condition="$_REQUEST['order_status'] EQ '4'">selected="selected"</if>>退款完成</option>
+                                      </select>     
+                      支付状态：<select name="pay_status">
+                                           <option value="">全部</option>
+                                           <option value="0" <if condition="$_REQUEST['pay_status'] EQ '0'">selected="selected"</if> >未付款</option>
+                                           <option value="1" <if condition="$_REQUEST['pay_status'] EQ '1'">selected="selected"</if>>付款中</option>
+                                           <option value="2" <if condition="$_REQUEST['pay_status'] EQ '2'">selected="selected"</if>>已付款</option>
+                                      </select>  			
+                      配送状态：<select name="shipping_status">
+                                           <option value="">全部</option>
+                                           <option value="0" <if condition="$_REQUEST['shipping_status'] EQ '0'">selected="selected"</if> >未发货</option>
+                                           <option value="1" <if condition="$_REQUEST['shipping_status'] EQ '1'">selected="selected"</if>>备货中</option>
+                                           <option value="2" <if condition="$_REQUEST['shipping_status'] EQ '2'">selected="selected"</if>>已发货</option>
+                                      </select>  											  						                                                         
+                    </td>             
+                    <td>
+                        <div class="buttonActive" ><div class="buttonContent"><button type="submit">检索</button></div></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </form>
+    </if>    
+</div>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+        
+            <if condition="access('OrderInfo/exportExcelList')">
+            <li class="">
+                 <a class="icon" href="{:U(APP_APPS.'/OrderInfo/exportExcelList',array(C('VAR_PAGE')=>$currentPage),'xls')}" target="dwzExport" targettype="navTab" title="实要导出这些记录吗?这可能需要几分钟，请耐心等待">
+                 <span>导出EXCEL</span>
+                 </a>           
+            </li>
+            </if>
+                    
+            <if condition="access('OrderInfo/orderDel')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/OrderInfo/orderDel','','')}/{:C('VAR_PAGE')}/{$currentPage}/is_show/{$is_show}" class="delete"><span>删除所选</span></a></li>
+            </if>            
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="<if condition="!$today">90<else />65</if>"  id="list-table-goods-cate-order<if condition="!$today">-11</if>">
+        <thead>
+            <tr >
+                <th width="20%"><input type="checkbox" group="ids"  class="checkboxCtrl">订单号</th>
+                <th width="16%">下单(会员/时间)</th>
+                <th>总金额</th>
+				<!--<th>物流总费用</th>
+				<th>税率(%)</th>
+				<th>税金</th>-->
+                <th >应付金额<!--<sapn style="font-size:8px !important;color:#666;">(包含物流费、税金)</span>--></th>
+                <th>订单状态</th>
+				<!--<th>配送状态</th>
+				<th>支付状态</th>-->
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+           <foreach name="list" item="V">
+            <tr target="sid_user"  rel="{$V['order_id']}" class="{$V['pid']} showtr" id="{$V['pid']}_{$V['id']}">
+
+                    <td style="text-align:left;text-indent:5px;padding-left:<if condition="$V['pid'] gt 0">20<else />0</if>px;">
+					<if condition="$V['pid'] eq 0">
+					 <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$V['pid']}_{$V['id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-goods-cate-order<if condition="!$today">-11</if>')" />
+					  <input  value="{$V.order_id}" name="ids" type="checkbox" ><strong>{$V.order_sn}</strong><br/>
+
+					<else />
+					  <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$V['pid']}_{$V['id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-goods-cate-order<if condition="!$today">-11</if>')" />
+					  单号：<strong>{$V.order_sn}</strong>  <br/>
+					  <span style="padding-left:18px;">名称：{$V.shop_name}</span>
+					</if>  
+				  </td>
+
+                <td>
+                    <if condition="$V['user_name']">[{$V.user_name}]<else />[匿名用户]</if>
+                    <br/>{$V.add_time|date='Y-m-d H:i:s',###}</td>
+                <td>￥{$V.goods_amount}</td>
+				<!--<td>￥{$V.freight}</td>
+				<td>{$V['tax'] * 100}%</td>
+				<td>￥{$V['taxes']}</td>-->
+                <td>￥{$V.order_amount}</td>
+                <td>
+                    [{$orderStatus[$V['order_status']]}] 	
+					[{$shippingStatus[$V['shipping_status']]}]                     
+                   <if condition="$V['order_amount'] eq 0">
+                       [积分对换] 
+                    <elseif condition="$V['pay_type'] eq 1" />
+                        [到店自提]
+                    <elseif condition="$V['pay_type'] eq 2" />
+                        [货到付款]
+                    <else />
+                         [{$payStatus[$V['pay_status']]}]
+                    </if>   					
+				</td><!--订单状态-->
+				<!--发货状态
+				<td>[{$shippingStatus[$V['shipping_status']]}] </td>
+				<td>[{$payStatus[$V['pay_status']]}] </td>
+				<!--支付状态-->
+                <td>
+                <if condition="C('IS_LOGISTICS')">
+                    <if condition="$V['logistics_sn'] AND $V['logistics_id']">
+					    <a href="{:U(APP_APPS.'/OrderInfo/apiKuaidi100',array('order_id'=>$V["order_id"]))}" mask="true" target="dialog"  class="auto-size" title="查看物流">
+						    <img src="{:C('__IMG__')}/resize_png_new.png"/>
+						</a>                    
+                    <else />
+                        <span style="color:#ccc;"  title="暂无查看物流"><img src="{:C('__IMG__')}/resize_png_new.png"/></span> 
+                    </if>
+                </if>
+                  {$action|tpl_action='navTab','OrderInfo/orderShow','order_id/'.$V["order_id"],'订单详情'.strip_tags($V['order_sn']),'icon_view.gif','icon_view_not.gif'} <!--查看按钮-->
+                  <if condition="$V['order_status'] egt 3">
+                     <!--查看退货按钮-->
+                     {$action|tpl_action='navTab','OrderInfo/orderShow','order_id/'.$V["order_id"].'/tpl/orderRefund','查看退货订单'.strip_tags($V['order_sn']),'icon_output.gif','icon_output.gif'} 
+                  <else />
+                     <!--查看退货按钮-->
+                     <img src="{:C('__IMG__')}/icon_output_no.gif" />
+                  </if>
+                                          
+                    {$action|tpl_action='ajaxTodo','OrderInfo/orderDel','ids/'.$V["order_id"],'确定执行删除('.strip_tags($V['order_sn']).')订单？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->                                        
+                </td>
+            </tr>
+          </foreach>  
+        </tbody>
+    </table>
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>

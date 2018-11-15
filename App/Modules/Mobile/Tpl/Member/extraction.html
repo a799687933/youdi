@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>申请提现</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/mobileInfoPosition.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/jscript">
+$(function(){
+  valinit('.form1','post','',true,'bottomLeft',true);   
+});
+</script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">申请提现<a href="javascript:;history.back();" class="icon12"></a></h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+<div style="height:20px;"></div>
+<div class="member-content" style="font-size:0.7rem;margin-bottom:40px;">
+  <form method="get" action="{:U(is_m().'/Member/extractionForm')}" class="form1">
+   <ul  class="ul-style" style="text-indent:5px;">
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="money" value="{$memberBank.money}" id="money" class="input validate[required,maxSize[10],custom[onlyNumberSp]]" placeholder="提现金额" data-errormessage="提现金额错误" />
+     </li>   
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="band_name" value="{$memberBank.bank_name}" id="band_name" class="input validate[required,maxSize[100]]" placeholder="开户银行" data-errormessage="开户银行不可空"/>
+     </li>    
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="band_account" value="{$memberBank.bank_sn}" id="band_account" class="input validate[required,maxSize[100]]" placeholder="银行帐号" data-errormessage="银行帐号不可空" />
+     </li>    
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="user_name" value="{$memberBank.user_name}" id="user_name" class="input validate[required,maxSize[100]]" placeholder="帐户名称" data-errormessage="帐户名称不可空" />
+     </li>         
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="bank_child" value="{$memberBank.bank_child}" id="bank_child" class="input validate[required,maxSize[100]]" placeholder="开户网点" data-errormessage="开户网点不可空"/>
+     </li>           
+     <li style="line-height:280%;margin-top:1px;height:60px;">
+        <div style="height:10px;"></div>
+        <input type="submit" 
+        id="submits" 
+        value="提交" 
+        class="add-submit" 
+         style="width:90%;background:#c2161d;
+                    border:none;color:#fff;height:40px;line-height:40px;
+                    display:block;
+                    margin:0px auto;
+                    font-size:0.7rem;
+                    border-radius:4px;cursor:pointer;"/>       
+     </li>
+   </ul>  
+  </form> 
+{/*收货信息结束*/}
+             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<include file="Common:footer" />{/*页脚*/}
+</div>
+</body>
+</html>

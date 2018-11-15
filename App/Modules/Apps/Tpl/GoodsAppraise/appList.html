@@ -1,0 +1,80 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <!--<if condition="access('GoodsAppraise/delApp')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/GoodsAppraise/delApp','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除评述</span></a></li>
+            </if>-->
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="53">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <!--<th>编号</th>-->
+                <th>会员</th> 
+                <th>评分</th>     
+				 <th>评价内容</th>         
+                <th>是否审核</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>           
+        </thead>
+        <tbody>
+            
+           <volist name="appLists" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <!--<td>{$V.id}</td>-->
+                <td><img src="__ROOT__/{$V['head_pic']}" style="width:22px;height:22px;border-radius:50%;margin-right:3px;position:relative;top:5px;"/>{$V['user_name']}</td>
+                <td>{$V.score}</td> 
+				<td>
+				   {$V['content']|sub_str=###,50}
+				</td>        
+                <td>{$V.is_show|tpl_yes_no=###,'goods_appraise','is_show',$V['id'],'id','GoodsAppraise/updateApp'}</td>
+                <td>{$V.times|date='Y-m-d',###} </td>
+                <td>          
+                    <!--{$action|tpl_action='dialog','GoodsAppraise/appShow','id/'.$V["id"],'编辑评论','icon_edit.gif','icon_edit_not.gif','','','编辑评论'} -->
+                    {$action|tpl_action='dialog','GoodsAppraise/goodsComReply','goods_appraise_id/'.$V["id"].'/goods_id/'.$goods_id.'/user_id/'.$V['member_id'],'@'.$V['user_name'],'icon_edit.gif','icon_edit_not.gif','','','回复'}
+                     {$action|tpl_action='ajaxTodo','GoodsAppraise/delApp','goods_id/'.$goods_id.'/ids/'.$V["id"],'确定执行删除？','icon_drop.gif','icon_drop_not.gif','','','删除'}         
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <!--分页      
+            <span>显示</span>
+            <select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+            -->
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

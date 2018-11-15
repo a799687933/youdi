@@ -1,0 +1,86 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/VisitQuantity/spiderGetWeb","","")}" method="post">
+     <input type="hidden" name="display" value="{$displys}"/>   
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  <span style="float:left;position: relative;top:6px;">日期：</span><input type="text" name="dates" value="{$searchVal}" class="date" readonly="readonly" style="float:left;"/>
+                  <a class="inputDateButton" href="javascript:;">选择</a>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('VisitQuantity/delSpiderGetWeb')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/VisitQuantity/delSpiderGetWeb','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除文档</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th  orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="spider_name"  class="<if condition='$spider_name eq "desc"'>desc<else />asc</if>">蜘蛛名称</th>
+                <th orderfield="get_url"  class="<if condition='$get_url eq "desc"'>desc<else />asc</if>">爬取页面</th>       
+                <th orderfield="visit_time"  class="<if condition='$visit_time eq "desc"'>desc<else />asc</if>">爬取时间</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="visits" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V.spider_name}</td>
+                <td><a href="{$V.get_url}" target="_blank">{$V.get_url}</a></td>
+                <td>{$V.visit_time|from_time=###}</td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <!--分页      
+            <span>显示</span>
+            <select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+            -->
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

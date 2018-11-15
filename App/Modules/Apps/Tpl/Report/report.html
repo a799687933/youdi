@@ -1,0 +1,169 @@
+<script type="text/javascript">
+//PHP替换全局变量window.xxxxxx
+window.axisCount={$report.axisCount};
+window.axisStr= [{$report.axisStr}];
+window.linecDayStr=[{$report.linecDayStr}];
+window.linecDataStr=[{$report.linecDataStr}];//这里可以扩展多个数组
+var options = {
+    axis: "0 0 1 1", // Where to put the labels (trbl)
+    axisxstep: axisCount, // How many x interval labels to render (axisystep does the same for the y axis)
+    axisxlables: axisStr,
+    axisystep: 20,
+    shade:false, // true, false
+    smooth:true, //曲线
+    symbol:"circle"
+};
+
+$(function () {
+    
+    var pageHeight=450;
+    var pageWidth=parseInt($('.{$RaphaelClass}').css('width').replace('px',''))-80;   
+    window.linecHeight=pageHeight;
+    window.linecWhere=pageWidth;
+     $('#{$RaphaelDiv}').css('height',(parseInt(linecHeight)+50)+'px').css('width',(parseInt(linecWhere)+50)+'px');
+  
+    // Make the raphael object
+    var r = Raphael("{$RaphaelDiv}"); 
+    
+    var lines = r.linechart(
+        20, // X start in pixels
+        20, // Y start in pixels
+        linecWhere, // Width of chart in pixels
+        linecHeight, // Height of chart in pixels
+        linecDayStr, // Array of x coordinates equal in length to ycoords
+        linecDataStr, // Array of y coordinates equal in length to xcoords
+        options // opts object
+    ).hoverColumn(function () {
+        this.tags = r.set();
+
+        var box_x = this.x, box_y = 30,
+            box_w = 100, box_h = 80;
+        if (box_x + box_w > r.width) box_x -= box_w;
+        var box = r.rect(box_x,box_y,box_w,box_h).attr({stroke: "#f00", "stroke-width": 1, r:5});
+        this.tags.push(box);
+
+        for (var i = 0; i < this.y.length; i++) {
+             
+            //this.tags.push(r.blob(this.x, this.y[i], "$"+this.values[i]).insertBefore(this).attr([{ fill: "#ffa500", stroke: "#000"}, { fill: this.symbols[i].attr("fill") }]));
+            if(this.values[i]){
+                   var t = r.text(box_x+50, box_y+40 + i*16,this.values[i]).attr({fill: this.symbols[i].attr("fill")});
+                }else{
+                   var t = r.text(box_x+50, box_y+40 + i*16,"0");
+                }
+            
+            this.tags.push(t);
+        }
+        
+        
+    }, function () {
+        this.tags && this.tags.remove();
+    });
+
+    lines.symbols.attr({ r: 6 });
+});
+</script>
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<div class="pageHeader {$RaphaelClass}">
+        <form onsubmit="return navTabSearch(this);" action="__ACTION__" method="post">
+         <input type="hidden" name="table" value="{$table}" />   
+         <input type="hidden" name="field" value="{$filed}" />   
+         <input type="hidden" name="report" value="year" />  
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td></td>
+               <td>
+                <select class="combox" name="date" class="required">
+                    <option value="">-请选择年份-</option>
+                    <option value="2015" <if condition="$data eq 2015">selected="selected"</if>>--2015年--</option>
+                    <option value="2016" <if condition="$data eq 2016">selected="selected"</if>>--2016年--</option>
+                    <option value="2017" <if condition="$data eq 2017">selected="selected"</if>>--2017年--</option>
+                    <option value="2018" <if condition="$data eq 2018">selected="selected"</if>>--2018年--</option>
+                    <option value="2019" <if condition="$data eq 2019">selected="selected"</if>>--2019年--</option>
+                    <option value="2020" <if condition="$data eq 2020">selected="selected"</if>>--2020年--</option>
+                    <option value="2021" <if condition="$data eq 2021">selected="selected"</if>>--2021年--</option>
+                    <option value="2022" <if condition="$data eq 2022">selected="selected"</if>>--2022年--</option>
+					<option value="2023" <if condition="$data eq 2023">selected="selected"</if>>--2023年--</option>
+					<option value="2024" <if condition="$data eq 2024">selected="selected"</if>>--2024年--</option>
+					<option value="2025" <if condition="$data eq 2025">selected="selected"</if>>--2025年--</option>
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent ">
+     <div class="pageFormContent nowrap"  layoutH="90">
+            <div id="{$RaphaelDiv}" ></div>
+            <p style="border-top:1px solid #999;margin-left:10px;width:97%;height:20px;line-height:20px;">
+                   {$title}{$report.dateTime} (<b style="color:red;">{$report.count}</b>)  {$report.average}
+				   <if condition="$table eq 'order_info' ">
+				        订单总金额：￥<span style="color:red;"><if condition="$orderAmount['order_amount'] gt 0">{$orderAmount['order_amount']}<else />0</if></span>  | 
+						成功交易：￥<span style="color:red;"><if condition="$orderAmount['established'] gt 0">{$orderAmount['established']}<else />0</if></span>  | 
+						未确定：￥<span style="color:red;"><if condition="$orderAmount['notSure'] gt 0">{$orderAmount['notSure']}<else />0</if></span>  | 
+						已取消：￥<span style="color:red;"><if condition="$orderAmount['cancelled'] gt 0">{$orderAmount['cancelled']}<else />0</if></span>  | 
+						无效：￥<span style="color:red;"><if condition="$orderAmount['invalid'] gt 0">{$orderAmount['invalid']}<else />0</if></span>  | 
+						要处理退款：￥<span style="color:red;"><if condition="$orderAmount['refund'] gt 0">{$orderAmount['refund']}<else />0</if></span>  | 
+						退款商议中：￥<span style="color:red;"><if condition="$orderAmount['consult'] gt 0">{$orderAmount['consult']}<else />0</if></span>  | 
+						已退款：￥<span style="color:red;"><if condition="$orderAmount['refundOK'] gt 0">{$orderAmount['refundOK']}<else />0</if></span>  | 
+						不予退款：￥<span style="color:red;"><if condition="$orderAmount['gotGrant'] gt 0">{$orderAmount['gotGrant']}<else />0</if></span> 
+				   </if>
+            </p>    
+           <div>
+
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-1','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-1月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-1月报表</span>
+             </a>
+             
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-2','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-2月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-2月报表</span>
+             </a>
+
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-3','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-3月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-3月报表</span>
+             </a>
+               
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-4','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-4月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-4月报表</span>
+             </a>
+                            
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-5','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-5月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-5月报表</span>
+             </a>
+               
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-6','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-6月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-6月报表</span>
+             </a>               
+               
+               <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-7','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-7月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-7月报表</span>
+             </a>              
+
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-8','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-8月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-8月报表</span>
+             </a>
+               
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-9','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-9月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-9月报表</span>
+             </a>
+                            
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-10','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-10月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-10月报表</span>
+             </a>
+
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-11','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-11月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-11月报表</span>
+             </a>             
+
+              <a href="{:U(APP_APPS.'/Report/chart/',array('report'=>'month','date'=>$data.'-12','table'=>$table,'field'=>$filed,arrfiled=>$arrFiled))}" target="dialog" mask="true"  title="{$data}-12月{$title}报表" class="button auto-size" style="margin-right: 5px;">
+                  <span>{$data}-12月报表</span>
+             </a>   
+                          
+           </div>                           
+    </div>
+</div>
+

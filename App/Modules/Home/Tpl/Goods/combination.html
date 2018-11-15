@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$goods[pfix('goods_name')]|strip_tags=###}-{:C($langfx.'WEBNAME')}</title>
+<meta name="keywords" content="{$goods[pfix('commodity_key')]}" />
+<meta name="description" content="{$goods[pfix('commodity_description')]}" />
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/cart.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<script src="__COMMON__/Js/countdown.js"  type="text/javascript"></script>
+<script type="text/javascript" src="__PLUGINS__/Logistics/my-city-2245784.js"></script>
+<link rel="stylesheet" type="text/css" href="__PLUGINS__/Logistics/my-city-2245784.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__/js/gotop.js"></script>
+<script src="__HOME__/js/MagicZoom.js" type="text/javascript"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+	 $('.qbcpfllist').hide();		
+
+    //促销商品显示结束时间
+    langs.surplus="{:L('Surplus')}";
+    langs.hour="{:L('Hour')}";
+    langs.minute="{:L('Minute')}";
+    langs.seconds="{:L('Seconds')}";    
+    var times="{:time()}";
+    timited('show-date',$('#show-date').attr('endTime'),times);
+	
+ 	//选择属性
+	$('.radio_class').click(function(){
+		  var parentsNode=$(this).parents('.cpxximgltxt');	//最顶节点	
+		  var showPriceNode='#'+$(this).attr('show-price-id');
+	      var bClass=$(this).attr('parent-class'); //class样式
+		  $('.'+bClass).attr('class',bClass+' guige ');
+		  $(this).parent().attr('class','guige2 guige '+bClass);
+		  showPrice(parentsNode,showPriceNode);
+		  $(this).parents('.attr-list').css('border','none');
+	}); 
+});
+
+/*计算价格*/
+function showPrice(parentsNode,showPriceNode){
+	var cpxximgltxt=$('.cpxximgltxt');
+	for(var t=0;t < cpxximgltxt.length;t++){
+		//计算属性价格
+		var attrList=cpxximgltxt.eq(t).find('.attr-list').find('.radio_class');
+		var attrPrice=0;
+		for(var i=0;i < attrList.length;i++){
+			if(attrList.eq(i).attr('checked')){
+				attrPrice+=parseFloat(attrList.eq(i).attr('attr-price'));
+			}
+		}
+		//获取商品个数
+		var num=cpxximgltxt.eq(t).find('input[name="goods_num[]"]').val();
+		if(!isNaN(num)){
+			num=parseInt(num);
+		}else{
+			cpxximgltxt.eq(t).find('input[name="goods_num[]"]').val(1);
+			num=1;
+		}	
+		//获取原价格
+		var prices=parseFloat(cpxximgltxt.eq(t).find('#show-price_'+t).attr('price'));
+		//计总价
+		var total=fmoney((prices + attrPrice) * num);
+		$(cpxximgltxt.eq(t).find('#show-price_'+t)).text(total);			
+	}
+}
+
+/*修改数量*/
+function updateNumber(fuhao,_this){
+	   var parentsNode=$(_this).parents('.cpxximgltxt');	//最顶节点	
+	   var inputNumNode=$('input[name="goods_num[]"]');//数量input节点
+	   var showPriceNode='#'+$(_this).attr('show-price-id');
+	   var numRe=/^\d+$/;
+	   var _curNum = parseInt(inputNumNode.val());
+	   if(!numRe.test(_curNum)){ inputNumNode.val(1);return;}
+	   if(fuhao=="+"){
+		  inputNumNode.val(_curNum +1);
+	   }else if(fuhao=="-"){
+		  if(_curNum >1){
+		       inputNumNode.val(_curNum -1);
+		  }else if(_curNum==1){
+		        return;
+		  }
+	  }	
+	  var num=inputNumNode.val();
+	  var goodsId=parentsNode.find('input[name="goods_id[]"]').val();
+	  var url="{:get_up_url(array('update'=>mt_rand(1000,9000)),U('/Goods/updateNumber','',''),true)}&number="+num+"&goods_id="+goodsId;
+	  $.ajax({
+		 type:'post',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			 if(response[0][1]){
+			     showPrice(parentsNode,showPriceNode);
+			 }else{
+				  if(response[0][3]){
+					  window.location.href=response[0][3];
+				  }else{
+				     myAlert("{:isL(L('ErrorTips'),'失败提示')}",response[0][2],'','',response[0][6],3);
+				  }
+			 }
+		  }
+	  });	
+}
+
+/*立即购买*/
+function toCart(){
+    var cpxximgltxt=$('.cpxximgltxt');
+	var goodsIds='';
+	var AttrIds='';
+	var nums='';
+	var temp='';
+	var tempIds='';
+	for(var i=0;i < cpxximgltxt.length;i++){
+		$t=0;
+		goodsIds+=cpxximgltxt.eq(i).find('input[name="goods_id[]"]').val()+'.';
+		nums+=cpxximgltxt.eq(i).find('input[name="goods_num[]"]').val()+'.';
+		temp=cpxximgltxt.eq(i).find('.radio_class');
+		if(temp.length > 0){
+			for(var j=0;j < temp.length;j++){
+				if(temp.eq(j).attr('checked')){
+				   $t++;	
+				   tempIds+=temp.eq(j).val()+',';
+				}
+		   }	
+		   if($t==0){
+			   cpxximgltxt.eq(i).find('.attr-list').css('border','red 1px solid');
+			   myAlert("{:isL(L('ErrorTips'),'失败提示')}",'{:isL(L("SelectAttributes"),"SelectAttributes")}','','','',3);
+			   return;
+		   }
+		   tempIds=tempIds.substring(0,tempIds.length - 1);
+		   AttrIds+=tempIds+'.';
+		   tempIds='';
+		}else{
+		   AttrIds+='0.';
+		}
+
+	}
+	goodsIds=goodsIds.substring(0,goodsIds.length - 1);
+	nums=nums.substring(0,nums.length - 1);
+	AttrIds=AttrIds.substring(0,AttrIds.length - 1);
+	var url="{:get_up_url(array('add_cart'=>mt_rand(1000,9000)),U('Cart/addCart','',''),true)}&goods_id="+goodsIds+"&num="+nums+"&attr_id="+AttrIds;
+	window.location.href=url;
+}
+</script>
+<style type="text/css">
+ .slideTxtBoxpj .bd ul li .yhlist{
+     width: 760px;
+ }   
+ .slideTxtBoxpj .bd ul li .yhlist .yhxx{
+     width: 760px;
+ }
+ .slideTxtBoxpj .hd{
+     height: 46px;
+ }
+</style>
+<style type="text/css">
+.guige{padding:0 5px;margin-bottom:4px;}
+.guige2{background:url(__COMMON__/Images/icon95.jpg) no-repeat right bottom;border: 1px solid #ff4400;padding-right:12px;}
+.cpxximgltxt label{text-align:right}
+</style>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+ <div>{:isL(L('Position'),'你的位置')}：<foreach name="goods['poistion']" item="p"> > {$p['name']}</foreach> > {$goods[pfix('goods_name')]}</div>
+<div class="pro_read_top">
+ {/*篇历组合购买*/}
+  <foreach name="goods['list']" item="gl" key="keyt">
+ 
+   <div class="cpxqbox1l">
+    <div id="preview{$keyt}" class="spec-preview"> 
+       <span class="jqzoom">
+          <img jqimg="__ROOT__/{$gl['goods_photo'][0]['img']}" src="__ROOT__/{$gl['goods_photo'][0]['img']}" style="max-height:400px;max-width:400px;" />
+       </span> 
+    </div>
+    <!--缩图开始-->
+    <div class="spec-scroll"> <a class="prev"></a> <a class="next"></a>
+      <div class="items">
+        <ul>
+          <foreach name="gl['goods_photo']" item="img" key="key8">
+            <li><img bimg="__ROOT__/{$img.img}" src="__ROOT__/{$img.img}" onmousemove="preview(this,'#preview{$keyt}');"></li>
+          </foreach>
+        </ul>
+      </div>
+    </div>
+   </div><!--cpxqbox1l end-->
+   <div class="cpxximgltxt" style="border:none;">
+    <input type="hidden" name="goods_id[]" value="{$gl['id']}" />
+    <h1>{$gl['goods_name']}</h1>
+    <div class="cb pb20"></div>
+    
+    <div id="show-price-div" style="width:220px;float:left;padding-right:0;">
+    <if condition="C('IS_MRKET_PRICE')">
+        <label>{:isL(L('MarketValue'),'市场价')}：</label>
+        <p style="width:140px;padding-right:0;margin:0;">
+            <del class="cpxxtxt1 f14">{:getPrice($gl['goods_market_price'],true)}</del>
+        </p>
+        <div class="cb pb10"></div>
+     </if>
+    
+    {/*组合价格*/}
+    <if condition="$keyt gt 0">
+        <label>{:isL(L('SuperValue'),'超值价')}：</label>
+        <p style="width:140px;padding-right:0;margin:0;">
+                <del>{:getPrice($gl['goods_retail_price'],true)}{/*不含属性价格*/}</del>
+        </p>
+        <div class="cb pb10"></div>
+        
+        <label>{:isL(L('CombinedPrice'),'组合价格')}：</label>
+        <p style="width:140px;padding-right:0;margin:0;">
+            <strong class="cpxxtxt1 f20 hong">
+                 {:CUR()}<span id="show-price_{$keyt}" price="{:getPrice($gl['zhuhe_price'],false)}">{:getPrice($gl['zhuhe_price'],false)}</span>
+            </strong>
+        </p>
+        <div class="cb pb10"></div>
+    <else />
+        <label>{:isL(L('SuperValue'),'超值价')}：</label>
+        <p style="width:140px;padding-right:0;margin:0;">
+            <strong class="cpxxtxt1 f20 hong">
+                {:CUR()}<span id="show-price_{$keyt}" price="{:getPrice($gl['goods_retail_price'],false)}">{:getPrice($gl['goods_retail_price'],false)}
+                     {/*不含属性价格*/}
+                </span>
+            </strong>
+        </p>
+        <div class="cb pb10"></div>           
+    </if>
+    {/*组合价格*/}
+     
+    </div>
+    
+    {/*显示限时抢购*/}
+    <if condition="$gl['promotion']">
+        <div id="is-promotion" style="float:left;width:290px;height:50px;margin-left:1px;border:1px #f60 solid;">
+           <p style="height:22px;line-height:22px;font-size:14px;padding-left:5px;color:#f60;"  
+           id="show-date" endTime="{$gl['promotion']['promotion_end_date']}">
+                离结束时间:800小时55分35秒
+           </p>
+           <p style="height:28px;line-height:28px;font-size:14px;padding-left:5px;color:#f60;">
+               {:isL(L('PromotionPrice'),'促销价格')}:<b style="color:red;font-size:16px;">{:getPrice($gl['promotion']['promotion_price'],true)}</b>元
+           </p>
+        </div>
+    </if>
+    {/*显示限时抢购结束*/}  
+    <div style="height:1px; clear:both"></div>    
+    
+  
+    
+    {/*商品数量优惠*/}
+    <if condition="$gl['numPrice']">
+        <label>数量优惠：</label>
+        <p style="padding-right:0;margin:0;">
+            <foreach name="gl['numPrice']" item="np">
+                 <span style="border:1px #ccc solid;padding:2px 5px;margin:0 3px;">
+                      满{$np['discount_sum']}个<b style="color:red">{:getPrice($np['preferential'],true)}</b>
+                 </span>
+            </foreach>
+        </p>
+        <div class="cb pb10"></div>
+    </if>
+    {/*商品数量优惠*/}
+
+    {/*指定会员价格*/}
+    <if condition="$gl['gradePrice']">
+        <label>会员价格：</label>
+        <p style="padding-right:0;margin:0;line-height: 15px; ">
+            <foreach name="gl['gradePrice']" item="np">
+                 <span style="border:1px #ccc solid;padding:2px 5px;margin:0 3px;display:block;height:15px;width:150px !important;margin-top:5px;">
+                     {$np['grade_name']}<b style="color:red">{:getPrice($np['member_price'],true)}</b>
+                 </span>
+            </foreach>
+        </p>
+        <div class="cb pb10"></div>
+    </if>
+    {/*指定会员价格结束*/}    
+     
+    <label>{:isL(L('Evaluation'),'评    价')}：</label>
+     <p>
+	       <for start="0" end="$goodsScore['stars']"> 
+               <img src="__PUBLIC__images/icon66.jpg" alt=""/>
+           </for>
+     {$gl['review_score']} <span class="hei">{:isL(L('CommentNumber'),'评论数')}({$gl['review_count']})</span></p>
+    <div class="cb pb10"></div>
+    <!--<label>支付方式：</label><p>货到付款   网上支付   银行转账   充值卡支付   积分支付</p>-->
+    <div class="cb pb10"></div>
+    <div class="line mb20" style="margin-bottom:5px;"></div>
+    
+    {/*商品属性*/}
+    <if condition="$goods['attrs'][$gl['id']]">
+        <div class="attr-list" style="margin:5px;padding:3px;">
+            <foreach name="goods['attrs'][$gl['id']]" item="ar" key="keyec"> 
+            <label style="line-height:26px">{$ar['attribute_name']}：</label>
+                <foreach name="ar['attr_list']" key="akey" item="av">
+                   <div class="radio_name_{$keyt}_{$keyec} guige <if condition="$av['select']">guige2</if>" 
+                   style="position:relative;<if condition="$av['attr_pic']">padding-left:0;</if>">
+                         <if condition="$av['attr_pic']"><img src="{:showImg($av['attr_pic'])}" />&nbsp;</if> 
+                         {$av['attr_value']}
+                         <input type="radio" value="{$av.attr_id}" 
+                         <if condition="$av['select']">checked="echecked"</if>  
+                         parent-class="radio_name_{$keyt}_{$keyec}" 
+                         class="radio_class"  show-price-id="show-price_{$keyt}"
+                         attr-price="{:getPrice($av['attr_price'],false)}"
+                         name="attr_{$ar['attribute_id']}_{$gl['id']}"
+                         style="width:100%;height:100%;position:absolute;top:0;left:0;filter:alpha(opacity=0);
+                         -moz-opacity:0;-khtml-opacity: 0;opacity: 0; cursor:pointer;" />	               
+                   </div>
+                </foreach>
+            <div class="cb pb20"></div>
+            </foreach>
+        </div>
+    </if>
+    {/*商品属性结束*/}
+    
+   {/*主商品才可修改数量*/} 
+    <if condition="$keyt eq 0">
+        <label style="line-height:36px;">{:isL(L('Number'),'购买数量')}：</label>
+        <div class=" gmsl">
+              <a href="javascript:void(0)" onClick="updateNumber('-',this)" show-price-id="show-price_{$keyt}">-</a>
+                  <span><input type="text" value="1" id="number" name="goods_num[]" style="width:26px;height:31px;border:none;text-align:center;font-size:16px;" /></span>
+              <a href="javascript:void(0)" onClick="updateNumber('+',this)" show-price-id="show-price_{$keyt}">+</a>
+        </div>
+        <div class="cb "></div>
+        <div class="line pt20"></div>    
+    <else />
+        <label style="line-height:36px;">{:isL(L('Number'),'购买数量')}：</label>
+        <div class=" gmsl" style="cursor:n-resize;">
+              <a show-price-id="show-price_{$keyt}" >-</a>
+                  <span><input type="text" value="1" readonly="readonly" id="number" name="goods_num[]" style="width:26px;height:31px;border:none;text-align:center;font-size:16px;cursor:n-resize;" /></span>
+              <a show-price-id="show-price_{$keyt}">+</a>
+        </div>
+        <div class="cb "></div>
+        <div class="line pt20"></div>    
+    </if>
+    
+    <div class="cb " style="height:10px;"></div>
+   <span style="float:left">{:isL(L('YouCanAlso'),'你还可以')}</span>
+    <div class="bdsharebuttonbox bdshare-button-style0-16" style="float:left;margin-top:-5px; width:80px;display:inline" data-bd-bind="1444727629064">
+    <a href="javascript:void(0);" class="icon68 ml20 mr10" data-cmd="more" style="float:right"><img src="__PUBLIC__images/icon68.jpg" style="margin-top:-5px;"/>{:isL(L('Share'),'分享')}</a>
+    </div>    
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+    <!--<a href="javascript:void(0);" class="icon68 ml20 mr10">分享</a>-->
+    <a href="javascript:void(0);" onclick="myAlert('','','{:U('/Goods/collection',array('id'=>$gl['id'],'type'=>'goods'),'')}','')" class="icon69" style="float:left">
+         {:isL(L('Collection'),'收藏')}({$gl['gc_counts']})
+   </a> 
+   
+   <div class="cb"></div>
+       
+   </div><!--cpxximgltxt end-->
+   <div class="cb" ></div>
+   <div style="border-bottom:1px #ccc solid;height:1px;"></div>
+   </foreach>
+   <div style="text-align:center;height:40px;padding-top:10px;">
+      <input type="button" value="{:isL(L('AddCart'),'加入购物车')}" class="btn_jrgwc" onClick="toCart();" style="margin:10px 400px;display:inline" />
+  </div>
+  {/*篇历组合购买结束*/}
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

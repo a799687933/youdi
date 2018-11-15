@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{$result['titletext']} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/flexslider.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.min.js"></script>
+<script src="__PLUGINS__/kindeditor-4.1.10/kindeditor.js" type="text/javascript"></script>{/*kindeditor-4.1.10编辑器js*/} 
+<script src="__PLUGINS__/kindeditor-4.1.10/lang/{:getLang()}.js" type="text/javascript"></script>{/*kindeditor-4.1.10编辑器中文语言*/}
+<script type="text/javascript">
+{/*指定显示文本编辑器的按钮*/}
+window.items=[
+            'emoticons'
+]    
+</script>
+<script src="__PLUGINS__/kindeditor-4.1.10/kindelitor-config.js" type="text/javascript"></script>{/*kindeditor-4.1.10配置*/} 
+<script type="text/javascript">
+$(document).ready(function() {	
+$('.bxslider').bxSlider({
+	   controls: false,
+	   pager: null,
+	   auto:false
+	  });	
+ $(".icon62 span").click(function(){
+	 $(this).prevAll("span").addClass("now")
+	 $(this).addClass("now")
+	 $(this).nextAll("span").removeClass("now")
+	 })	
+	});
+</script>
+<!--[if IE]>
+		<script src="js/html5shiv.min.js"></script>
+<![endif]-->
+<script defer src="__HOME__/js/flexslider.js"></script> 
+<script>
+ $(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",directionNav: true,slideshow:false
+     
+      });
+	  $(".flexslider").hover(function(){
+		  $(this).toggleClass("flexslidernow")
+		  })
+    });
+</script>
+
+</head>
+
+<body style="background:#fff">
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<!--<div class="banner">
+  <ul class="bxslider">
+      <foreach name="ads" item="a">
+	     <li><a  <if condition="trim($a['ad_url'])">href="{$a['ad_url']}"</if> target="_blank"><img src="__ROOT__/{$a['ad_img']}" /></a></li>
+	  </foreach>
+	</ul>
+</div><!--banner end-->
+<div class="flexsliderwrap">
+				<div class="flexslider" >
+					<ul class="slides">
+                    <foreach name="ads" item="a" key="ak">
+						<li><b> {$ak+1} / {:count($ads)} </b>
+                        <table width="100%" height="100%">
+                  <tr>
+                      <td align="center" valign="middle" width="100%" height="100%">
+                          <a  <if condition="trim($a['ad_url'])">href="{$a['ad_url']}"</if> target="_blank"><img src="__ROOT__/{$a['ad_img']}" /></a>
+                      </td>
+                  </tr>
+             </table></li>
+                        </foreach>
+					</ul>
+                    
+			   </div>
+ </div>
+
+
+
+<div class="dptj">
+<div class="dptjl">
+ <div class="dptjlt">
+  <div class="dptjltt">
+  <h1>{$result['titletext']|strip_tags=###}</h1>
+  <p class="dptjlttm">{$result['bewrite']|strip_tags=###}</p>
+  <p class="dptjlttb"><span>By Eric Hsu · {:date('Y.m.d',$result['addtime'])}</span><!-- {$result['author']} {:date('Y.m.d',$result['addtime'])}--></p>
+  </div>
+  <div class="dptjltb">{$result['content']|stripcslashes=###}</div>
+ </div>
+ <!--
+ <div class="dptjlb">
+  <p class="pb5"><a href="" class="icon27a"></a><a href="" class="icon27b"></a><a href="" class="icon27c"></a><a href="" class="icon27d"></a><a href="" class="icon27e"></a><a href="" class="icon27f"></a></p>
+  <div class="dptjlbm">
+   <form action="{:U('Article/commnetForm')}" class="comment">
+       <input type="hidden"  name="id" value="{$result['id']}"/>
+       <textarea id="saytext" name="content" class="dptjlbm_text kindeditor" style="padding-bottom:10px;"></textarea>
+       <a href="javascript:void(0)" class="icon27j emotion" style="background: none; display:none"></a>
+       
+       <input type="submit" id="comment" msg="{:isL(L('PleaseLater'),'提交中...')}"
+       style="min-width:80px;height:30px;padding:0 3px;line-height:28px;color:#000;background:#fff;font-size:14px;border:none;float:right;display:block;border:1px solid #ccc; position:absolute; right:10px; bottom:5px" 
+       value="{:isL(L('Comment'),'评论')}" info-text="comment-t"/>
+       
+   </form>   
+  </div>
+  <p class="tsy comment-t" style="text-align:left;margin-top:-10px;border-top:none;">评论提示层</p>
+  <script type="text/javascript">       
+         //提交评论
+	    formInit('.comment',true,true,true,true);    
+  </script>
+  <span class="icon62">
+   <span></span><span></span><span></span><span></span><span></span>
+  </span>
+  
+  <span class="lh30 f16 col000 pl10 vam">Wonderful index</span>
+  <if condition="$clicks['id']">
+     <a  class="icon27ib fr">{:isL(L('Like'),'点赞')}({$result['like_count']})</a>
+  <else />
+     <a href="{:U('Article/clickLike',array('id'=>$result['id']))}" class="icon27i fr">{:isL(L('Like'),'点赞')}({$result['like_count']})</a>
+   </if>
+ </div><!---->
+ 
+ 
+ 
+</div><!--dptjl end-->
+ <include file="Article:right" />
+<div class="cb"></div>
+<!--<div class="dptjr"><div class="ph20">
+<p class="f16">SUBSCRIBE</p>
+<p class="f24 pv20">YOUDI WU</p>
+<p class="f12 pb30 lh22">Receive update to our latest bews,features
+and exclusive offers from YOUDI WU inour
+newsletter.</p>
+ <script type="text/javascript">
+   $(function(){
+       //提交订阅1
+       formInit('.form1',false,true,true,true);     
+   });  
+ </script>
+<form method="post" action="{:U('EmailSubscribe/saveEmail')}" class="form1">
+<input type="text" name="email"  placeholder="{:isL(L('SubscribeTo'),'订阅电子报')}" class="dptjr_input validate[custom[email],required]" info-text="email-text2" error-info="{:isL(L('EnterYourEmail'),'请输入您的电邮地址')}" error-other="{:isL(L('EmailFormatError'),'请输入正确的电邮地址')}"/>
+<input type="submit" id="submits1" msg="{:isL(L('PleaseLater'),'提交中...')}" value="Submit" class="dptjr_btn"/>
+<div style="clear:both"></div>
+<p class="tsy email-text2" style="width:65%;text-align:left">提示层</p>
+</form>
+<div class="cb"></div>
+</div></div>
+<div class="cb pv10"></div>-->
+
+
+
+
+</div><!--zxzx end-->
+ 
+<!--content end-->
+ <include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript">
+    $(function(){
+        setTimeout(function(){
+            $('.ke-container').css('width','100%');
+        },500);
+        
+    });    
+</script>
+</body>
+</html>

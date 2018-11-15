@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+    var ps = $("#div_pro").position();  
+    $("#div_pro").mouseenter(function () {  
+        $("#float_box").show();  
+    });  
+    $("#float_box").mouseleave(function () {  
+        $("#float_box").hide();  
+    });  
+});  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                 <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > {:isL(L('MyFavorites'),'我的收藏')}
+             </p>          
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+           <table class="my-table my-table-bot-border" >
+             <tbody>
+             <tr>
+                 <td align="center" ><strong>{:isL(L('Thumbnail'),'缩略图')}</strong></td>
+                 <td align="center" ><strong>{:isL(L('CommodityName'),'商品名称')}</strong></td>
+                 <td align="center" ><strong>{:isL(L('CollectionTime'),'收藏时间')}</strong></td>
+                 <td align="center" ><strong>{:isL(L('Operation'),'操作')}</strong></td>
+                </tr>
+                    <foreach name="result" item="nos">
+                        <tr>
+                         <td align="center">
+                             <a class="col666" href="{:U('Goods/index',array('html'=>'goods_'.$nos['goods_id']))}"  target="_blank">
+                                  <img src="__ROOT__/{$nos.goods_thumb}" style="height:50px;" />
+                             </a>
+                         </td>
+                         <td align="left">{$nos.goods_name}</td>
+                         <td align="center">{$nos.add_time|date="Y-m-d H:i:s",###}</td>
+                         <td align="center">
+                                <a class="col666" href="{:U('Goods/index',array('html'=>'goods_'.$nos['goods_id']))}"  target="_blank">{:isL(L('Look'),'查看')}</a> |
+                                <!--<a class="col666" href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$nos['goods_id']}')"  target="_blank">放入购物车</a> |-->
+                                <a class="col666" 
+                                href="javascript:void(0);"  
+                                onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}','{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                                '{:U('Member/delCollection',array('id'=>$nos['rec_id']))}','')">{:isL(L('Delete'),'删除')}</a>
+                         </td>
+                        </tr>
+                    </foreach>
+               </tbody>
+             </table>                
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

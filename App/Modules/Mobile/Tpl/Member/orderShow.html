@@ -1,0 +1,424 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>订单祥情</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/mobileInfoPosition.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/jscript">
+$(function(){
+  valinit('.form1','get','',true,'bottomLeft',true);   
+  valinit('.form2','post','',true,'bottomLeft');   
+});
+</script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt"><span style="font-size: 0.7rem;">订单号：{$order.order_sn}</span><a href="javascript:;history.back();" class="icon12"></a></h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+
+<div class="member-content" style="font-size:0.7rem;margin-bottom:40px;">
+  {/*订单状态*/}     
+  <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">订单状态</p>
+  <ul  class="ul-style" style="text-indent:5px;">                 
+      <li style="line-height:50px;"> 
+         {:isL(L('SingleTime'),'下单时间')}：{$order.add_time|date='Y-m-d H:i:s',###} 
+      </li>   
+      
+      <li style="line-height:50px;margin-top:1px;"> 
+         {:isL(L('OrderStatus'),'订单状态')}：
+         [{$orderStart[$order['order_status']]}]{/*订单状态*/}
+      </li>
+      <li style="line-height:50px;margin-top:1px;"> 
+         {:isL(L('PaymentStatus'),'付款状态')}：
+             <php>if($order['order_amount'] == 0){</php> 
+                 积分对换
+             <php>}else if($order['pay_type'] == 1){</php>
+                 到店自提
+             <php>}else if($order['pay_type'] == 2){</php>
+                货到付款
+             <php>}else{</php>
+                   <if condition="$order['pay_status'] eq 0">
+                      {:isL(L('Unpaid'),'未付款')}  
+                       <if condition="($order['order_status'] lt 2) AND ($order['order_status'] eq 0 OR $order['order_status'] eq 1)">
+                           <php>if($order['pay_type'] == 0){</php>
+                              <input type="button" value="{:isL(L('PayNow'),'现在支付')}" 
+                              onClick="javascript:;window.location.href='{:U(is_m().'/Member/selectPay',array('order_id'=>$_GET['order_id']))}';" 
+                              style="width:100px;margin-left: 10px;background:#c2161d;border:none;color:#fff;
+                              height:25px;line-height:25px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+                          <php>}else if($order['pay_type'] ==3){</php>
+                              <input type="button" value="{:isL(L('PayNow'),'余额支付')}" onClick="edcfsAed('#publishs',true,60,'');" 
+                              style="width:100px;margin-left: 10px;background:#c2161d;border:none;color:#fff;
+                              height:25px;line-height:25px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+                          <php>}</php>                                                              
+                         </if>
+                      <elseif condition="$order['pay_status'] eq 1" />
+                          {:isL(L('PaymentIn'),'付款中')}
+                      <elseif condition="$order['pay_status'] eq 2" />      
+                          <span style="color:green;">{:isL(L('AccountPaid'),'已付款')}</span>
+                      </if>                                                 
+             <php>}</php>                            
+      </li>
+      
+      <li style="line-height:50px;margin-top:1px;"> 
+          {:isL(L('DeliveryStatus'),'配送状态')}：
+          <if condition="$order['shipping_status'] eq 0">
+              {:isL(L('NonDelivery'),'未发货')}
+          <elseif condition="$order['shipping_status'] eq 1" />
+              <span style="color:green;">{:isL(L('Stocking'),'备货中')}</span>
+          <elseif condition="$order['shipping_status'] eq 2" />      
+              <span style="color:blue;">{:isL(L('Delivered'),'已发货')}</span>  
+               <if condition="$order['order_status'] eq 0 OR $order['order_status'] eq 1">
+                  <input type="button" value="{:isL(L('DetermineCompletion'),'确定交易')}" 
+                  onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}','{:isL(L('ISDELETE'),'操作不可恢复确定执行本次操作？')}','{:U('Member/comDeal','','')}?order_id={$order['order_id']}','','{:is_m()}',2)" 
+                  style="width:3rem;margin-left: 5px;background:#c2161d;border:none;color:#fff;font-size0.6rem;
+                  height:25px;line-height:25px;border-radius:4px;cursor:pointer;" id="to-pay"/>
+                  
+                  <input type="button" value="{:isL(L('ApplicationForRefund'),'申请退款/退货')}" onClick="edcfsAed('#publishs1',true,60,'');" 
+                  style="width:5.2rem;margin-left: 5px;background:#c2161d;border:none;color:#fff;font-size0.6rem;
+                  height:25px;line-height:25px;border-radius:4px;cursor:pointer;" id="to-pay"/>		
+             </if>	  											  												    
+          <elseif condition="$order['shipping_status'] eq 3" />       
+              <span style="color:green;">{:isL(L('ReceivedGoods'),'已收货')}</span>                                                                                                                                  
+          </if>             
+      </li>                             
+ </ul>    
+  {/*订单状态结束*/}    
+ 
+  {/*退款/退货原因*/}  
+  <if condition="$order['order_status'] eq 3 OR  $order['order_status'] eq 4">   
+      <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">退款/退货原因</p>
+      <div style="background:#fff;min-height:150px;text-indent:5px;padding:10px;line-height:250%">{$order.order_message}</div>
+  </if>
+  {/*退款/退货原因结束*/}  
+  
+  {/*商品清单*/}       
+   <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">商品清单</p>   
+   <ul  class="ul-style" style="text-indent:5px;">   
+     <foreach name="order['goodsList']" item="go">
+       <li style="line-height:200%;margin-top:1px; position:relative" class="arrow">
+          <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$go['goods_id']))}" style="display:block;color:#000">
+           <dl style="height:auto">
+               <dt style="width:2rem;float:left;"><img src="__ROOT__/{$go.goods_thumb}" style="height:2rem;"></dt>
+               <dd>
+                     {$go[pfix('goods_name')]|strip_tags=###|sub_str=###,15}<br/>
+                     <span style="color:red">
+                        <if condition="$order['is_gift'] eq 1">
+                           {:isL(L('PremiumValue'),'赠品价值')}({:getPrice($go['goods_price'],true)})
+                        <else />
+                           {:getPrice($go['goods_price'],true)}
+                        </if>  <br/>
+                        <span style="color:#666">
+                            <if condition="$order['is_gift'] eq 1">
+                                    {:isL(L('Giveaway'),'赠品')}
+                            <else />
+                                  {$go.goods_number}x{$go.goods_number} = {:getPrice(number_format($go['goods_price'] * $go['goods_number'],2, '.', ''),true)}
+                            </if>    
+                        </span>                       
+                    </span>                      
+               </dd>
+               <dd style=" clear:both"></dd>
+           </dl>
+          </a>
+          <span style="position:absolute;right:2rem;bottom:0;">
+              <if condition="$order['pay_status'] eq 2 AND $order['order_status'] eq 2"> 
+                    <if condition="$go['is_reviews']">
+                        <a href="{:U(is_m().'/Member/appraise',array('order_id'=>$_GET['order_id'],'goods_id'=>$go['goods_id']))}">{:isL(L('ViewEvaluation'),'查看评价')}</a>
+                    <else />
+                        <a href="{:U(is_m().'/Member/appraise',array('order_id'=>$_GET['order_id'],'goods_id'=>$go['goods_id']))}">{:isL(L('EvaluationOfGoods'),'评价商品')}</a>
+                    </if>    
+              <else />
+                    <span style="color:#ccc;display:inline;">{:isL(L('EvaluationOfGoods'),'评价商品')}</span>
+              </if>           
+          </span>
+         <div style=" clear:both"></div>
+       </li>
+     </foreach>
+      <div style=" clear:both"></div>
+   </ul>
+  {/*商品清单结束*/}   
+  
+  {/*显示费用*/}   
+  <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">{:isL(L('TotalCost'),'费用总计')} </p>      
+  <ul  class="ul-style" style="text-indent:5px;"> 
+         <li style="line-height:280%;margin-top:1px;">   
+             {:isL(L('TotalAmount'),'总金额')} ({:getPrice($order['goods_amount'],true)})
+         </li>  
+        
+         <if condition="$order['pay_points'] OR $order['rank_points'] OR $order['give_red']">
+           <li style="line-height:280%;margin-top:1px;">
+                 {:isL(L('YouWillGet'),'您将获得')}   
+                  <if condition="$order['pay_points']">{:isL(L('PointsConsumption'),'消费积分')}({$order.pay_points})</if>
+                  <if condition="$order['rank_points']">{:isL(L('LevelPoints'),'等级积分')}({$order.rank_points})</if>
+                  <if condition="$order['give_red']">{:isL(L('CashCoupon'),'现金券')}({$order.give_red})</if>                  
+           </li>
+          </if>
+          
+          {/*使用现金卷*/}
+          <if condition="$order['bonus_name'] AND $order['bonus_money']">
+              <li style="line-height:280%;margin-top:1px;">
+                    {:isL(L('PreferentialVolume'),'已使用现金卷')} ({$order.bonus_name})  ：    -{:getPrice($order['bonus_money'],true)}  
+              </li>
+          </if>	      
+          {/*使用现金卷结束*/}        
+
+      {/*使用消费积分*/}
+      <if condition="$order['use_integral'] AND $order['integral_money']">  
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('UseConsumptionIntegral'),'已使用消费积分')}({$order.use_integral})：    -{:getPrice($order['integral_money'],true)}  
+          </li>   
+       </if>
+      {/*使用消费积分结束*/}                     
+
+      {/*物流费用*/}
+      <if condition="$order['freight'] gt 0"> 
+          <li style="line-height:280%;margin-top:1px;">   
+              {:isL(L('LogisticsCost'),'物流')}：    +{:getPrice($order['freight'],true)} 
+          </li>       
+      </if>
+      {/*物流费用结束*/}   
+
+     {/*总税款金额*/}
+     <if condition="$order['taxes'] gt 0">   
+         <li style="line-height:280%;margin-top:1px;">   
+              {:isL(L('TotalTaxAmount'),'总税款金额')}：    +{:getPrice($order['taxes'],true)}  
+         </li>     
+     </if>
+     {/*总税款金额结束*/}        
+     
+     <li style="line-height:280%;margin-top:1px;"> 
+          {:isL(L('TotalPayable'),'应付金额')} (<strong style="color:red;"> {:getPrice($order['order_amount'],true)}</strong>)
+     </li>     
+  </ul>
+ {/*显示费用结束*/} 
+ 
+{/*发票内容*/} 
+<if condition="$invs">
+ <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">
+        {:isL(L('InvoiceInformation'),'发票信息')} 
+        <span style="color:red;">
+            (<span style="color:red;">
+               <if condition="$order['is_inv'] eq 1">
+                   {:isL(L('CommonInvoice'),'普通发票')}
+               <elseif condition="$order['is_inv'] eq 2" />
+                   {:isL(L('VATspecialticket'),'增值税发票')}
+               </if></span>)
+        </span> 
+ </p>  
+ <ul  class="ul-style" style="text-indent:5px;">
+     <if condition="$order['is_inv'] eq 1">
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('InvoiceTitle'),'发票抬头')}：{$invs.inv_title}
+          </li>
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('InvoiceContent'),'发票内容')}：{$invs.inv_content}
+          </li>          
+      <elseif condition="$order['is_inv'] eq 2" />
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('UnitName'),'单位名称')}：{$invs.company_name}
+          </li>   
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('IdentificationCode'),'纳税人识别码')}：{$invs.id_code}
+          </li>      
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('RegisteredAddress'),'注册地址')}：{$invs.reg_address}
+          </li>  
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('RegisteredPhone'),'注册电话')}：{$invs.reg_tel} 
+          </li>          
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('OpeAccount'),'开户银行')}：{$invs.bank_name}
+          </li>  
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('BankAccount'),'银行账户')}：{$invs.bank_sn} 
+          </li>  
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('InvoiceContent'),'发票内容')}：{$invs.inv_content}   
+          </li>   
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('InvoiceName'),'收票人姓名')}：{$invs.shou_piao}  
+          </li>         
+          <li style="line-height:280%;margin-top:1px;"> 
+             {:isL(L('InvoiceMobile'),'收票人手机')}：{$invs.shou_mobile} 
+          </li>    
+          <li style="line-height:280%;margin-top:1px;"> 
+              {:isL(L('Address'),'地址')}：{$invs.address} 
+          </li>                                                                             
+      </if>       
+  </ul>
+ </if>
+ {/*发票内容结束*/} 
+
+{/*收货信息*/} 
+ <p style="height:30px;line-height:30px;font-size:0.7rem;text-indent:5px;margin:10px 0;">收货信息</p>  
+  <form action="{:U(is_m().'/Member/orderShow')}" method="post" name="theForm" class="form1">
+   <input type="hidden"  name="order_id" value="{$_GET['order_id']}" />
+   <input type="hidden" value="1" name="address_update" />  
+   <ul  class="ul-style" style="text-indent:5px;">
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="country"  onChange="getPlace(this,true)" id="country" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('Country'),'国家')}</option>
+                     {$order['region'][0]}
+            </select>
+         </div>
+     </li>
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="province"  onChange="getPlace(this,true)" id="province" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('Province'),'省份')}</option>
+                     {$order['region'][1]}
+            </select>
+         </div>
+     </li>   
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="city" onChange="getPlace(this,true)" id="city" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('City'),'城市')}</option>
+                     {$order['region'][2]}
+            </select>
+         </div>
+     </li>    
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="district"   id="district">
+                     <option value="">{:isL(L('District'),'区县')}</option>
+                     {$order['region'][3]}
+            </select>
+         </div>
+     </li> 
+     
+     <li style="line-height:280%;margin-top:1px;">
+        <input name="address" id="address" 
+        value="{$order.address}" type="text" placeholder="详细街道" 
+        data-errormessage="详细街道不可空"
+        class="input validate[required]"/>
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input name="consignee" id="consignee" 
+        value="{$order.consignee}" type="text" placeholder="收货人姓名" 
+        data-errormessage="收货人姓名不可空" class="input validate[required]"/>
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input name="mobile" id="mobile" 
+        value="{$order.mobile}" type="text" placeholder="收货人手机" 
+        data-errormessage="收货人手机不可空" class="input validate[required]"/>
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input name="tel" id="tel" value="{$order.tel}" type="text" placeholder="收货人电话" class="input" />
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;">
+       <input name="zipcode" value="{$order.zipcode}" type="text" placeholder="邮政编码" class="input" />
+     </li>
+
+     <li style="line-height:280%;margin-top:1px;height:60px;">
+        <div style="height:10px;"></div>
+        <input type="submit" 
+        id="submits" 
+        value="保存收货地址" 
+        class="add-submit" 
+		 style="width:90%;background:#c2161d;
+					border:none;color:#fff;height:40px;line-height:40px;
+                    display:block;
+                    margin:0px auto;
+                    font-size:0.7rem;
+					border-radius:4px;cursor:pointer;"/>       
+     </li>
+   </ul>  
+  </form> 
+{/*收货信息结束*/}
+             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<div class="footer-empty"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>
+  
+ {/*余额支付弹出层 */}
+     <div id="publishs" style="width:14rem;height:130px;background:#fff;border-radius: 6px;display:none" class="jqddtable">
+         <div style="height:40px;line-height:40px;text-indent:10px;font-size:0.6rem;">
+         <a href="javascript:void(0);" style="float:right;color:red;margin-right:10px;font-size:0.7rem;" onclick="closeEdcfsAed('#publishs')">×</a>
+        请填写会员密码 <span id="files-id"></span>
+         </div>
+          <form  action="{:U('Member/balancePays','','')}" class="form2">     
+              <input type="hidden" value="{$order.order_id}" name="order_id" />   
+              <table cellpadding="0" cellspacing="1" border="0" class="my-table" style="width:98%;margin:3px auto;">
+                  <tr>
+                       <td style="font-size:0.6rem;">
+                            <input type="password" name="user_password" id="user_password" 
+                            style="border-bottom:1px #ccc solid;"
+                            placeholder="登录密码"
+                            data-errormessage="请输入登录密码"
+                            class="input validate[required]" />
+                        </td>
+                   </tr>	
+                   				   					   			   				   				     				   
+                  <tr style="border:none;">
+                          <td>
+                               
+						        <input type="hidden" value="submits2" name="submits"/>
+						        <input type="submit" value="支 付"  id="submits2"
+                                            id="submits1" 
+                                           style="
+                                               cursor:pointer;padding:0;width:120px;height:30px;
+                                               margin-top:10px;
+                                               border-radius: 3px;background:#8c3600;color:#fff;font-size:0.5rem;border:#8c3600"
+                                />
+						 </td>
+                  </tr>
+              </table>
+          </form>
+     </div>
+  {/*余额支付弹出层 结束*/}
+  
+ {/*退款退货原因*/}
+     <div id="publishs1" style="width:15rem;height:250px;background:#fff;border-radius: 6px;display:none;font-size:0.6rem;" class="jqddtable">
+         <div style="height:40px;line-height:40px;font-size:16px;padding:5px;padding-left:20px;">
+         <a href="javascript:void(0);" style="float:right;font-size:0.7rem;color:red;padding-right:10px;" onClick="closeEdcfsAed('#publishs1')">×</a>
+         {:isL(L('RefundReason'),'退货/退款原因')}
+         </div>
+          <form method="get" action="{:U('/Member/refund')}" class="form1">
+             <input type="hidden" value="{$order.order_id}" name="order_id" />
+              <table  class="my-table" style="width:100%">
+                  <tr>
+                       <td align="left" style="text-align:left;padding-left:20px;">
+                           <textarea name="order_message" id="order_message" style="width:90%;height:160px;border:1px #eee solid;resize: none;" class="validate[required]"></textarea>
+                        </td>
+                   </tr>           
+                  <tr style="border:none;">
+                          <td align="left" style="text-align:left;padding-left:20px;">
+                          <input type="submit" 
+                          value="{:isL(L('Submit'),'提交')}"  class="btn_lkgm" id="submits" 
+                          style=" width:200px;margin:0 auto;height: 30px;
+                                           line-height:30px;font-size:20px;
+                                           background:#a6080f;color:#fff;border-radius:4px;border:none; cursor:pointer;"/></td>
+                  </tr>
+              </table>
+          </form>
+     </div>
+  {/*退款退货原因结束*/}  
+  
+</body>
+</html>

@@ -1,0 +1,229 @@
+<style type="text/css">
+.show_face{
+	width:288px;height:110px;border:1px #666 solid;background:#fff;border-radius:6px;position:absolute;
+	top:30px;
+	left:-12px;
+	display:none; z-index:100
+}
+.up-arrow1{position:absolute;top:15px;z-index:102;font-size:22px;color:#000;left:3px;display:none;}
+.up-arrow2{position:absolute;top:16px;z-index:102;font-size:22px;color:#fff;left:3px;display:none;}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ .up-arrow1{top:19px}  
+ .up-arrow2{top:20px} 
+ .show_face{ top:34px;}
+}
+@media screen and (max-width:767px){
+	.up-arrow1{top:19px !important}  
+ .up-arrow2{top:20px !important} 
+	}
+
+
+.show_face ul li{
+    width:35px;
+	height:30px;
+    border-left: 1px dashed #e5e5e5;
+    float: left;
+    margin: 0;	
+}
+.show_face ul li span,.pjbbtxt span{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin: 8px 9px;
+    overflow: hidden; vertical-align:middle
+}
+.show_face ul{border-top: 1px dashed #e5e5e5;height:35px;}
+.show_face ul li span.face-item,.pjbbtxt span.face-item{
+    background: url(__COMMON__/Images/face-map.png) no-repeat center;
+	/**background-size:26px 557px;**/
+	cursor:pointer;
+}
+.show_face ul li span.face_01,.pjbbtxt span.face_01{
+   background-position: -2px -2px;
+}
+.show_face ul li span.face_02,.pjbbtxt span.face_02{
+   background-position: -2px -24px;
+}
+.show_face ul li span.face_03,.pjbbtxt span.face_03{
+   background-position: -1px -49px;
+}
+.show_face ul li span.face_04,.pjbbtxt span.face_04{
+   background-position: -2px -73px;
+}
+.show_face ul li span.face_05,.pjbbtxt span.face_05{
+   background-position: -2px -97px;
+}
+.show_face ul li span.face_06,.pjbbtxt span.face_06{
+   background-position: -2px -121px;
+}
+.show_face ul li span.face_07,.pjbbtxt span.face_07{
+   background-position: -2px -145px;
+}
+.show_face ul li span.face_08,.pjbbtxt span.face_08{
+   background-position: -2px -168px;
+}
+.show_face ul li span.face_09,.pjbbtxt span.face_09{
+   background-position: -2px -192px;
+}
+.show_face ul li span.face_10,.pjbbtxt span.face_10{
+   background-position: -2px -215px;
+}
+.show_face ul li span.face_11,.pjbbtxt span.face_11{
+   background-position: -2px -238px;
+}
+.show_face ul li span.face_12,.pjbbtxt span.face_12{
+   background-position: -2px -260px;
+}
+.show_face ul li span.face_13,.pjbbtxt span.face_13{
+   background-position: -2px -284px;
+}
+.show_face ul li span.face_14,.pjbbtxt span.face_14{
+   background-position: -2px -307px;
+}
+.show_face ul li span.face_15,.pjbbtxt span.face_15{
+   background-position: -2px -331px;
+}
+.show_face ul li span.face_16,.pjbbtxt span.face_16{
+   background-position: -2px -355px;
+}
+.show_face ul li span.face_17,.pjbbtxt span.face_17{
+   background-position: -2px -378px;
+}
+.show_face ul li span.face_18,.pjbbtxt span.face_18{
+   background-position: -2px -401px;
+}
+.show_face ul li span.face_19,.pjbbtxt span.face_19{
+   background-position: -2px -425px;
+}
+.show_face ul li span.face_20,.pjbbtxt span.face_20{
+   background-position: -2px -445px;
+}
+.show_face ul li span.face_21,.pjbbtxt span.face_21{
+   background-position: -2px -465px;
+}
+.show_face ul li span.face_22,.pjbbtxt span.face_22{
+   background-position: -2px -488px;
+}
+.show_face ul li span.face_23,.pjbbtxt span.face_23{
+   background-position: -2px -511px;
+}
+.show_face ul li span.face_24,.pjbbtxt span.face_24{
+   background-position: -2px -535px;
+}
+.margin0{
+    margin:0 !important;
+}
+
+
+
+.face-wrapper-dw{top:24px;left:-10px;display:none;width:300px;height:145px;position:absolute;z-index:2;background:url(__COMMON__/Images/face-bg.png);overflow:hidden}
+ .face-wrapper-dw .wrapper-cont-dw{width:288px;height:107px;margin-top:6px;margin-left:1px}
+ .face-wrapper-dw .wrapper-cont-dw ul{border-top:1px dashed #e5e5e5; height:35px;}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child{border-top:0}
+.face-wrapper-dw .wrapper-cont-dw ul li{border-left:1px dashed #e5e5e5;width:35px;height:35px;float:left;margin:0}
+.face-wrapper-dw .wrapper-cont-dw ul li:hover{background:#f2f2f2}
+.face-wrapper-dw .wrapper-cont-dw ul li:first-child{border-left:0}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child li:first-child{border-top-left-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul:first-child li:last-child{border-top-right-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul:last-child li:first-child{border-bottom-left-radius:8px}.face-wrapper-dw .wrapper-cont-dw ul:last-child li:last-child{border-bottom-right-radius:8px}
+.face-wrapper-dw .wrapper-cont-dw ul li a{width:35px;height:24px;display:inline-block;text-align:center;overflow:hidden;padding:8px 0 0}
+.face-wrapper-dw .wrapper-cont-dw ul li span{display:inline-block;width:22px;height:22px;margin:8px 9px;overflow:hidden}
+.face-item{background:url(__COMMON__/Images/face-map.png) no-repeat center}.face-item.face_01{background-position:-2px -2px}.face-item.face_02{background-position:-2px -24px}.face-item.face_03{background-position:-1px -49px}.face-item.face_04{background-position:-2px -73px}.face-item.face_05{background-position:-2px -97px}.face-item.face_06{background-position:-2px -121px}.face-item.face_07{background-position:-2px -145px}.face-item.face_08{background-position:-2px -168px}.face-item.face_09{background-position:-2px -192px}.face-item.face_10{background-position:-2px -215px}.face-item.face_11{background-position:-2px -238px}.face-item.face_12{background-position:-2px -260px}.face-item.face_13{background-position:-2px -284px}.face-item.face_14{background-position:-2px -307px}.face-item.face_15{background-position:-2px -331px}.face-item.face_16{background-position:-2px -355px}.face-item.face_17{background-position:-2px -378px}.face-item.face_18{background-position:-2px -401px}.face-item.face_19{background-position:-2px -425px}.face-item.face_20{background-position:-2px -445px}.face-item.face_21{background-position:-2px -465px}.face-item.face_22{background-position:-2px -488px}.face-item.face_23{background-position:-2px -511px}.face-item.face_24{background-position:-2px -535px}@media (-webkit-min-device-pixel-ratio:2),(min--moz-device-pixel-ratio:2),(min-resolution:2dppx),(min-resolution:192dpi){.face-item{background:url(__COMMON__/Images/face-map-2x.png) no-repeat center;background-size:44px auto}.face-item.face_01{background-position:0 -176px}.face-item.face_02{background-position:-22px -66px}.face-item.face_03{background-position:0 -44px}.face-item.face_04{background-position:-22px -154px}.face-item.face_05{background-position:0 -88px}.face-item.face_06{background-position:-22px 0}.face-item.face_07{background-position:0 -110px}.face-item.face_08{background-position:0 -66px}.face-item.face_09{background-position:0 0}.face-item.face_10{background-position:0 -22px}.face-item.face_11{background-position:-22px -44px}.face-item.face_12{background-position:0 -132px}.face-item.face_13{background-position:-22px -88px}.face-item.face_14{background-position:-22px -22px}.face-item.face_15{background-position:0 -154px}.face-item.face_16{background-position:-22px -132px}.face-item.face_17{background-position:-22px -110px}.face-item.face_18{background-position:0 -220px}.face-item.face_19{background-position:0 -198px}.face-item.face_20{background-position:-22px -198px}.face-item.face_21{background-position:-22px -220px}.face-item.face_22{background-position:-22px -244px}.face-item.face_23{background-position:0 -132px}.face-item.face_24{background-position:-22px -176px}}
+
+
+.comm999 {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    color: #999;
+    font-size: 15px;
+}
+.disccc{background:#ccc !important;cursor:auto!important;}
+</style>
+<form id="pagerForm" method="post" action="{:U(APP_APPS."/User/index","","")}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="article_id" value="{$_GET['article_id']}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/NewComment/articleComList","","")}" method="post">
+     <!--<div class="searchBar">
+       <table class="searchContent">
+            <tr>
+                <td>
+                                      输入关键字：<input type="text" name="username" value=""/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>-->
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+ 
+            <!--<if condition="access('NewComment/articleComDelete')">
+              <li><a title="操作不可恢复确定操作本次操作！" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/NewComment/articleComDelete','','')}/article_id/{$_GET['article_id']}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>-->
+            <li class="line">line</li>
+            <!--<li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>-->
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="61">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th >用户名</th>
+                <th>评论内容</th>
+                <!--<th>是否显示</th>-->
+                <th>时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+           <volist name="result" id="r">
+                <tr target="sid_user" rel="{$r.id}">
+                    <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                    <td>
+                       <if condition="$r['user_id']">
+                           <img src="__ROOT__/{$r.head_pic}" style="width:22px;height:22px;border-radius:50%;margin-right:5px;"/><strong style="position:relative;top:-6px;">{$r.user_name}</strong>
+                           <span style="color:#3C7FB1;position:relative;top:-8px;">@ </span><img src="/Public/Home/images2/logo.png" style="margin-right: 5px;width:66px;position:relative;top:-5px;" />
+                       <else />
+                          <img src="/Public/Home/images/logo.png" width="68" alt="" class="vam" style="position:relative;top:-3px;"><span style="color:#3C7FB1;position:relative;top:-6px;"> @ </span>
+                          <img src="__ROOT__/{$r.head_pic}" style="width:22px;height:22px;border-radius:50%;margin-right:5px;"/><strong style="position:relative;top:-8px;color:#3C7FB1;">{$r.user_name}</strong>
+                       </if>
+                    </td>
+                    <td>{$r.content}</td>
+                    <!--<td>{$r.is_show|tpl_yes_no=###,'comment','is_show',$r['id'],'id','NewComment/articleComList'}</td>-->
+                    <td>{$r.times|date='Y-m-d',###}</td>
+                    <td>
+                       <if condition="$r['user_id']">
+                           {$action|tpl_action='dialog','NewComment/editReplyList2','reply_id/'.$r["id"].'/article_id/'.$_GET['article_id'].'/user_id/'.$r['user_id'],'','icon_edit.gif','icon_edit_not.gif','','','回复'} <!--修改按钮-->
+                       <else />
+                           <span style="color:#cccc;">回复</span>
+                       </if> 
+                        {$action|tpl_action='ajaxTodo','NewComment/delReplyList2','article_id/'.$_GET['article_id'].'/ids/'.$r["id"],'确定执行删除？','icon_drop.gif','icon_drop_not.gif','','','删除'}
+                   </td>
+                </tr>
+          </volist> 
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

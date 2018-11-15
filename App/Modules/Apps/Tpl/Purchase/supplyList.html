@@ -1,0 +1,71 @@
+
+<div class="pageHeader">
+</div>
+<div class="pageContent">
+    <table class="list" width="100%" layoutH="40">
+        <thead>
+            <tr>
+                <th>公司名称</th>
+                <th>联系人</th>
+                <th >联系电话</th>
+                <th >联系手机</th>
+                <th >地址</th>
+				<th >供货数量</th>
+				<th >供货单价</th>
+				<th width="20%">供货说明</th>
+                 <th width="20%">主营产品</th>
+                <th width="5%">操作</th>
+            </tr>                  
+        </thead>
+        <tbody>
+            <php>$s=0;</php>
+           <volist name="res" id="V">
+           <php>$s++;</php>
+            <tr target="sid_user" rel="{$V.id}">
+                <td>{$V.company_name}</td>
+                <td>{$V.linkman}</td>
+                <td>{$V.tel}</td>
+                <td>{$V.mobile}</td>
+				<td>{$V.province}{$V.city}{$V.district}{$V.warehouse}</td> 
+				<td>{$V.number|tpl_modify_oen=###,'purchase_supply','number',$V['id'],'id','Purchase/supplyList'}</td>
+				<td>{$V.price|tpl_modify_oen=###,'purchase_supply','price',$V['id'],'id','Purchase/supplyList'}</td>
+                <td style="position:relative;" onMouseMove="showDiv(this);" onMouseOut="hideDiv(this)">
+				     {$V.sup_explain|tpl_modify_oen=###,'purchase_supply','sup_explain',$V['id'],'id','Purchase/supplyList'}
+					 <div style="position:absolute;top:20px;left:0;padding:5px;width:96%;min-height:100px;background:#fff;border:1px #ccc solid;display:none;z-index:1;" class="divs">
+					      {$V.sup_explain}
+					 </div>
+				</td>				
+                <td style="position:relative;" onMouseMove="showDiv(this);" onMouseOut="hideDiv(this)">
+				     {$V.business|sub_str=###,10}
+					 <div style="position:absolute;top:20px;left:0;padding:5px;width:96%;min-height:100px;background:#fff;border:1px #ccc solid;display:none;z-index:1;" class="divs">
+					      {$V.business}
+					 </div>
+				</td>
+                <td style="text-align:center;">
+				<if condition="$V['is_select'] eq 1">
+				    <span style="color:green;">已锁货</span>
+				<else />
+				  <a href="javascript:;" onclick="testConfirmMsg('{:U(APP_APPS.'/Purchase/lockPur',array('id'=>$V['id'],'purchase_id'=>$V['purchase_id']))}','ajax','确定选择此供货商({$V.company_name})？')">锁定</a>
+				</if>
+				
+				</td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$s} 数据</span>
+        </div>
+    </div>
+</div>
+<script>
+function showDiv(_this){
+    $(_this).children('.divs').show();
+}
+function hideDiv(_this){
+    $(_this).children('.divs').hide();
+}
+</script>

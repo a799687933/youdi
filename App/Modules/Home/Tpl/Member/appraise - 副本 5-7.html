@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>商品评价 | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/iconfont2.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<script type="text/javascript">
+//防止页面后退
+if (window.history && window.history.pushState) {
+	$(window).on('popstate', function () {
+	var hashLocation = location.hash;
+	var hashSplit = hashLocation.split("#!/");
+	var hashName = hashSplit[1];
+	if (hashName !== '') {
+	var hash = window.location.hash;
+	if (hash === '') {
+	//alert("Back button isn't supported. You are leaving this application on next clicking the back button");
+	}
+	}
+	});
+	window.history.pushState('forward', null, './#order-h1');
+}
+
+$(function(){
+
+
+             $(".djpy").click(function(){
+				 $(this).siblings(".zcpjrtrmt").show().delay(6000).hide(0);
+				 $(this).parent("a").siblings("a").children(".zcpjrtrmt").hide()
+				 })
+			 $(".haop").click(function(){
+				$(this).parents(".zcpjrtr").siblings(".zcpjrtl").children(".rating-static-module").children("span").addClass("rateit-selected")
+				 $(this).parents(".zcpjrtr").siblings(".zcpjrtl").children(".rating-static-module").children("span").removeClass("rateit")
+				 })
+				 
+				$(".zhongp").click(function(){ 
+				 a=$(this).parents(".zcpjrtr").siblings(".zcpjrtl").children(".rating-static-module").children("span:eq(2)")
+				 a.addClass("rateit-selected")
+				 a.prevAll("span").addClass("rateit-selected")
+				 a.removeClass("rateit")
+				 a.prevAll("span").removeClass("rateit")
+				 a.nextAll("span").removeClass("rateit-selected")
+				 a.nextAll("span").addClass("rateit")
+				 }) 
+				 
+				 $(".chap").click(function(){
+				b=$(this).parents(".zcpjrtr").siblings(".zcpjrtl").children(".rating-static-module").children("span:first-child")
+				 b.addClass("rateit-selected")
+				 b.nextAll("span").addClass("rateit")
+				 }) 	 
+			      
+         	     	     
+});
+</script>
+<!--content begin-->
+<form action="{:sign_url(array('order_id'=>$_REQUEST['order_id']),U(is_m().'/Member/appraiseForm'))}" method="post" class="form1">
+    <div class="zhu">
+     
+         <div class="lbtm fl">
+          <h1>{:isL(L('PleaseMakeGoods'),'请对商品做出评价')}</h1> 
+              <!--<p>文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字</p>-->
+     </div>
+
+         <div class="cb pb10"></div>
+      <div class="zcpj">
+       <ul>
+       <foreach name="order_goods" item="og" key="ogk"> 
+        <li class="list">
+             <input type="hidden" name="appraise_id[]" value="{$goods_appraise[$og['goods_id']]['goods_id']?$goods_appraise[$og['goods_id']]['id'] : 0}" />
+             <input type="hidden" name="appraise_id_sign[]" 
+             value="{$goods_appraise[$og['goods_id']]['appraise_id_sign']?$goods_appraise[$og['goods_id']]['appraise_id_sign'] : $og['appraise_id_sign']}" />
+             <input type="hidden" name="goods_id[]" value="{$og['goods_id']}" />
+             <input type="hidden" name="class_name_{$ogk}" value="error-pin-{$ogk}" />
+             <div class="zcpjl"><table width="100%"><tr>
+              <td align="center" valign="middle" width="50%">
+                   <a href="{:U('Goods/index',array('html'=>$og['goods_id']))}" target="_blank"><img src="__ROOT__/{$og['goods_thumb']}" alt=""></a>
+              </td>
+              <td align="left" width="50%">
+               <div class="pl20">
+                <p class="f14">YOUDI WU</p>
+                <p><a href="{:U('Goods/index',array('html'=>$og['goods_id']))}" class="col2ab" target="_blank">{$og['goods_name']}</a></p>
+                <p class="pv10">{:isL(L('ProductNumber'),'商品编号')}：{$og['goods_sn']}</p>
+                <p>{:isL(L('CommodityQuantity'),'商品数量')}：{$og['goods_number']}</p>
+                <p class="pv10"><foreach name="og['goods_attr']" item="ga">{$ga[pfix('name')]}：{$ga['value'][pfix('attr_value')]}&nbsp;&nbsp;</foreach></p>
+               </div>
+              </td>
+             </tr></table></div><!--zcpjl end-->
+             <div class="zcpjr">
+              <div class="zcpjrtl">
+               <div class="rating-static-module">           
+                <span class="rateit-selected fl svg"></span>
+                <span class="rateit-selected fl svg"></span>
+                <span class="rateit-selected fl svg"></span>
+                <span class="rateit-selected fl svg"></span>
+                <span class="rateit-selected fl svg"></span>
+                <div class="cb"></div>
+                </div>
+                <span class="f12 col000 pb5" style="display:inline-block">Wonderful index</span>
+              </div><!--zcpjrtl end-->
+              <if condition="is_mobile()">
+               <div class="zcpjrtr">
+               <a href="javascript:void(0)" title="{:isL(L('PoorEvaluation'),'差评')}">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                   <input id="radio1{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="0"  
+                   <php>if($goods_appraise[$og['goods_id']]['sva']=='0'){</php>checked="checked"<php>}</php>
+                   <php>if($goods_appraise[$og['goods_id']]['sva'] > 0){</php>disabled="disabled"<php>}</php>
+                   class="vam djpy"/>
+                   <label class="ffInput" for="radio1{$ogk}">
+                  <span class="ffInput__radio chap"></span>  
+                  </label>
+                   <i class="Hui-iconfont Hui-iconfont-face-chijing" style="color:#aaa"></i>
+               
+               </a>    
+               
+               <a href="javascript:void(0)" title="{:isL(L('Secondary'),'中评')}" class="mh30">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                    <input id="radio2{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="1" 
+                    <php>if($goods_appraise[$og['goods_id']]['sva']==1){</php>checked="checked"<php>}</php>
+                    <php>if($goods_appraise[$og['goods_id']]['sva'] > 1){</php>disabled="disabled"<php>}</php>
+                    class="vam djpy"/>
+                     <label class="ffInput" for="radio2{$ogk}">
+                  <span class="ffInput__radio zhop"></span>  
+                  </label>
+                    <i class="Hui-iconfont Hui-iconfont-face-dai"></i>
+               </a>
+                <a href="javascript:void(0)" title="{:isL(L('GoodEvaluation'),'好评')}">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                   <input id="radio3{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="2" 
+                   <php>if($goods_appraise[$og['goods_id']]['sva'] =='' || $goods_appraise[$og['goods_id']]['sva']==2){</php>checked="checked"<php>}</php>
+                    class="vam djpy"/>
+                     <label class="ffInput" for="radio3{$ogk}">
+                  <span class="ffInput__radio"></span>  
+                  </label>
+                    <i class="Hui-iconfont Hui-iconfont-face-weixiao"></i>
+               
+               
+               </a>  
+              </div>
+              <else/>
+              <div class="zcpjrtr">
+               <a href="javascript:void(0)" title="{:isL(L('GoodEvaluation'),'好评')}">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                   <input id="radio4{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="2" 
+                   <php>if($goods_appraise[$og['goods_id']]['sva'] =='' || $goods_appraise[$og['goods_id']]['sva']==2){</php>checked="checked"<php>}</php>
+                    class="vam djpy"/>
+                   <label class="ffInput" for="radio4{$ogk}">
+                  <span class="ffInput__radio  haop"></span>  
+                  </label>
+                    <i class="Hui-iconfont Hui-iconfont-face-weixiao"></i>
+               
+               </a>
+               <a href="javascript:void(0)" title="{:isL(L('Secondary'),'中评')}" class="mh30">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                    <input id="radio5{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="1" 
+                    <php>if($goods_appraise[$og['goods_id']]['sva']==1){</php>checked="checked"<php>}</php>
+                    <php>if($goods_appraise[$og['goods_id']]['sva'] > 1){</php>disabled="disabled"<php>}</php>
+                    class="vam djpy"/>
+                    <label class="ffInput" for="radio5{$ogk}">
+                  <span class="ffInput__radio zhongp"></span>  
+                  </label>
+                    <i class="Hui-iconfont Hui-iconfont-face-dai"></i>
+               </a>
+               <a href="javascript:void(0)" title="{:isL(L('PoorEvaluation'),'差评')}">
+                <div class="zcpjrtrmt">{:isL(L('ThankYouFeedback'),'谢谢您的反馈！')}</div>
+               
+                   <input id="radio6{$ogk}" style="display:none" type="radio" name="sva_{$ogk}" value="0"  
+                   <php>if($goods_appraise[$og['goods_id']]['sva']=='0'){</php>checked="checked"<php>}</php>
+                   <php>if($goods_appraise[$og['goods_id']]['sva'] > 0){</php>disabled="disabled"<php>}</php>
+                   class="vam djpy"/>
+                   <label class="ffInput" for="radio6{$ogk}">
+                  <span class="ffInput__radio chap"></span>  
+                  </label>
+                   <i class="Hui-iconfont Hui-iconfont-face-chijing" style="color:#aaa"></i>
+               
+               </a>       
+              </div>
+              </if>
+              <div class="cb"></div>
+              <textarea name="content[]" class="zcpjrm mb5" info-text="error-pin-{$ogk}" error-info="{:isL(L('Required'),'必填项')}" placeholder="{:isL(L('WritePointEvaluation'),'写点评价吧，您的评价对其他买家有很大帮助的。')}" maxlength="140">{$goods_appraise[$og['goods_id']]['content']}</textarea>
+              <p class="error-pin-{$ogk}" style="border-top:1px solid red;height:26px;line-height:26px;position:relative;top:-7px;color:red;display:none">{:isL(L('PleaseEvaluationContent'),'请输入评价内容')}</p>
+              <div class="zcpjrbl">
+               <div class="showt" style="position:relative">
+                   <i class="fa fa-file-image-o col000 mr5"></i>Show Time
+                      <input name="file4" type="file" id="appraiseUp_{$ogk}" 
+                      onChange="appraiseUpload('{:U("/UploadFile/upload",array('up'=>'UploadFile','file_type'=>'jpg,png,gif,jpeg'),"")}',
+                      'appraiseUp_{$ogk}','divider_{$ogk}','__ROOT__','{$_SESSION["MY_TOKEN"]}','#img_related','#counts',this,'img_{$ogk}[]');"
+                      style="height:100%;width:100%;position:absolute;top:0px;left:0;z-index:9999;filter:alpha(opacity=0); opacity: 0;cursor:pointer"/>  
+                                  
+               </div>   
+               <div class="pjbbimg2 fl" style=" width:80%">
+                   <ul id="divider_{$ogk}">
+                       <!---<foreach name="goods_appraise[$og['goods_id']]['slide_show']" item="ss">
+                         <li class="divigm"><img src="__ROOT__/{$ss}"><span></span><input type="hidden" value="{$ss}" name="img_{$ogk}[]"></li>
+                         
+                       </foreach>--> 
+                       <li class="divigm"><img src="/UploadFile/2018-03/5aab6d0e31219.png"><span></span><input type="hidden" value="UploadFile/2018-03/5aab6d0e31219.png" name="img_0[]"></li>
+                   </ul>
+                   <div class="tcpic">
+                    <div class="bpic"><div class="bpicm"><img src="/UploadFile/2018-03/5aab6d0e31219.png"></div></div>
+                   </div>
+                   <script>
+                    $(function(){
+						$(".divigm span").click(function(){
+							$(this).parent(".divigm").hide()
+							})
+					   /** $(".divigm img").click(function(){
+							$(".tcpic").fadeIn()
+							})
+						$(".tcpicg").click(function(){
+							$(".tcpic").fadeOut()
+							})	**/		
+						})
+                   </script>
+                   <div class="tctp">
+         <span class="tpprev glyphs icon-prev"></span><span class="tpnext glyphs icon-next"></span>
+         <div class="tpm">
+           <span class="close tpclose" style="top:-30px; right:-40px;"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+           <b><img src="" alt=""></b>
+         </div>
+        </div><!--tctp end-->
+                          </div>
+              </div><!---->
+              <div class="zcpjrbr">
+              <a href="javascript:void(0)" class="pr20">
+                  <input type="radio" name="is_open_{$ogk}" id="radio7{$ogk}" value="1" 
+                  <php>if($goods_appraise[$og['goods_id']]['is_open'] =='' || $goods_appraise[$og['goods_id']]['is_open']==1){</php>checked="checked"<php>}</php>
+                  checked="checked" style="display:none"/>
+                  <label class="ffInput" for="radio7{$ogk}">
+                  <span class="ffInput__radio"></span>  
+                  </label>
+                  <i class="vam">{:isL(L('Open'),'公开')}</i>
+                  </a>
+                  <a href="javascript:void(0)">
+                  <input type="radio" name="is_open_{$ogk}" id="radio8{$ogk}" value="0" 
+                  <php>if($goods_appraise[$og['goods_id']]['is_open']=='0'){</php>checked="checked"<php>}</php>
+                  class="vam" style="display:none"/>
+                  <label class="ffInput" for="radio8{$ogk}">
+                  <span class="ffInput__radio"></span>  
+                  </label>
+                  <i class="vam">{:isL(L('IsAnony'),'匿名')}</i>
+                  </a>
+                  </div>
+              <div class="cb"></div>
+              <div class="cb"></div>
+             </div><!--zcpjl end-->
+             <div class="cb"></div>
+          </li><!--到这才是一组-->
+       </foreach>
+       </ul>
+      </div><!--zcpj end-->
+      <if condition="is_mobile()">
+     
+          <div class="bcbtn" >
+            <php>if($goods_appraise){</php>
+              <!--<input value="{:isL(L('SubmitEvaluation'),'提交评价')}" class="btn" type="button" style="background:#eee;color:#ccc;">-->
+            <php>}else{</php>
+               <input value="{:isL(L('SubmitEvaluation'),'提交评价')}" class="btn" type="submit" onClick="return sendForm(this)">
+            <php>}</php>
+           <p class="submits" style="height:26px;line-height:26px;text-align:center;display:none">提示层</p>
+           <span class="glyphs icon-thinArrow btnb"></span>    
+         </div>
+         <div class="cb"></div>
+      
+      <else/>   
+      
+          <div class="pv20 tl">
+              <div class="bcbtn" style="float:right; width:20%">
+               <php>if($goods_appraise){</php>
+                 <!--<input value="{:isL(L('SubmitEvaluation'),'提交评价')}" class="btn" type="button" style="background:#eee;color:#ccc;">-->
+               <php>}else{</php>
+                <input value="{:isL(L('SubmitEvaluation'),'提交评价')}" class="btn" type="submit">
+               <php>}</php> 
+               <!--<p class="submits" style="height:26px;line-height:26px;text-align:center;display:none">提示层</p>-->
+               <span class="glyphs icon-thinArrow btnb"></span>    
+             </div>
+             <div class="cb"></div>
+          </div>
+    </if>
+    </div>
+</form>
+<!--content endh-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<style>
+ .tctp{ background:rgba(0,0,0,0.7); width:100%; height:100%; position:fixed; left:0; top:0; z-index:300; display:none}
+ .tpprev{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; left:35px; top:50%; margin-top:-15px; color:#bababa; line-height:30px; text-align:center; font-size:60px;}
+ .tpnext{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; right:35px; top:50%; margin-top:-15px;color:#bababa; line-height:30px; text-align:center; font-size:60px;}
+ .tpm{ background:#444; width:520px; height:520px; position:absolute; left:50%; top:50%; margin:-260px 0 0 -260px; display:none}
+ .tpm b{ display:table-cell; vertical-align:middle; text-align:center; width:520px; height:520px;  box-sizing:border-box}
+ .tpm img{ max-width:520px; max-height:520px}
+</style>
+<script type="text/javascript">
+//评价表单
+//formInit('.form1',true,true,true,true,false);
+ $(function(){
+  var t=0;			
+  $('.zcpjrtr a label').click(function(){
+      var zcpjrtr=$(this).parents('.zcpjrtr');
+	  var radio=zcpjrtr.find('input[type="radio"]');
+	  $('.zcpjrtrmt').hide();
+	  for(var i=0;i < radio.length;i++){
+		  if(radio.eq(i).prop('checked')){
+			  var a=radio.eq(i).parents('a');
+			  a.find('.zcpjrtrmt').show();
+			 clearTimeout(t);
+			  t=setTimeout(function(){
+					a.find('.zcpjrtrmt').hide();			  
+			  },3000);
+		  }
+	  }
+  });
+  
+/****/
+var bigImg='';
+	var _index=0;
+	
+		$(".tpclose").click(function(){
+			$(this).parent(".tpm").hide()
+		$(this).parents(".tctp").fadeOut()
+			
+		
+	});
+	$(".pjbbimg2 li img").click(function(){
+		$(this).parent("li").parent("ul").siblings(".tctp").fadeIn("fast",function(){
+			$(this).children(".tpm").show()
+			});
+		bigImg=$(this).attr("src");//获取点击图片的地址
+		$(this).parent("li").parent("ul").siblings(".tctp").children(".tpm").children("b").children("img").attr("src",bigImg); //更换大图的图片地址
+		_index=$(this).index();//保存图片的序列号
+		i=$(this).parent("li").parent("ul").children("li").length;
+		
+	});
+
+
+	$(document).on('click', ".tpnext",function(){
+		_index++; //序列号加1 _index+1
+		
+		if(_index>=i){_index=0};
+		//alert(i)
+		bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+	});
+	
+	$(".tpprev").click(function(){
+		_index--; //序列号加1 _index+1
+		if(_index< 0){_index=i-1};
+		//alert(_index)
+		bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+	});
+    }); 
+
+</script>
+ 
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<php>
+//执门推荐
+$alist=M('article')->field('id,'.pfix('titletext').' AS titletext,thumb,addtime')->where(array('is_show'=>1,'is_recommend'=>1,'files_id'=>498))->order("comment DESC")->limit(6)->select();
+</php>
+
+<div class="hydy">
+ 
+ <div class="hydyt">
+  <p class="pb40">{:isL(L('WelcomeToSubscribe'),'欢迎订阅<br/>YOUDI WU最新资讯')}</p>
+  <form method="get" action="{:U('/EmailSubscribe/saveEmail')}" class="save-email1">
+  <input type="text"name="email"  class="hydyt_input required email" info-text="emailct-text" error-info="{:isL(L('EnterYourEmail'),'请输入您的电邮地址')}" error-other="{:isL(L('EmailFormatError'),'请输入正确的电邮地址')}"/>
+  <input type="submit" name="" value="Sumbit" class="hydyt_btn"/>
+  </form>
+  
+  <div class="cb"></div>
+  <!--<p class="colf00 f12 lh28 emailct-text" style="display:none">提示层</p>-->
+ </div><!--hydyt end-->
+  <script type="text/javascript">
+     //邮件订阅2
+     formInit('.save-email1',true,true,true,true);
+</script>      
+ <div class="hydyb">
+  <h1 class="hydybt">Popular news</h1>
+  <div class="hydybb">
+   <ul>
+   <foreach name="alist" item="li">
+   	<li>
+         <div class="hydybbl"><a href="{:U('/Article/content',array('html'=>$li['id']))}"><img src="__ROOT__/{$li['thumb']}" alt=""/></a></div>
+         <div class="hydybbr">
+          <p>{$li['addtime']|date='Y.m.d',###}</p>
+          <a href=""><h1>{$li['titletext']|show_str=###,30}</h1></a>
+         </div>
+         <div class="cb"></div>
+        </li>
+    </foreach>
+   </ul>
+  </div>
+ </div><!--hydyb end-->
+</div><!--hydy end-->

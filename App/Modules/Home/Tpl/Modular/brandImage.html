@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{$result['titletext']} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+          <h1>{$result['titletext']}</h1>
+          <P style="height:44px;"> {:isL(L('StefanoTwoDesigners'),'Domenico Dolce和Stefano Gabbana两位设计师在意大利时尚圈扮演了举足轻重的角色。感性，妩媚的意大利时尚女性激起了两人的创作灵感，他们的设计风格性感中带干练，难怪在短短的30年内便能成功地将该品牌晋升为家喻户晓的奢侈品大牌。YOUDI WU现在就带你体验！')}</P>
+     </div><div class="cb"></div></div>
+ </div>
+ <!--<h1 class="title"><div class="wrap"><span>{$result['titletext']}</span></div></h1>-->
+ <div class="wrap"><div class="gywm mt20">
+  <img src="__ROOT__/{$result['thumb']}" alt=""/>
+  <div class="gywmr">
+   <p>{$result['content']|stripcslashes=###}</p>
+  </div>
+  <div class="cb"></div>
+ </div></div>
+ <!--<div class="app">
+     <div class="gywm mt20">
+         <div class="gywmm">{$result['content']|stripcslashes=###}</div> 
+     </div>
+
+ </div><!--zyjh end-->
+ 
+<!--content endh-->
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<!---->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

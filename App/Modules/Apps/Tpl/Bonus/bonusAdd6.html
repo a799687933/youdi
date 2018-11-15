@@ -1,0 +1,121 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<script>
+$('#ffos').click(function(){
+   if($(this).attr('checked')){
+      $('#w,#h').attr('disabled',true);
+   }else{
+      $('#w,#h').attr('disabled',false);
+   }
+});
+</script>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Bonus/addSaveForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="" value="{$ids}"  id="ids"/>
+        <input type="hidden" name="send" value="{$_GET['send']}"/>
+        <input type="hidden" name="send_type" value="{:C('_SIX')}" />
+        <input type="hidden" name="is_show" value="1" />
+        <if condition="$_GET['send'] eq 'update' "><input type="hidden" name="id" value="{$_GET['id']}"/><input type="hidden" name="{:C('VAR_PAGE')}" value="{$_GET[C('VAR_PAGE')]}"/></if>
+        <div class="pageFormContent nowrap" layoutH="60">
+           
+           <foreach name="bonusName" item="t">
+             <dl>
+                <dt>({$t['info']})现金券名：</dt>
+                <dd>
+                     <input type="text" name="{$t['field']}" class="required" size="40" value="{$result[$t['field']]}"/>
+                </dd>
+            </dl>
+           </foreach>
+           
+            <dl>
+                <dt>重定义宽和高：</dt>
+                <dd>
+                   <input type="checkbox" id="ffos" checked="checked">
+                       宽:<input type="text" disabled="true" name="ad_width" value="282" id="w" size="10" style="float:none;"/> 
+                       高:<input type="text" name="ad_height" disabled="true" value="185" id="h" size="10" style="float:none;"/>
+               </dd>                                                                                                              
+            </dl>           
+           
+             <dl>
+                <dt>现金卷图片：</dt>
+                <dd>
+                     <input type="hidden" name="picture" value="{$result.picture}" id="d_thumb"/>
+                    <input name="file1" type="file" id="fileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>282,'height'=>185,remove=>'ok'))}','fileToUpload','img_show','d_thumb','','a-show','__ROOT__','imgloads');">
+                </dd>
+            </dl>
+
+            <dl  id="imgloads" style="display:<if condition="$result['picture']"><else />none</if>;">
+                <dt>图片信息：</dt>
+                <dd>
+                          <img src="__ROOT__/{$result.picture}" style="display:inline-block;padding:3px;" id="img_show"  height="50" class="a-show"/>                        
+                </dd>
+            </dl>
+                                    
+             <dl>
+                <dt>现金券金额：</dt>
+                <dd>
+                     <input type="text" name="bonus_money" class="required number" size="40" value="<if condition="$result['bonus_money']">{$result['bonus_money']}<else />0</if>"/>
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">此现金券可以抵销的金额</span>                               
+                </dd>
+            </dl>            
+            
+             <dl>
+                <dt>订单最小金额：</dt>
+                <dd>
+                     <input type="text" name="min_amount" class="required number" size="40" value="<if condition="$result['min_amount']">{$result['min_amount']}<else />0</if>"/>
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有商品总金额达到这个数的订单才能使用这现金券</span>                               
+                </dd>
+            </dl>                                  
+                       
+            <dl>
+                <dt>发放起始日期：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="send_start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['send_start_date']">{$result.send_start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>发放结束时间：</dt>
+                <dd style="width:680px;">
+                     <input type="text" readonly="readonly" name="send_end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['send_end_date']">{$result.send_end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有当前时间介于起始日期和截止日期之间时，此类型的现金券才可以发放</span>                               
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>使用起始日期：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="use_start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['use_start_date']">{$result.use_start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>使用结束日期：</dt>
+                <dd style="width:680px;">
+                     <input type="text" readonly="readonly" name="use_end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['use_end_date']">{$result.use_end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有当前时间介于起始日期和截止日期之间时，此类型的现金券才可以使用</span>                               
+                </dd>
+            </dl>
+                              
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

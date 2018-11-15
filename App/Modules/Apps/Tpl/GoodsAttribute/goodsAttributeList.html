@@ -1,0 +1,72 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input name="category_id" type="hidden" value="{$_REQUEST['goods_attr_type_id']}" />
+</form>
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('GoodsAttribute/goodsAttributeAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/GoodsAttribute/goodsAttributeAdd',array('goods_attr_type_id'=>$goods_attr_type_id),'')}" target="dialog" mask="true" width="1024" height="590" title="添加属性"><span>添加属性</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="54">
+        <thead>
+            <tr>
+                <!--<th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>-->
+                <th>编号</th>
+                <th>属性名称</th>
+                <th >属性类型名称</th>          
+                <th >属性方式</th>
+                <th>是否使用</th>
+                <th >排序</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="Attribute" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <!--<td><input name="ids" value="{$V.id}" type="checkbox"></td>-->
+                <td>{$V.id}</td>
+                <td>{$V[pfix('name')]|tpl_modify_oen=###,'goods_attribute',pfix().'name',$V['id'],'id','GoodsAttribute/goodsAttributeSaveForm'}</td>
+                <td>{$V.type_name}</td>
+                <td>
+                    <if condition="$V['attr_type'] eq 0">
+                         唯一属性
+                    <elseif condition="$V['attr_type'] eq 1" />
+                        单选属性
+                    <elseif condition="$V['attr_type'] eq 2" />
+                        多选属性
+                     </if>
+                </td>
+                <td> {$V.is_show|tpl_yes_no=###,'goods_attribute','is_show',$V['id'],'id','GoodsAttribute/goodsAttributeSaveForm'}</td>
+                <td>{$V.sort_order|tpl_modify_oen=###,'goods_attribute','sort_order',$V['id'],'id','GoodsAttribute/goodsAttributeSaveForm'}</td> 
+                <td>
+				{/*属性值列表*/}	        
+               {$action|tpl_action='navTab','GoodsAttribute/attrValueList','attribute_id/'.$V["id"],strip_tags($V[pfix('name')]).'属性列表','book_open.gif','book_open2.gif'}                
+                {/*修改按钮*/}	   
+                {$action|tpl_action='dialog','GoodsAttribute/goodsAttributeAdd','goods_attr_type_id/'.$_REQUEST['goods_attr_type_id'].'/id/'.$V["id"],'修改'.strip_tags($V[pfix('name')]),'icon_edit.gif','icon_edit_not.gif',1024,590} 
+                {$action|tpl_action='ajaxTodo','GoodsAttribute/goodsAttributeDelete',C('VAR_PAGE').'/'.$currentPage.'/goods_attr_type_id/'.$_REQUEST['goods_attr_type_id'].'/ids/'.$V["id"],'确定执行删除('.strip_tags($V[pfix('name')]).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+    </div>
+</div>
+

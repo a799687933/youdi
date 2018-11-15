@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>我的消息</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/loadMoerPage.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/javascript"> 
+//加载分页
+window.page=new loadMoerPage();
+page.options.url="{:str_replace('2.html','',go_page($_URL_,$pageNumShown,'+'))}"; //请求地址把固定值去掉(2.html)
+page.options.totalPages="{$pageNumShown}"; //总页数
+page.options.addEnd="#add-page"; //追加内容节点
+page.options.addEndLoadImg=".member-content"; //显示生成加载图片父节点
+page.options.addEndLoadImgPath="__COMMON__/Images/5-121204193R3.gif"; //加载图标路径
+page.run();  
+</script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">我的消息<a href="javascript:;history.back();" class="icon12"></a></h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+<div class="member-content" style="font-size:0.7rem;margin-bottom:40px;">
+   <ul  class="ul-style" style="text-indent:5px;" id="add-page">   
+      <include file="Piece:Member_infoList" />
+  </ul>             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>  
+</body>
+</html>

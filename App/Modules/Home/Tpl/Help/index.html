@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$result.titletext|strip_tags=###} - {$result.files_name|strip_tags=###} | YOUDI WU 中国</title>
+<meta name="keywords" content="{$result.keywords|strip_tags=###}" />
+<meta name="description" content="{$result.bewrite|strip_tags=###}" />
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript">  
+        $(document).ready(function () {  
+            var ps = $("#div_pro").position();  
+            $("#div_pro").mouseenter(function () {  
+                $("#float_box").show();  
+            });  
+            $("#float_box").mouseleave(function () {  
+                $("#float_box").hide();  
+            });  
+        })  
+    </script>
+
+</head>
+<body>
+<include file="Common:top" />{/*公共顶部*/}
+<include file="Common:header" />{/*头部*/}
+<div class="main">
+    <div class="member_l">
+        <div class="member_l_title">{:isL(L('HelpCenter'),'帮助中心')}</div>
+        <div class="member_l_list">
+          <foreach name="alist" item="ar">  
+            <dl>
+                <dt><span><img src="__HOME__/images/m1.jpg" /></span>{$ar.files_name}</dt>
+                <foreach name="ar['list']" item="al">
+                <dd>
+                           <if condition="$al['outside_url']">
+                              <a href="{$al['outside_url']}" class="clr_6" <if condition="$al['is_target']">target="_blank"</if>>{$al.titletext}</a><br/>
+                           <else />
+                             <a href="{:U('/Help/index',array('html'=>'help-'.$al['id']))}" class="clr_6" <if condition="$al['is_target']">target="_blank"</if>>{$al.titletext}</a><br/>
+                           </if>    
+               </dd>
+                </foreach>                
+            </dl>
+         </foreach>
+        </div>
+    </div>
+    <div class="member_r">
+        <div class="member_r_title">{$result.titletext|strip_tags=###}</div>
+        <div class="member_r_con">
+            <div style="padding:10px;line-height:180%">{$result.content|stripcslashes=###}</div>
+        </div>
+    </div>
+    
+    
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

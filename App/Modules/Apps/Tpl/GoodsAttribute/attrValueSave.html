@@ -1,0 +1,40 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/GoodsAttribute/attrValueSaveForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input name="attribute_id" type="hidden" value="{$attrbuteId}" />
+        <input type="hidden" name="id" value="{$id}"/>
+        <div class="pageFormContent" layoutH="58" >
+        
+        <p style="width:100%;">
+                <label>属性名称：</label>
+               <input type="text"  readonly="readonly" value="{$attrName}" size="44" class="" />
+          </p>   
+               
+          <foreach name="attrValues" item="t"><!--属性类型名称多语言-->
+            <p style="width:100%;">
+                <label>({$t.info})属性值：</label>
+                <input type="text" name="{$t.field}" value="{$save[$t['field']]}" size="44" class="required" />
+            </p>
+            </foreach><!--属性类型名称多语言结-->  
+            
+           <p style="width:100%;margin-bottom:5px;">
+                <label>排序：</label>
+               <input type="text"  name="orders" value="{$save['orders']}" size="44" class="" />
+            </p>       
+ 
+            <p style="width:100%;">
+                <label>是否显示：</label>
+                <input type="radio" name="is_show" value="1" <if condition="$save['is_show'] eq 1 OR $save['is_show'] eq ''">checked="checked"</if>/>显示 
+                <input type="radio" name="is_show" value="0"  <if condition="$save['is_show'] eq '0'">checked="checked"</if>/>不显示               
+            </p>      
+
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

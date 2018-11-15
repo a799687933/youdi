@@ -1,0 +1,68 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+		    <if condition="$_SESSION[C(SESSION_NAME_VAL)] eq C('RBAC_SUPERADMIN')">
+			  <li>
+                  <a class="add auto-size" href="{:U(APP_APPS.'/GoodsCategory/addSaveCombination','','')}/pid/0" target="dialog"   mask="true" title="添加">
+                        <span>添加</span>
+                  </a>
+              </li>
+			</if>
+		</ul>
+	</div>
+
+
+	<table class="list" width="100%" layoutH="50" id="list-table-goods-cate">
+		<thead>
+		<tr>
+	
+			<th width="250">名称</th>
+			<th width="250">类型</th>
+            <th width="250">包含商品分类</th>
+			<th width="120">排序</th>
+			<th width="120">是否显示</th>
+            <th width="120">操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<foreach item="app" name="Cate">
+			<tr target="sid_node" rel="{$app['id']}" class="{$app['pid']} showtr" id="{$app['pid']}_{$app['id']}" >
+				<td class="first-cell" style="text-align:left;text-indent:5px;padding-left:{$app['padding']}px;">
+                <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app['pid']}_{$app['id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-goods-cate')" />
+                {$app.name|tpl_modify_oen=###,'goods_category_combination','name',$app['id'],'id','GoodsCategory/cateSave'}
+                </td>
+               <td>{$app.type_where}</td>
+               <td>
+                    <if condition="$app['goods_category_name']">
+                      <foreach name="app['goods_category_name']" item="cates">
+                          [{$cates['name']}]&nbsp;
+                      </foreach>
+                    <else />
+                       <if condition="$app['pid'] eq 0">{$app.name}<else />未选分类</if>
+                    </if>
+               </td>
+                <td>{$app.reorder|tpl_modify_oen=###,'goods_category_combination','reorder',$app['id'],'id','GoodsCategory/addSaveCombinationForm'}</td>
+				<td>{$app.is_show|tpl_yes_no=###,'goods_category_combination','is_show',$app['id'],'id','GoodsCategory/addSaveCombinationForm'}</td>
+                <td >     
+				   <if condition="$app['pid'] eq 0">    
+                       {$action|tpl_action='dialog','GoodsCategory/addSaveCombination','pid/'.$app["id"],'添加('.strip_tags($app['name']).')子分类','icon_add.gif','icon_add_not.gif'} <!--添加按钮-->
+				   <else />
+				      <img src="__SYS_IMG__/icon_add_not.gif" />    	
+				   </if>	
+                   <if condition="$app['pid'] eq 0">
+                       <img src="__SYS_IMG__/icon_edit_not.gif" />   
+                       <img src="__SYS_IMG__/icon_drop_not.gif" />
+                   <else />
+                        {$action|tpl_action='dialog','GoodsCategory/addSaveCombination','id/'.$app["id"],'修改('.strip_tags($app['name']).')子分类','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+                        {$action|tpl_action='ajaxTodo','GoodsCategory/deleteCombination','ids/'.$app["id"],'确定执行删除('.strip_tags($app['name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->                   
+                   </if>
+
+                </td>
+			</tr>
+		</foreach>
+		</tbody>
+	</table>
+</div>
+

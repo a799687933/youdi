@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+	var ps = $("#div_pro").position();  
+	$("#div_pro").mouseenter(function () {  
+		$("#float_box").show();  
+	});  
+	$("#float_box").mouseleave(function () {  
+		$("#float_box").hide();  
+	});  
+})  
+</script> 
+<style type="text/css">
+a{color:#666;}
+.dts{font-weight:normal;line-height:220%;}
+.info-list{
+  width:100%;
+  min-height:100px;
+  border-bottom:1px #ccc solid;
+  margin-bottom:10px;
+}
+.info-list dt{
+    width:122px;
+    float:left;
+    /*min-height:100px;*/
+    text-align:center;
+    font-size:14px;
+}
+.info-list dd{
+    width:830px;
+    float:left;
+    margin-left:10px;
+    /*background:green;*/
+    /*min-height:100px;*/
+}
+.info-ps{
+    height:30px;
+    line-height:30px;
+    border-bottom:1px #ccc dotted;
+    }
+.info-ps span.floatright{
+     float:right !important;
+}   
+</style>
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                  <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > 
+                  {:isL(L('StationSMS'),'站内信息')}
+             </p>
+            <!--<h1><a href="{:U('Member/orderList')}">站内信息</a></h1>-->{/*右边*/}
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+            <foreach name="instationInfo" item="ins">
+               <if condition="$ins['info_type'] eq 1">
+                    <dl class="info-list">
+                         <dt>
+                             <img src="__HOME__/images/logo.jpg" width="120" style="margin:1px;margin-top:10px;"/><br/><br/>
+                             <span style="color:red;">{:isL(L('SystemMessage'),'系统消息')}</span>
+                         </dt>
+                        <dd>
+                               <p class="info-ps"><span class="floatright">
+                                    {:from_time($ins['add_time'],'Y-m-d H:i:s')} | 
+                                    <span style="color:#ccc;">{:isL(L('Reply'),'回复')}</span> | 
+                                     <a href="javascript:void(0);" 
+                                     onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                                     '{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                                     '{:U('Member/deleteInfo',array('id'=>$ins['id']))}','')">{:isL(L('Delete'),'删除')}</a>
+                                    </span>
+                                   {$ins.title}
+                              </p>
+                          <p style="padding:5px;text-indent:20px;line-height:180%;">{$ins.content|stripcslashes=###}</p>
+                         </dd>
+                         <div style="clear:both"></div>
+                    </dl>
+                <else />    
+                    <dl class="info-list">
+                         <dt title="<if condition="$ins['nickname']">{$ins.nickname}<else />{$ins.user_name}</if>">
+                            <if condition="$ins['head_pic']">
+                                 <img src="__ROOT__/{$ins.head_pic}" width="80" style="margin:1px;"/><br/><br/>
+                            <else />
+                                 <img src="__ROOT__/{:C('USER_IMG')}" width="80" style="margin:1px;"/><br/><br/>
+                            </if>                         
+                             <if condition="$ins['nickname']">{$ins.nickname|sub_str=###,6}<else />{$ins.user_name|sub_str=###,6}</if>
+                         </dt>
+                        <dd>
+                               <p class="info-ps">
+                                   <span class="floatright">
+                                    {:from_time($ins['add_time'],'Y-m-d H:i:s')} | 
+                                    <a href="javascript:void(0);">{:isL(L('Reply'),'回复')}</a> | 
+                                     <a href="javascript:void(0);" 
+                                     onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                                     '{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                                     '{:U('Member/deleteInfo',array('id'=>$ins['id']))}','')">{:isL(L('Delete'),'删除')}</a>
+                                    </span>
+                                   {$ins.title}                           
+                               </p>
+                          <p style="padding:5px;text-indent:20px;line-height:180%;">{$ins.content|stripcslashes=###}</p>
+                         </dd>
+                         <div style="clear:both"></div>
+                    </dl>            
+                </if>
+            </foreach>  
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

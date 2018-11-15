@@ -1,0 +1,72 @@
+<style type="text/css">
+dl dt{text-align:right;}
+.nowrap{
+	font-size:12px ;
+	}
+</style>
+<script type="text/javascript">
+//parent.iframeReturn();
+</script>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/OrderInfo/payRequestForm')}" class="pageForm required-validate">
+		    <input type="hidden" name="order_id" value="{$res['order_id']}" />
+		    <input type="hidden" name="id" value="{$_GET['id']}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt style="float:left;">订单总金额：</dt>
+                <dd>
+                       <input  type="text"  value="{$res.order_amount}" class="" size="40" disabled="disabled"/>             
+                </dd>
+            </dl>	
+			<foreach name="paydata" item="p">	
+			   <if condition="$p['id'] eq $_GET['id']">
+					<dl>
+						<dt style="float:left;"><b style="color:red;">当前补交：</b></dt>
+						<dd>
+							<input  type="text" name="amount" value="{$p.amount}" class="required number" readonly="readonly" size="40"/>     
+							 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:0px;">
+							<span style="color:#666;position:relative;top:-3px;">系统自动计算手续费,当前比例({:C('CODEBUYBACKS')}%)</span>               
+						</dd>
+					</dl>			   
+			   <else />
+					<dl>
+						<dt style="float:left;">转入金额	：</dt>
+						<dd>
+							<input  type="text"  value="{$p.amount}" disabled="disabled" size="40"/>      
+							<if condition="$p['pay_status'] eq -1">
+							     <b style="color:red;">转入失败({$p.times|date='Y-m-d H:i:s',###})</b>
+							<elseif condition="$p['pay_status'] eq 0" />
+							     <b>未发起支付请求({$p.times|date='Y-m-d H:i:s',###})</b>
+						   <elseif condition="$p['pay_status'] eq 1" /> 		
+						         <b style="color:green;">转入成功({$p.times|date='Y-m-d H:i:s',###})</b> 
+							</if>            
+						</dd>
+					</dl>
+			  </if>	
+			</foreach>
+			{/*不是重发请求*/}
+			<if condition="$_GET['order_id']">
+					<dl>
+						<dt style="float:left;"><b style="color:red;">当前转入	：</b></dt>
+						<dd>
+							<input  type="text" name="amount" value="" class="required number" size="40"/>     
+							 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:0px;">
+							<span style="color:#666;position:relative;top:-3px;">系统自动计算手续费,当前比例({:C('CODEBUYBACKS')}%)</span>               
+						</dd>
+					</dl>				
+			</if>
+			{/*不是重发请求结束*/}
+            <dl>
+                <dt style="float:left;">备注：</dt>
+                <dd>
+                    <textarea name="remarks" rows="20" class="required" cols="100" style="margin:3px 0;">{$res.remarks|stripcslashes=###}</textarea>            
+                </dd>
+            </dl>			
+        </div>
+        <p><button type="submit" style="width:100px;height:30px;font-size:16px;font-weight:bold;margin-left:50px;">提交</button></p>
+    </form>
+    
+</div>
+
+

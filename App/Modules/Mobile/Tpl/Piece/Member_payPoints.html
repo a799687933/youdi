@@ -1,0 +1,138 @@
+{/*我的余额*/}
+<if condition="$userType eq 0">    
+   <foreach name="result" item="res">
+    <li style="border:1px solid #ccc;width:100%;margin:5px auto;line-height:200%;height:auto">
+        <div style="padding:5px;">
+             {:isL(L('SerialNumber'),'流水号')} ：<if condition="$res['transaction'] eq '0'">
+                                      A/N
+                                <else />
+                                     {$res['transaction']}
+                                </if><br/>
+           {:isL(L('Amount'),'金额')}：<if condition="$res['member_money'] gt 0">
+                                     <span style="color:blue">+{$res['member_money']}</span>
+                                 <else />
+                                     <span style="color:red">{$res['member_money']}</span>
+                                 </if><br/>
+             {:isL(L('ChangeReason'),'变动原因')}：<span style="color:red">{$res['change_desc']}</span>  <br/>
+             {:isL(L('Type'),'类型')}：
+                            <if condition="$res['change_type'] eq 1">
+                            {:isL(L('OnlineRecharge'),'在线充值')}(
+                            <if condition="$res['return_mark'] eq 1">
+                                  <span style="color:green;">{:isL(L('HasBeenSuccessful'),'已成功')}</span>
+                            <else />
+                                  <span style="color:red;">{:isL(L('NotSuccessful'),'未成功')}</span> | 
+                                  <a href="{:U(is_m().'/Member/payment',array('id'=>$res['id'],'cz'=>'ok'))}">{:isL(L('ToFillTheRecharge'),'去补此次充值')}</a>
+                            </if>)
+                         <elseif condition="$res['change_type'] eq 2" />
+                            {:isL(L('Withdrawals'),'提现')}
+                         <elseif condition="$res['change_type'] eq 3" />
+                            {:isL(L('Regulation'),'为理员调节')}             
+                         <elseif condition="$res['change_type'] eq 4" />
+                             {:isL(L('loginIntegral'),'登录积分')}           
+                         <elseif condition="$res['change_type'] eq 5" />
+                            {:isL(L('OperationUnderTheOrder'),'下订单时操作')}         
+                         <elseif condition="$res['change_type'] eq 99" />
+                            {:isL(L('Other'),'其它')}                                                                                                      
+                         </if><br/>             
+             {:isL(L('Time'),'变动时间')}： {$res['change_time']|date='Y-m-d H:i:s',###}
+    </li> 
+    </foreach>
+{/*我的冻结资金*/}    
+<elseif condition="$userType eq 1" />   
+   <foreach name="result" item="res">
+    <li style="border:1px solid #ccc;width:100%;margin:5px auto;line-height:200%;height:auto">
+        <div style="padding:5px;">
+             {:isL(L('FrozenFunds'),'冻结资金')} ：{$res['frozen_money']}<br/>
+            {:isL(L('ChangeReason'),'变动原因')}：{$res['change_desc']}<br/>
+             {:isL(L('Type'),'类型')}：
+                             <if condition="$res['change_type'] eq 1">
+                            {:isL(L('OnlineRecharge'),'在线充值')}(
+                                <if condition="$res['return_mark'] eq 1">
+                                     <span style="color:green;">{:isL(L('HasBeenSuccessful'),'已成功')}</span>
+                                <else />
+                                <span style="color:red;">{:isL(L('NotSuccessful'),'未成功')}</span>
+                                </if>
+                            )
+                         <elseif condition="$res['change_type'] eq 2" />
+                            {:isL(L('Withdrawals'),'提现')}
+                         <elseif condition="$res['change_type'] eq 3" />
+                            {:isL(L('Regulation'),'为理员调节')}              
+                         <elseif condition="$res['change_type'] eq 4" />
+                            {:isL(L('loginIntegral'),'登录积分')}       
+                         <elseif condition="$res['change_type'] eq 5" />
+                            {:isL(L('OperationUnderTheOrder'),'下订单时操作')}         
+                         <elseif condition="$res['change_type'] eq 99" />
+                             {:isL(L('Other'),'其它')}                                                                                                    
+                         </if><br/>    
+             {:isL(L('Time'),'变动时间')}： {$res['change_time']|date='Y-m-d H:i:s',###}
+    </li> 
+    </foreach> 
+{/*我的级等积分*/}    
+<elseif condition="$userType eq 2" />   
+    <foreach name="result" item="res"> 
+     <li style="border:1px solid #ccc;width:100%;margin:5px auto;line-height:200%;height:auto">
+        <div style="padding:5px;">
+             {:isL(L('GradePoints'),'等级积分')} ：<if condition="$res['rank_points'] gt 0">
+                                     <span style="color:blue">+{$res['rank_points']}</span>
+                                 <else />
+                                    <span style="color:red">{$res['rank_points']}</span>
+                                 </if><br/>
+             {:isL(L('ChangeReason'),'变动原因')}：<span style="color:red">{$res['change_desc']}</span>  <br/>
+             {:isL(L('Type'),'类型')}：
+                             <if condition="$res['change_type'] eq 1">
+                             {:isL(L('OnlineRecharge'),'在线充值')}(
+                               <if condition="$res['return_mark'] eq 1">
+                                     <span style="color:green;">{:isL(L('HasBeenSuccessful'),'已成功')}</span>
+                               <else />
+                                     <span style="color:red;">{:isL(L('NotSuccessful'),'未成功')}</span>
+                               </if>
+                             )
+                         <elseif condition="$res['change_type'] eq 2" />
+                            {:isL(L('Withdrawals'),'提现')}
+                         <elseif condition="$res['change_type'] eq 3" />
+                            {:isL(L('Regulation'),'为理员调节')}             
+                         <elseif condition="$res['change_type'] eq 4" />
+                            {:isL(L('loginIntegral'),'登录积分')}      
+                         <elseif condition="$res['change_type'] eq 5" />
+                            {:isL(L('OperationUnderTheOrder'),'下订单时操作')}          
+                         <elseif condition="$res['change_type'] eq 99" />
+                            {:isL(L('Other'),'其它')}                                                                                                     
+                         </if><br/>    
+             {:isL(L('Time'),'变动时间')}： {$res['change_time']|date='Y-m-d H:i:s',###}
+      </li> 
+    </foreach>
+{/*我的消费积分*/}    
+<elseif condition="$userType eq 3" />    
+    <foreach name="result" item="res"> 
+     <li style="border:1px solid #ccc;width:100%;margin:5px auto;line-height:200%;height:auto">
+        <div style="padding:5px;">
+             {:isL(L('ConsumptionIntegral'),'消费积分')} ：<if condition="$res['pay_points'] gt 0">
+                                      <span style="color:blue">+{$res['pay_points']}</span>
+                                  <else />
+                                      <span style="color:red">{$res['pay_points']}</span>
+                                  </if><br/>
+             {:isL(L('ChangeReason'),'变动原因')}：<span style="color:red">{$res['change_desc']}</span>  <br/>
+             {:isL(L('Type'),'类型')}：
+                         <if condition="$res['change_type'] eq 1">
+                            {:isL(L('OnlineRecharge'),'在线充值')}(
+                                 <if condition="$res['return_mark'] eq 1">
+                                     <span style="color:green;">{:isL(L('HasBeenSuccessful'),'已成功')}</span>
+                                 <else />
+                                     <span style="color:red;">{:isL(L('NotSuccessful'),'未成功')}</span>
+                                 </if>
+                            )
+                         <elseif condition="$res['change_type'] eq 2" />
+                            {:isL(L('Withdrawals'),'提现')}
+                         <elseif condition="$res['change_type'] eq 3" />
+                            {:isL(L('Regulation'),'为理员调节')}          
+                         <elseif condition="$res['change_type'] eq 4" />
+                            {:isL(L('loginIntegral'),'登录积分')}      
+                         <elseif condition="$res['change_type'] eq 5" />
+                            {:isL(L('OperationUnderTheOrder'),'下订单时操作')}          
+                         <elseif condition="$res['change_type'] eq 99" />
+                            {:isL(L('Other'),'其它')}                                                                                                  
+                         </if><br/>
+             {:isL(L('Time'),'变动时间')}： {$res['change_time']|date='Y-m-d H:i:s',###}
+      </li> 
+    </foreach>           
+</if>

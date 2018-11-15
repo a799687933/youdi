@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>邦定第三方登录_{:C('WEBNAME')}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+	$('.footerb').attr('class','footerb2 wrap');						
+});
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:header'/>{/*头部 */}
+ <!--content begin-->
+ <div class="content bgf6">
+ 	<div class="wrap pt30">
+	  <div class="txdd" style="min-height:600px;"><span class="icon8">&nbsp;</span>
+	   <p class="col333 f20 pb30">邦定第三方登录</p>
+	   <div class="zzyy" style="border:none;">
+	   <div style="height:100px;"></div>
+	   	<div id="comigs1" style="text-align:center;">
+                <img src="{$biotinge['pic_a']}" />
+                <p style="height:40px;line-height:40px;font-size:16px;">{$biotinge['name']}</p>
+                <h2 style="height:40px;line-height:40px;text-align:center;font-size:16px;color:red;">没有检测到{$biotinge['type']}</h2>
+			    <p style="height:40px;line-height:40px;text-align:center;">
+				     <a href="{:U('/Login/index')}">现在去邦定</a> | 
+					 <a href="{:U('/Register/member')}">注册一个新用户</a> | 
+					 <a href="{:U('/Register/sjrz')}">注册一个服务商</a>
+			   </p>				
+	  </div>
+	    <div class="cb pv30"></div>
+	   </div><!---->	   
+	  </div>
+	  <!--footer begin--> 
+	  <!--footer end-->
+	 </div>
+ </div>
+  <!--content end-->
+   <include file='Common:footer'/>{/*页脚*/}	
+</body>
+</html>

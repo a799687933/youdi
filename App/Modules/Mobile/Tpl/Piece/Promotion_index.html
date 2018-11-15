@@ -1,0 +1,33 @@
+<foreach name="promotion" item="pro" key="keyps"> 
+    <div class="tg_list">
+        <div class="tg_img"><img src="__ROOT__/<if condition="$pro['promotion_img']">{$pro.promotion_img}<else />{$pro.goods_thumb}</if>" /></div>
+        <div class="tg_con">
+            <ul>
+                <li class="title">{$pro.goods_name|show_str=###,20}</li>
+                <li>
+                    <div class="tg_jg">
+                        <span>
+                            {:isL(L('PromotionalPrice'),'促销价格')}：
+                            <font>{:CUR()}<font style="font-size:1.3em;">{:getPrice($pro['promotion_price'],false)}</font>
+                        </span>
+                    </div> 
+                    <div class="tg_time" ids="time_{$keyps}" endTime="{$pro.promotion_end_date}">
+                        <span><img src="__MOBILE__/images/tg_inoc1.jpg"></span>
+                        <span id="time_{$keyps}" style="width:auto"></span>
+                    </div>
+                </li>
+                <li class="tg_bp">
+                <div class="bp1">{:isL(L('Band'),'品牌')}：<font>{$pro.brand_name}</font></div>
+                </li>
+                <li class="tg_buy">
+                    <a href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$pro.id}&check=ok')">
+                        <span><img src="__MOBILE__/images/tg_buy1.jpg" /></span>
+                    </a>
+                    <a href="javascript:void(0);" onClick="carts('','','','{:U('Cart/addCart','','')}?id={$pro.id}')">
+                        <span style="float:right;"><img src="__MOBILE__/images/tg_buy2.jpg" /></span>
+                    </a>
+               </li>
+            </ul>
+        </div>    
+    </div>
+</foreach>    

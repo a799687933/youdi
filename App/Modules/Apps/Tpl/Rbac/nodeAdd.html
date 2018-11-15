@@ -1,0 +1,25 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/Rbac/nodeAddHanlde')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" name="pid" value="{$pid}"/>
+        <input type="hidden" name="level" value="{$level}"/>
+        <input type="hidden" name="path" value="{$path}"/>
+        <div class="pageFormContent" layoutH="58">
+            <p>
+                <label>{$type}：</label>
+                <input type="text" name="name" size="25" class="required" />
+            </p>
+            <p>
+                <label>描述：</label>
+                <input type="text" name="title" size="25" class="required" />
+            </p>
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

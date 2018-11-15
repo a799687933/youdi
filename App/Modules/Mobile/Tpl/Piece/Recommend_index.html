@@ -1,0 +1,13 @@
+<foreach name="result" item="res" key="keyrec">  
+<li>
+   <span style="width:100%">
+        <div class="img"><img src="__ROOT__/{$res.goods_thumb}"></div>
+        <div class="title">{$res.goods_name|show_str=###,15}</div>
+        <div class="jg">{:isL(L('PromotionalPrice'),'促销价格')}：<font>{:getPrice($res['goods_retail_price'],true)}</font></div>
+        <div class="buy">
+            <a href="{:U('Goods/index',array('html'=>'g-'.$res['id']))}" class="buy1">{:isL(L('BuyImmediately'),'立即抢购')}</a>
+            <a href="{:U('Goods/index',array('html'=>'g-'.$res['id']))}" class="buy2"><img src="__MOBILE__/images/gwc_inoc.jpg"></a>
+       </div>
+   </span> 
+</li>
+</foreach>

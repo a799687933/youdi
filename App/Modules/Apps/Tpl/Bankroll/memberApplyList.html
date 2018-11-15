@@ -1,0 +1,106 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->       
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>日期：<input type="text" name="datas" class="date textInput readonly valid" size="12" value="{$datas}" /></td>
+                <td>
+                <select class="combox" name="is_deal" class="required">
+                    <option value="">-全部-</option>                
+                       <option value="1" <if condition="$_REQUEST['is_deal'] eq 1">selected="selected"</if>>已处理</option>
+                       <option value="0" <if condition="$_REQUEST['is_deal'] eq '0'">selected="selected"</if>>未处理</option>
+                </select>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Bankroll/deleteMemberApplyList')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Bankroll/deleteMemberApplyList','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>     
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="goods_supplier_id"  class="<if condition='$goods_supplier_id eq "desc"'>desc<else />asc</if>">会员名称</th>    
+                <th orderfield="money"  class="<if condition='$money eq "desc"'>desc<else />asc</if>">申请提现金额</th>            
+                <th >申请银行名称</th>
+                <th >申请银行帐号</th>
+                <th >开户帐号名称</th>
+                <th>开户网点</th>
+                <!--<th >银行类型</th>-->
+                <th orderfield="is_deal"  class="<if condition='$is_deal eq "desc"'>desc<else />asc</if>">是否已处理</th>
+                <th orderfield="times"  class="<if condition='$times eq "desc"'>desc<else />asc</if>">申请时间</th>
+                <th>操作</th>
+            </tr>           
+        </thead>
+        <tbody>
+            
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><if condition="$V['is_deal']"><input name="ids" value="{$V.id}" type="checkbox"><else /><input disabled="disabled" type="checkbox"></if></td>
+                <td>{$V.id}</td>
+                <td>
+                     <if condition="access('MemberAccount/accountList')">
+                         <a href="{:U(APP_APPS.'/MemberAccount/accountList',array('id'=>$V['m_id'],'name'=>$V['m_name']))}" target="navTab" title="{$V.m_name}帐户￥{$V.member_funds}">{$V['m_name']}</a>
+                     <else />
+                         {$V['m_name']}
+                     </if> 
+                </td>
+                <td>￥<span style="color:red;">{$V.money}</span></td>
+                <td>{$V.band_name}</td>
+                <td>{$V.band_account}</td> 
+                <td>{$V.user_name}</td>
+                <td>{$V.band_address}</td>
+                <!--<td><if condition="$V['bank_type']">对公帐户<else />个人帐户</if></td>-->
+                <td><if condition="$V['update_time']"><span style="color:green;">已处理</span><else /><span style="color:red;">未处理</span></if></td>
+				<td>{$V.add_time|date='Y-m-d H:i:s',###}</td>
+                <td>    
+                <if condition="$V['update_time'] eq 0"> 
+                    <!--给商户转帐-->                            
+                    {$action|tpl_action='dialog','Bankroll/memberApply','id/'.$V["id"],'记录('.$V['m_name'].')转帐','icon_account.gif','icon_account_not.gif',1024,590} 
+                <else />
+                     {$action|tpl_action='dialog','Bankroll/memberApply','id/'.$V["id"],'查看('.$V['m_name'].')转帐填写记录','icon_view.gif','icon_view_not.gif',1024,590} 
+                </if>
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

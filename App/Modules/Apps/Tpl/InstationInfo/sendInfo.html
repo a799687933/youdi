@@ -1,0 +1,41 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    <if condition="!$_GET['ins_id']">
+    <form method="post" action="{:U(APP_APPS.'/InstationInfo/sendInfoForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    </if>
+        <input type="hidden" name="user_id" value="{$uid}" />
+        <input type="hidden" name="type" value="{$type}"/>
+        <input type="hidden" name="action" value="{$action}"/>
+        <div class="pageFormContent nowrap" layoutH="97">
+           <foreach name="titles" item="t">
+                <dl>
+                    <dt>({$t['info']})消息标题：</dt>
+                    <dd>
+                        <input  type="text" name="{$t['field']}" value="{$save[$t['field']]|strip_tags=###}" class="required" size="40" />
+                        
+                    </dd>
+                </dl>        
+          </foreach>     
+          
+          <foreach name="contents" item="t"> 
+             <dl class="nowrap">
+                <dt>({$t['info']})<br/>消息内容(200个字)：</dt>
+                <dd><textarea name="{$t['field']}" class="required" cols="80" rows="8" style="resize:none;">{$save[$t['field']]|stripcslashes=###|strip_tags=###}</textarea></dd>
+             </dl>
+          </foreach>    
+            
+        </div>
+        <div class="formBar">
+            <ul>
+               <if condition="!$_GET['ins_id']"><li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li></if>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+     <if condition="!$_GET['ins_id']">    
+    </form>
+    </if>
+</div>
+
+

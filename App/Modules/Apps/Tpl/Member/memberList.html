@@ -1,0 +1,181 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Member/memberList","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  输入E-mail：<input type="text" name="user_name" value="{$searchVal}"/>
+                </td>
+              <!--  <td>
+                <select class="combox" name="city_id" class="required">
+                    <option value="">-请选择城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.city_id}" <if condition='$_REQUEST["city_id"] eq $C["city_id"]'>selected="selected"</if>>{$C.html}{$C.city_name}</option>
+                   </foreach>  
+                </select>
+                </td>-->
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <!--<if condition="access('Member/memberAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Member/memberAdd')}"target="dialog" mask="true" width="1024" height="590" title="添加会员"><span>添加会员</span></a></li>
+            </if>-->
+            <if condition="access('Member/memberDelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Member/memberDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/memberList" class="delete"><span>删除</span></a></li>
+            </if>
+
+            <if condition="access('Member/exportExcel')">
+            <li class="">
+                 <a class="icon" href="{:U(APP_APPS.'/Member/exportExcel',array(C('VAR_PAGE')=>$currentPage),'xls')}" target="dwzExport" targettype="navTab" title="实要导出这些记录吗?这可能需要几分钟，请耐心等待">
+                 <span>导出EXCEL</span>
+                 </a>           
+            </li>
+            </if>
+            			
+			{/*是否启用站内信*/}
+			<if condition="C('IS_LETTER')">        
+				<if condition="access('InstationInfo/sendInfo')">
+				  <li>
+					  <a class="add" href="{:U(APP_APPS.'/InstationInfo/sendInfo',array('type'=>'member','action'=>'memberList'))}"target="dialog" mask="true" width="1024" height="590" title="会员批量推送站内信">
+						<span>会员批量推送站内信</span>
+					  </a>
+				  </li>
+				</if>     
+			</if> 
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th>编号</th>
+               <!-- <th>所属城市</th>-->       
+                <th >用户帐号</th>        
+				<th >电话</th>       
+				<!--<th >电子邮件</th>  -->
+				 <if condition="C('IS_ACCOUNT')">     
+					<th >可用资金</th>
+				    <th >冻结资金</th>
+                 </if>     
+				 <if condition="C('IS_RANK_POINTS')">
+                     <th >等级积分</th>
+                 </if>  
+                 <if condition="C('IS_PAY_POINTS')">
+					<th>消费积分</th>
+				 </if>
+                <th>注册时间</th>
+                <th>登录次数</th>
+				<th>帐号异常</th>
+				<th>是否锁定</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="Member" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <!--<td>{$V.city_name}</td>-->
+				<td>{$V.user_name}</td>
+                <td>{$V.telephone}</td>
+				<!--<td>{$V.reg_email}</td>-->
+                
+				{/*会员帐户*/}
+				<if condition="C('IS_ACCOUNT')">        
+                    <td>{$V.member_funds}</td>
+                    <td>{$V.frozen_funds}</td> 
+                </if>
+                {/*会员帐户结束*/}
+                
+                {/*会员等级*/}
+                <if condition="C('IS_RANK_POINTS')">
+                <td>
+                     <if condition="$V['rank_points']">
+                         <foreach name="level" item='L'> 
+                              <if condition="($V['rank_points'] gt $L['min_points']) AND ($V['rank_points'] elt $L['max_points'])">
+                                      <if condition="$L['special_rank']">
+                                            {$L.grade_name}--(特殊会员组) ({$V['rank_points']})
+                                      <else />    
+                                            {$L[pfix('grade_name')]}({$V['rank_points']})
+                                      </if> 
+                                       <php>break;</php>  
+                                <elseif condition="($V['rank_points'] gt $L['min_points']) AND ($V['rank_points'] gt $L['max_points'])" />
+                                     {$level[0][pfix('grade_name')]}({$V['rank_points']}) 
+                                      <php>break;</php>     
+                                </if> 
+                           </foreach>       
+                     <else />    
+                         注册用户(0)
+                     </if>  
+                </td>
+                </if>
+                {/*会员等级结束*/}
+              
+               {/*会员消费积分*/}  
+                <if condition="C('IS_PAY_POINTS')">
+                   <td>{$V.pay_points}</td>
+				</if>
+				{/*会员消费积分结束*/}
+                  
+                <td>{$V.reg_time|date='Y-m-d',###}</td>
+                <td>{$V.login_count}</td>
+				<td>
+				       <if condition="$V['temp_login_count'] egt 5">
+					        <span style="color:red;" title="登录失败5次帐号被禁止登录">登录被限制</span> | <a href="javascript:;" onclick="testConfirmMsg('{:U(APP_APPS.'/Member/cancelLimit',array('id'=>$V['id']))}','ajax','确定取消本次限制？')" rel="memberList">取消限制</a>
+					  <else />
+					       <span style="color:green;">登录正常</span>
+					  </if>
+				</td>
+			    <td>{$V.is_lock|tpl_yes_no=###,'member','is_lock',$V['id'],'id','Member/memberSaveForm'}</td>
+                <td>                
+                 {$action|tpl_action='dialog','Member/memberSave','id/'.$V["id"],'修改（'.strip_tags($V['user_name']).'）','icon_edit.gif','icon_edit_not.gif',900,550} <!--添加按钮-->
+				 
+				{/*是否启用会员帐户等级功能*/} 
+                <if condition="C('IS_ACCOUNT') OR C('IS_PAY_POINTS')  OR C('IS_RANK_POINTS')"> 
+                 {$action|tpl_action='navTab','MemberAccount/accountList','id/'.$V["id"].'/name/'.$V['user_name'],'('.$V['user_name'].')会员帐户','icon_account.gif','icon_account_not.gif'} 
+			   </if>
+               	 
+              {/*给会员发消息*/}    
+			  <if condition="C('IS_LETTER')">                             
+              {$action|tpl_action='dialog','InstationInfo/sendInfo','id/'.$V["id"].'/type/member/name/'.$V['user_name'].'/action/memberList','给('.$V['user_name'].')会员发送站内信','icon_account.gif','icon_account_not.gif',1024,590} 
+			  </if>
+              {$action|tpl_action='ajaxTodo','Member/memberDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['user_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

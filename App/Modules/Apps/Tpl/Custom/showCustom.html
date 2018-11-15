@@ -1,0 +1,68 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(MODULE_NAME.'/Links/linkAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>联系人：</dt>
+                <dd>
+                    <input  type="text" name="" value="{$result.user_name}" class="" size="40"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>手机：</dt>
+                <dd>
+                    <input type="text" name="" value="{$result.mobile}" class="" size="40"/>
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>固定电话：</dt>
+                <dd>
+                     <input type="text" name="" class="" value="{$result.phone}" size="40"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>电子邮件：</dt>
+                <dd>
+                     <input type="text" name="" class="" value="{$result.email}" size="40"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>地址：</dt>
+                <dd>
+                     <input type="text" name="" class="" value="{$result.address}" size="40"/>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>发布时间：</dt>
+                <dd>
+                     <input type="text" name="" class="" value="{$result.add_time|date='Y-m-d H:i:s',###}" size="40"/>
+                </dd>
+            </dl>
+            
+        <dl class="nowrap">
+            <dt>备注：</dt>
+            <dd><textarea name="" class="" cols="50" rows="8" style="resize:none;">{$result.remarks}</textarea></dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <!--<li><div class="buttonActive"><div class="buttonContent"><button type="submit">{:L('Submit')}</button></div></div></li>-->
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:C($langfx.'WEBTITLE')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="keywords" content="{:C($langfx.'WEBKEYWORD')}" />
+<meta name="description" content="{:C($langfx.'WEBDEPICT')}" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="g-mn">
+  <include file="Common:header2" />{/*头部*/}
+  <div class="banner"><img src="__ROOT__/{$navAd[0]['ad_img']}"></div>
+  <div class="nav_list">
+    <ul>
+     <foreach name="cateList" item="m_cate" key="m_cate_key">
+          <li>
+                   <a href="{:U(is_m().'/Category/index',array('html'=>$m_cate['id']))}">
+                       <img src="__MOBILE__/images/list_{$m_cate_key + 1}.png"><br>{$m_cate['name']}
+                  </a>
+          </li>
+     </foreach>   
+    </ul>
+  </div>
+  <div class="index_title"> <span><a href="{:U(is_m().'/Promotion/index')}">{:isL(L('More'),'更多')}>></a>{:isL(L('Promotion'),'限时促销')}</span> </div>
+  <div class="index_pro_list">
+    <ul>
+      <foreach name="prom"  item="p" key="p_key">  
+          <if condition="$p_key lt 4">
+              <li>
+                   <span>
+                      <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$p['id']))}"><img src="__ROOT__/{$p['goods_thumb']}"></a>
+                      <h1>{$p.goods_name|show_str=###,15}</h1>
+                      <h2>
+                           <a href="{:U(is_m().'/Goods/index',array('html'=>'g-'.$p['id']))}">{:isL(L('Bought'),'立即购买')}</a>
+                           {:isL(L('Price'),'立即购买')}：{:getPrice($p['promotion_price'],true)}
+                      </h2>
+                </span> 
+              </li>
+          </if>   
+      </foreach>
+    </ul>
+  </div>
+  <div class="index_pb">
+    <div class="index_pb_title">
+         <span><a href="{:U(is_m().'/Brand/index')}">{:isL(L('More'),'更多')}>></a>{:isL(L('BrandRecommendation'),'品牌推荐')}</span>
+    </div>
+    <div class="pb_list">
+      <ul>
+       <foreach name="pulbicBand" item="pb" key="b_key">   
+           <if condition="$b_key lt 12">
+               <li><a href="{:U('BandCover/index',array('html'=>'b-'.$pb['id']))}"><img src="__ROOT__/{$pb.logo}" style="height: 93px !important;"></a></li>
+          </if> 
+       </foreach>       
+      </ul>
+    </div>
+  </div>
+  <div class="index_title"> <span><a href="#">{:isL(L('More'),'更多')}>></a>{:isL(L('Recommend'),'推荐商品')}</span> </div>
+  <div class="index_tj">
+    <ul>
+     <foreach name="recommend"  item="rec">      
+          <li>
+              <span style="width: 100%;">
+                    <div class="img"><img src="__ROOT__/{$rec['goods_thumb']}"></div>
+                    <div class="title">{$rec.goods_name|show_str=###,10}</div>
+                    <div class="jg">{:isL(L('PromotionalPrice'),'促销价格')}：<font>{:getPrice($rec['goods_retail_price'])}</font></div>
+                    <div class="buy">
+                        <a href="{:U('Goods/index',array('html'=>'g-'.$rec['id']))}" class="buy1">{:isL(L('BuyImmediately'),'立即抢购')}</a>
+                        <a href="{:U('Goods/index',array('html'=>'g-'.$rec['id']))}" class="buy2"><img src="__MOBILE__/images/gwc_inoc.jpg"></a>
+                   </div>
+            </span> 
+         </li>
+     </foreach> 
+    </ul>
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

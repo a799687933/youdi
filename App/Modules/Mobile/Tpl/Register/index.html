@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('Registered'),'注册')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script>
+    $(function(){
+       $('.cat_tree').hide();
+        var url="{:U(is_m().'/Register/chkData','','')}";
+        myValidationEngine('ajaxUser',url,'my=data','{:isL(L("BeRegistered"),"此用户已被其他人注册")}','{:isL(L("CanBeRegistered"),"此用户可以注册")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');      
+        var url="{:U(is_m().'/Register/checkCode','','')}";
+        myValidationEngine('ajaxYzm',url,'my=data','{:isL(L("VerificationCodeError"),"验证码错误")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');  
+        valinit('.form1','get','',true,'topLeft');  
+    });
+</script>
+<style type="text/css">
+#submits {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    color: #FFF;
+    font-size: 1.3em;
+    border-radius: 3px;
+    background-color: #99c838;
+    text-align: center;
+	width:100%;
+	border:none
+}
+</style>
+</head>
+<body>
+<div class="g-mn"> 
+ <include file="Common:header1" />
+  <div class="login">
+  	<div class="login_bg"><img src="__MOBILE__/images/login_bg.jpg"></div>
+    <div class="loginbox">
+    <div class="login_img"><img src="__MOBILE__/images/login_img.png"></div>
+    <div class="login_re">
+    	<ul>
+            <form method="post" action="{:U(is_m().'/Register/regDo')}" class="form1" >
+                <input type="hidden" name="recommend" value="" />
+        	<li >
+            <div class="re_l"><span><font>* </font>{:isL(L('UserName'),'用户名')}</span></div>
+            <div class="log1">
+                 <input type="text" class="login1 validate[required,ajax[ajaxUser]]"  name="user_name" id="user_name"/>
+            </div>
+            </li>
+            <li >
+            <div class="re_l"><span><font>* </font> {:isL(L('LoginPassword'),'登录密码')}</span></div>
+            <div class="log1"></span>
+                <input type="password"  id="password" name="password" class="login1"  />
+            </div>
+            </li>
+            <li >
+            <div class="re_l"><span><font>* </font>{:isL(L('ConfirmPassword'),'确认密码')}</span></div>
+            <div class="log1"></span>
+                <input type="password" name="not_password" id="not_password" class="login1 validate[required,equals[password]]"  />
+            </div>
+            </li>
+            <li >
+            <div class="re_l"><span><font>* </font>{:isL(L('Email'),电子邮箱)}</span></div>
+            <div class="log1">
+               <input type="text" name="reg_email" id="reg_email" class="login1 validate[custom[email],required]"  />
+            </div>
+            </li>
+            
+            <li >
+            <div class="re_l"><span><font>* </font>{:isL(L('VerificationCode'),'验证码')}</span></div>
+            <div class="log5">
+                <input type="text" class="login3 validate[required,ajax[ajaxYzm]]" id="code" name="code" style="position: relative;top:-4px;" />
+                <div class="yzm">
+                  <span><img src="{:U(is_m().'/Register/showCode','','')}" onClick="javascript:this.src='{:U(is_m().'/Register/showCode','','')}/tm/'+Math.random()"/>
+                  </span> 
+                  </div>
+              </div>
+            </li>
+
+            <li >
+             <div class="re_l"><span></span></div>
+            <div class="log5">
+                <input type="checkbox" class="validate[minCheckbox[1]] checkbox" id="agree" name="agree" style="width:auto;height:auto;position:relative;top:0.8rem;"/>{:isL(L('HaveReadTermsService'),'我已经阅读并同意服务条款')}
+              </div>
+            </li>
+                        
+            <li>
+            <div class="re_l"><span></span></div>
+            <div class="log3"><input type="submit" class="login2" id="submits" value="{:isL(L('Registered'),'注册')}"/></div>
+            </li>
+            <li>
+            <div class="re_l"><span></span></div>
+            <div class="log4">
+                 {:isL(L('HaveAccountLogin'),'已经有账号，请点击这里')}
+                 <a href="{:U(is_m().'/Login/index')}">{:isL(L('QuickLogin'),'快速登录')}>></a>
+            </div>
+            </li>        
+           </form>
+        </ul>
+    </div>
+    </div> 
+  </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+</body>
+</html>

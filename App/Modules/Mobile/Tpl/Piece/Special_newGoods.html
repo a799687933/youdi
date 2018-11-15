@@ -1,0 +1,14 @@
+﻿{/*新品推荐列表*/}
+<foreach name="result" item="res">
+      <li>
+          <img src="__ROOT__/{$res['goods_thumb']}" alt=""/>
+          <h1 class="col666 f14 lh20 b pl10">{$res['goods_name']|strip_tags=###|sub_str=###,9}</h1>
+          <span class="pl10 lh25 hong">￥<b class="f16">{$res['goods_retail_price']}</b></span>
+          <del class="col999 fr lh25 pr10" style="font-size: 0.4rem;">市场价：{$res['goods_market_price']}</del>
+          <div class="cb"></div>
+          <a href="javascript:void(0);" onClick="myAlert('确认提示','确定收藏该商品？','{:U(is_m().'/Goods/collection',array('id'=>$res['id']),'')}','','{:is_m()}',2)" class="icon10 fl">收藏</a>
+          <a href="javascript:void(0);" onClick="carts('','','','{:U(is_m().'/Cart/addCart','','')}?id={$res['id']}')" class="icon10r fl">&nbsp;</a>
+          <a href="{:U(is_m().'/Goods/index',array('html'=>$res['id']))}" class="icon10rr fr">查看详情</a>
+          <div class="cb"></div>
+      </li>
+</foreach>

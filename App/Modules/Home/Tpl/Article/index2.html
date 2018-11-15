@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('News'),'YOUDI WU最新资讯')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/swiper.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/swiper4.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".zixun li").each(function(){
+		var i = $(this).index();
+		var zxpic1 = new Swiper(".zxpic_1_" + i + "", {
+		autoHeight: true,
+        		pagination: {
+   		 el: ".zxpicb_1_" + i + "",
+			clickable :true,
+		  },
+		   navigation: {
+		    nextEl: ".zxpicr_1_" + i + "",
+		    prevEl: ".zxpicl_1_" + i + "",
+		  },
+		    });
+	})
+	
+	
+
+	
+	
+	 /*$(".zxdz").click(function(){
+		 $(this).addClass("zxdznow fa-heart")
+		 $(this).removeClass("fa-heart-o")
+		 })	*/
+	/*$(".zxsc").click(function(){
+		 $(this).addClass("fa-star")
+		 $(this).removeClass("fa-star-o")
+	})	*/
+	//展开更多文章内容
+	$(document).on('click','.zxfbnr b',function(){
+		 $(this).hide()
+		 $(this).parent(".zxfbnr").css("height","auto")	
+	});
+	//展开更多评价
+    $(document).on('click','.zxdhb b',function(){
+		 $(this).hide()
+		 $(this).parent(".zxdhb").siblings(".zxdh").children("p").show()	
+	});
+	$(".zxdh p:gt(2)").hide(); 
+});
+//点击加载更多，按钮必须是button
+/**
+ *THIS   this
+ * totalPages  总页数
+ * addEnd      追加内容节点
+ * url               请求地址
+ *  */
+mobile={};
+var page=2;
+mobile.clickPage=function(THIS,totalPages,addEnd,url){    
+    var _this=this;
+    this.run=function(){
+         if(page <= totalPages){  
+            if($(THIS).attr('ajax') == 'ok') return;      
+			if(page == totalPages) $(THIS).parents('a').hide(); //最后一页
+             _this.getPage();
+         }else{
+			 $(THIS).parents('a').hide();
+             //$(THIS).attr('disabled',true).val(window.LoadingCompleted);
+         }             
+    };  
+    this.getPage=function(){
+          $.ajax({
+             type:'get',
+             dataType: "text",
+             url:url+page+'/req/app',
+             success:function(response,status,xhr){
+                 $(THIS).attr('ajax','').attr('disabled',false).val('Load More');
+                 page++;
+                 $(addEnd).append(response);
+				 p65();
+	var j = 1;
+	$(".zixun li").each(function(){
+		var i = $(this).index();
+		if(i > 4){
+			i = 0;
+			j++;
+		}
+		var zxpic1 = new Swiper(".zxpic_"+j+"_" + i + "", {
+		autoHeight: true,
+        		pagination: {
+   		 el: ".zxpicb_"+j+"_" + i + "",
+			clickable :true,
+		  },
+		   navigation: {
+		    nextEl: ".zxpicr_"+j+"_" + i + "",
+		    prevEl: ".zxpicl_"+j+"_" + i + "",
+		  },
+		    });
+	})
+              },
+              beforeSend:function(){
+                  $(THIS).attr('ajax','ok').attr('disabled',true).val(window.Loading);
+              },         
+             error:function(xhr,errorText,errorType){
+                 alert('错误代码：' + xhr.status + ' : ' + xhr.statusText);
+             }
+         });              
+    };  
+    //运行
+    _this.run();         
+};	
+/*定位光标*/
+function positions(_this){
+	var  li=$(_this).parents('li');
+	li.find('.zxpltext').focus();
+}
+
+/*提交评论*/
+var isForm10=false;
+function formSend(_this){
+	var li=$(_this).parents('li');
+     var content=$(_this).find('input[name="content"]').val();
+	 if(content)  content=content.replace(/(^\s*)|(\s*$)/g, "");
+	 if(!content) {
+		$(_this).find('input[name="content"]').val('').focus();
+		return false;
+	 }	 
+	 var url=$(_this).attr('action');
+	if(isForm10) return;
+	isForm10=true;	 
+    $.ajax({
+		 type:'POST',
+		 dataType: "JSON",
+		 data:{content:content},
+		 url:url,
+		 success:function(response,status,xhr){
+			  //isForm10=false;
+			  res=response[0];
+			  if(!res[1]){
+				 if(res[3]) window.location.href=res[3];
+				 return;
+			  }			   
+			 //生成节点
+		     //content= repFace(content);//替换表情
+			 var node='<p><span class="vam mr5">{:getUserC("SE_NICKNAME")}</span><span class="vam" style="color:#023867;">@</span>';
+             node+='<img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">'+content+'</p>';
+              li.find('.zxdh').append(node);
+			  li.find('.show_time').text('刚刚');
+			  $(_this).find('input[name="content"]').val('');
+			  var num=parseInt(li.find('.show_app_num').text());
+			  num++;
+			  li.find('.show_app_num').text(num);
+			  li.find('.zxdhb').show();
+		  },
+		   beforeSend:function(){
+			 //请求前
+		  }
+	 });		 
+	 return false;
+}
+
+/*点赞*/
+var isForm6=false;
+function praise(_this,url){	
+    var  li=$(_this).parents('li');
+	var num=parseInt(li.find('.paraise_num').text());
+	if(isForm6) return;
+	isForm6=true;		
+	$.getJSON(url,{},function(res){
+		 isForm6=false;							  
+		 res=res[0];					  
+	     if(!res[1]){
+			 if(res[3]) window.location.href=res[3];
+			 return;
+		}
+		if(res[5] == 'save'){
+			$(_this).addClass("fa-heart-o")
+			$(_this).removeClass("zxdznow fa-heart")			
+			num--;
+			li.find('.paraise_num').text(num);		
+		}else{
+			$(_this).addClass("zxdznow fa-heart")
+			$(_this).removeClass("fa-heart-o")					
+			num++;
+			li.find('.paraise_num').text(num);			
+		}
+	});    
+}
+//收藏夹 
+var isForm8=false;
+function setCollection(_this,url){
+	if(isForm8) return;
+	isForm8=true;		
+	$.getJSON(url,{},function(res){
+		 isForm8=false;					  
+		 res=res[0];					  
+	     if(!res[1]){
+			 if(res[3]) window.location.href=res[3];
+			 return;
+		}
+		if(res[5] == 'save'){
+			$(_this).removeClass('fa-star').addClass('fa-star-o');
+		}else{
+			$(_this).removeClass('fa-star-o').addClass('fa-star');			
+	    }
+	});
+}
+/*递归替换表情*/
+function repFace(content){
+	 var face={
+		   'face_01':'[流汗]',
+		   'face_02':'[钱]',
+		   'face_03':'[发怒]',
+		   'face_04':'[浮云]',
+		   'face_05':'[给力]',
+		   'face_06':'[大哭]',
+		   'face_07':'[憨笑]',
+		   'face_08':'[色]',
+		   'face_09':'[奋斗]',
+		   'face_10':'[鼓掌]',
+		   'face_11':'[鄙视]',
+		   'face_12':'[可爱]', 
+		   'face_13':'[闭嘴]',
+		   'face_14':'[疑问]',
+		   'face_15':'[抓狂]',
+		   'face_16':'[惊讶]',
+		   'face_17':'[可怜]',
+		   'face_18':'[弱]',
+		   'face_19':'[强]',
+		   'face_20':'[握手]',
+		   'face_21':'[拳头]',
+		   'face_22':'[酒]',
+		   'face_23':'[玫瑰]',
+		   'face_24':'[打酱油]'				 
+	 };
+	 for(var i in face){
+		 var fa='<span title="" class="margin0 face-item '+i+'" style="display:inline-block;height:23px;width:23px;position:relative;top:5px;"></span>';
+		 var test=eval("/"+face[i]+"/");
+		 if(test.test(content)){
+			 content=content.replace(face[i],fa);		
+			 return  repFace(content);
+		 }
+	 }	
+	 return content;    
+}
+
+//只显示3行
+p65();
+function p65(){
+$(function(){
+	 var p=$('.list_p p');
+	 for(var i = 0;i < p.length;i++){
+		 var ph=p.eq(i).height();
+		 if(ph > 40){
+			// alert(p.eq(i).html());
+			 p.eq(i).css('height','67px').css('overflow','hidden').find('.show_all').addClass('show_class');
+		 }
+	 }
+});
+}
+//展开多行
+function showAlls(_this){
+    var p=$(_this).parents('p');
+	 p.css('overflow','auto').css('height','auto');
+	 $(_this).hide();
+}
+</script>
+<!--[if IE]>
+		<script src="js/html5shiv.min.js"></script>
+<![endif]-->
+
+<style type="text/css">
+.show_all{
+   display:inline-block; padding:0 10px;
+   height:22px;
+   border:1px solid #ccc;
+   color:#666;
+   border-radius:6px;
+   text-align:center;
+   line-height:22px;
+   font-size:12px;
+   position:absolute;
+   bottom:0px;
+   right:0;
+   background:#fff;
+   display:none;
+   cursor:pointer;
+}
+.show_class{
+   display:inline-block;
+    line-height:20px;
+   height:22px; z-index:10
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+
+<div class="wrap">
+ <div class="zixun">
+  <ul id="article-list">
+      <include file="Article/index2_list" />
+  </ul>
+ </div><!--zixun end-->
+ <div class="cb"></div>
+ <div class="dptjl">
+  <if condition="$pageNumShown gt 1">
+       <a href="javascript:void(0)" class="more clickMoerPage" >
+          <input class="morebtn" value="Load More" type="button" onClick="mobile.clickPage(this,{$pageNumShown},'#article-list','{:U('Article/index2','','')}/p/');"/> 
+       </a>
+  </if>
+ </div>
+ <div class="cb"></div>
+</div><!--wrap end--> 
+<!--content end-->
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<!---->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

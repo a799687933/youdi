@@ -1,0 +1,56 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+		    <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>
+			  <li><a class="add auto-size" href="{:U(APP_APPS.'/Category/cateAdd','','')}/pid/0" target="dialog"   mask="true" title="添加顶级分类" width="900" height="500"><span>添加顶级分类</span></a></li>
+			</if>
+		</ul>
+	</div>
+
+	<table class="list" width="100%" layoutH="50" id="list-table-cate">
+		<thead>
+		<tr>	
+			<th width="250">分类名称</th>
+			<th>文档类型</th>
+			<th >分类描述</th>
+			<th >是否显示</th>
+            <th width="200">排序</th>
+            <th style="text-align: center;">操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<foreach item="app" name="Cate">
+			<tr target="sid_node" rel="{$app['files_id']}" class="{$app['files_pid']} showtr" id="{$app['files_pid']}_{$app['files_id']}" >
+				<td class="first-cell" style="text-align:left;text-indent:5px;padding-left:{$app['files_padding']}px;">
+                <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app['files_pid']}_{$app['files_id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-cate')" />           
+                    {$app[pfix('files_name')]|tpl_modify_oen=###,'files_sort',pfix('files_name'),$app['files_id'],'files_id','Category/cateSave'}
+                </td>
+				<td>{$app.files_type}</td>				
+				<td>{$app.files_bewrite|tpl_modify_oen=###,'files_sort','files_bewrite',$app['files_id'],'files_id','Category/cateSave'}</td>				
+				<td>{$app.display|tpl_yes_no=###,'files_sort','display',$app['files_id'],'files_id','Category/cateSave'}</td>
+                <td>{$app.files_sort|tpl_modify_oen=###,'files_sort','files_sort',$app['files_id'],'files_id','Category/cateSave'}</td>             
+                <td style="text-align: center;">
+                 <!--添加按钮-->
+				{$action|tpl_action='dialog','Category/cateAdd','files_pid/'.$app["files_id"],'添加（'.strip_tags($app[pfix('files_name')]).'）子级分类','icon_add.gif','icon_add_not.gif',900,550}
+                <!--修改按钮-->
+                {$action|tpl_action='dialog','Category/cateAdd','cate_id/'.$app['files_id'],'修改('.$app[pfix('files_name')].')','icon_edit.gif','icon_edit_not.gif'} 
+			   <if condition='$_SESSION[C(SESSION_NAME_VAL)] eq C("RBAC_SUPERADMIN")'>	  
+                  <!--删除按钮-->
+				  {$action|tpl_action='ajaxTodo','Category/cageDelete','ids/'.$app["files_id"],'确定执行删除('.strip_tags($app[pfix('files_name')]).')？','icon_drop.gif','icon_drop_not.gif'}        
+				</if>  
+                </td>
+			</tr>
+		</foreach>
+		</tbody>
+	</table>
+
+	<div class="panelBar">
+		<!--<div class="pages">
+			<span></span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="10" currentPage="{$currentPage}"></div>
+	</div>-->
+</div>
+

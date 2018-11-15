@@ -1,0 +1,161 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->    
+	<input type="hidden" name="shops_id" value="{$_REQUEST['shops_id']}" /><!--商户检索ID-->    
+	<input type="hidden" name="action" value="{$_REQUEST['action']}" /><!---->    
+	<input type="hidden" name="goods_category_id" value="{$_REQUEST['goods_category_id']}" /><!---->    
+</form>
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/Goods/goodsShelvesList","","")}" method="post">
+       <input type="hidden" value="{$_REQUEST['type']}" name="type" /> 
+       <input type="hidden" value="{$_REQUEST['action']}" name="action" /> 
+       <input type="hidden" value="{$_REQUEST[C('VAR_PAGE')]}" name="{:C('VAR_PAGE')}" /> 
+	   <input type="hidden" name="shops_id" value="{$_REQUEST['shops_id']}" /><!--商户检索ID-->
+	   <input type="hidden" name="action" value="{$_REQUEST['action']}" /><!---->    
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                    <select class="combox " name="goods_category_id" ><!--商品分类询查-->
+                             <option value="">-商品分类询查-</option>
+                              <foreach name="goodCat" item='C'>                       
+                               <option value="{$C.id}" <if condition="$C['id'] eq $_REQUEST['goods_category_id']" >selected="selected"</if>>{$C.html}{$C[pfix('name')]}</option>
+                             </foreach>  
+                      </select>       
+                </td>                                  
+               <td>
+               <input type="text" name="goods_name" value="{$searchVal}"/>
+                </td>                
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+          <if condition="$_REQUEST['type'] eq 2">
+               <if condition="access('Goods/goodsDelete')">
+                  <li><a title="确定把所选择进行删除？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Goods/goodsDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/{$types}/action/{$_REQUEST['action']}" class="delete"><span>删除</span></a></li>
+                </if>  
+         <else />
+           <if condition="access('Goods/goodsAdd')">
+              <li><a class="add auto-size" href="{:U(APP_APPS.'/Goods/goodsAdd','','')}/{:C('VAR_PAGE')}/{$currentPage}/{$types}/action/{$_REQUEST['action']}" target="dialog"  mask="true"><span title="添加">添加</span></a></li>
+            </if>     
+               <if condition="access('Goods/moveRecycleBin')">
+                  <li><a title="确定把所选择列入回收站？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Goods/moveRecycleBin','','')}/{:C('VAR_PAGE')}/{$currentPage}/{$types}/action/{$_REQUEST['action']}" class="delete"><span>加入回收站</span></a></li>
+                </if>           
+         </if>            
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90"  id="list-table-invet">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th width="3%" orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th width="22%" orderfield="goods_name"  class="<if condition='$goods_name eq "desc"'>desc<else />asc</if>">商品名称</th>
+                <th orderfield="goods_category_id"  class="<if condition='$goods_category_id eq "desc"'>desc<else />asc</if>">商品分类</th>     
+			    <th orderfield="goods_market_price"  class="<if condition='$goods_market_price eq "desc"'>desc<else />asc</if>">市场价格</th> 
+                <th orderfield="goods_retail_price"  class="<if condition='$goods_retail_price eq "desc"'>desc<else />asc</if>">价格</th>
+                <if condition="C('IS_PROMOTION')"><th orderfield="is_promotion"  class="<if condition='$is_promotion eq "desc"'>desc<else />asc</if>">是否促销</th></if>
+                <th orderfield="shelves"  class="<if condition='$shelves eq "desc"'>desc<else />asc</if>">是否上架</th>
+                <if condition="C('IS_RECOMMEND')">
+                   <th orderfield="recommend"  class="<if condition='$recommend eq "desc"'>desc<else />asc</if>">本店推荐</th>
+                </if>
+                <if condition="C('IS_GOODS_HOT')">
+			        <th orderfield="hot"  class="<if condition='$hot eq "desc"'>desc<else />asc</if>">热销商品</th>
+			    </if>
+			    <if condition="C('IS_GOODS_NEW')">
+                    <th orderfield="is_new"  class="<if condition='$is_new eq "desc"'>desc<else />asc</if>">是否新品</th>
+                </if>
+                <if condition="C('IS_GOODS_WEEK')">
+                    <th orderfield="is_week"  class="<if condition='$is_week eq "desc"'>desc<else />asc</if>">每周优惠</th>
+                </if>
+                <th orderfield="create_time"  class="<if condition='$create_time eq "desc"'>desc<else />asc</if>">创建时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="goods" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td><a href="{:U('/Goods/index',array('html'=>'goods_'.$V['id']))}" target="_blank">{$V[pfix('goods_name')]}</a></td>
+                <td>{$V[pfix('name')]}</td>
+				<td>{$V.goods_market_price}</td>
+                <td>{$V.goods_retail_price}</td>
+                {/*是否促销*/}
+                <if condition="C('IS_PROMOTION')">
+                   <td><if condition="$V['is_promotion']"><img src="{:C('__IMG__')}/yes.gif"/><else /><img src="{:C('__IMG__')}/no.gif" /></if></td>
+                </if>
+                {/*是否促销结束*/}
+                 <td>
+                        <if condition="$V['shelves'] eq 0">
+                           <span style="color:red;">已下架</span>
+                        <elseif condition="$V['shelves'] eq 1" />
+                             <span style="color:green;">已上架</span>
+                        </if>
+                 </td>
+                 <if condition="C('IS_RECOMMEND')">
+                      <td>{$V.recommend|tpl_yes_no=###,'goods','recommend',$V['id'],'id','Goods/goodsSendForm'}</td>
+                 </if>   
+                 <if condition="C('IS_GOODS_HOT')">  
+			         <td>{$V.hot|tpl_yes_no=###,'goods','hot',$V['id'],'id','Goods/goodsSendForm'}</td>
+			     </if>
+			     <if condition="C('IS_GOODS_NEW')">
+                   <td>{$V.is_new|tpl_yes_no=###,'goods','is_new',$V['id'],'id','Goods/goodsSendForm'}</td>
+                 </if>   
+                 <if condition="C('IS_GOODS_WEEK')">
+                    <td>{$V.is_week|tpl_yes_no=###,'goods','is_week',$V['id'],'id','Goods/goodsSendForm'}</td>
+                 <if></if>   
+                <td>{$V.create_time|date='Y-m-d',###} </td>
+                <td>
+               
+                <if condition="$_REQUEST['type'] eq 2"><!--回收站列表-->
+                   <if condition="access('Goods/moveRecycleBin')">
+                        <a href="{:U(APP_APPS.'/Goods/moveRecycleBin','','')}/{:C('VAR_PAGE')}/{$currentPage}/{$types}/ids/{$V.id}/action/{$_REQUEST['action']}" target="ajaxTodo"><img src="{:C('__IMG__')}/icon_output.gif" /></a>
+                  <else />
+                       <img src="{:C('__IMG__')}/icon_output_no.gif" title="{:L('Without')}"/>
+                   </if> 
+                   {$action|tpl_action='ajaxTodo','Goods/goodsDelete',C('VAR_PAGE').'/'.$currentPage.'/'.$types.'/ids/'.$V["id"].'/action/'.$_REQUEST['action'],'确定执行删除('.strip_tags($V[pfix('goods_name')]).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->       
+                <else />  <!--未上架商和上架商品表列列表-->
+                 {$action|tpl_action='NAVTAB','GoodsAppraise/appList','goods_id/'.$V["id"],$V[pfix('goods_name')].'[评论]','icon_edit.gif','icon_edit_not.gif','','','评论('.($V['review_count'] ? $V['review_count'] : 0).')'}  
+                 {$action|tpl_action='dialog','Goods/goodsEditing',$types.'/id/'.$V["id"].'/action/'.$_REQUEST['action'],'修改（'.strip_tags($V[pfix('goods_name')]).'）','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+                 {$action|tpl_action='dialog','Goods/goodsEditing',$types.'/id/'.$V["id"].'/action/'.$_REQUEST['action'].'/copy/ok'.'/field/'.$_REQUEST['field'].'/'.$_REQUEST['field'].'/'.$_REQUEST[$_REQUEST['field']],'复制（'.strip_tags($V[pfix('goods_name')]).'）','icon_copy.gif','icon_copy_no.gif'} <!--复制按钮-->
+                   <if condition="access('Goods/moveRecycleBin')">
+                       <a href="{:U(APP_APPS.'/Goods/moveRecycleBin','','')}/{:C('VAR_PAGE')}/{$currentPage}/{$types}/ids/{$V.id}/action/{$_REQUEST['action']}" target="ajaxTodo" title="确定把({$V[pfix('goods_name')]})列入回收站？"><img src="{:C('__IMG__')}/icon_trash.gif" /></a>
+                   <else />
+                       <img src="{:C('__IMG__')}/icon_trash_no.gif" title="{:L('Without')}" />
+                   </if>
+                  
+                </if>
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共{$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

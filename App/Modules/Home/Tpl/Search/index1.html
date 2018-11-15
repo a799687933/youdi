@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>关键字搜索_{:C('WEBNAME')}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script>
+$(document).ready(function(){
+	$(".icon1").hover(function(){
+		$(".guzhu").show();
+		$(this).addClass("icon1b")
+		},function(){
+			$(".guzhu").hide();
+			$(this).removeClass("icon1b")
+			})
+	$(".icon2").hover(function(){
+		$(".fuwus").show();
+		$(this).addClass("icon2b")
+		},function(){
+			$(".fuwus").hide();
+			$(this).removeClass("icon2b")
+			})
+	$(".suoyl").click(function(){
+		$(".suoyr").toggle()
+		})	
+	$(".subrb").hover(function(){
+		 $(this).children(".subrbox").show()
+		},function(){
+			$(this).children(".subrbox").hide()
+			})		
+			
+	})
+
+
+</script>
+</head>
+
+<body>
+<!--top begin-->
+<include file='Common:header'/>
+<!--top end-->
+<!--nav begin-->
+<include file='Common:nav'/>
+<!--nav end-->
+
+<!--content begin-->
+<div class="zcwrap pr">
+
+ <div class="zcbox">
+       <div class="" style="width:100%;position:relative;top:-20px;">
+        <form method="get" action="">
+           <input type="text" name="keywords" value="{$_GET['keywords']}" placeholder="请输入关键词" style="width:400px;height:49px;line-height:49px;border-radius: 2px;border:1px #004098 solid;outline: none;font-size:24px;"/>
+           <input type="submit" name="" value="搜索" class="ser_btn" style="outline:none; cursor:pointer"/>
+         </form>  
+          <div class="cb"></div>
+          <div class="cb pv20"></div>
+       </div>
+   <div class="searchs">
+    <if condition="$info">
+          <p style="height:40px;line-height:40px;font-size:16px;color:red;">请输入关键字?</p>
+    <else />    
+           <if condition="$res">
+               <foreach name="res" item="r"> 
+                 <div>
+                     <h2 style="height:40px;line-height:40px;font-weight:normal;">
+                          <a href="{$r.url}" class="search-a" target="_blank">{$r.title}</a>
+                     </h2>
+                     <p class="search-p">{$r.content}</p>
+                     <p class="search-p">加入时间：{$r.add_time|date='Y-m-d H:i:s',###} 性质：{$r.nature}</p>
+                 </div>
+               </foreach>
+           <else />
+               <p style="height:40px;line-height:40px;font-size:16px;color:red;">未找到与(<strong style="color:red;">{$_GET['keywords']}</strong>)相关数据？</p>
+           </if>
+       </if>        
+   </div>
+   
+  <div class="cb pv20"></div>
+ </div>
+ <!---->
+ <div class="xrbz">
+  <ul>
+   <li>
+    <span class="icon26">&nbsp;</span>
+    <div class="xrbzr">
+     <p>可信任</p>
+     <p>保障真实信息</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon27">&nbsp;</span>
+    <div class="xrbzr">
+     <p>超快速</p>
+     <p>众多服务商</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon28">&nbsp;</span>
+    <div class="xrbzr">
+     <p>随时在</p>
+     <p>客服全程跟进</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon29">&nbsp;</span>
+    <div class="xrbzr">
+     <p>高服务</p>
+     <p>高质量服务群体</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+    <li>
+    <span class="icon30">&nbsp;</span>
+    <div class="xrbzr">
+     <p>有保障</p>
+     <p>商家保证金系统</p>
+    </div>
+    <div class="cb"></div>
+    </li>
+   <div class="cb"></div>
+  </ul>
+ </div><!--xrbz end-->
+ <!--right begin-->
+ <include file='Common:rightBegin'/> 
+ </div>
+ <!--right end-->
+</div>
+<!--content end-->
+
+<!--footer begin-->
+<include file='Common:footer'/>
+<!--footer end-->
+<!---->
+<include file='Common:serveIndex'/>  
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?type=left&amp;move=0&amp;btn=l3.gif" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('BillingCheck'),'结算 - 核对')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/tipso.min.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+window.winw=$(window).width();
+$(window).resize(function(){window.winw=$(window).width();});
+$(function(){
+			
+
+$('.tip1').tipso({
+		useTitle: false,
+		position: 'bottom',
+		background: '#d6d6d4'
+	});
+
+	})
+
+</script>
+<if condition="is_mobile()">
+
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<!--content begin-->
+<div class="jies">
+ <div class="gwdt b">{:isL(L('Billing'),'结算')}</div>
+ <div class="jsl">
+  <div class="jslt">
+   <ul>
+   	<li>1.{:isL(L('SentOut'),'配送')}</li>
+    <li>2.{:isL(L('Pay'),'支付')}<span class="jsltspan2"></span></li>
+    <li class="last now" style="border-right:1px solid #fff">3.{:isL(L('Checklist'),'核对')}<span class="jsltspan2"></span></li>
+    <div class="cb"></div>
+   </ul>
+  </div><!--jslt end-->
+  <div class="hedt">
+   <ul>
+   	<li>
+   	    <p class="pl20 f16 pb10">{:isL(L('DeliveryAddress'),'送货地址')}
+   	        <a href="{:sign_url(array('ids'=>$_REQUEST['ids'],'total'=>$_REQUEST['total']),U('CheckOut/selectAddress','',''),'')}" class="ggai2">{:isL(L('Change'),'更改')}</a>
+   	    </p>
+   	</li>
+    <li>
+         <p class="pl20 lh20">
+             {$address['surname']}{$address['consignee']}<br/> <span>{$address['address']}</span>           {$address['province']}，{$address['city']}
+         </p>
+     </li>
+     <li class="ggai1"><a href="{:sign_url(array('ids'=>$_REQUEST['ids'],'total'=>$_REQUEST['total']),U('CheckOut/selectAddress','',''),'')}" class="col2ab">{:isL(L('Change'),'更改')}</a></li>
+    <div class="cb"></div>
+   </ul>
+   <ul>
+   	<li>
+   	     <p class="pl20 f16 pb10">
+   	         Payment Method
+   	         <a href="{:sign_url(array('ids'=>$_REQUEST['ids'],'total'=>$_REQUEST['total']),U('CheckOut/selectPay','',''),'')}&selectAdderss={$_REQUEST['selectAdderss']}" class="ggai2">{:isL(L('Change'),'更改')}</a>   	        
+   	     </p>
+   	</li>
+    <li><p class="pl20"><img src="__HOME__/images/zfb.png" style="height:50px" alt=""/></p></li>
+     <li class="ggai1"><a href="{:sign_url(array('ids'=>$_REQUEST['ids'],'total'=>$_REQUEST['total']),U('CheckOut/selectPay','',''),'')}&selectAdderss={$_REQUEST['selectAdderss']}" class="col2ab">{:isL(L('Change'),'更改')}</a></li>
+    <div class="cb"></div>
+   </ul>
+  </div><!--hedt end-->
+  <div class="hedb">
+   <ul>
+     <foreach name="result['goods_list']" item="res">  
+     <if condition="is_mobile()">
+      <li>
+             <div class="hedbl">
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                           <a href="{:U('Goods/index',array('html'=>$res['goods_id']))}"><img src="__ROOT__/{$res['goods_thumb']}" alt=""/></a>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="hedbtxt hedblr">
+              <h1 class="f16" >YOUDI WU</h1>
+              <p>{$res[pfix('goods_name')]|strip_tags=###|sub_str=###,20}</p>
+              <p class="pt5 pb10">{:isL(L('ProductNumber'),'商品编号')}：{$res['goods_sn']}</p>
+              <p>{:isL(L('Number'),'数量')}：{$res['goods_number']}</p>
+              
+              {/*商品属性*/}
+              <foreach name="res['goods_attr']" item="attr">
+                <p>{$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}</p>
+                <php>$attr_ids.=$attr['value']['attr_id'].',';</php>
+              </foreach> 
+              <h1 class="f16 b">{:C('KTEC_H')}{$res['goods_price']}</h1>
+             </div>
+             
+            <div class="cb"></div> 
+             <div class="hedbtxt2 hkjs" style="width:100%">
+             <p><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow"></span>
+              {:isL(L('SendSFAirlines'),'顺丰航空寄送')}
+              </label></p>
+             <p><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow"></span>
+              {:isL(L('FreeShipping'),'免费送货')}
+              </label></p>
+              <p><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow"></span>
+              {:isL(L('MostPartsPf'),'全国大部分地区1-2天到达，部分<b class="tip1 tiptxt" data-tipso="西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。">偏远地区</b>及港、澳、台除外。')}
+              
+              </label></p>
+             </div>
+            
+             <div class="cb"></div>
+             
+        </li>
+      <else />
+      <li>
+             <div class="hedbl">
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                           <a href="{:U('Goods/index',array('html'=>$res['goods_id']))}"><img src="__ROOT__/{$res['goods_thumb']}" alt=""/></a>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="hedbtxt" style="width:33%">
+              <h1 class="f16" style="line-height:16px; margin-bottom:10px;">YOUDI WU</h1>
+              <p>{$res[pfix('goods_name')]|strip_tags=###|sub_str=###,20}</p>
+              <p class="pt5 pb10">{:isL(L('ProductNumber'),'商品编号')}：{$res['goods_sn']}</p>
+              <p>{:isL(L('Number'),'数量')}：{$res['goods_number']}</p>
+              
+              {/*商品属性*/}
+              <foreach name="res['goods_attr']" item="attr">
+                <p>{$attr[pfix('name')]}：{$attr['value'][pfix('attr_value')]}</p>
+                <php>$attr_ids.=$attr['value']['attr_id'].',';</php>
+              </foreach> 
+             </div>
+             
+             <div class="hedbtxt" style="width:16%"><h1 class="f16" style="line-height:16px">{:C('KTEC_H')} {$res['goods_price']}</h1></div>
+             <div class="hedbtxt2 hkjs">
+              <p style="padding:0 0 5px"><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow"></span>
+              <span class="vam" style="display:inline-block">{:isL(L('SendSFAirlines'),'顺丰航空寄送')}</span>
+              </label></p>
+              <p><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow"></span>
+              <span class="vam" style="display:inline-block">{:isL(L('FreeShipping'),'免费送货')}</span>
+              </label></p>
+              <p><label class="ffInput">
+              <span class="ffInput__radio ffInput__radionow" style="vertical-align:top; margin-top:3px;"></span>
+             <span class="vam" style="display:inline-block; width:200px"> {:isL(L('MostPartsPf'),'全国大部分地区1-2天到达，部分<b class="tip1 tiptxt" data-tipso="西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。">偏远地区</b>及港、澳、台除外。')}</span>
+              </label></p>
+              
+             </div>
+             <div class="hedbr" style="margin-top:-5px;"><span data-tipso="{:isL(L('ExceptTibetXinjiang'),'西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。')}" class="icon36 glyphs icon-info-circle tip1">&nbsp;</span></div>
+             <div class="cb"></div>
+             <div class="hedbb"><span>:isL(L('SendSFAirlines'),'顺丰航空寄送')}</span><span>{:isL(L('FreeShipping'),'免费送货')}</span></div>
+        </li>
+      </if>
+       	
+    </foreach>
+   </ul>
+  </div><!--hedb end-->
+ </div><!--jsl end-->
+ <div class="jsr">
+     <div class="jsrm" >
+  <h1>{:isL(L('Billing'),'结算')}</h1>
+  <p class="pb10 f12">{:isL(L('Subtotal'),'小计')}<span class="fr b f16">{:C('KTEC_H')}{:number_format($result['total'],2, '.', '')}</span></p>
+ <p class="pb10 f12">配送<span class="fr b f16 huan" >{:C('KTEC_H')}0.00</span></p>
+  <!--<p class="myf">{:isL(L('NewFreeShipping'),'免运费')}</p>-->
+  <div class="jsrb mt5">
+  <div class="pb30 f12">{:isL(L('TotalCost'),'总计')}       <span class="fr tr f16"><b>{:C('KTEC_CUR')}{:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</b></span>
+       <p class="tr col999 lh18 f12 pt5">(已含增值税)</p>
+       </div>
+       
+       <div style=" position:relative;">
+       <input onClick="window.open('{:sign_url(array('ids'=>$_REQUEST['ids'],'selectAdderss'=>$_REQUEST['selectAdderss'],'pay'=>$_REQUEST['pay']),U('CheckOut/addOrder','',''),'')}&w='+window.winw)"
+   value="使用Alipay付款"  class="jsr_btn" type="button">
+       <!--<input   onclick="window.location.href='{:sign_url(array('ids'=>$_REQUEST['ids'],'selectAdderss'=>$_REQUEST['selectAdderss'],'pay'=>$_REQUEST['pay']),U('CheckOut/addOrder','',''),'')}&w='+window.winw;" 
+   value="使用Alipay付款"  class="jsr_btn" type="button">-->
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+     
+      </div>
+      
+   <!--   
+   <p class="pb20">{:isL(L('TotalCost'),'总计')}<span class="fr b">CNY ￥ {:number_format($result['total'],2, '.', '')}</span></p>
+   <input type="button" 
+   onclick="window.location.href='{:sign_url(array('ids'=>$_REQUEST['ids'],'selectAdderss'=>$_REQUEST['selectAdderss'],'pay'=>$_REQUEST['pay']),U('CheckOut/addOrder','',''),'')}&w='+window.winw;" 
+   value="{:isL(L('Settlement'),'去结算')}" class="jsr_btn"/>-->
+  </div>
+  
+  </div>
+   <div class="p10 tc"><img src="__HOME__/images/norton.gif" /></div>
+ </div><!--jsr end-->
+
+ 
+ <div class="cb"></div>
+ <div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>
+
+</div><!--jies end-->
+<div class="cb pt30 pb25"></div>
+<!--content end-->
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

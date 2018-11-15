@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/css.css" />
+<title>{$result.titletext|strip_tags=###} - {$result.files_name|strip_tags=###} | YOUDI WU 中国</title>
+<meta name="keywords" content="{$result.keywords}" />
+<meta name="description" content="{$result.bewrite}" />
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script>
+	$(function(){
+	   $('.cat_tree').hide();
+	});
+</script>
+</head>
+<body>
+<include file='Common:header'/>{/*头部*/}
+	
+	<div class="user_center m_auto">
+		<div class="user_left fl">
+			<h2 class="h2_user f_16 clr_f">关于{:C('WEBNAME')}</h2>
+				<dl class="user_dl">
+					<foreach name="flist" item="fl">
+					   <if condition="$fl['outside_url']">
+					       <dd><a href="{$fl['outside_url']}" class="f_12 clr_6" <if condition="$fl['is_target']">target="_blank"</if>>· {$fl.titletext}</a></dd>
+					   <else />
+					       <dd><a href="{:U('/About/index',array('html'=>'about_'.$fl['id']))}" class="f_12 clr_6" <if condition="$fl['is_target']">target="_blank"</if>>· {$fl.titletext}</a></dd>
+					   </if>
+                    </foreach>
+				</dl>
+		</div>
+		
+		<div class="user_right fr">
+			<div class="mall_serv">
+				<h2 class="mall_h2 f_14 clr_3">{$result.titletext|strip_tags=###}</h2>	
+				<div class="mall_pad">{$result.content|stripcslashes=###}</div>
+			</div>
+		</div>
+		<div class="cls"></div>
+	</div>
+    <include file='Common:footer'/>{/*页脚*/}	
+</body>
+
+</html>

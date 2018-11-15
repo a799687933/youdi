@@ -1,0 +1,47 @@
+About        关于我们模块
+
+Article      文章控制
+
+Brand        品牌控制
+
+Cart         购特车控制
+
+Channel      商品封面
+
+Category     商品分类列表控制
+
+CheckOut     结算页
+
+Common       公共碎片模块
+
+Cooperation  我要和商城合作
+
+Forget       找回密码
+
+Goods        商品详情页
+
+Help         城市服务帮助页
+
+Index        首页控制
+
+Login        登录控制
+
+Member       会员控制
+
+Payment      跳转支付走向页
+
+Piece        公共碎片
+
+Promotion    促销商品列表
+
+Register     注册页
+
+Search       商品检索页
+
+ThreeLogin   第三方登录提示页
+
+Recommend    热门推荐
+
+Coupon       优惠劵控制
+
+Custom       私人定制

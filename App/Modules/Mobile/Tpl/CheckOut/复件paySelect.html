@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>
+<if condition="$data['order_id']">{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}<else />{:isL(L('OrdersSubmittedFailure'),'订单提失败')}</if>-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+$(function(){
+    var title="<if condition="$data['order_id']">{:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}<else />{:isL(L('OrdersSubmittedFailure'),'订单提失败')}</if>";
+    $('.title').text(title);
+});    
+</script>
+</head>
+
+<body>
+<div class="g-mn">
+   <include file="Common:header1" />
+   <div style="padding:10px;">
+            <div class="my_cart mt_20" >
+                   <if condition="$data['order_id']">   
+                    <h2 class="pp_h2 f_16 f_norm clr_6">
+                        <p style="width:150px;font-size:20px;">
+                            <if condition="$data['order_id']">
+                                  {:isL(L('OrdersSubmittedSuccess'),'订单提交成功')}
+                            <else />
+                                  {:isL(L('OrdersSubmittedFailure'),'订单提失败')}
+                            </if>  
+                        </p>
+                    </h2>
+                   <else />
+                     <h2 class="pp_h2 f_16 f_norm clr_6"><p style="width:150px;font-size:20px;">&nbsp;&nbsp;</p></h2>
+                   </if> 
+               
+                <div class="receiver_info mt_20" style="padding-left:25px;">
+                    <if condition="$data['order_id']">  
+                    <h2 class="rece_h2 f_14 clr_3">{:isL(L('ConsigneeInformation'),'收货人信息')}</h2>   
+                    <div class="receiver_ls">
+                        <dl class="receiv_dl f_12 clr_6">
+                            <dt class="clr_r3" style="font-size:16px;">{:isL(L('OrderNumber'),'订单号')}：{$data.order_sn}</dt>    
+                            <dt class="clr_r3" style="font-size:16px;">
+                                 {:isL(L('TotalAmount'),'总金额')}：{:getPrice(number_format($data['order_amount'],2, '.', ''),true)}
+                             </dt>   
+                            <dd class="clr_r3" style="color:#666; cursor:auto;">
+                              {:isL(langReplace((C('ORDERRETAIN') * 86400) / 3600,L('AutomaticCancellation')),'请你在提交订单后<span style="color:red;">'.((C('ORDERRETAIN') * 86400) / 3600).'</span>小时内完成支付，否则订单自动取消。')}
+                            </dd>
+                            <dd class="clr_r3" style="color:#666;cursor:auto;">
+                                {:isL(L('SendTo'),'配送至')}：
+                                {$data.province}{$data.city}{$data.district}{$data.address}&nbsp;&nbsp;{$data.consignee}&nbsp;&nbsp;{$data.mobile}
+                            </dd>                           
+                        </dl>
+                    </div>
+                    <else />
+                       <div class="receiver_ls" style="min-height:400px;">
+                            <p style="margin-top:100px;font-size:16px;text-align:center;color:red;">{:isL(L('OrdersSubmittedFailure'),'订单提失败')}</p>
+                            <p style="text-align:center;font-size:14px;">
+                                <a href="__ROOT__/{:is_m()}" style="color:#f60;">{:isL(L('Home'),'首页')}</a> | 
+                                <a href="{:U(is_m().'/Member/index')}" style="color:#f60;">{:isL(L('UserCenter'),'用户中心')}</a>
+                            </p>
+                        </div>                       
+                    </if>
+                </div>
+                
+              {/*提交成功显示支付*/}
+              <if condition="$data['order_id']">    
+                <div class="receiver_info mt_20">
+                    <h2 class="rece_h2 f_14 clr_3" style="font-size:20px;">{:isL(L('PaymentMethod'),'选择支付方式')}</h2>  
+                    <div class="pay_type" style="width:auto;">
+                    <form name="formName" id="form-name" action="{:U(is_m().'/Payment/index')}" method="post" class="form1" style="margin:0 auto;">
+                        <input type="hidden" value="{$base64}" name="data"/>
+                        <input type="hidden" value="{$code}" name="code"/>
+                        
+                        <foreach name="payment" item="pa">
+                         <if condition="$pa['pay_code'] eq 'alipay'">
+                        <p style="text-indent: 20px;height: 60px;line-height: 60px;margin-top:10px;">
+                               <label style="cursor:pointer;">
+                                     <input type="radio" name="pay" value="alipay" class="validate[required] radio" checked="checked" title="请选择支付银行！" style="position: relative;bottom:15px;left: 4px" />
+                                        <img src="__COMMON__/PaymentLogo/alipay.gif"/>
+                                </label>
+                        </p>
+                        
+                        <elseif condition="$pa['pay_code'] eq 'yeepay'" />
+                        <div style="padding-left:18px;margin-top:10px;">
+                            <ul>
+                                
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="ICBC-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/ICBC-NET-B2C.png"/>
+                                    <label>
+                               </li>
+                               
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                      <input type="radio" name="pay" value="CMBCHINA-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CMBCHINA-NET-B2C.png"/>
+                                    <label>
+                               </li>  
+                                    
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="ABC-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/ABC-NET-B2C.png"/>
+                                    <label>
+                               </li>   
+                               
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CCB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CCB-NET-B2C.png"/>
+                                    <label>
+                               </li>       
+                               
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="BCCB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/BCCB-NET-B2C.png"/>
+                                    <label>
+                               </li>        
+     
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="BOCO-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/BOCO-NET-B2C.png"/>
+                                    <label>
+                               </li>      
+    
+                                <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CIB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CIB-NET-B2C.png"/>
+                                    <label>
+                               </li>       
+                               
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="NJCB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/NJCB-NET-B2C.png"/>
+                                    <label>
+                              </li>      
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CMBC-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CMBC-NET-B2C.png"/>
+                                    <label>
+                              </li>        
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CEB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CEB-NET-B2C.png"/>
+                                    <label>
+                              </li>    
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="BOC-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/BOC-NET-B2C.png"/>
+                                    <label>
+                              </li>                              
+     
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="PINGANBANK-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/PINGANBANK-NET.png"/>
+                                    <label>
+                              </li>     
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CBHB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CBHB-NET-B2C.png"/>
+                                    <label>
+                              </li>     
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="HKBEA-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/HKBEA-NET-B2C.png"/>
+                                    <label>
+                              </li>    
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="NBCB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/NBCB-NET-B2C.png"/>
+                                    <label>
+                              </li>      
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="ECITIC-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/ECITIC-NET-B2C.png"/>
+                                    <label>
+                              </li>       
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="SDB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/SDB-NET-B2C.png"/>
+                                    <label>
+                              </li>    
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="GDB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/GDB-NET-B2C.png"/>
+                                    <label>
+                              </li>        
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="SHB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/SHB-NET-B2C.png"/>
+                                    <label>
+                              </li>     
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="SPDB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/SPDB-NET-B2C.png"/>
+                                    <label>
+                              </li>    
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="POST-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/POST-NET-B2C.png"/>
+                                    <label>
+                              </li>   
+    
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="BJRCB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/BJRCB-NET-B2C.png"/>
+                                    <label>
+                              </li>       
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="HXB-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/HXB-NET-B2C.png"/>
+                                    <label>
+                              </li>        
+                              
+                               <li style="float:left;margin:5px;">
+                                    <label style="cursor:pointer;">
+                                    <input type="radio" name="pay" value="CZ-NET" style="position: relative;bottom:10px;"/>
+                                         <img src="__COMMON__/PaymentLogo/CZ-NET-B2C.png"/>
+                                    <label>
+                              </li>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                            </ul>
+                        </div>
+                        </if>
+                       </foreach> 
+                        
+                       <div style="clear:both;height:50px;line-height:80px;/*background:#eee;*/font-size:20px;font-family: 'Microsoft Yahei';font-weight: bold;border-top:1px #ccc solid;text-align: right;padding-right:10px;">
+                             {:isL(L('TotalPayable'),'应付金额')}：￥<strong style="color:red;">{:number_format($data['order_amount'],2, '.', '')}</strong>
+                        <input type="submit"value="立即支付" style="width:160px;height:38px;line-height: 38px;background:#ea9901;border:#ff4644;color:#fff;font-family: 'Microsoft Yahei';font-weight: bold;font-size:17px;cursor: pointer;" /> 
+                       </div>
+                   </form>      
+                    </div>
+                </div>
+               </if>
+               {/*提交成功显示支付结束*/}       
+       
+   </div>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+<form></form>
+</body>
+</html>

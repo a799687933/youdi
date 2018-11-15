@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+    valinit('.form1','post','',true,'topRight');  
+    var ps = $("#div_pro").position();  
+    $("#div_pro").mouseenter(function () {  
+        $("#float_box").show();  
+    });  
+    $("#float_box").mouseleave(function () {  
+        $("#float_box").hide();  
+    });  
+});
+
+/**/
+function identity(id){
+    if(id){
+      var url="{:U('Member/identity','','')}?id="+id;   
+      $.ajax({
+         type:'post',
+         url:url,
+         dataType:'json',
+         success:function(response,status,xhr){
+               $('input[name="id"]').val(response.id);
+               $('input[name="id_name"]').val(response.id_name);
+               $('input[name="id_str"]').val(response.id_str);               
+          }
+       });              
+    }else{
+       $('input[name="id"]').val('');
+       $('input[name="id_name"]').val('');
+       $('input[name="id_str"]').val('');
+    }
+    edcfsAed('#publishs',true,30);
+}  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                   <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > 
+                   {:isL(L('IDmanagement'),'身份证管理')}
+                   <span style="float:right;">
+                                <a href="javascript:void(0);" onClick="identity('');" 
+                                    style="cursor:pointer;padding:0;margin:0;height:30px;
+                                    line-height:30px;padding:2px 10px;color:#99c838;
+                                    border-radius: 3px;background:#fff;border:none;
+                                    position: relative;top:5px;margin-right: 10px;">
+                                    {:isL(L('AddID'),'添加身份证')}
+                                </a>
+                   </span>                 
+            </p>
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+         <table class="my-table" >
+         <tbody>
+         <tr><td colspan="5" style="text-align:left">
+         <div class="f_12 clr_6 card_need">
+                    {:isL(L('Certificates'),'根据中国海关总署修订后的《中华人民共和国海关对进出境快件监管办法》，入境到中国大陆的个人包裹经海关查验需向海关提供收件人身份证件 (彩色) 等相关信息。您可以到海关网站查询相关规定： 中华人民共和国海关总署官方网站
+新澳洲承诺所有信息均进行加密存储，直接提交给海关清关时进行查验，绝不用做其它途径，其他任何人均无法查看 <br />
+请务必按照以下要求上传：<br />
+1. 必须要求身份证彩色扫描件或身份证彩色图片（现在客户所提供的黑白照片一律被打回）。<br/>
+2. 字体头像还有身份证有效期必须要清晰度高。<br/>
+3. 港澳台的客户必须上传有效个人身份证证件（不与上传通行证，通行证会被打回）。<br/>')}
+
+           </div>
+         </td></tr>
+         <tr>
+             <td align="center" ><strong>{:isL(L('ID'),'编号')}</strong></td>
+             <td align="center" ><strong>{:isL(L('IDFullName'),'姓名')}</strong></td>
+             <td align="center" ><strong>{:isL(L('DocumentNumber'),'证件号码')}</strong></td>
+             <td align="center" ><strong>{:isL(L('Time'),'添加时间')}</strong></td>
+             <td align="center" ><strong>{:isL(L('Operation'),'操作')}</strong></td>
+            </tr>
+                <foreach name="result" item="nos">
+                    <tr>
+                     <td align="center">{$nos.id}</td>
+                     <td align="center">{$nos.id_name}</td>
+                     <td align="center">{$nos.id_str}</td>
+                     <td align="center">{$nos.add_time|date="Y-m-d H:i:s",###}</td>
+                     <td align="center">
+                            <a class="col666" href="javascript:void(0);" onClick="identity({$nos.id});">{:isL(L('Modify'),'编辑')}</a> | 
+                            <a class="col666" 
+                                    href="javascript:void(0);" 
+                                    onClick="myAlert('{:isL(L('ConfirmationPrompt'),'确认提示')}',
+                                    '{:isL(L('ISDELETE'),'操作不可恢复，确定执行本次操作？')}',
+                                    '{:U('Member/identityDelete',array('id'=>$nos['id']))}','')">
+                                    删除
+                            </a>
+                     </td>
+                    </tr>
+                </foreach>
+           </tbody>
+         </table>
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+
+ {/*弹出层*/}
+     <div id="publishs" style="width:600px;height:250px;background:#fff;border-radius: 6px;display:none" class="jqddtable">
+         <div style="height:40px;line-height:40px;font-size:16px;padding:5px;">&nbsp;
+         <a href="javascript:void(0);" style="float:right;font-size:30px;color:red;padding-right:10px;" onClick="closeEdcfsAed('#publishs')">×</a>
+         {:isL(L('IDinformation'),'身份证信息')}
+         </div>
+          <form method="get" action="{:U('/Member/identityForm')}" class="form1">
+              <input type="hidden" name="id" value="" />
+              <table  class="my-table my-table-border">
+                  <tr>
+                        <td align="right" style="width:110px;">&nbsp;{:isL(L('IDFullName'),'姓名')}：</td>
+                        <td align="left" style="text-align:left">
+                           <input type="text" id="id_name" class="validate[required]" name="id_name" style="width:300px;border:1px #eee solid;height:30px;line-height:30px;" />                   </td>
+                  </tr>
+                  <tr>
+                       <td align="right">&nbsp;{:isL(L('DocumentNumber'),'身份证号码')}：</td>
+                       <td align="left" style="text-align:left">
+                          <input type="text" id="id_str" class="validate[required]" name="id_str" style="width:300px;border:1px #eee solid;height:30px;line-height:30px;" />
+                        </td>
+                   </tr>
+                  <tr style="border:none;">
+                          <td>&nbsp;</td>
+                          <td align="left" style="text-align:left">
+                          <input type="submit" 
+                          value="{:isL(L('Submit'),'提交')}" img="__PUBLIC__images/13221814.gif" class="btn_lkgm" id="submits" 
+                          style=" width:200px;margin:0 auto;height: 40px;
+                                           line-height:40px;font-size:20px;
+                                           background:#99c838;color:#fff;border-radius:4px;border:none; cursor:pointer;"/></td>
+                  </tr>
+              </table>
+          </form>
+     </div>
+  {/*弹出层结束*/}
+</body>
+</html>

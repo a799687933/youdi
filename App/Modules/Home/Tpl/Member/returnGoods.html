@@ -1,0 +1,330 @@
+ <!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>选择退货商品 | YOUDI WU 中国</title>
+<meta name="keywords" content="{:C('WEBKEYWORD')}" />
+<meta name="description" content="{:C('WEBDEPICT')}" />
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script>
+function closets(){
+	$(".thspts").hide()
+	}
+</script>
+<if condition="is_mobile()">
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+<body>
+<div class="box">
+ <include file="Common:headermin" />{/*公共头部*/}
+ <form action="{:sign_url(array('order_id'=>$order['order_id']),U('Member/returnAddress'))}" id="send-content" method="post">
+     <!--content begin-->
+     <div class="jies">
+     <if condition="is_mobile()">
+      <div class="lbtm pv20" style="width:100%">
+              <h1 style="font-weight:normal; font-size:18px;">
+                  {:isL(L('FreeReturnService'),'免费退货服务')}
+                 
+              </h1>
+              <p>
+                  {:isL(L('PleaseReturnInfo'),'请在接收订单的30天内向 YOUDI 官方商店退货。')}
+                  <a href="{:U('Modular/refund',array('html'=>C('B_3')))}" target="_blank" class="col2ab">{:isL(L('ClickHere'),'点击此处')}</a>{:isL(L('UnderstandThe'),'了解退货政策')}
+              </p>
+              <p class="pt10"> <a href="{:U('Member/index')}" class="col2ab f14 mt20" style="font-weight:normal; line-height:25px">{:isL(L('ReturnAccount'),'返回我的账户')}</a></p>
+         </div>
+         <else/>
+         <div class="lbtm fl pv10" style="width:100%">
+              <h1 style="font-weight:normal; font-size:18px;">
+                  {:isL(L('FreeReturnService'),'免费退货服务')}
+                  <a href="{:U('Member/index')}" class="col2ab f14 fr mt20" style="font-weight:normal; line-height:25px">{:isL(L('ReturnAccount'),'返回我的账户')}</a>
+              </h1>
+              <p style="height:44px;">
+                  {:isL(L('PleaseReturnInfo'),'请在接收订单的30天内向 YOUDI 官方商店退货。')}
+                  <a href="{:U('Modular/refund',array('html'=>C('B_3')))}" target="_blank" class="col2ab">{:isL(L('ClickHere'),'点击此处')}</a>{:isL(L('UnderstandThe'),'了解退货政策')}
+              </p>
+         </div>
+         </if>
+         <div class="jsl">
+          <div class="jslt" style="float:left; border-left:none">
+           <ul>
+            <li class="now" style="border-left:none">1.{:isL(L('Commodity'),'商品')}</li>
+            <li>2.{:isL(L('Address'),'地址')}<span class="jsltspan1"></span></li>
+            <li class="last">3.{:isL(L('Confirm'),'确认')}<span class="jsltspan2"></span></li>
+            <div class="cb"></div>
+           </ul>
+          </div><!--jslt end-->
+          <div class="cb"></div>
+          <div class="thsp">
+           <div class="thspts pr" style="display:none"><span class="icon-info-circle glyphs mr10 colf00 f30"></span><b>{:isL(L('ErrorOccurred'),'出现错误')}：</b>{:isL(L('PleaseSelectGoods'),'请选择您要退还的商品')}
+            <span class="close thsptsclose" onClick="closets();"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+           </div>
+           <p class="pb30">{:isL(L('OrderNumber'),'订单编号')}：{$order['order_sn']}<br/>{:isL(L('OrderDate'),'订单日期')}：{$order['add_time']|date='Y/m/d',###}</p>
+           <h1 class="f16 pb5">{:isL(L('TheUumberOf'),'选择包裹数量')}</h1>
+           <if condition="is_mobile()">
+          <div style="float:left; width:100%">
+           <select class="phoneselect" name="packages_num" onChange="setNum(this)">
+             <option value="0">{:isL(L('PackagesNum'),'包裹数量')}</option>
+             <option value="1" <php>if($retreat_data['packages_num'] == 1){</php>selected="selected"<php>}</php>>1</option>
+             <option value="2" <php>if($retreat_data['packages_num'] == 2){</php>selected="selected"<php>}</php>>2</option>
+             <option value="3" <php>if($retreat_data['packages_num'] == 3){</php>selected="selected"<php>}</php>>3</option>
+             <option value="4" <php>if($retreat_data['packages_num'] == 4){</php>selected="selected"<php>}</php>>4</option>
+             <option value="5" <php>if($retreat_data['packages_num'] == 5){</php>selected="selected"<php>}</php>>5</option>
+             <option value="6" <php>if($retreat_data['packages_num'] == 6){</php>selected="selected"<php>}</php>>6</option>
+             <option value="7" <php>if($retreat_data['packages_num'] == 7){</php>selected="selected"<php>}</php>>7</option>
+             </select>
+             <p class="tsy packages-text">{:isL(L('TheUumberOf'),'选择包裹数量')}</p>
+             </div>
+          <else />
+           <div style="float:left; width:33.33%">
+           <select class="chosen-select" name="packages_num" onChange="setNum(this)">
+             <!--<option value="0">{:isL(L('PackagesNum'),'包裹数量')}</option>-->
+             <option value="1" <php>if($retreat_data['packages_num'] == 1){</php>selected="selected"<php>}</php>>1</option>
+             <!--<option value="2" <php>if($retreat_data['packages_num'] == 2){</php>selected="selected"<php>}</php>>2</option>
+             <option value="3" <php>if($retreat_data['packages_num'] == 3){</php>selected="selected"<php>}</php>>3</option>
+             <option value="4" <php>if($retreat_data['packages_num'] == 4){</php>selected="selected"<php>}</php>>4</option>
+             <option value="5" <php>if($retreat_data['packages_num'] == 5){</php>selected="selected"<php>}</php>>5</option>
+             <option value="6" <php>if($retreat_data['packages_num'] == 6){</php>selected="selected"<php>}</php>>6</option>
+             <option value="7" <php>if($retreat_data['packages_num'] == 7){</php>selected="selected"<php>}</php>>7</option>-->
+             </select>
+             <p class="tsy packages-text">{:isL(L('TheUumberOf'),'选择包裹数量')}</p>
+             </div>
+             </if>
+             <div class="cb pb30"></div>
+             <h1 class="f16">{:isL(L('ItemsYouWant'),'选择您想退还的商品')}</h1>
+            
+              
+              <if condition="is_mobile()">
+              <div style="float:left; width:100%; line-height:25px;">
+               <foreach name="goods_list" item="g" key="gk">
+               <table width="100%">
+                   <tr class="goods-list">
+                    <input type="hidden" name="rec_id[]" value=""  /> 
+                    <input type="hidden" name="goods_num[]" value=""  /> 
+                    <td align="left" valign="top" width="10%">
+                    <div style="position:relative;" onClick="isChecked()">
+                     <input class="vam goods-checkbox"  id="subs{$gk+1}" style="display:none"  
+                     <php>if($_GET['rd_id']){</php>
+                        disabled="disabled"
+                        <php>if($retreat_data['goods_data'][$g['rec_id']]){</php>checked="checked"<php>}</php> 
+                     <php>}else{</php>
+                        <php>if($retreat_data['goods_data'][$g['rec_id']]){</php>checked="checked"<php>}</php> 
+                     <php>}</php>
+                     num="{$g['goods_number']}" value="{$g.rec_id}" type="checkbox"/>
+                    <label class="ffInput" for="subs{$gk+1}">
+                    <span class="ffInput__checkbox" style="top:4px;left:4px;"></span>
+                    </label>
+                    </div>
+                    </td>
+                    <td align="center" valign="top" width="48%"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></td>
+                    <td align="left" width="42%" valign="top">
+                          <h1 class="f16">YOUDI WU</h1>
+                          <p>{$g['goods_name']}</p>
+                          <p class="pt5 pb10">{:isL(L('ProductNumber'),'商品编号')}：{$g['goods_sn']}</p>                  
+                          <p><foreach name="g['goods_attr']" item="a">{$a[pfix('name')]}：{$a['value'][pfix('attr_value')]}<br/></foreach></p>
+                          <p class="pt10 f16">￥{$g['goods_price']}</p>
+                    </td>
+                    </tr>
+                    </table>
+                   
+                      <select class="phoneselect" name="choosing_return[]" onChange="isChecked()">
+                         <!--<option value="0">{:isL(L('ReasonForReturnIs'),'请选择退货原因')}</option>-->
+                         <foreach name="return_cause" item="rc" key="rk">
+                           <option value="{$rk}" <php>if($retreat_data['goods_data'][$g['rec_id']]['choosing_return'] == $rk){</php>selected="selected"<php>}</php>>{$rc}</option>
+                        </foreach>
+                     </select>
+                     <p class="tsy show-text">{:isL(L('ReasonForReturnIs'),'请选择退货原因')}</p>
+                      <textarea name="return_info[]" placeholder="{:isL(L('PleaseHelpUs'),'请帮助我们改进！')}" class="thsp_text mt20">{$retreat_data['goods_data'][$g['rec_id']]['return_info']}</textarea>
+                   
+               </foreach>
+               </div>
+              <else/>
+               <div style="float:left; width:80%; line-height:25px;">
+              <foreach name="goods_list" item="g" key="gk">
+              <table width="100%">
+                   <tr class="goods-list">
+                    <input type="hidden" name="rec_id[]" value=""  /> 
+                    <input type="hidden" name="goods_num[]" value=""  /> 
+                    <td align="left" valign="top" width="5%">
+                    <div style="position:relative;" onClick="isChecked()">
+                     <input class="vam goods-checkbox"  id="subs{$gk+1}" style="display:none"  
+                     <php>if($_GET['rd_id']){</php>
+                        disabled="disabled"
+                        <php>if($retreat_data['goods_data'][$g['rec_id']]){</php>checked="checked"<php>}</php> 
+                     <php>}else{</php>
+                        <php>if($retreat_data['goods_data'][$g['rec_id']]){</php>checked="checked"<php>}</php> 
+                     <php>}</php>
+                     num="{$g['goods_number']}" value="{$g.rec_id}" type="checkbox"/>
+                    <label class="ffInput" for="subs{$gk+1}">
+                    <span class="ffInput__checkbox" style="top:4px;left:4px;"></span>
+                    </label>
+                    </div>
+                    </td>
+                    <td align="center" valign="top" width="25%"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></td>
+                    <td align="left" width="35%" valign="top">
+                          <h1 class="f16">YOUDI WU</h1>
+                          <p>{$g['goods_name']}</p>
+                          <p class="pt5 pb10">{:isL(L('ProductNumber'),'商品编号')}：{$g['goods_sn']}</p>                  
+                          <p><foreach name="g['goods_attr']" item="a">{$a[pfix('name')]}：{$a['value'][pfix('attr_value')]}<br/></foreach></p>
+                          <p class="pt10 f16">￥{$g['goods_price']}</p>
+                    </td>
+                    <td  width="35%" valign="top">
+                      <select class="chosen-select" name="choosing_return[]" onChange="isChecked()">
+                         <!--<option value="0">{:isL(L('ReasonForReturnIs'),'请选择退货原因')}</option>-->
+                         <foreach name="return_cause" item="rc" key="rk">
+                           <option value="{$rk}" <php>if($retreat_data['goods_data'][$g['rec_id']]['choosing_return'] == $rk){</php>selected="selected"<php>}</php>>{$rc}</option>
+                        </foreach>
+                     </select>
+                     <p class="tsy show-text">{:isL(L('ReasonForReturnIs'),'请选择退货原因')}</p>
+                      <textarea name="return_info[]" placeholder="{:isL(L('PleaseHelpUs'),'请帮助我们改进！')}" class="thsp_text mt20">{$retreat_data['goods_data'][$g['rec_id']]['return_info']}</textarea>
+                    </td>
+                   </tr>
+                   </table>
+                   
+               </foreach>
+               </div>
+              </if>
+              
+             
+             <div class="cb"></div>
+          </div><!--thsp end-->
+         </div><!--jsl end-->
+         <div class="jsr" style="padding:0">
+          <div class="jsrm">
+          <h1>{:isL(L('Billing'),'总结')}</h1>
+          <p class="pb5 f12">{:isL(L('PackagesNum'),'包裹数量')}<span class="fr f16 packagesNum">{$retreat_data['packages_num'] ? $retreat_data['packages_num'] : 1}</span></p>
+          <p class="pb5 f12">{:isL(L('CommodityQuantity'),'商品数量')}<span class="fr f16 goodsNum">{$goods_num}</span></p>
+          <div class="jsrb mt5">
+           <p class="col999 lh18 f13 tj pt5 pb15">{:isL(L('EturnProcesst'),'在退货过程中本人同意 YOUDI WU 的<a href="http://youdi-wu.com/Modular/refund/html/172.html" target="_blank" class="col2ab" >退货政策</a>并确认此次退还的商品完全符合该退货政策中的条款。')}</p>
+           </div>
+   
+           <div style=" position:relative;">
+               
+           <php>if($_GET['rd_id']){</php>
+               <input  value="{:isL(L('continue'),'继续')}" class="jsr_btn" type="button" style="background:#eee;color:#ccc; cursor:auto;">
+               
+           <php>}else{</php>
+               <a><input  value="{:isL(L('continue'),'继续')}" class="jsr_btn" type="submit" onClick="return sendForm()"></a>
+           <php>}</php>
+           <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+          <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+          </div>
+          </div>
+         </div><!--jsr end-->
+         <div class="cb"></div>
+         <p class="pt15 f14"><a href="javascript:void(0);" onClick="history.go(-1)" class="col2ab">{:isL(L('Cancel'),'取消')}</a></p>
+         <div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>
+    
+     </div><!--jies end-->
+ </form>
+ <!--content end-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+
+
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+$(".chosen-select").chosen();
+var t=0;t2=0;
+/*表单提交*/
+function sendForm(){
+    var form=$('#send-content');
+
+	//必须选择包裹数
+	 if(!parseInt($('select[name="packages_num"]').val())){
+		 $('.packages-text').show();
+		 stopCount();
+		 setTimeout(function(){$('.packages-text').hide();},3000);
+		 return false;
+	 }
+	if(!isChecked()){
+		$('.thspts').show();
+		stopCount();
+		t=setTimeout(function(){
+		     $('.thspts').hide();
+		},3000);
+		return false;
+	}else{
+		$('.thspts').hide();
+	}
+	return true;
+}
+
+/*计算选择退货商品个数*/
+function isChecked(){
+	{/*已申请过此涵数不再生效*/}
+	<php>if($_GET['rd_id']){</php>return;<php>}</php>
+    var checkbox=$('.goods-checkbox');
+	var j=0;
+	for(var i=0;i < checkbox.length;i++){
+		var goodsList=checkbox.eq(i).parents('.goods-list');
+	    if(checkbox.eq(i).prop('checked')) {
+		   var num=parseInt(checkbox.eq(i).attr('num'));
+			goodsList.find('input[name="rec_id[]"]').val(checkbox.eq(i).val());
+			goodsList.find('input[name="goods_num[]"]').val(num);
+			var cre=parseInt(goodsList.find('select[name="choosing_return[]"]').val());
+			
+            if(cre==0) {
+				goodsList.find('.show-text').show();
+				stopCount();
+				t2=setTimeout(function(){goodsList.find('.show-text').hide();},3000);
+				return false;
+			}else{
+				goodsList.find('.show-text').hide();
+			}
+			j+=num;
+		}else{
+		    goodsList.find('input[name="rec_id[]"]').val('');
+			goodsList.find('input[name="goods_num[]"]').val('');
+			goodsList.find('.show-text').hide();
+		}
+	}
+	$('.goodsNum').text(j);
+	return j;
+}
+
+/*删除计时器*/
+function stopCount() { 
+clearTimeout(t);
+clearTimeout(t2);
+} 
+
+/*复选框动态选择显示商品数量*/
+function setNum(_this){
+   $('.packagesNum').text($(_this).val());
+}
+</script>
+</body>
+</html>

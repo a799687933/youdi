@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>js 图片预览</title>
+<script type="text/javascript" src="img.js"></script>
+</head>
+<body>
+	<form action="__URL__/saveNews" method="post" enctype="multipart/form-data">
+        <input id="idFile" style="width:224px" runat="server" name="image_url" onchange="javascript:setImagePreview(this,localImag,preview);" type="file" />
+       <div id="localImag">
+               <img id="preview" alt="预览图片" onclick="over(preview,divImage,imgbig);"  src="banner4.jpg" style="width: 200px; height: 150px;"/>
+       </div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,91 @@
+
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>    
+                <li ></li>        
+                <li class="selected"><a href="javascript:;"><span>通用信息</span></a></li>
+               <!--  <li ><a href="javascript:;"><span>会员简介</span></a></li>
+                 <li ><a href="javascript:;"><span>相关专辑</span></a></li>-->
+                 <li ><a href="javascript:;"><span>备注</span></a></li>            
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/Member/memberAddForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            <div inited="1000" style="display: block;"></div>
+            <div inited="1000" style="display: block;"><!--通用资料内容-->
+       
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                    <!--  <tr><td style="text-align:right;">选择城市：</td><td>  
+                          <select class="combox" name="city" class="required">
+                              <option value="">-选择城市-</option>
+                              <foreach name="City" item='C'>                       
+                               <option value="{$C.region_id}">{$C.html}{$C.region_name}</option>
+                             </foreach>  
+                           </select>         
+                    </td></tr>-->
+                    <tr><td  style="text-align:right;">会员名称：</td><td><input type="text" name="user_name" maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>   
+					<tr><td  style="text-align:right;">会员昵称：</td><td><input type="text" name="nickname" maxlength="20" class="" style="margin:3px 0;" size="50"/></td></tr>    
+                    <tr><td  style="text-align:right;">会员手机：</td><td><input type="text" name="mobile_phone" maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>                                     
+                   <!-- <tr><td  style="text-align:right;">会员Email：</td><td><input type="text" name="reg_email" maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>-->
+                    <tr><td  style="text-align:right;">登录密码：</td><td><input id="w_validation_pwd" type="password" name="password" class="required alphanumeric" minlength="6" maxlength="20" alt="字母、数字、下划线 6-20位" style="margin:3px 0;" size="50"/></td></tr>
+                    <tr><td  style="text-align:right;">重复密码：</td><td> <input type="password" name="notpassword" class="required" equalto="#w_validation_pwd" size="50"/></td></tr>
+                                 
+                    <tr><td  style="text-align:right;">缩略图：</td><td>
+                      <input type="hidden" name="head_pic" value="" id="member_thumb"/>
+                     <input name="file4" type="file" id="memberFileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>162,height=>162,'remove'=>'ok'))}','memberFileToUpload','member_img_show','member_thumb','','B-show','__ROOT__');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr style="" id="member_imgloads"><td>缩略图信息：</td><td> <img src="Uploads/2014/53835293aa9c9.png"  height="80" id="member_img_show" style="display:none;position:relative;top:3px;" class="B-show"/></td></tr>                   
+                   
+                   
+                    <!--<tr><td  style="text-align:right;">{:L('phone')}：</td><td><input type="text" name="mobile" maxlength="250" class="" size="50" style="margin-top:5px;"/></td></tr>              
+                    <tr><td  style="text-align:right;">{:L('Plane')}：</td><td><input type="text" name="phone" maxlength="250"  class="" size="50" style="margin:3px 0;"/></td></tr>
+                    <tr><td  style="text-align:right;">{:L('Email')}：</td><td><input type="text" name="email" maxlength="250"  class="" size="50" style="margin:3px 0;"/></td></tr>
+                    <tr><td  style="text-align:right;">{:L('Address')}：</td><td><input type="text" name="address" maxlength="250"  class="" size="50" style="margin:3px 0;"/></td></tr>
+                    <tr><td  style="text-align:right;">{:L('Category')}：</td><td>
+                              <label><input type="radio" name="rank" value="1" checked="checked" />{:L('Consultant')}</label> <label><input type="radio" name="rank" value="0" />{:L('Ordinary')}</label>
+                   </td></tr>-->
+                                      
+                    <tr><td  style="text-align:right;">是否锁定：</td><td>
+                              <label><input type="radio" name="is_lock" value="1" />是</label> <label><input type="radio" name="is_lock" value="0" checked="checked"/>否</label>
+                   </td></tr>
+                </table>
+                                                                   
+            </div><!--通用资料内容结束-->
+            
+            <!--
+            <div inited="1000" style="display: block;"><!--文档祥细内容
+                               
+                    <textarea name="profile"  style="width:99%;height:470px;"></textarea>   
+               
+            </div><!--文档祥细内容结束-->
+           
+           <!--
+            <div inited="1000" style="display: block;"><!--相关相册的内容
+                               
+                <p style="height: 10px;padding-bottom:10px;">相关相册: <input name="file3" type="file" id="fileToUpload" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload')}');"></p>  
+                <div class="divider"></div> 
+                <!--这里上传图片
+               <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="__PUBLIC__/Images/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>
+               
+            </div><!--相关相册的内容结束-->     
+            
+            <div inited="1000" style="display: block;"><!--后台备注-->
+                 <textarea name="remarks"  style="width:99%;height:470px;"></textarea>   
+            </div><!--后台备注结束-->
+            
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/City/cityAddForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" name="region_id" value="{$_GET['city_pid'] ? $_GET['city_pid'] : 0}"/>
+        <input type="hidden" name="action" value="{$_GET['action']}"/>
+        <input type="hidden" name="code" value="{$code}" />
+        <div class="pageFormContent" layoutH="58" >
+            <p>
+                <label>区域名称：</label>
+                <input type="text" name="region_name" size="20" class="required" />
+            </p>
+            
+            <p>
+                <label>字母分类：</label>
+                <input type="text" name="region_abc" size="20" class="required" />
+            </p>
+            <p>
+                <label>排序：</label>
+                <input type="text" name="orders" size="20" class="required digits" />
+            </p>
+            <p>
+                <label>是否显示：</label>
+                <input type="radio" value="1" name="is_show" checked="checked"/>显示
+                <input type="radio" value="0" name="is_show"/>不显示
+            </p>
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

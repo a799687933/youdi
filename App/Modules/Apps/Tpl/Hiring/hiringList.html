@@ -1,0 +1,92 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->     
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                     商户ID：<input type="text" name="shops_id" value="{$shops_id}"/>
+                </td>            
+                <td>
+                     输入关键字：<input type="text" name="hiring_name" value="{$hiring_name}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+           <!-- <if condition="access('Hiring/hiringAddSave')">
+              <li><a class="add" href="{:U(APP_APPS.'/Hiring/hiringAddSave')}" target="dialog" mask="true" width="900" height="550" title="添加招聘信息"><span>添加招聘信息</span></a></li>
+            </if>-->
+
+            <if condition="access('Hiring/linkDelete')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Hiring/hiringDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除招聘信息</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="hiring_name"  class="<if condition='$hiring_name eq "desc"'>desc<else />asc</if>">招聘标题</th>
+                <th orderfield="files_id"  class="<if condition='$files_id eq "desc"'>desc<else />asc</if>">招聘分类</th>
+                <th orderfield="city"  class="<if condition='$city eq "desc"'>desc<else />asc</if>">所在城市</th>
+                <th orderfield="shops_id"  class="<if condition='$shops_id eq "desc"'>desc<else />asc</if>">所属商家</th>
+                <th orderfield="display"  class="<if condition='$display eq "desc"'>desc<else />asc</if>">是否显示</th>
+                <th orderfield="is_recommend"  class="<if condition='$is_recommend eq "desc"'>desc<else />asc</if>">是否推荐</th>
+                <th orderfield="add_time"  class="<if condition='$add_time eq "desc"'>desc<else />asc</if>">添加时间</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="hiring" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td><a href="{:U('/Hiring/contents',array('html'=>'hiring_'.$r['id']))}" target="_blank">{$r.hiring_name}</a></td>
+                 <td>{$r.files_name}</td>
+                <td>{$r.region_name}</td>
+                <td>{$r.shop_name}</td>
+                <td>{$r.display|tpl_yes_no=###,'hiring','display',$r['id'],'id','Hiring/hiringForm'}</td> 
+                <td>{$r.is_recommend|tpl_yes_no=###,'hiring','is_recommend',$r['id'],'id','Hiring/hiringForm'}</td>
+               <td>{$r.add_time|date='Y-m-d H:i:s',###}</td>
+               <td>
+                    {$action|tpl_action='dialog','Hiring/hiringAddSave',C('VAR_PAGE').'/'.$currentPage.'/id/'.$r["id"],'修改'.strip_tags($r['hiring_name']),'icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','Hiring/hiringDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$r["id"],'确定执行删除('.strip_tags($r['hiring_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

@@ -1,0 +1,66 @@
+<style type="text/css">
+.nowrap .content_list{
+   line-height:200%;
+   border-bottom:1px #eee solid;
+   padding:10px 40px 10px 5px;
+   position:relative;
+}
+.del_a{
+	position:absolute;
+	right:5px;
+	top:20px;
+	color:#3C7FB1;
+}
+.times{margin-left:20px;color:#ccc;}
+</style>
+<div class="pageContent">
+  <div class="pageFormContent nowrap" layoutH="60" style="font-size:14px;">
+       <div id="reply_list_content">
+             <!--动态数据-->
+        </div> 
+     <div style="margin-top:20px;">
+         <input type="text" id="content_356" placeholder="回复···" style="width:20%;" />
+         <a class="buttonActive" href="javascript:;" style="position:relative;top:-2px;" onclick="sendMassge()"><span>按钮</span></a>
+     </div>
+  </div>  
+    <div class="formBar">
+        <ul>
+            <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+        </ul>
+    </div>   
+</div>
+<script type="text/javascript">
+getReplyList();
+//动态获取列表
+function getReplyList(){
+   var url="{:sign_url(array('types'=>'list','article_id'=>$_GET['article_id'],'comment_id'=>$_GET['comment_id'],'user_id'=>$_GET['user_id']),U('NewComment/articleComReply'))}";
+   $.get(url,{},function(res){
+	     $('#reply_list_content').html(res);
+	});
+}
+
+//提交表单
+function sendMassge(){
+    var content=$('#content_356').val();
+	if(content) content=content.replace(/(^\s*)|(\s*$)/g, "");
+	if(!content) {
+		$('#content_356').val('').focus();
+		return;
+	}	
+	var url="{:sign_url(array('types'=>'add','article_id'=>$_GET['article_id'],'comment_id'=>$_GET['comment_id'],'user_id'=>$_GET['user_id']),U('NewComment/articleComReply'))}";
+	$.post(url,{content:content},function(res){
+	     if(parseInt(res) == 1) getReplyList();
+		 $('#content_356').val('');
+	});
+}
+//删除
+function massgeDel(url){
+    if(confirm('确定删除回复？')){
+	    $.get(url,{},function(res){
+		     if(parseInt(res) == 1) getReplyList();
+		});
+	}
+}
+</script>
+
+

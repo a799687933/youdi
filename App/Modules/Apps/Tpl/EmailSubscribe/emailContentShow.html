@@ -1,0 +1,38 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+        <div class="pageFormContent nowrap" layoutH="97">
+        
+            <dl>
+                <dt style="width:60px;">推送用户：</dt>
+                <dd>
+                    <input  type="text"  value="{$result.user_name}" class="required" size="40" />
+                    
+                </dd>
+            </dl>    
+                    
+            <dl>
+                <dt style="width:60px;">邮件标题：</dt>
+                <dd>
+                    <input  type="text"  value="{$result.title}" class="required" size="40" />
+                    
+                </dd>
+            </dl>        
+            
+        <dl class="nowrap">
+            <dd style="width:100%">
+                    <textarea class="editor"  style="width:100%;height:450px;" tools="mini" >{$result.content|stripcslashes=###}</textarea>              
+            </dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+</div>
+
+

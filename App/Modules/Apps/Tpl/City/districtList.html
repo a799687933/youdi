@@ -1,0 +1,44 @@
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+            <if condition="access('City/cityAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/City/cityAdd','','')}/city_pid/{$_GET['region_id']}/action/districtList" target="dialog" mask="true" title="添加{$_GET['name']}区县" width="900" height="550"><span>添加{$_GET['name']}区县</span></a></li>
+            </if>
+            <li class="line">line</li>
+		</ul>
+	</div>
+	<table class="list" width="100%" layoutH="30"  id="list-table">
+		<thead>
+			<tr>
+				<th >城市名称</th>
+				<th width="30%">按字母分类</th>
+				<th width="10%">排除</th>
+				<th width="10%">是否显示</th>
+				<!--<th width="10%">是否热门</th>-->
+				<th width="10%" style="text-align: center;">操作</th>	
+			</tr>
+		</thead>
+		<tbody>
+		   <foreach name="CityArr" item="app"> 
+    			<tr target="sid_user" rel="{$app.region_id}"  id="{$app.parent_id}_{$app.region_id}" class="{$app.parent_id} showtr">   				
+    				<td style="text-align:left;text-indent:2px; padding-left:5px;"  class="first-cell">    				  
+    				  <img src="__SYS_IMG__//menu_minus.gif" id="icon_{$app.parent_id}_{$app.region_id}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this)" />
+    				  {$app.region_name|tpl_modify_oen=###,'region','region_name',$app['region_id'],'region_id','City/citySave'}
+                    </td>                  
+    				<td>{$app.region_abc|tpl_modify_oen=###,'region','region_abc',$app['region_id'],'region_id','City/citySave'}</td>
+    				<td>{$app.orders|tpl_modify_oen=###,'region','orders',$app['region_id'],'region_id','City/citySave'}</td>
+    				<td>{$app.is_show|tpl_yes_no=###,'region','is_show',$app['region_id'],'region_id','City/citySave'}</td>  		
+					<!--<td>{$app.is_hot|tpl_yes_no=###,'region','is_hot',$app['region_id'],'region_id','City/citySave'}</td>  	-->	
+    				<td style="text-align: center;">
+                  {/*城市列表*/}     
+                      {$action|tpl_action='navTab','City/streetList','region_id/'.$app["region_id"].'/name/'.$app['region_name'],'('.$app['region_name'].')街道列表','book_open.gif','book_open2.gif'}
+                      {$action|tpl_action='ajaxTodo','City/cityDelete','action/cityList/ids/'.$app["region_id"].'/region_pid/'.$_GET['region_id'],'确定执行删除('.strip_tags($app['region_name']).')','icon_drop.gif','icon_drop_not.gif'}   {/*删除按钮*/}                             
+                  </td> 				
+    		  </tr>
+           </foreach> 
+
+		</tbody>
+	</table>
+
+</div>
+

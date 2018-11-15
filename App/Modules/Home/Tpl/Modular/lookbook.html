@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>LOOKBOOK | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script defer src="__HOME__/js/flexslider.js"></script> 
+<script>
+ $(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",directionNav: true,slideshow:false, animationSpeed:1000
+     
+      });
+	 
+	  $(".flexslider").hover(function(){
+		  $(this).toggleClass("flexslidernow")
+		  })
+	 a=$(".slides li").length
+	
+	 $(".a").text(a)  
+
+    });
+</script>
+<style>
+.lbwrap{box-sizing: border-box;    margin: 0 auto;   width: 1440px;        padding: 5px 35px 0;   }
+ .flexslider {	margin: 0 auto;	position: relative;	width:1370px; box-sizing:border-box; 	zoom: 1;}
+.flex-viewport {max-height: 2000px;	-webkit-transition: all 1s ease;-moz-transition: all 1s ease;	transition: all 1s ease;}
+.flexslider .slides {	zoom: 1;}
+.flexslider .slides li{ position:relative}
+.flexslider .slides li b{ padding:7px 12px 5px; line-height:18px; display:inline-block; border-radius:5px; color:#fff; font-family:Arial; position:absolute; right:13px; top:13px; font-size:13px; text-shadow:0 0 5px #999; box-sizing:content-box; font-weight:normal}
+.flexslidernow .slides li b{ background:rgba(150,150,150,0.8)}
+.flexslider .slides li img{ max-width:100%; height:722px;}
+.flex-direction-nav {*height: 0;}
+.flex-direction-nav a{ display:block; width:50px; height:120px; border-radius:5px; position:absolute; top:50%; margin-top:-60px; transition:all 50ms ease-out 0s;opacity:0.5;background-repeat:no-repeat; background-size:auto 28px; background-position:center center; font-size:0}
+.flexslidernow .flex-direction-nav{ }
+.flexslidernow .flex-direction-nav a{ background-color: rgba(150, 150, 150, 1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15); }
+.flex-direction-nav .flex-next{ background-image:url(__HOME__/images/1121ab.png);right:10px}
+.flex-direction-nav .flex-prev{  background-image:url(__HOME__/images/1121aa.png); left:10px}
+.flexslidernow .flex-direction-nav a:hover{background-color: #969696; opacity:1}
+.flex-control-nav {width: 100%;position: absolute;bottom: 10px;text-align: center; display:none}
+.flex-control-nav li {margin: 0 5px;display: inline-block;zoom: 1;*display: inline; }
+.flex-control-paging li a{background: #fff; border-radius:50%;display:block;height: 13px;overflow: hidden;text-indent:-99em;width: 13px;cursor: pointer;}
+.flex-control-paging li a.flex-active { background:#1b60a6;}
+
+.phlbbox{ padding:10px;}
+.phlbbox img{ vertical-align:top; max-width:100%; margin-bottom:20px;}
+</style>
+</head> 
+<body>
+<div class="box wlgq">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin--> 
+ <div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+          <h1>LOOKBOOK</h1>
+          <P style="height:44px;"> </P>
+     </div><div class="cb"></div></div>
+ </div>
+ <if condition="is_mobile()">
+  <div class="phlbbox">
+  <foreach name="ads" item="a" key="adk">
+  <a <if condition="trim($a['ad_url'])">href="{$a['ad_url']}" target="_blank"</if>><img src="__ROOT__/{$a['ad_img']}" alt=""/></a>
+   </foreach>
+  </div>
+ <else/>
+ <div class="lbwrap">
+				<div class="flexslider" >
+					<ul class="slides">
+                    <foreach name="ads" item="a" key="adk"> 
+						<li><b> {$adk+1} of {:count($ads)} </b>
+                        <table width="100%" height="100%">
+                  <tr>
+                      <td align="center" valign="middle" width="100%" height="100%">
+                          <a <if condition="trim($a['ad_url'])">href="{$a['ad_url']}" target="_blank"</if>><img src="__ROOT__/{$a['ad_img']}" alt=""/></a>
+                      </td>
+                  </tr>
+             </table></li>
+                        </foreach>
+					</ul>
+                    
+			   </div>
+ </div>
+</if>
+
+<!--content end-->
+ <include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<!---->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

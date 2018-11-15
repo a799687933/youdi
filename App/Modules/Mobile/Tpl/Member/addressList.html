@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>收货地址</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">
+     <a href="{:U(is_m().'/Member/address')}" style="background:#ccc;color:#fff;padding:2px 10px;border-radius: 3px;">添加新地址</a>
+     <a href="javascript:;history.back();" class="icon12"></a>
+</h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+<div class="member-content" style="font-size:0.7rem;margin-bottom:60px;">
+   <ul  class="ul-style" style="text-indent:5px;" id="add-page">   
+       <foreach name="address" item="add">
+            <li style="line-height:280%;margin-top: 20px;">
+                  <p>{:isL(L('IDFullName'),'姓名')}：{$add.consignee}</p>
+                  <p>{:isL(L('Address'),'地址')}：{$add.r_province} {$add.r_city} {$add.r_district} {$add.address}</p>
+                  <p>{:isL(L('Telephone'),'电话')}：{$add.mobile}</p>
+                  <p>{:isL(L('ZipCode'),'邮政编码')}：{$add.zipcode} </p>
+                  <p>
+                 <if condition="$add['default_address']">
+                        <span style="color:#ccc;">{:isL(L('DefaultAddress'),'默认地址')}</span> | 
+                 <else />
+                       <a href="javascript:void(0);" 
+                       onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}','{:isL(L('IsDefaultAddress'),'您是否确定此地址设为默认地址？')}','{:U(is_m().'/Member/setDefault',array('address_id'=>$add['address_id']))}','','moblie',2)"
+                       style="display:inline"
+                       >
+                       {:isL(L('DefaultAddress'),'默认地址')}</a> | 
+                 </if>    
+                  <a href="{:U(is_m().'/Member/address',array('address_id'=>$add['address_id']))}" style="display:inline">{:isL(L('Modify'),'编辑')}</a> | 
+                  <a href="javascript:void(0);" 
+                  onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}','{:isL(L('ConfirmationPrompt'),'操作不可恢复确定执行本次操作？')}','{:U(is_m().'/Member/delAddress',array('address_id'=>$add['address_id']))}','','moblie',2)" style="display:inline">删除</a>
+                  </p>                                             
+            </li>
+     </foreach>              
+  </ul>             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<include file="Common:footer" />{/*页脚*/}
+  </div>  
+</body>
+</html>

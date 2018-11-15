@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>企业登录-{:C(strtoupper($langfx).'WEBNAME')}</title>
+<meta name="keywords" content="{:C($langfx.'WEBKEYWORD')}" />
+<meta name="description" content="{:C($langfx.'WEBDEPICT')}" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__HOME__/Css/style.css"/>
+<script type="text/javascript" src="__HOME__/Js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+    var url="{:U('Supplier/checkCode','','')}";
+    myValidationEngine('ajaxYzm',url,'my=data','{:isL(L("VerificationCodeError"),"验证码错误")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');      
+    valinit('.form1','get','',true,'bottomLeft');
+});
+</script>
+<style type="text/css">
+.pr25 {
+  padding-right: 10px;
+}    
+</style>
+</head>
+<body>
+<include file="Supplier:top" />{/*头部*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="qyrz  pt45" style="min-height: 600px;">
+      <form action="{:U('/Supplier/loginDo')}" class="form1">
+           <h1 class="mb50"><span>企业登录</span></h1>
+           <div class="qyrzbox fl">
+               
+                <label><span class="colf00">*</span>登录帐号：</label>
+                <input type="text" name="name" id="name" placeholder="请输入帐号" class="qyrz_input validate[required]"/>
+                <div class="cb pb15"></div>
+                
+                <label><span class="colf00">*</span>登录密码：</label>
+                <input type="password" name="password" id="password" placeholder="请输入密码" class="qyrz_input validate[required]"/>
+                <div class="cb pb15"></div>
+                <label><span class="colf00">*</span>验证码：</label>
+                <input type="text" id="code" name="code" placeholder="请输入密码" class="qyrz_input validate[required,ajax[ajaxYzm]]" style="width:150px;"/>
+                <img src="{:U('/Supplier/showCode','','')}" onClick="javascript:this.src='{:U('/Supplier/showCode','','')}/tm/'+Math.random()" height="30" style="position: relative;top:13px;" />
+                <div class="cb pb15"></div>   
+                <label>&nbsp;</label>             
+                <input type="submit" id="submits" value="登 录" class="qyrz_btn" style="margin:0;" />
+           </div><!--qyrzbox end-->
+           <div class="cb pv40"></div>
+                
+          
+           <div class="cb pv30"></div>
+   </form>
+  </div><!--qyrz end-->
+ </div>
+ <!--content end-->
+<!--footer begin-->
+<include file="Common:footer2" />{/*页脚*/}
+<!--footer end-->
+
+<!---->
+<include file="Common:cityHot" />{/*选择城市*/}
+<!--dqxz end-->
+<!---->
+
+</body>
+</html>

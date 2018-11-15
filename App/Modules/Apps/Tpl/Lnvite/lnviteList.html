@@ -1,0 +1,88 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->      
+    <input type="hidden" name="shops_id" value="{$_GET['shops_id']}" /><!--保存按商户检索条件--> 
+</form>
+<div class="pageHeader">
+     <form onsubmit="return navTabSearch(this);" action="" method="post">
+     <input type="hidden" name="display" value="{$displys}"/>   
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  邀请码：<input type="text" name="str_code" value="{$_REQUEST['str_code']}"/>
+                </td>
+                <td>
+             
+                    <select class="combox" name="shops_id" class="">
+                      <option value="">-全部邀请码-</option>
+                      <option value="0" <if condition="$_REQUEST['shops_id'] eq '0'">selected="selected"</if>>招代理商邀请码</option>
+                      <foreach name="shops" item='C'>                       
+                       <option value="{$C.id}" <if condition="$_REQUEST['shops_id'] eq $C['id']">selected="selected"</if>>{$C.shop_name}</option>
+                     </foreach>  
+                    </select>       
+              
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Lnvite/addLnvite')">
+              <li><a class="add" href="{:U(APP_APPS.'/Lnvite/addLnvite')}" target="dialog" mask="true" width="900" height="550" title="批量生成"><span>批量生成</span></a></li>
+            </if>
+
+            <if condition="access('Lnvite/delLnvite')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Lnvite/delLnvite','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="str_code"  class="<if condition='$str_code eq "desc"'>desc<else />asc</if>">邀请码</th>
+                <th orderfield="shops_id"  class="<if condition='$shops_id eq "desc"'>desc<else />asc</if>">所属商户</th>
+                <th orderfield="status"  class="<if condition='$status eq "desc"'>desc<else />asc</if>">使用状态</th>
+                <th orderfield="add_time"  class="<if condition='$add_time eq "desc"'>desc<else />asc</if>">添加时间</th>
+            </tr>                       
+        </thead>
+        <tbody>           
+           <volist name="lnvite" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.str_code}</td>
+                <td><if condition="$r['shop_name']">{$r.shop_name}<else />招代理商邀请码</if></td>
+                <td><if condition="$r['status']">{$r.make_time|date='Y-m-d',###}已注册<else />未使用</if></td>
+               <td>{$r.add_time|date='Y-m-d',###}</td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

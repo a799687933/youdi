@@ -1,0 +1,63 @@
+{/*猜你喜欢列表*/}
+<!--<ul>
+    <foreach name="youLike" item="it">
+        <li> 
+       
+            
+             <div class="zjllbmt">
+                   <table width="100%" height="100%">
+                        <tr>
+                            <td align="center" valign="middle" width="100%" height="100%">
+                                <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb']}" alt=""/></a>
+                            </td>
+                        </tr>
+                    </table>
+             </div>
+             <div class="zjllbmtb">
+                   <table width="100%" height="100%">
+                       <tr>
+                            <td align="center" valign="middle" width="100%" height="100%">
+                                  <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb2']}" alt=""/></a>
+                            </td>
+                       </tr>
+                   </table>
+             </div>
+             <div class="zjllbmb">
+                   <p class="tc">￥ {$it['goods_retail_price']}</p>
+             </div>
+        </li>
+    </foreach>
+    <div class="cb"></div>
+</ul>-->
+<php>
+   $basicPiece=new BasicAction();
+   $youLikeTdde=$basicPiece->guessYouLike(0,30,'');
+</php>
+<foreach name="youLikeTdde" item="it">
+ <div class="slide">
+ <div class="zjllbmt">
+                   <table width="100%" height="100%">
+                        <tr>
+                            <td align="center" valign="middle" width="100%" height="100%">
+                                <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb']}" alt=""/></a>
+                            </td>
+                        </tr>
+                    </table>
+             </div>
+             <div class="zjllbmtb">
+                   <table width="100%" height="100%">
+                       <tr>
+                            <td align="center" valign="middle" width="100%" height="100%">
+                                  <a href="{:U('Goods/index',array('html'=>$it['id']))}" target="_blank"><img src="__ROOT__/{$it['goods_thumb2']}" alt=""/></a>
+                            </td>
+                       </tr>
+                   </table>
+             </div>
+             <div class="zjllbmb">
+                   <p class="tc">￥ {$it['goods_retail_price']}</p>
+             </div>
+ 
+ 
+ 
+ </div>
+ </foreach>

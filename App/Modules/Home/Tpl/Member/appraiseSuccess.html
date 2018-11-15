@@ -1,0 +1,59 @@
+ <!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>评论成功 | YOUDI WU 中国</title>
+<meta name="keywords" content="{:C('WEBKEYWORD')}" />
+<meta name="description" content="{:C('WEBDEPICT')}" />
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript">
+//防止页面后退
+/*if (window.history && window.history.pushState) {
+		$(window).on('popstate', function () {
+		var hashLocation = location.hash;
+		var hashSplit = hashLocation.split("#!/");
+		var hashName = hashSplit[1];
+		if (hashName !== '') {
+		var hash = window.location.hash;
+		if (hash === '') {
+		   //alert("Back button isn't supported. You are leaving this application on next clicking the back button");
+		   window.location.href="{:U('Member/index',array('order'=>'show'))}#order-h1";
+		}
+		}
+		});
+		//window.history.pushState('forward', null, './#forward');
+}*/
+</script>
+</head>
+<body>
+<div class="box">
+ <include file="Common:headermin" />{/*公共头部*/}
+ <!--content begin-->
+ <div class="wrap">
+  <div class="cb pv20"></div>
+  <p style="color:#222; font-size:16px; padding-bottom:25px;">谢谢您的用心分享，祝您生活愉快。</p>
+  <div style=" position:relative; width:7rem; float:left">
+       <a href="{:U('Category/index')}">
+          <input value="继续购物" class="jsr_btn" type="button">
+          <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; line-height:38px; color:#fff; font-size:1.25em;top:-0rem;"></span>
+      </a>
+       
+      </div>
+      <div class="cb"></div>
+ </div>
+ <!--content end-->
+<div class="cb pv20"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</body>
+</html>

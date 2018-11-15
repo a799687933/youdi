@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>
+<php>
+$emtp=$position;
+sort($emtp);
+</php>
+{$goods[pfix('goods_name')]|strip_tags=###} - 
+<foreach name="emtp" item="po"> {$po['name']} - </foreach> {:isL(L('Categories'),'产品分类')} | YOUDI WU 中国
+</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+
+<!--<link rel="stylesheet" href="__HOME__/css/plugins.css" />-->
+<link href="__HOME__/css/essentials.min.css" rel="stylesheet">    
+<link href="__HOME__/css/detail.min.css" rel="stylesheet">
+<link rel="stylesheet" href="__HOME__/css/iconfont.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/swiper.css" />
+<link rel="stylesheet" href="__HOME__/css/style0417.css" />
+<!--<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>-->
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/alertAjax.js"></script>
+<script type="text/javascript" src="__HOME__/js/swiper4.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+ /**
+function pjbbtxtdj(){
+$('.pjbbtxtdj').toggle(function(){
+        $(this).text(window.DisplayPart);
+        $(this).parent().siblings(".pjbbtxt").css("height","auto");
+        },function(){
+        $(this).text(window.ReadMore);
+        $(this).parent().siblings(".pjbbtxt").css("height","25px");
+});  
+} **/  
+/*无刷新收藏*/
+function addColle(){
+	var url="{:U('Cookie/goodsCollect',array('id'=>$goods['id']))}";
+	$.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			 $('.falses').hide();
+			 $('.trues').show();
+			 //实时获得
+              getNewcollection(); 
+		  }
+    });	
+}
+</script>
+<script type="text/javascript">
+var staticInfo = { fontVersion: 19, fontIconsVersion: 8, staticFolder: "", requireMainFolder: "__HOME__/js/farfetch/" };
+</script>
+<script  src="__HOME__/js/farfetch/jsbundles/ffmodernizr.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/farfetch/jsbundles/loads.js"></script>
+<style type="text/css">
+.rating-static-module span{padding-left:0px;margin-left:0px;}
+
+.bx-wrapper{ float:left}
+.sliderProductModule .bx-wrapper{ float:none; height:auto}
+.zjllb .bx-wrapper .bx-prev::before {
+    content: "\e602";
+    left: 10px;
+    position: relative;
+    top: 10px;
+}
+.sliderProductModule-fullscreen-container .button-white-circle:hover{ box-shadow:none !important; background:none}
+.zjllb .bx-wrapper .bx-prev{font-family: "iconGliphs";
+	background-color: white;
+    border: medium none;
+    border-radius: 20px; color:#222; font-size:13px;
+    left: -14px;
+    margin-bottom: auto;
+    margin-top: auto;
+    opacity: 0.8;
+    top: calc(50% - 40px);height: 32px;
+    outline: 0 none;
+    position: absolute;
+    width: 32px;
+    z-index: 9;}
+.zjllb .bx-wrapper .bx-next::before {
+    content: "\e605";
+    left: 10px;
+    position: relative;
+    top: 10px;
+}
+.zjllb .bx-wrapper .bx-next{font-family: "iconGliphs";
+	background-color: white;
+    border: medium none;
+    border-radius: 20px; color:#222; font-size:13px;
+    right: -14px;
+    margin-bottom: auto;
+    margin-top: auto;
+    opacity: 0.8;
+    top: calc(50% - 40px);height: 32px;
+    outline: 0 none;
+    position: absolute; 
+    width: 32px;
+    z-index: 9;}	
+.zjllb .bx-wrapper .bx-next:hover,.zjllb .bx-wrapper .bx-next:hover{ box-shadow:1px 1px 0 #ccc inset; opacity:1}
+
+.fwcnb img{max-width:100% !important;}
+</style>
+
+</head>
+<body data-page="detail" class="globalPos__hide" style="overflow-x:hidden; width:100%">
+<div class="box" style="overflow:hidden; width:100%">
+ <include file="Common:header" />{/*公共头部*/}
+ 
+<!--content begin-->
+<!--上面大图-->
+<div class="baseline">
+        <!-- sliderProductModule -->
+        <div class="sliderProductModule">
+<ul class="sliderProduct js-sliderProduct js-sliderProductPage">
+     <foreach name="goods['goods_photo']" item="al" key="alkey">
+        <li class="sliderProduct-slide">
+            <a class="sliderProduct-link js-rollover" data-itemimage="{$alkey}">
+                <img itemprop="image" src="__ROOT__/{$al['img']}"
+                        class="responsive js-blurload ff-blurload"
+                        alt="Dolce &amp; Gabbana &#39;Taormina&#39;"
+                        data-zoom-image="__ROOT__/{$al['img']}"
+                        data-large="__ROOT__/{$al['img']}"
+                        data-medium="__ROOT__/{$al['img']}"
+                        data-small="__ROOT__/{$al['img']}"
+                        data-xsmall="__ROOT__/{$al['img']}"
+                        data-resize="false">
+            </a>
+        </li>
+     </foreach>   
+</ul> 
+            <!-- sliderProduct -->
+           
+        </div>
+        <!-- sliderProductModule -->
+        <div class="container" style="height:1px">
+            <div class="sliderProductModule-fullscreen-container">
+                <a class="sliderProductModule-fullscreen-btn button-white-circle" data-toggle="modal"
+                   data-target=".productDetail-modalSlider" href=""><span class="icon-resize glyphs"></span></a>
+            </div>
+        </div>
+    </div>
+  <div class="cb"></div>
+<!--下面小图-->
+<div class="container">
+    <div class="productDetailModule-breadcrumb-container">
+    <div class="sernot" style="margin:0; padding:10px 0 5px; display:none">
+   <ul>
+   	<li class="breadcrumbs-listItem"><a href="__ROOT__/">{:isL(L('Home'),'首页')}</a><meta itemprop="position" content="1"></li>
+    <li class="breadcrumbs-listItem"><meta itemprop="position" content="1"><a href="{:U('Category/index')}">{:isL(L('Categories'),'产品分类')}</a></li>
+    <foreach name="position" item="po">
+       <li class="breadcrumbs-listItem"><meta itemprop="position" content="1"><a href="{:U('Category/index',array('html'=>$po['id']))}">{$po['name']}</a></li>
+    </foreach>
+    <li><meta itemprop="position" content="1"><a >{$goods[pfix('goods_name')]}</a></li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+       <div class="bx-pager-thumb">
+          <foreach name="goods['goods_photo']" item="al" key="alkey">  
+            <a data-slide-index="{$alkey}" href="javascript:void(0);" class="relative js-video-thumb">
+                <img trk="25" src="__ROOT__/{$al['img']}" alt="Dolce &amp; Gabbana &#39;Taormina&#39;" style="width:70px;height:93px;" />
+            </a>
+        </foreach>
+        <div class="cb"></div>
+      </div>
+   </div>
+</div>
+<!--弹出图-->
+<div class="modal fade productDetail-modalSlider" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="productFullscreen">
+            <button type="button" class="button-white-circle modal-close-action modal-close-action-productFullscreen close float-right" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <!-- sliderProductModule -->
+            <div class="sliderProductModule">
+                <ul class="sliderProduct js-sliderProductFull">
+                    <foreach name="goods['goods_photo']" item="al" key="alkey">
+                        <li class="sliderProduct-slide">
+                            <a class="sliderProduct-link js-rollover" href="javascript:void(0);">
+                                <img itemprop="image" src="__ROOT__/{$al['img']}" data-fullsrc="__ROOT__/{$al['img']}" 
+                                alt="Dolce &amp; Gabbana &#39;Taormina&#39;" />
+                            </a>
+                        </li>
+                    </foreach> 
+                </ul>
+                <div class="bx-pager-thumbFull">
+               <foreach name="goods['goods_photo']" item="al" key="alkey">
+                    <a data-slide-index="{$alkey}" href="javascript:void(0);">
+                        <img trk="25" src="__ROOT__/{$al['img']}" alt="Dolce &amp; Gabbana &#39;Taormina&#39;" style="width:70px;height:93px;"/>
+                    </a>
+                </foreach> 
+                </div>
+                <!-- sliderProduct -->
+            </div>
+            <!-- sliderProductModule -->
+        </div>
+    </div>
+</div>
+<!---->
+
+
+
+
+<div class="cpxqb">
+<div class="cpxqbl" id="cpxqbl158">
+  <div class="ljpj">
+   <h1><span style="display:inline-block; line-height:30px; float:left">{:isL(L('CumulativeEvaluation'),'累计评价')}</span><span class="ljpjsz">{$goods['review_count'] ? $goods['review_count'] : 0}</span> 
+   <div class="cb"></div>
+   </h1>
+   <div class="ljpjb">
+    <div class="ljpjbl">
+         <p>{$showScore}{$showScoreFloat}</p>
+         <div class="rating-static-module" >
+         
+         {/*评价星星*/}
+    <span class="<php>if($score >= 1 && (1+1) ==$points){</php>rateit-halfselected svg<php>}else if($score >= 1){</php>rateit-selected svg<php>}else{</php>rateit svg<php>}</php>" style="margin:0; display:inline-block"></span>
+    <span class="<php>if($score >= 2 && (2+1) ==$points){</php>rateit-halfselected svg<php>}else if($score >=2){</php>rateit-selected svg<php>}else{</php>rateit svg<php>}</php>" style="margin:0; display:inline-block"></span>
+    <span class="<php>if($score >= 3 && (3+1) ==$points){</php>rateit-halfselected svg<php>}else if($score >= 3){</php>rateit-selected svg<php>}else{</php>rateit svg<php>}</php>" style="margin:0; display:inline-block"></span>
+    <span class="<php>if($score >= 4 && (4+1) ==$points){</php>rateit-halfselected svg<php>}else if($score >= 4){</php>rateit-selected svg<php>}else{</php>rateit svg<php>}</php>" style="margin:0; display:inline-block"></span>
+    <span class="<php>if($score >= 5 && (5+1) ==$points){</php>rateit-halfselected svg<php>}else if($score >= 5){</php>rateit-selected svg<php>}else{</php>rateit svg<php>}</php>" style="margin:0; display:inline-block"></span>              
+         {/*评价星星结束*/}
+         
+         <!--星星标本
+         <span class="rateit-selected svg" style="margin:0; display:inline-block"></span>  全黑色星
+         <span class="rateit svg" style="margin:0; display:inline-block"></span> 灰色星星
+        <span class="rateit-halfselected svg" style="margin:0; display:inline-block"></span> 半黑半灰星星
+          -->
+         
+         </div>
+         <!--<img src="__HOME__/images/img11.jpg" alt=""/><img src="__HOME__/images/img11.jpg" alt=""/><img src="__HOME__/images/img11.jpg" alt=""/>   -->
+         <div class="cb"></div>
+    </div>
+    <div class="ljpjbr"  id="container" style="/*<php>if($goods['goods_app']['app_list']){</php>height:180px;<php>}else{</php>height:80px;<php>}</php>*/">
+          <table width="100%" height="100%">
+               <tr>
+                   <td align="center" valign="middle" width="100%" height="100%"><img src="__HOME__/images/img4b.jpg" alt=""/></td>
+               </tr>
+          </table>
+    </div>
+    <div class="cb"></div>
+   </div>
+  </div><!--ljpj end-->
+  <if condition="is_mobile()">
+   
+  <else/>
+  <div class="xspj cpxqpj pv20">
+     <ul id="app-end">
+         <include file="Goods:index_ajax" /> {/*评价列表动态模板*/}   
+     </ul>
+     <php>if($pageNumShown > 1){</php>
+         <a href="javascript:void(0)" class="more mt10">
+             <input onClick="mobile.clickPage(this,'#app-end');" class="morebtn" value="Load More" type="button">
+         </a>
+     <php>}</php>
+    </div><!--pjb end-->
+  </if>
+  
+ </div><!--cpxqbl end-->
+ <div class="cpxqbr">
+  <h1 class="f18 lh22 pb5"><b class="vam pr10" style="color:#000">{$goods['us_goods_name']|strip_tags=###} <img src="__HOME__/images/logo.png" width="100" /><!--YOUDI WU--></b><!--<span class="f13" style="font-weight:normal">{$goods['us_goods_name']|strip_tags=###}</span>--></h1>
+  <p class="pb10 f13 vam col000" style="font-family:Arial, Helvetica, sans-serif;font-size:14px;color:#333;">Number:{$goods['goods_num']}</p>
+  <p class="pb10 f16 vam col000 ">
+     <span class="vam">{:C('KTEC_H')}</span><span id="show-price" class="vam">{$goods['goods_retail_price']}</span> 
+     <span class="col999 f13 vam">({:isL(L('ValueAddedTax'),'含增值税')})</span>
+   </p>
+  <a href="javascript:void(0)" class="cmzn" style="float:right">{:isL(L('SizeDescription'),'尺码指南')}</a>
+  <!--<a href="javascript:void(0)" class="zjsc">{:isL(L('TestAtHome'),'在家试穿')}</a>-->
+  <div class="cb"></div>
+  
+  {/*商品属性*/}
+   <foreach name="goods['attrs'][$goods['id']]" item="ar" key="keyec">       
+    <php>$counts=count($ar['attr_list']);</php>
+     <div class="cmbox">
+         <php>if($goods['stock'] <= 0 && C('CHECK_STOCK') && $keyec == 0){</php>
+            <!--<span class="cmboxtxt cmboxtxtred" style="text-transform:uppercase">sold out</span>{/*没货时*/}-->
+            <span class="cmboxtxtred" style="text-transform:uppercase">sold out</span>{/*没货时*/}
+         <php>}else{</php>
+            <b class="<if condition="$goods['stock'] gt 0">cmboxtxt</if> get-attr-val attr-class-{$keyec}" <php>if($counts==1){</php>value="{$ar['attr_list'][0]['attr_id']}"<php>}</php> 
+            attr-class="attr-class-{$keyec}"  info-class="error-info-{$keyec}" error1="{:isL(L('PleaseSelect'),'请选择')}{$ar['attribute_name']}" <if condition="$goods['stock'] elt 0">style="color:#999"</if>>
+            <php>if($counts==1){</php>{$ar['attr_list'][0]['attr_value']}<php>}else{</php>{:isL(L('Select'),'选择')}{$ar['attribute_name']}<php>}</php>
+            </b>
+         <php>}</php> 
+         
+          <div class="cmboxb" style="display: none;background:#fff;">
+               <ul style="background:#fff;">       
+                   <foreach name="ar['attr_list']" key="akey" item="av">           
+                        <li value="{$av.attr_id}" price="{$av['attr_price']}" attr-stock="{$av['attr_stock']}">
+                         <a href="javascript:void(0)" class="cmsj">
+                           {/*色彩*/}
+                            <if condition="$av['attribute_id'] eq 72">{/*白色*/}
+                               <span class="ysq" style="background:#fff"></span>
+                            <elseif condition="$av['attribute_id'] eq 73" />
+                               <span class="ysq" style="background:yellow"></span>{/*黄色*/}
+                            <elseif condition="$av['attribute_id'] eq 74" />
+                               <span class="ysq" style="background:orange"></span>{/*橙色*/}     
+                            <elseif condition="$av['attribute_id'] eq 75" />
+                               <span class="ysq" style="background:red"></span>{/*红色*/}             
+                            <elseif condition="$av['attribute_id'] eq 76" />
+                               <span class="ysq" style="background:pink"></span>{/*粉色*/}      
+                            <elseif condition="$av['attribute_id'] eq 208" />
+                               <span class="ysq" style="background:black"></span>{/*黑色*/}         
+                            <elseif condition="$av['attribute_id'] eq 209" />
+                               <span class="ysq" style="background:green"></span>{/*绿色*/}      
+                            <elseif condition="$av['attribute_id'] eq 210" />
+                               <span class="ysq" style="background:turquoise"></span>{/*清绿色*/}          
+                            <elseif condition="$av['attribute_id'] eq 211" />
+                               <span class="ysq" style="background:turquoise"></span>{/*蓝色*/}                          
+                            <elseif condition="$av['attribute_id'] eq 212" />
+                               <span class="ysq" style="background:turquoise"></span>{/*紫色*/}
+                            </if>
+                           {/*色彩结束*/}
+                         <b class="ysqr">{$av['attr_value']}</b></a>
+                         <!--<span class="productDetailModule-dropdown-leftInStock color-black bold">{:replace_isl('OnlyNInventory','仅%d库存',$av['attr_stock'])}</span>库存-->
+                        </li>  
+                    </foreach> 
+               </ul>
+          </div>
+          
+     </div>
+    <!-- <p class="tsy error-info-{$keyec}" style="border:none;text-indent:0;position:relative;left:-5px;top:-5px;">提示层</p>-->
+  </foreach>
+  {/*商品属性结束*/}
+  
+   <div class="cb pb10"></div>
+  <div class="w50 fl">
+  <span class="pl7">{:isL(L('Sold'),'已售')}：<span class="f14">{$goods['volume']}</span></span>
+      <!--<input type="text"  value="{$goods['volume']}" class="cpxqbr_input" readonly /><span class="col999 pl5 vam">{:isL(L('Sold'),'已售')}</span>-->
+  </div>
+  <div class="w50 fl tr">
+   <span class="pr30">{:isL(L('CumulativeEvaluation'),'累计评价')}：<span class="f14">{$goods['review_count'] ? $goods['review_count'] : 0}</span></span>
+       <!--<input type="text" value="{$goods['review_count'] ? $goods['review_count'] : 0}" class="cpxqbr_input" readonly />
+       <span class="col999 pl5 vam">{:isL(L('CumulativeEvaluation'),'累计评价')}</span>-->
+  </div>
+  <div class="cb pb10"></div>
+<div class="w50 fl">
+<span class="pl7 fl" style="display:inline-block; line-height:26px;">{:isL(L('PurchaseQuantity'),'购买数量')}：</span>
+ <a href="javascript:void(0)" class="icon39a fl" onClick="updateNumber('-','goods_num');">-</a>
+  <input type="text" name="goods_num" value="1" readonly num="1" class="cpxqbr_input fl"/>
+ <a href="javascript:void(0)" class="icon39a fl" onClick="updateNumber('+','goods_num');">+</a>
+</div>
+<div class="w50 fl tr">
+ <span class="pr30">{:isL(L('ResidualInventory'),'已剩库存')}：<span class="f14">{$goods['stock']}</span></span>
+   <!-- <input type="text" name="" value="{$goods['stock']}" class="cpxqbr_input" readonly />
+    <span class="col999 pl5 vam">{:isL(L('InfoSt

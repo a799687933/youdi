@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--搜索不到关键词的跳转页面-->
+<!--content begin-->
+
+ <div class="serno"><div class="sernom">
+  <div class="sernot">
+   <ul>
+   	<li class="breadcrumbs-listItem"><a href="__ROOT__/">{:isL(L('Home'),'首页')}</a><meta itemprop="position" content="1"></li>
+    <li><a href="{:U('Category/index')}">{:isL(isL(L('Categories'),'产品分类'))}</a></li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+  <h1>{:replace_isl('SorryWeCan',"抱歉，我们无法找到 '%d'",htmlspecialchars($_GET['keywords']))}</h1>
+ </div></div><!---->
+ <div class="yjzct" style="background:none">
+ <div class="yjzctm">
+  <if condition="is_mobile()">
+  <img src="__HOME__/images/xs_newsletter.jpg" alt=""/>
+  <else/>
+  <img src="__HOME__/images/11120a.jpg" alt=""/>
+  </if>
+ </div>
+</div><!--yjzct end-->
+ <div class="cb pb30"></div>
+<div class="zxfb"> 
+<div class="zjll">
+  <div class="zjllt">
+   <ul>
+   	<!--<li onClick="setTab(1,0)">{:isL(L('YouMayLike'),'您可能会喜欢')}</li>-->
+    <li class="hover">{:isL(L('YouMayLike'),'您可能会喜欢')}<!--{:isL(L('RecentVisit'),'最近浏览过')}--></li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+  <div class="zjllb">
+   <blockquote class="block" get="likes">
+   <div class="slider2">
+      <include file="Piece/likes" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/likes.html */}
+    </div>
+   </blockquote>
+  </div><!--zjllb end-->
+ </div><!--zjll end-->
+ <div class="cb"></div>
+</div>
+
+<!--content end-->
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.js"></script>
+<if condition="is_mobile()">
+<script type="text/javascript">
+$(document).ready(function(){			
+	  wk=$(".zjllb").width()
+
+		  
+$('.dbcloseb').click(function(e){
+  e.preventDefault();
+  $(this).parent('.slide').remove();
+  slider1.reloadSlider({
+	  slideWidth:  wk/3,
+            minSlides: 2,
+            maxSlides: 3,
+            slideMargin: 0,
+			prevText:"",
+			nextText:"",
+	  });
+});	  		 	  
+		  
+$('.slider2').bxSlider({			
+	slideWidth:  wk/3,
+	minSlides: 2,
+	maxSlides: 3,
+	slideMargin: 0,
+	prevText:"",
+	nextText:""
+
+  });
+
+	//打开手机检索栏
+	$(document).on('click','.sxtjdj',function(){
+		$(".tcshxl").fadeIn();
+		$(".tcshxlb").slideDown();
+	});
+	//关闭手机检索栏
+	$(document).on('click','.tcshxlt,.close-retrieval',function(){
+		 $(".tcshxl").fadeOut();
+		 $(".tcshxlb").slideUp();	
+		 $('body,html').stop().animate({
+			'scrollTop': 0,
+			'duration': 300,
+			'easing': 'ease-in'
+		  });			
+	});
+	
+});
+
+</script>
+
+<else/>
+
+     <script type="text/javascript">
+
+		$(document).ready(function(){
+		
+		/*加载浏览过的商品*/
+		wkt=$(".zjllb").width();
+		
+		
+		/*删除浏览过的商品*/
+		$(document).on('click','.dbcloseb',function(e){
+			 var _this=$(this);
+			 var url=_this.attr('url');
+			 delRecentVisit(url);
+			  e.preventDefault();
+			  $(this).parent('.slide').remove();
+			  slider1.reloadSlider({
+				  slideWidth:  wkt/8-1,
+				  minSlides: 7,
+				  maxSlides: 8,
+				  slideMargin: 0,
+				  prevText:"",
+				  nextText:"",	
+			   });
+		});	
+
+		 	  
+		  
+		  $('.slider2').bxSlider({			
+            slideWidth:  wkt/8-1,
+            minSlides: 7,
+            maxSlides: 8,
+            slideMargin: 0,
+			prevText:"",
+			nextText:""
+
+          });
+		  
+		  
+
+
+        });
+
+    </script>
+</if>
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

@@ -1,0 +1,159 @@
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<style type="text/css">
+dl{clear: both}
+dl dt{width:120px;float: left;text-align:right;margin:10px 0;}
+.pageFormContent dd{width:auto;}
+.pageFormContent label{width:auto;}
+</style>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>       
+                 <li></li>     
+                 <li><a href="javascript:;"><span>通用信息</span></a></li>
+                 <if condition="C('IS_BRAND_COVER')"><li ><a href="javascript:;"><span>PC板自定义代码</span></a></li></if> 
+                 <if condition="C('IS_M_BRAND_COVER')"><li ><a href="javascript:;"><span>手机板自定义代码</span></a></li> </if>
+            </ul>
+        </div>
+    </div>
+   <form method="post" action="{:U(APP_APPS.'/GoodsBrand/brandForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+         <input type="hidden" name="id" value="{$save.id}" />
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            
+            <div inited="1000" style="display: block;"></div>
+            
+          {/*通用资料内容*/}
+            <div inited="1000" style="display: block;">
+
+            <dl>
+                <dt>商品分类：</dt>
+                <dd>
+                         <foreach name="cate" item='C'>
+                            <label>
+                                <input type="checkbox" name="goods_category_id[]" 
+                                <if condition="in_array($C['id'],$save['categoryIds'])">checked="checked"</if>
+                                value="{$C['id']}" style="position:relative;  top:3px;" />{$C['name']}
+                            </label>
+                        </foreach>                       
+                </dd>
+            </dl>
+
+          <foreach name="names" item="t">  
+            <dl>
+                <dt>({$t['info']})品牌名称：</dt>
+                <dd>
+                    <input  type="text" name="{$t['field']}" class="required" size="40" value="{$save[$t['field']]}"/>
+                    
+                </dd>
+            </dl>
+           </foreach>
+                                   
+            <dl>
+                <dt>品牌字母排序：</dt>
+                <dd>
+                    <input type="text" name="abc" class="required lettersonly" size="40" value="{$save.abc}"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>品牌LOGO：</dt>
+                <dd>
+                    <input type="hidden" name="logo" id="logo_thumb" value="{$save.logo}"/>
+                    <input name="file2" type="file" id="logoFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>296,'height'=>296))}','logoFileToUpload','logo_img_show','logo_thumb','','acc-show','__ROOT__','logo_imgloads');"/> 
+                </dd>
+            </dl>            
+            <dl style="<if condition="!$save['logo']">display:none;</if> " id="logo_imgloads">
+                <dt>LOGO图：</dt>
+                <dd>
+                   <img src="__ROOT__/{$save.logo}" id="logo_img_show" width="80" style="display:inline-block;position:relative;top:5px;" class="acc-show"/> 
+                </dd>
+            </dl>          
+            
+            <!--<dl>
+                <dt>品牌广告图：</dt>
+                <dd>
+                    <input type="hidden" name="ad_img" id="ad_img_thumb" value="{$save.ad_img}"/>
+                    <input name="file2" type="file" id="ad_imgFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload')}','ad_imgFileToUpload','ad_img_img_show','ad_img_thumb','','accs-show','__ROOT__','ad_img_imgloads');"/> 
+                </dd>
+            </dl>            
+            <dl style="<if condition="!$save['ad_img']">display:none;</if> " id="ad_img_imgloads">
+                <dt>LOGO图：</dt>
+                <dd>
+                   <img src="__ROOT__/{$save.ad_img}" id="ad_img_img_show" width="150" height="100" style="display:inline-block;position:relative;top:5px;" class="accs-show"/> 
+                </dd>
+            </dl>               
+ 
+             <dl>
+                <dt>品牌网址：</dt>
+                <dd>
+                    <input type="text" name="url" class="required url" size="40" value="{$save.url}"/>
+                </dd>
+            </dl>-->
+    
+            <dl style="margin-top:20px;">
+                <dt>排序：</dt>
+                <dd>
+                     <input type="text" name="orders" class="required digits" value="<if condition="$save['orders']">{$save.orders}<else />0</if>" size="40"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>是否显示：</dt>
+                <dd>
+                    <label><input type="radio" name="display" value="1" <if condition="$save['display']">checked="checked"</if>/>是</label>
+                    <label><input type="radio" name="display" value="0" <if condition="!$save['display']">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+            
+       <foreach name="bewrites" item="t">        
+        <dl class="nowrap">
+            <dt>{$t['info']}描述：</dt>
+            <dd><textarea name="{$t['field']}" class="required" cols="50" rows="6" style="resize:none;">{$save[$t['field']]}</textarea></dd>
+        </dl>
+        <p style="height:10px;"></p>
+       </foreach>                
+      </div>
+     {/*通用资料内容*/}
+            
+      {/*PC版自定义代码*/}
+      <if condition="C('IS_BRAND_COVER')">
+        <div inited="1000" style="display: block;">
+           <foreach name="brandCover" item="t">
+           <if condition="C('LANG_SWITCH_ON')">  
+           <p style="color:#03408b;height:40px;line-height:40px;font-weight:bold;border:1px #ABC7EC solid;font-size:16px;text-indent:10px;margin-top:20px;background:url(__SYS_IMG__/header_bg.png) repeat-x;border-bottom:none;">({$t.info})PC版代码内容</p>
+          </if>                 
+            <textarea name="{$t.field}" class="kindeditor"  up-url="{:U(APP_APPS."/UploadFile/upload",'','')}?dwz=ok" space-url=""
+              >{$save[$t['field']]|stripcslashes=###}</textarea>   
+          </foreach>                              
+        </div>
+       </if> 
+       {/*PC版自定义代码*/}
+
+      {/*手机版自定义代码*/}
+      <if condition="C('IS_M_BRAND_COVER')">
+        <div inited="1000" style="display: block;">
+           <foreach name="mBrandCover" item="t">
+           <if condition="C('LANG_SWITCH_ON')">  
+           <p style="color:#03408b;height:40px;line-height:40px;font-weight:bold;border:1px #ABC7EC solid;font-size:16px;text-indent:10px;margin-top:20px;background:url(__SYS_IMG__/header_bg.png) repeat-x;border-bottom:none;">({$t.info})手机版代码内容</p>
+          </if>                 
+            <textarea name="{$t.field}" class="kindeditor"  up-url="{:U(APP_APPS."/UploadFile/upload",'','')}?dwz=ok" space-url=""
+              >{$save[$t['field']]|stripcslashes=###}</textarea>   
+          </foreach>                              
+        </div>
+      </if>  
+      {/*手机版自定义代码*/}         
+         
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

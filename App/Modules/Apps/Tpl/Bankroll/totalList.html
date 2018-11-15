@@ -1,0 +1,70 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->       
+     <input  type="hidden" name="trade_type" value="{$_REQUEST['type']}" />    <!--保存收入/提现条件-->
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);"  method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>日期：<input type="text" name="times" class="date textInput readonly valid" size="12" value="{$_REQUEST['times']}" /></td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+                <td style="text-align:right;width:100%;">
+                    帐户营业总额：￥<strong style="color:blue;"><if condition="$addMoney gt 0">{$addMoney}<else />0</if></strong> |
+                    已支出金额:<span style="color:red;">-￥<if condition="$subtractMoney gt 0">{$subtractMoney}<else />0</if></span> | 
+                    可用余额:<strong style="color:green;">￥{:number_format($addMoney - $subtractMoney,2, '.', '')}</strong>
+               </td>                
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Bankroll/adjust')">
+              <li><a class="add" href="{:U(APP_APPS.'/Bankroll/adjust','','')}"target="dialog" mask="true" width="900" height="590"><span>调节帐户</span></a></li>
+            </if>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th orderfield="id" class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+				<th orderfield="add_money" class="<if condition='$add_money eq "desc"'>desc<else />asc</if>">当天收入</th>
+                <th orderfield="subtract_money" class="<if condition='$subtract_money eq "desc"'>desc<else />asc</if>">当天支出</th>
+                <th orderfield="times" class="<if condition='$times eq "desc"'>desc<else />asc</if>">时间</th> 
+                <th>操作</th> 
+            </tr>                  
+        </thead>
+        <tbody>
+           <volist name="result" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td>{$V.id}</td>
+				<td><span style="color:blue;">+￥{$V.add_money}</span></td>
+                <td><span style="color:red;">-￥{$V.subtract_money}</span></td>
+                <td>{$V.times|date='Y-m-d',###}</td>
+                <td><a href="{:U(APP_APPS.'/Bankroll/totalExpenses',array('id'=>$V['id']))}" target="navTab" title="{$V.times|date='Y-m-d',###}当天收支清单">当天收支清单</a></td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="{$pageNumShown}" currentPage="{$currentPage}"></div>
+    </div>
+</div>
+

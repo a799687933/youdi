@@ -1,0 +1,27 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/GoodsAttrType/attrTypeForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input name="id" type="hidden" value="{$_REQUEST['id']}" />
+        <div class="pageFormContent" layoutH="58" >
+        
+        <foreach name="attrNames" item="t"><!--属性类型多语言-->
+            <p style="width:100%;">
+                <label>{$t.info}属性类型：</label>
+                <input type="text" name="{$t.field}" value="{$save[$t['field']]|stripcslashes=###}" size="44" class="required" />
+            </p>
+        </foreach><!--属性类型多语言结-->         
+          <!-- <p style="width:100%;">
+                <label>属性分组：</label>
+                <textarea name="attr_group" style="width:250px;height:100px;">{$save['attr_group']}</textarea>
+            </p>-->
+                                         
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

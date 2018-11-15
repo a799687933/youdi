@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>样品车列表</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/div-dialog.js"></script>
+<script type="text/javascript">
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function(){
+   $('input[name="cart_id[]"]').click(function(){
+	   counts();
+	});
+});
+function selectCheckbox(_this,types){
+     if(types=='all'){
+		 var box=$('#catr').find('input[type="checkbox"]');
+		 if($(_this).attr('checked')){
+			 for(var i=0;i < box.length;i++){ 
+				 box.eq(i).attr('checked',true);
+			 }
+		 }else{
+			 for(var i=0;i < box.length;i++){
+				 box.eq(i).attr('checked',false);
+			 }			 
+		 }
+	 }else{
+		     var box=$('.sel_'+types);
+			 if($(_this).attr('checked')){
+				 for(var i=0;i < box.length;i++){ 
+					 box.eq(i).attr('checked',true);
+				 }
+			 }else{
+				 for(var i=0;i < box.length;i++){
+					 box.eq(i).attr('checked',false);
+				 }			 
+			 }		 
+	 }
+	 counts();
+}
+function toDelete(ids){
+  // if(confirm('操作不可恢复，确定执行本次操作?')==false) return false;	
+   var str='';   
+   if(ids){
+	   str=ids;
+   }else{
+	   var inputs=$('input[name="cart_id[]"]');
+	   for(var i=0;i < inputs.length;i++){
+		   if(inputs.eq(i).attr('checked')){
+			   str+=inputs.eq(i).val()+',';
+		   }
+	   }	   
+   }
+  if(!str){
+	  myAlert('选择提示','请选择要删除的记录','','');
+	  return;
+   }
+   var url="{:U('Cart/delCart','','')}/ids/"+str;
+   myAlert('删除提示','操作不可恢复确定执行本次操作？',url,'');
+ /* $.ajax({
+	 type:'get',
+	 url:url,
+	 dataType:'json',
+	 success:function(response,status,xhr){
+		 if(response.statusCode==1){
+			 if(response.url) window.location.href=response.url;
+		 }else{
+			 alert(response.message);
+		}
+	  }
+   });	  */ 
+}
+function counts(){
+    var inputs=$('input[name="cart_id[]"]');
+	var j=0;
+	for(var i=0;i < inputs.length;i++){
+		  if(inputs.eq(i).attr('checked')) j++;
+	}
+	$('.counts').text(j);
+}
+
+function sendForm(){
+   var cleckAll=$('input[name="cart_id[]"]');
+   var str='';
+   for(var i=0;i<cleckAll.length;i++){
+	   if(cleckAll.eq(i).attr('checked')) str+=cleckAll.eq(i).val()+',';
+   }
+   if(!str){
+	   myAlert('选择提示','请选择要提交的样品','','');
+	   return false;
+   }
+}
+</script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:header'/>{/*头部 */}
+<div class="wrap">
+<div class="cgxxlt">样品车 &gt; <span class="chen">全部样品{$cartList.count} 件</span></div>
+<div class="ypc">
+	
+<form method="get" action="{:U('/SampleOrder')}" id="catr" >	
+ <h1 class="lh40 bgf4 bd">
+  <span class="fl w10"><input type="checkbox" name="all" onclick="selectCheckbox(this,'all')"  class="ml10"/>&nbsp;全选</span>
+  <span class="fl w45 tc">商品</span>
+  <span class="fl w20 tc">数量</span>
+  <span class="fl w20 tc">操作</span>
+  <span class="fl w5">&nbsp;</span>
+  <div class="cb"></div>
+ </h1>
+ 
+ <foreach name="cartList['list']" item="li" key="key4">
+ <h1 class="lh40 pt20"><input type="checkbox" onclick="selectCheckbox(this,'{$key4}')"  class="ml10"/><span class="pl5">{$li['company']}</span></h1>
+ <div class="bd pv20">
+  <ul>
+  <foreach name="li['cart_list']" item="catrs">	 
+       <li>
+        <span class="fl w5 h122 pv20"><input type="checkbox"  name="cart_id[]" value="{$catrs.id}" class="ml15 sel_{$key4}" style="margin-top:55px;"/></span>
+        <span class="fl w50 bbd pv20">
+         <a href="{:U('Goods/index',array('id'=>$catrs['goods_id']))}" target="_blank"><img src="__ROOT__/{$catrs.goods_thumb}" alt="" class="fl"/></a>
+          <div class=" ypcimgr">
+           <p class="f14"><a href="{:U('Goods/index',array('id'=>$catrs['goods_id']))}" class="col59" target="_blank">{$catrs.goods_name}</a></p>
+           <foreach name="catrs['goods_attr']['attr_array']" item="attr">
+               <p class="col999 lh20">{$attr.attr_name}：{$attr.attr_value}</p>
+           </foreach>
+          </div>
+          <div class="cb"></div>
+        </span>
+        <span class="fl w20 bbd pt30 pb10 tc h122">{$catrs.goods_number}</span>
+        <a href="javascript:void(0);" onclick="toDelete({$catrs.id})" class="fl w20 bbd pt30 pb10 tc h122 col59">删除</a>
+        <span class="fl w5">&nbsp;</span>
+        <div class="cb"></div>
+       </li>
+   </foreach>
+  </ul>
+ </div>
+ </foreach>
+ <div class="ypcb mt25">
+  <div class="ypcbl">
+      <input type="checkbox" name="all" onclick="selectCheckbox(this,'all')"/>
+      <span class="pl5">全选</span><span class="pl30" onclick="toDelete('')" style="cursor:pointer">删除选中的商品</span>
+  </div>
+  <input type="submit" onclick="return sendForm()" value="确认样品" class="qryp"/><span class="fr pr30">已选择 <span class="chen counts">0</span> 件商品</span>
+  <div class="cb"></div>
+ </div>
+</form>
+</div>
+
+<div class="cb pv30"></div>
+</div>
+  <!--footer begin-->
+     <include file='Common:footer'/>{/*头部 */}
+  <!--footer end-->
+</body>
+</html>

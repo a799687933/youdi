@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+        $(document).ready(function () {  
+            valinit('.form1','post','',true,'topRight');  
+            var ps = $("#div_pro").position();  
+            $("#div_pro").mouseenter(function () {  
+                $("#float_box").show();  
+            });  
+            $("#float_box").mouseleave(function () {  
+                $("#float_box").hide();  
+            });  
+        })  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                  <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > {:isL(L('ChangePassword'),'修改密码')}</p>
+            <!--<h1><a href="{:U('Member/orderList')}">站内信息</a></h1>-->{/*右边*/}
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+             <form method="get" action="{:U('/Member/changePWDform')}" class="form1">
+                 <table class="my-table" style="width:100%">
+                 
+                      <tr>
+                          <td style="width:100px;text-align:center;">{:isL(L('OldPassword'),'旧密码')}：</td>
+                          <td style="text-align:left">
+                             <input type="password" name="wornPWD" id="wornPWD" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                          </td>
+                      </tr>               
+        
+                      <tr>
+                          <td style="width:100px;text-align:center;">{:isL(L('NewPassword'),'新密码')}：</td>
+                          <td style="text-align:left">
+                             <input type="password" name="password" id="password" class="validate[required]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                          </td>
+                      </tr>     
+                      
+                       <tr>
+                          <td style="width:100px;text-align:center;">{:isL(L('ConfirmPassword'),'确认新密码')}：</td>
+                          <td style="text-align:left">
+                             <input type="password" name="notPassword" id="notPassword" class="validate[required,equals[password]]" style="height:30px;line-height:30px;width:250px;border:#eee solid 1px;" />
+                          </td>
+                      </tr>                 
+                   
+                       <tr style="border:none">
+                          <td style="width:100px;text-align:center;">&nbsp;</td>
+                          <td style="text-align:left">
+                              <input type="submit" 
+                                         value="{:isL(L('Modify'),'修改')}" 
+                                         class="btn_lkgm" 
+                                         img="__PUBLIC__images/13221814.gif" 
+                                         id="submits" 
+                                         style="
+                                                   width:200px;margin:0 auto;height: 40px;
+                                                   line-height:40px;font-size:20px;
+                                                   background:#99c838;color:#fff;border-radius:4px;border:none; cursor:pointer;
+                                         "/>
+                          </td>
+                      </tr>                                                           
+                 </table>
+             </form>
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

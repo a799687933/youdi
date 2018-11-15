@@ -1,0 +1,13 @@
+﻿{/*专场集合列表*/}
+<foreach name="result" item="res">
+  <li>
+   <a href="{:U(is_m().'/Goods/index',array('html'=>$res['id']))}"><img src="__ROOT__/{$res['goods_thumb']}" alt=""/></a>
+   <h1 class="col666 f12 lh20 b pb5">{$res['goods_name']|sub_str=###,7}</h1>
+   <span class="hong lh20">￥<b class="f14">{$res['goods_retail_price']}</b></span>
+   <span class="icon7 fr pl30 lh20 col666">
+       {$res['collection_count']}人
+       <a href="javascript:void(0);" onclick="myAlert('确认提示','确定收藏该商品？','{:U(is_m().'/Goods/collection',array('id'=>$res['id']))}','{:is_m()}','',2)" class="hong">收藏</a>
+   </span>
+   <div class="cb"></div>
+  </li>
+</foreach>

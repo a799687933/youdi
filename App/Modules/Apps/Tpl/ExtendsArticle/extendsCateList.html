@@ -1,0 +1,40 @@
+<div class="pageContent">
+	<table class="list" width="100%" layoutH="26" id="list-table-cate">
+		<thead>
+		<tr>	
+			<th width="250">分类名称</th>
+			<th >分类描述</th>
+            <th width="200">排序</th>
+            <th style="text-align: center;">操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<foreach item="app" name="Cate">
+			<tr target="sid_node" rel="{$app['files_id']}" class="{$app['files_pid']} showtr" id="{$app['files_pid']}_{$app['files_id']}" >
+				<td class="first-cell" >
+                <img src="__SYS_IMG__/menu_minus.gif" id="icon_{$app['files_pid']}_{$app['files_id']}" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this,'list-table-cate')" />           
+                    {$app.files_name|tpl_modify_oen=###,'files_sort','files_name',$app['files_id'],'files_id','ExtendsArticle/extendsCateSave'}
+                </td>
+				<td>{$app.files_bewrite|tpl_modify_oen=###,'files_sort','files_bewrite',$app['files_id'],'files_id','ExtendsArticle/extendsCateSave'}</td>				
+                <td>{$app.files_sort|tpl_modify_oen=###,'files_sort','files_sort',$app['files_id'],'files_id','ExtendsArticle/extendsCateSave'}</td>               
+                <td style="text-align: center;">
+                <if condition="$app['files_pid'] neq $caet_id"> 
+                    {$action|tpl_action='dialog','ExtendsArticle/extendsCateAdd','files_pid/'.$app["files_id"].'/caet_id/'.$caet_id,'添加（'.strip_tags($app['files_name']).'）子级分类','icon_add.gif','icon_add_not.gif',900,550} <!--添加按钮-->
+                 <else />
+                    <img src="__SYS_IMG__/icon_add_not.gif" />    
+                 </if>   
+                 <if condition="$app['files_pid'] eq 0">
+                 <img src="__SYS_IMG__/icon_drop_not.gif" />    
+                 <else />
+                 {$action|tpl_action='ajaxTodo','ExtendsArticle/extendsCageDelete','ids/'.$app["files_id"].'/caet_id/'.$caet_id,'确定执行删除('.strip_tags($app['files_name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                 </if>                    
+                </td>
+			</tr>
+		</foreach>
+		</tbody>
+	</table>
+
+	<div class="panelBar">
+</div>
+

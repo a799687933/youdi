@@ -1,0 +1,259 @@
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<script type="text/javascript">
+$(function(){
+var upImgUrl='{:U("/SellerUpload/upload",array("dwz"=>"ok","dir"=>$save["catalog"],"shops_id"=>$save["id"]),"")}/{$_SESSION["MY_TOKEN"]}/'+$('input[name="{$_SESSION["MY_TOKEN"]}"]').val();
+var upImgExt="jpg,jpeg,gif,png" ;
+
+ var upFlashUrl='{:U("/SellerUpload/upload",array("dir"=>$save["catalog"],"shops_id"=>$save["id"]),"")}/{$_SESSION["MY_TOKEN"]}/'+$('input[name="{$_SESSION["MY_TOKEN"]}"]').val();
+ var upFlashExt="swf";
+ 
+ var upMediaUrl='{:U("/SellerUpload/upload",array("dir"=>$save["catalog"],"shops_id"=>$save["id"]),"")}/{$_SESSION["MY_TOKEN"]}/'+$('input[name="{$_SESSION["MY_TOKEN"]}"]').val();
+ var upMediaExt="avi";
+ 
+ var upLinkUrl='{:U("/SellerUpload/upload",array("dir"=>$save["catalog"],"shops_id"=>$save["id"]),"")}/{$_SESSION["MY_TOKEN"]}/'+$('input[name="{$_SESSION["MY_TOKEN"]}"]').val();
+ var upLinkExt="zip,rar,txt"; 
+	   
+  $('.editor').attr('upImgUrl',upImgUrl);
+  $('.editor').attr('upImgExt',upImgExt);
+  
+  $('.editor').attr('upFlashUrl',upFlashUrl);
+  $('.editor').attr('upFlashExt',upFlashExt);
+
+  $('.editor').attr('upMediaUrl',upMediaUrl);
+  $('.editor').attr('upMediaExt',upMediaExt);
+  
+  $('.editor').attr('upLinkUrl',upLinkUrl);
+  $('.editor').attr('upLinkExt',upLinkExt);
+  
+});
+</script>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>  
+            	<li class="selected"></li>          
+                 <li class="selected"><a href="javascript:;"><span>通用信息</span></a></li>
+				 <li ><a href="javascript:;"><span>其它信息</span></a></li>   
+                 <if condition="$save['id']">          
+                     <li ><a href="javascript:;"><span>关于商铺</span></a></li>         
+                     <li ><a href="javascript:;"><span>联系商铺</span></a></li>     
+                 </if>
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/Shops/shopAddSaveForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}"/>
+        <input type="hidden" name="action" value="{$_GET['action']}"/>
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+        	
+        	<div inited="1000" style="display: block;"></div>
+  
+            <div inited="1000" style="display: block;"><!--通用资料内容-->
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                    <tr><td style="text-align:right;">所属城市：</td><td>  
+                        <select name="country"  onchange="getPlace(this,'.country_name_0')" to-url="{:U(APP_APPS."/Hiring/hiringForm","","")}">
+                              <option value="">请选择国家</option>
+                               {$region[0]}
+                        </select>   
+                                                                     
+                        <select name="province"  onchange="getPlace(this,'.province_name_0')" to-url="{:U(APP_APPS."/Hiring/hiringForm","","")}">
+                                 <option value="">请选择省份</option>
+                                  {$region[1]}
+                        </select>
+                               
+                        <select name="city" onchange="getPlace(this,'.city_name_0')" to-url="{:U(APP_APPS."/Hiring/hiringForm","","")}">
+                                  <option value="">请选择城市</option>
+                                  {$region[2]}
+                         </select>
+                              
+                         <select name="district" onchange="getPlace(this,'.district_name_0')" to-url="{:U(APP_APPS."/Hiring/hiringForm","","")}" >
+                                 <option value="">请选择区县</option>
+                                 {$region[3]}
+                         </select>		      
+                    </td></tr> 
+                    <tr><td  style="text-align:right;">详细街道：</td><td>
+					    <input type="text"  name="address" value="{$save.address}"  class="required" style="margin:3px 0;" size="50" /></td></tr>                    
+                    <tr><td  style="text-align:right;">铺商目录：</td><td>
+					    <input type="text"  name="catalog" value="{$save.catalog}"  <if condition="$save['catalog']">readonly="readonly"</if> class="required alphanumeric" style="margin:3px 0;" size="50" /></td></tr>
+                    <tr><td  style="text-align:right;">铺商目录大小(MB)：</td><td>
+					    <input type="text"  name="shop_size" value="{$save.shop_size}" class="required digits" style="margin:3px 0;" size="50" /></td></tr>
+                    <tr><td  style="text-align:right;">服务类型：</td><td>
+					     <foreach name="cates" item="ca">
+						      <input type="checkbox" name="cate_id[]" value="{$ca.id}" <if condition="in_array($ca['id'],$save['cate_id'])">checked="checked"</if> /><span style="position:relative;top:-3px;">{$ca.name}</span> 
+						</foreach>
+					</td></tr>
+						
+                    <tr><td  style="text-align:right;">商户名称：</td><td><input type="text" name="shop_name" value="{$save.shop_name}"  style="margin:3px 0;" size="50" /></td></tr> 
+                        
+                  <if condition="$save['id'] gt 0">
+                    <tr><td  style="text-align:right;">商户类型：</td><td><input type="text"  value="<if condition="$save['agent_shops_id'] eq '0'">代理商<else />普通商户</if>"  style="margin:3px 0;" size="50" readonly="readonly"/></td></tr>    
+                   </if>
+
+				 <tr><td  style="text-align:right;">链锁经营：</td><td>
+					  <label><input type="radio" name="is_ls" value="1" <if condition="$save['is_ls'] eq 1">checked="checked"</if>/>是</label>                         
+					  <label><input type="radio" name="is_ls" value="0" <if condition="$save['is_ls'] eq 0">checked="checked"</if>/>否</label>
+			   </td></tr>    
+                                                       
+                  <!--  <tr><td  style="text-align:right;">商家类型：</td><td>
+ 					  <label><input type="radio" name="shops_type" value="1" <if condition="$save['shops_type'] eq 1">checked="checked"</if>/>企业商家</label>              
+					  <label><input type="radio" name="shops_type" value="0" <if condition="$save['shops_type'] eq 0">checked="checked"</if>/>个人商家</label>                    </td></tr>      
+                    <tr><td  style="text-align:right;">是否认证：</td><td>
+ 					  <label><input type="radio" name="auth" value="1" <if condition="$save['auth'] eq 1">checked="checked"</if>/>已认证</label>              
+					  <label><input type="radio" name="auth" value="0" <if condition="$save['auth'] eq 0">checked="checked"</if>/>未认证</label>                   
+                    </td></tr>       
+                    <tr><td  style="text-align:right;">是否保证金：</td><td>
+ 					  <label><input type="radio" name="bail" value="1" <if condition="$save['bail'] eq 1">checked="checked"</if>/>是</label>              
+					  <label><input type="radio" name="bail" value="0" <if condition="$save['bail'] eq 0">checked="checked"</if>/>否</label>                   
+                    </td></tr>       
+                    <tr><td  style="text-align:right;">发布源需要审核：</td><td>
+ 					  <label><input type="radio" name="is_verify" value="1" <if condition="$save['is_verify'] eq 1">checked="checked"</if>/>不需要审核</label>              
+					  <label><input type="radio" name="is_verify" value="0" <if condition="$save['is_verify'] eq 0">checked="checked"</if>/>需要审核</label>                   
+                    </td></tr>   -->
+                                                                                            
+                    <tr><td  style="text-align:right;">会员ID：</td><td><input type="text"  name="member_id" value="{$save.member_id}"   class="required digits" style="margin:3px 0;" size="50" /></td></tr>       
+					
+                    <if condition="$save['id']">                            
+                    <tr><td  style="text-align:right;">铺商LOGO：</td><td>
+                      <input type="hidden" name="shop_logo" value="{$save.shop_logo}" id="member_thumb"/>
+                     <input name="file4" type="file" id="memberFileToUpload" onchange="ajaxFileUpload('{:U('/SellerUpload/upload',array('thum'=>'ok','width'=>300,height=>76,'remove'=>'ok','dir'=>$save['catalog'],'shops_id'=>$save['id']))}','memberFileToUpload','member_img_show','member_thumb','','B-show','__ROOT__','','{$_SESSION["MY_TOKEN"]}');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr id="member_imgloads"><td>LOGO信息：</td><td> <img src="__ROOT__/<if condition="!$save['shop_logo']">{:C('GOODS_IMG')}<else/>{$save.shop_logo}</if>"  height="100" id="member_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/></td></tr>                   
+                    <tr><td colspan="2" style="height:10px;"></td></tr>
+                    </if>
+
+                    <tr><td  style="text-align:right;">执照法人：</td><td><input type="text" name="corporation" value="{$save.corporation}"   class="" style="margin:3px 0;" size="50" /></td></tr>
+                                        
+                    <tr><td  style="text-align:right;">上传营业执照：</td><td>
+                      <input type="hidden" name="license" value="{$save.license}" id="member_license"/>
+                     <input name="file5" type="file" id="memberLicenseUpload" onchange="ajaxFileUpload('{:U('/UploadFile/upload',array('thum'=>'','width'=>'',height=>'','remove'=>'','up'=>'License'))}','memberLicenseUpload','License_img_show','member_license','','C-show','__ROOT__','','{$_SESSION["MY_TOKEN"]}');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr id=""><td>执照信息：</td><td> <a target="_blank" href="__ROOT__/<if condition="$save['license'] eq ''">{:C('GOODS_IMG')}<else/>{$save.license}</if>" class="C-show"><img src="__ROOT__/<if condition="!$save['license']">{:C('GOODS_IMG')}<else/>{$save.license}</if>"  height="100" id="License_img_show" style="display:inline;position:relative;top:3px;" class="C-show"/></a></td></tr>                               
+                    <tr><td style="height:10px;"></td><td></td></tr>
+                    <tr><td  style="text-align:right;">执照号：</td><td><input type="text" name="license_num" value="{$save.license_num}"   class="" style="margin:3px 0;" size="50" /></td></tr>
+                    
+                    <tr><td  style="text-align:right;">企业形像图：</td><td>
+                      <input type="hidden" name="image" value="{$save.image}" id="image_license"/>
+                     <input name="file5" type="file" id="imageLicenseUpload" onchange="ajaxFileUpload('{:U('/SellerUpload/upload',array('thum'=>'ok','width'=>196,height=>196,'remove'=>'ok','dir'=>$save['catalog'],'shops_id'=>$save['id']))}','imageLicenseUpload','License_img_shows','image_license','','k-show','__ROOT__','','{$_SESSION["MY_TOKEN"]}');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr id=""><td>形像图信息：</td><td> <a target="_blank" href="__ROOT__/<if condition="$save['image'] eq ''">{:C('GOODS_IMG')}<else/>{$save.license}</if>" class="k-show"><img src="__ROOT__/<if condition="!$save['image']">{:C('GOODS_IMG')}<else/>{$save.image}</if>"  height="100" id="License_img_shows" style="display:inline;position:relative;top:3px;" class="k-show"/></a></td></tr>                               
+                    <tr><td style="height:10px;"></td><td></td></tr>
+                 
+					
+                     <tr><td colspan="2" style="height:10px;"></td></tr>  
+                    <tr><td  style="text-align:right;">身份证正面：</td><td>
+                      <input type="hidden" name="id_positive" value="{$save.id_positive}" id="id_positive"/>
+                     <input name="file4" type="file" id="memberFileToUpload5" onchange="ajaxFileUpload('{:U('/UploadFile/upload',array('thum'=>'','width'=>'',height=>'','remove'=>'','up'=>'Id'))}','memberFileToUpload5','id_positive_img_show','id_positive','','d-show','__ROOT__','','{$_SESSION["MY_TOKEN"]}');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr><td>身份证信息：</td><td> 
+					<a target="_blank" href="__ROOT__/<if condition="$save['id_positive'] eq ''">{:C('GOODS_IMG')}<else/>{$save.id_positive}</if>" class="d-show">
+					<img src="__ROOT__/<if condition="!$save['id_positive']">{:C('GOODS_IMG')}<else/>{$save.id_positive}</if>"  height="100" id="id_positive_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/></a></td></tr>                   
+                    <tr><td colspan="2" style="height:10px;"></td></tr>  
+
+                    <tr><td  style="text-align:right;">身份证背面：</td><td>
+                      <input type="hidden" name="id_behind" value="{$save.id_behind}" id="id_behind"/>
+                     <input name="file4" type="file" id="memberFileToUpload6" onchange="ajaxFileUpload('{:U('/UploadFile/upload',array('thum'=>'','width'=>'',height=>'','remove'=>'','up'=>'Id'))}','memberFileToUpload6','id_behind_img_show','id_behind','','e-show','__ROOT__','','{$_SESSION["MY_TOKEN"]}');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr><td>身份证背面信息：</td><td> 
+					<a target="_blank" href="__ROOT__/<if condition="$save['id_behind'] eq ''">{:C('GOODS_IMG')}<else/>{$save.id_behind}</if>" class="e-show">
+					<img src="__ROOT__/<if condition="!$save['id_behind']">{:C('GOODS_IMG')}<else/>{$save.id_behind}</if>"  height="100" id="id_behind_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/></a></td></tr>                   
+                    <tr><td colspan="2" style="height:10px;"></td></tr>  					
+       
+	              <tr><td  style="text-align:right;">身份证号：</td><td><input type="text" name="id_number" value="{$save.id_number}"   class="" style="margin:3px 0;" size="50" /></td></tr>
+				  <tr><td  style="text-align:right;">真实姓名：</td><td><input type="text" name="real_name" value="{$save.real_name}"   class="" style="margin:3px 0;" size="50" /></td></tr>
+    </table>
+                                                                   
+            </div><!--通用资料内容结束-->
+
+             <div inited="1000" style="display: block;"><!--其它内容-->
+                <table cellpadding="0" cellspacing="0" class="mytable">			  
+				 
+				 <tr><td  style="text-align:right;">商铺标题：</td><td><input type="text" name="title" value="{$save.title}"   class="" style="margin:3px 0;" size="50" /></td></tr>       
+				 
+				 <tr><td  style="text-align:right;">商铺描述：</td><td><input type="text" name="describe" value="{$save.describe}"   class="" style="margin:3px 0;" size="50" /></td></tr>    
+				
+				 <tr><td  style="text-align:right;">商铺关键字：</td><td><input type="text" name="keyword" value="{$save.keyword}"   class="" style="margin:3px 0;" size="50" /></td></tr>   
+				 
+				 <tr><td  style="text-align:right;">商铺地址：</td><td><input type="text" name="address" value="{$save.address}"   class="" style="margin:3px 0;" size="50" /></td></tr>    
+				 
+				  <tr><td  style="text-align:right;">电子邮件：</td><td>
+						<input type="text" name="email" value="{$save.email}"   class="" style="margin:3px 0;" size="50" />
+				  </td></tr> 
+				  
+				  <tr><td  style="text-align:right;">电话号码：</td><td>
+						<input type="text" name="phone" value="{$save.phone}"   class="" style="margin:3px 0;" size="50" />
+				  </td></tr>   
+				 
+				   <tr><td  style="text-align:right;">联系手机：</td><td>
+						<input type="text" name="mobile" value="{$save.mobile}"   class="" style="margin:3px 0;" size="50" />
+				  </td></tr> 
+				  
+					<tr><td  style="text-align:right;">QQ：</td><td>
+						<input type="text" name="qq" value="{$save.qq}"   class="" style="margin:3px 0;" size="50" />
+				  </td></tr>    
+				  
+					  <tr><td  style="text-align:right;">商铺通告：</td><td>
+						<textarea style="width:400px;height:100px;margin:3px 0;" name="notice">{$save.notice}</textarea>
+				  </td></tr>    
+				<tr><td  style="text-align:right;">是否审核：</td><td>
+					  <label><input type="radio" name="display" value="1" <if condition="$save['display'] eq 1">checked="checked"</if>/>已审核</label>                         
+					  <label><input type="radio" name="display" value="0" <if condition="$save['display'] eq 0">checked="checked"</if>/>未审核</label>
+					  <label><input type="radio" name="display" value="-1"  <if condition="$save['display'] eq -1">checked="checked"</if>/>审核未通过</label> 
+			   </td></tr>     
+		
+			   <tr><td  style="text-align:right;">审核未通过原因：</td><td>
+				<textarea style="width:400px;height:100px;margin:3px 0;" name="reasons">{$save.reasons}</textarea>
+			  </td></tr>  
+		  
+				 <tr><td  style="text-align:right;">商户状态：</td><td>
+					  <label><input type="radio" name="shop_close" value="1" <if condition="$save['shop_close'] eq 1">checked="checked"</if>/>正常</label>                         
+					  <label><input type="radio" name="shop_close" value="0" <if condition="$save['shop_close'] eq 0">checked="checked"</if>/>关闭</label>
+			   </td></tr>     
+		
+			   <tr><td  style="text-align:right;">商户关闭原因：</td><td>
+				<textarea style="width:400px;height:100px;margin:3px 0;" name="shop_close_reasons">{$save.shop_close_reasons}</textarea>
+			  </td></tr>  
+		
+				 <tr><td  style="text-align:right;">启用站内文章：</td><td>
+					 <label><input type="radio" name="launched_files" value="1" <if condition="$save['launched_files'] eq 1">checked="checked"</if>/>启用</label>                         
+					  <label><input type="radio" name="launched_files" value="0" <if condition="$save['launched_files'] eq 0">checked="checked"</if>/>关闭</label>
+			   </td></tr>   	
+			   <tr><td colspan="2" style="height:10px;"></td></tr>
+			   <tr><td  style="text-align:right;">商铺模板：</td><td>
+				  <select class="combox" name="shop_style" class="required">
+					  <foreach name="tpls" item='t'>                       
+					   <option value="{$t}" <if condition="$save['shop_style'] eq $t">selected="selected"</if> >{$t}</option>
+					 </foreach>  
+				   </select>           
+				</td></tr>     
+
+				 <tr><td  style="text-align:right;">充许编辑模板：</td><td>
+					 <label><input type="radio" name="is_edit_tpl" value="1" <if condition="$save['is_edit_tpl'] eq 1">checked="checked"</if>/>充许</label>                         
+					 <label><input type="radio" name="is_edit_tpl" value="0" <if condition="$save['is_edit_tpl'] eq 0">checked="checked"</if>/>不充许</label>
+			   </td></tr>  
+			   			 
+				</table>
+                                                                   
+            </div><!--其它信息结束-->
+            <if condition="$save['id']"> 
+                <div inited="1000" style="display: block;"><!--关于我们-->
+                        <textarea name="synopsis" class="editor"  style="width:100%;height:450px;">{$save.synopsis|stripcslashes=###}</textarea>    
+                </div><!--关于我们结束-->
+                
+                <div inited="1000" style="display: block;"><!--联系我们-->
+                        <textarea name="contact" class="editor"  style="width:100%;height:450px;">{$save.contact|stripcslashes=###}</textarea>    
+                </div><!--联系我们结束-->
+			</if>			
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

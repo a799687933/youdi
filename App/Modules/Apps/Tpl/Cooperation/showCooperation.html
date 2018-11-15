@@ -1,0 +1,24 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Words/reply')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+    <input type="hidden" name="id" value="{$_GET['id']}" />
+     <div class="pageFormContent nowrap" layoutH="97">
+            <h2 style="height:30px;line-height:30px;">
+             <span style="float:right;position:relative;top:10px;padding-right:3px;">提交时间：{$result.add_time|date='Y-m-d H:i:s',###}</span>
+            合作标题：{$result.title}
+            </h2>
+            <div style="min-height:300px;padding:10px;line-height:180%;border:1px #a2bac0 solid;"> {$result.content}</div>  
+        </div>
+        <div class="formBar">
+            <ul>
+              <!-- <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>-->
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+     </form>
+</div>
+
+

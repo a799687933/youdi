@@ -1,0 +1,57 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->   
+</form>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Cooperation/delCooperation')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Cooperation/delCooperation','','')}/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除留言</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="53">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th  orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th orderfield="title"  class="<if condition='$title eq "desc"'>desc<else />asc</if>">标题</th>                      
+                <th orderfield="user_name"  class="<if condition='$user_name eq "desc"'>desc<else />asc</if>">名称</th>
+                <th orderfield="add_time"  class="<if condition='$add_time eq "desc"'>desc<else />asc</if>">创建时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>            
+           <volist name="msglist" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V.title|sub_str=###,25}</td>    
+                <td>{$V.user_name}</td>           
+                <td>{$V.add_time|date='Y-m-d H:i',###} </td>
+                <td>               
+                    {$action|tpl_action='dialog','Cooperation/showCooperation','id/'.$V["id"],'查看（'.strip_tags($V['user_name']).'）','icon_view.gif','icon_view_not.gif'} <!--查看按钮-->
+                    {$action|tpl_action='ajaxTodo','Cooperation/delCooperation','ids/'.$V["id"],'确定执行删除('.strip_tags($V['user_name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->                    
+                </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>   
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+    </div>
+</div>
+

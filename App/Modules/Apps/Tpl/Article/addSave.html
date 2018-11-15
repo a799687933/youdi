@@ -1,0 +1,203 @@
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>       
+                <li></li>     
+                <li><a href="javascript:;"><span>通用信息</span></a></li>
+                 <li ><a href="javascript:;"><span>文档内容</span></a></li>
+                 <!--<li ><a href="javascript:;"><span>相册专辑</span></a></li>-->    
+                 <li ><a href="javascript:;"><span>关联文章</span></a></li>        
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/Article/addSaveForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$save.id}"/>
+        <input type="hidden" name="is_show" value="{$_GET['is_show']}" />
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            
+            <div inited="1000" style="display: block;"></div>
+  
+            <div inited="1000" style="display: block;"><!--通用资料内容-->
+       
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                      <tr>
+                          <td style="text-align:right;">选择文档分类：</td>
+                          <td>  
+                              <select class="combox" name="files_id" class="required">
+                                  <option value="">-选择文档分类-</option>
+                                  <foreach name="cage" item='C'>                       
+                                   <option value="{$C.files_id}" <if condition="$save['files_id'] eq $C['files_id']">selected="selected"</if> >{$C.html}{$C.files_name}</option>
+                                 </foreach>  
+                               </select>         
+                          </td>
+                    </tr>
+                   
+                   <foreach name="titletexts" item="t">
+                        <tr>
+                            <td  style="text-align:right;">({$t['info']})标题：</td>
+                            <td><input type="text" name="{$t['field']}" value="{$save[$t['field']]|stripcslashes=###}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+                       </tr>
+                   </foreach> 
+                   
+                   <foreach name="keywordss" item="t">
+                    <tr>
+                        <td  style="text-align:right;">({$t['info']})关键字：</td>
+                        <td><input type="text" name="{$t['field']}" value="{$save[$t['field']]|stripcslashes=###}" maxlength="250" class="" size="50" style="margin:3px 0;"/></td>
+                    </tr>
+                   </foreach> 
+                  
+                  <foreach name="authors" item="t">  
+                    <tr>
+                        <td  style="text-align:right;">({$t['info']})文档作者：</td>
+                        <td><input type="text" name="{$t['field']}" value="{$save[$t['field']]|stripcslashes=###}" maxlength="250" class="" size="50" style="margin:3px 0;"/></td>
+                    </tr>
+                  </foreach> 
+                  
+                    <tr>
+                        <td  style="text-align:right;">缩略图：</td><td>
+                           <input type="hidden" name="thumb" id="article_thumb" value="{$save.thumb}"/>
+                           <input name="file2" type="file" id="articleFileToUpload"  onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>420,'height'=>225))}','articleFileToUpload','article_img_show','article_thumb','','ac-show','__ROOT__','article_imgloads');"/> 
+                         </td>
+                    </tr>
+                    <tr style="<if condition="!$save['thumb']">display:none;</if> " id="article_imgloads">
+                        <td  style="text-align:right;"></td>
+                        <td style="margin-top:10px;">
+                            <img src="__ROOT__/{$save.thumb}" id="article_img_show" width="150" height="100" style="display:inline-block;position:relative;top:5px;" class="ac-show"/>                            
+                        </td>
+                   </tr>
+                  
+                    <tr>
+                        <td  style="text-align:right;">点击数：</td>
+                        <td>
+                            <input type="text" value="<if condition="$save['count_click']">{$save['count_click']}<else />100</if>" name="count_click" maxlength="250" class="digits" size="50" style="margin:10px 0 3px 0;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                          <td  style="text-align:right;">是否显示：</td>
+                          <td>
+                              <input type="radio" value="1" name="is_show" <if condition="$save['is_show'] eq 1">checked="checked"<else />checked="checked"</if>/>是
+                              <input type="radio" name="is_show" value="0" <if condition="$save['is_show'] eq '0'">checked="checked"</if>/>否
+                          </td>
+                    </tr>
+					
+                    <tr>
+                        <td  style="text-align:right;">是否新窗口打开：</td>
+                        <td>
+                            <input type="radio" value="1" name="is_target" <if condition="$save['is_target'] eq 1">checked="checked"<else />checked="checked"</if>/>是
+                            <input type="radio" name="is_target" value="0" <if condition="$save['is_target'] eq '0'">checked="checked"</if>/>否
+                        </td>
+                    </tr>		
+					
+					<tr>
+					      <td  style="text-align:right;">外链接地址：</td>
+					      <td>
+					          <input type="text" name="outside_url" value="{$save.outside_url|stripcslashes=###}" maxlength="250" class="" size="50" style="margin:3px 0;"/>
+					     </td>
+					</tr>
+			      
+			      <foreach name="bewrites" item="t">  							
+                    <tr>
+                          <td  style="text-align:right;">({$t['info']})描述：</td>
+                          <td><textarea name="{$t['field']}" rows="6" cols="100" style="margin:3px 0;">{$save[$t['field']]|stripcslashes=###}</textarea></td>
+                    </tr>
+                   </foreach> 
+                   
+                </table>
+                                                                   
+            </div><!--通用资料内容结束-->
+            
+            <div inited="1000" style="display: block;"><!--文档祥细内容-->
+               <foreach name="contents" item="t">
+               <if condition="C('LANG_SWITCH_ON')">  
+               <p style="color:#03408b;height:40px;line-height:40px;
+                   font-weight:bold;border:1px #ccc solid;font-size:16px;
+                   text-indent:10px;margin-top:20px;background:#F0F0EE;
+                   border-bottom:none;width:100%">({$t.info})文档内容</p>
+              </if>                 
+                <textarea name="{$t.field}" class="kindeditor"  up-url="{:U(APP_APPS."/UploadFile/upload",'','')}?dwz=ok" space-url=""
+                  >{$save[$t['field']]|stripcslashes=###}</textarea>   
+              </foreach>                              
+            </div><!--文档祥细内容结束-->
+          
+		  <!--相关相册的内容
+          <div inited="1000" style="display: block;">
+                <p style="height: 10px;padding-bottom:10px;">上传图片: <input name="file3" type="file" id="fileToUpload7" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'on','width'=>'','height'=>''))}','fileToUpload7','setimgdiv','__ROOT__');"></p>  
+                <div class="divider"></div> 
+                <!--这里上传图片
+                <foreach name='photo' item='m'>      
+                         <div class="divigm" style="float:left;margin:3px;position:relative;">
+                             <span style="display:block;width:200px;background:#000;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;position:absolute;left:0;top:0;">
+                                 <b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer; float:right;color:red;font-size:16px;">×</b>
+                            </span>
+                             <a href="__ROOT__/{$m.img}" target="_blank"><img src="__ROOT__/{$m.img}" width="200" height="180" style="display:block;"/></a>
+                             <input type="hidden" value="{$m.img}" name="imgAll[]"/>
+                             <input type="text" name="title[]"  value="{$m.img_bewrite}" style="width:197px;height:16px;font-size:12px;border:none;"  placeholder="这里输入图片说明"/>
+                      </div>
+                </foreach>                 
+               <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="__PUBLIC__/Images/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>
+               
+        </div><!--相关相册的内容结束-->     
+        
+		<!--关联文章内容-->
+        <div inited="1000" style="display: block;">
+              <table cellpadding="0" cellspacing="0" class="tableshide  tableshow5" border="0" style="width:100%;"><!--关联文章satrt-->      
+                  <tr><td style="height: 10px;"></td><td></td><td></td></tr> 
+              <tr> <!-- 文章搜索 SATRT-->
+                <td colspan="3" class="tdleft" >
+                   标题 <input type="text"  id="titletext"  style="margin-bottom:20px;"/>
+                    <select class="" id="files_id">
+                        <option value="0">选择分类</option>
+                        <foreach name="cage" item="s">
+                            <option value="{$s.files_id}">{$s.html}{$s.files_name}</option>
+                        </foreach>
+                   </select>
+                  <input type="button" value="检索" onclick="searchArticle('{:U(APP_APPS.'/Search/article','','')}','article','id','titletext','files_id','selectLeft')" class="upbutton" /></span>
+                </td>
+              </tr><!-- 文章搜索END -->
+              <tr><td style="height: 10px;"></td><td></td><td></td></tr>
+              <!-- 文章列表 -->
+              
+              <tr>
+                <th>可选文章</th>
+                <th style="text-align:center;">操作</th>
+                <th>关联文章</th>
+              </tr>
+              <tr><td style="height: 10px;"></td><td></td><td></td></tr>
+              <tr>
+                <td width="45%">
+               
+                  <select name="selectLeft[]" size="20" style="width:100%" multiple class="selectLeft">
+                  </select>
+                  
+                </td>
+                <td align="center" style="text-align:center;">
+                  <p><br /><input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  /></p><br />
+                  <p><input type="button" value=" >> " onclick="leftValueOen('selectLeft','selectRight');" class="upbutton" /></p><br />
+                  <p><input type="button" value=" << " onclick="rightValueOen('selectRight');" class="upbutton" /></p><br />
+                </td>
+                <td width="45%">
+                  <select name="selectRight[]" size="20" style="width:100%" multiple class="selectRight">
+                <foreach name='take' item='t'>
+                    <option value="{$t.id}" selected="selected">{$t.titletext|strip_tags=###}</option>
+                </foreach>                      
+                  </select>
+                </td>
+               </tr>      
+                </table><!--关联文章end-->
+       </div><!--关联文章内容结束-->
+            
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

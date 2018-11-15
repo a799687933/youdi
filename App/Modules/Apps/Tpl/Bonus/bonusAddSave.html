@@ -1,0 +1,122 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Bonus/addSaveForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="" value="{$ids}"  id="ids"/>
+        <input type="hidden" name="send" value="{$_GET['send']}"/>
+        <if condition="$_GET['send'] eq 'update' "><input type="hidden" name="id" value="{$_GET['id']}"/><input type="hidden" name="{:C('VAR_PAGE')}" value="{$_GET[C('VAR_PAGE')]}"/></if>
+        <div class="pageFormContent nowrap" layoutH="60">
+           
+           <foreach name="bonusName" item="t">
+             <dl>
+                <dt>({$t['info']})现金券名：</dt>
+                <dd>
+                     <input type="text" name="{$t['field']}" class="required" size="40" value="{$result[$t['field']]}"/>
+                </dd>
+            </dl>
+           </foreach>
+           
+             <dl>
+                <dt>现金卷图片：</dt>
+                <dd>
+                     <input type="hidden" name="picture" value="{$result.picture}" id="d_thumb"/>
+                    <input name="file1" type="file" id="fileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>282,'height'=>185,remove=>'ok'))}','fileToUpload','img_show','d_thumb','','a-show','__ROOT__','imgloads');">
+                </dd>
+            </dl>
+
+            <dl  id="imgloads" style="display:<if condition="$result['picture']"><else />none</if>;">
+                <dt>图片信息：</dt>
+                <dd>
+                          <a href="http://" class="a-show" target="_blank"> <img src="__ROOT__/{$result.picture}" style="display:inline-block;padding:3px;" id="img_show"  height="50" class="a-show"/></a>                          
+                </dd>
+            </dl>
+                                    
+             <dl>
+                <dt>现金券金额：</dt>
+                <dd>
+                     <input type="text" name="bonus_money" class="required number" size="40" value="<if condition="$result['bonus_money']">{$result['bonus_money']}<else />0</if>"/>
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">此类型的红包可以抵销的金额</span>                               
+                </dd>
+            </dl>            
+            
+             <dl>
+                <dt>订单最小金额：</dt>
+                <dd>
+                     <input type="text" name="min_amount" class="required number" size="40" value="<if condition="$result['min_amount']">{$result['min_amount']}<else />0</if>"/>
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有商品总金额达到这个数的订单才能使用这种红包</span>                               
+                </dd>
+            </dl>        
+            
+             <dl style="display:none">
+                <dt>如何发放现金券：</dt>
+                <dd style="width:600px;">
+                      <if condition="$_GET['send'] eq 'update'">
+                          <input type="radio" 
+                                     name="send_type" 
+                                     value="{:C('_ZERO')}" 
+                                     <if condition="$result['send_type'] eq 0">checked="checked"</if>
+                           />按指定用户发放          
+                      <else />    
+                          <input type="radio" name="send_type" value="{:C('_ZERO')}" checked="checked"/>按指定用户发放       
+                      </if>                              
+                      <input type="radio" name="send_type" value="{:C('_ONE')}" <if condition="$result['send_type'] eq 1">checked="checked"</if> />按商品发放                
+                      <input type="radio" name="send_type" value="{:C('_TWO')}" <if condition="$result['send_type'] eq 2">checked="checked"</if>/>按订单发放
+                      <input type="radio" name="send_type" value="{:C('_THREE')}" <if condition="$result['send_type'] eq 3">checked="checked"</if>/>按线下发放   
+                      <input type="radio" name="send_type" value="{:C('_FOUR')}" <if condition="$result['send_type'] eq 4">checked="checked"</if>/>推荐会员者发放
+                      <input type="radio" name="send_type" value="{:C('_FIVE')}" <if condition="$result['send_type'] eq 5">checked="checked"</if>/>新注册用户自动发放
+                </dd>
+            </dl>                               
+                       
+            <dl>
+                <dt>发放起始日期：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="send_start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['send_start_date']">{$result.send_start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>发放结束时间：</dt>
+                <dd style="width:680px;">
+                     <input type="text" readonly="readonly" name="send_end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['send_end_date']">{$result.send_end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以发放</span>                               
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>使用起始日期：</dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="use_start_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['use_start_date']">{$result.use_start_date|date='Y-m-d H:i:s',###}</if>"/>
+                     <a class="inputDateButton" href="javascript:;" >选择</a> 
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>使用结束日期：</dt>
+                <dd style="width:680px;">
+                     <input type="text" readonly="readonly" name="use_end_date" class="date textInput readonly valid required" datefmt="yyyy-MM-dd HH:mm:ss" size="37" value="<if condition="$result['use_end_date']">{$result.use_end_date|date='Y-m-d H:i:s',###}</if>"/>
+                      <a class="inputDateButton" href="javascript:;">选择</a> 
+                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                    <span style="color:#666;">只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以使用</span>                               
+                </dd>
+            </dl>
+                              
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

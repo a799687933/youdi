@@ -1,0 +1,177 @@
+<script type="text/javascript">
+   //AJAX获取区域
+function getPlace(_ths){
+   var urls=$(_ths).attr('to-url');
+    if($(_ths).val() > 0){
+      $.ajax({
+         type:'post',
+         dataType: "json",
+         url:urls+"/region_id/"+$(_ths).val(),
+         success:function(response,status,xhr){
+            var str='<option value="">请选择</option>';
+            for(var i in response){
+                str+='<option value="'+ response[i].region_id +'">'+ response[i].region_name +'</option>';
+            }
+            if($(_ths).next('select').length >0){
+                $(_ths).next().html(str);
+            }                                        
+          }
+       });    
+   }                              
+}    
+</script>
+<div class="pageContent">
+        <div class="tabs" currentindex="1" eventtype="click">
+            <div class="tabsHeader">
+                <div class="tabsHeaderContent">
+                    <ul>    
+                        <li></li> 
+                        <li ><a href="javascript:;"><span>通用信息</span></a></li>
+                        <li ><a href="javascript:;"><span>商品相册</span></a></li>      
+                    </ul>
+                </div>
+            </div>
+                <form method="post" action="{:U(APP_APPS.'/Purchase/updatePurForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+                    <input type="hidden" name="id" value="{$purchase.id}" /><!--采购修改的ID-->
+					<input type="hidden" name="user_id" value="{$purchase.user_id}" /><!--会员ID-->
+					<input type="hidden" name="pu_sn" value="{$purchase.pu_sn}" /><!--采购编号-->
+                    <input type="hidden" name="action" value="{$_REQUEST['action']}" /><!--返回的跳转方法名称-->
+
+                <div class="tabsContent" style="background:#fff;" layoutH="70">
+                    <div inited="1000" style="display: block;"></div><!--占位-->    
+                    
+                    <div inited="1000" style="display: block;"><!--通用资料内容-->
+               
+                        <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+						
+							<tr>
+							      <td  style="text-align:right;">发布会员：</td>
+								  <td><input type="text" value="{$purchase.user_name}" readonly="readonly" size="50" style="margin:3px 0;"/></td>
+						    </tr>
+													
+                            <tr ><td  style="text-align:right;">石材分类：</td><td>
+									<select name="files_id" class="select110 mr15" id="files_id" class="validate[required]">
+									   <foreach name="cates" item="fs">
+										  <option value="{$fs.files_id}" <if condition="$purchase['files_id'] eq $fs['files_id']">selected="selected"</if>>{$fs.files_name}</option>
+									   </foreach>	
+								  </select>
+                            </td></tr>      
+							                            
+                            <tr ><td  style="text-align:right;">石材品种：</td><td>
+									<select name="stone_class" class="select110 mr15" id="stone_class" class="validate[required]">
+									   <foreach name="filesSort" item="fs">
+										  <option value="{$fs.files_id}" <if condition="$purchase['stone_class'] eq $fs['files_id']">selected="selected"</if>>{$fs.files_name}</option>
+									   </foreach>	
+								  </select>
+                            </td></tr>                      
+							
+							<tr>
+							      <td  style="text-align:right;">品质要求：</td>
+								  <td><input type="text" name="quality_req" value="{$purchase.quality_req}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>
+
+							<tr>
+							      <td  style="text-align:right;">色度深浅：</td>
+								  <td><input type="text" name="chroma" value="{$purchase.chroma}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>
+							
+                            <tr ><td  style="text-align:right;">规格：</td><td>
+                            <select class="combox " name="norms" id="norms">
+                                     <option value="0" <if condition="$purchase['norms'] eq 0">selected="selected"</if>>规格板</option>
+                                     <option value="1" <if condition="$purchase['norms'] eq 1">selected="selected"</if>>大板</option>
+                              </select>   
+							  <input type="text" name="norms_size" id="norms_size" value="{$purchase.norms_size}"  class="input300 required" placeholder="例如：规格板：300*300mm" style="width:210px"/>    
+                            </td></tr>      							
+							                            
+							<tr>
+							      <td  style="text-align:right;">板面要求：</td>
+								  <td><input type="text" name="board" value="{$purchase.board}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>                      
+ 
+ 							<tr>
+							      <td  style="text-align:right;">预期价位：</td>
+								  <td><input type="text" name="exp_price" value="{$purchase.exp_price}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>                               
+                                                        
+ 							<tr>
+							      <td  style="text-align:right;">采购数量：</td>
+								  <td><input type="text" name="number" value="{$purchase.number}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>  
+							
+ 							<tr>
+							      <td  style="text-align:right;">所在地区：</td>
+								  <td>
+									  <select name="country" class="country" onchange="getPlace(this)" to-url="{:U(APP_APPS."/Purchase/updatePurForm",array('ajax'=>'city'),"")}">
+											 <option value="">请选择国家</option>
+											 {$region[0]}
+									  </select>                                              
+									  <select name="province" class="province" onchange="getPlace(this)" to-url="{:U(APP_APPS."/Purchase/updatePurForm",array('ajax'=>'city'),"")}">
+											 <option value="">请选择省份</option>
+											  {$region[1]}
+									  </select>
+									  <select name="city" class="city" onchange="getPlace(this)" to-url="{:U(APP_APPS."/Purchase/updatePurForm",array('ajax'=>'city'),"")}">
+											 <option value="">请选择城市</option>
+											  {$region[2]}
+									  </select>
+									   <select name="district" class="district" >
+											 <option value="">请选择区县</option>
+											  {$region[3]}
+									  </select><span style="color:red;"> *</span>     								  
+								  </td>
+						    </tr>  
+
+							<tr>
+							      <td  style="text-align:right;">详细街道：</td>
+								  <td><input type="text" name="address" value="{$purchase.address}" maxlength="250" class="required" size="50" style="margin:3px 0;"/></td>
+						    </tr>														
+
+							<tr>
+							      <td  style="text-align:right;">补充说明：</td>
+								  <td><textarea name="explain" id="explain" class="required" style="width:400px;height:200px;">{$purchase.explain}</textarea></td>
+						    </tr>		
+							
+                            <tr><td  style="text-align:right;">是否审核：</td><td>
+                                    <input type="radio" value="0" name="display" <if condition="$purchase['display'] eq 0">checked="checked"</if>/>未审核
+                                    <input type="radio" value="1" name="display" <if condition="$purchase['display'] eq 1">checked="checked"</if>/>已审核
+                                    <input type="radio" name="display" value="2" <if condition="$purchase['display'] eq 2">checked="checked"</if>/> 审核未通过               
+                          </td></tr>
+
+                            <tr><td  style="text-align:right;">采购状态：</td><td>
+                                    <input type="radio" value="0" name="status" <if condition="$purchase['status'] eq 0">checked="checked"</if>/>开始报价
+                                    <input type="radio" value="1" name="status" <if condition="$purchase['status'] eq 1">checked="checked"</if>/>已有报价
+                                    <input type="radio" value="2" name="status"  <if condition="$purchase['status'] eq 2">checked="checked"</if>/> 已锁货      
+									<input type="radio" value="3" name="status"  <if condition="$purchase['status'] eq 3">checked="checked"</if>/> 石度代购      
+									<input type="radio" value="4" name="status"  <if condition="$purchase['status'] eq 4">checked="checked"</if>/> 自行购买       
+									<input type="radio" value="5" name="status"  <if condition="$purchase['status'] eq 5">checked="checked"</if>/> 交易完成     
+                          </td></tr>
+						                                        
+                        </table>
+                                                                           
+                    </div><!--通用资料内容结束-->                    
+                    
+        
+                    <div inited="1000" style="display: block;"><!--相关相册的内容-->
+                        <p style="height: 10px;padding-bottom:10px;">商品相册: <input name="file3" type="file" id="fileToUpload7" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'','width'=>700,'height'=>700))}','fileToUpload7','setimgdiv','__ROOT__');"></p>  
+                        <div class="divider"></div> 
+                        <!--这里上传图片-->
+                        <foreach name="photo" item='p'>
+                          <div class="divigm" style="float:left;margin:3px;position:relative;"><span style="display:block;width:200px;background:#000;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;position:absolute;left:0;top:0;"><b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer;float:right;color:red;font-size:16px;" title="'+closes+'">×</b></span><img src="__ROOT__/{$p.img}" width="200" height="180" style="display:block;"/><input type="hidden" value="{$p.img}" name="imgAll[]"/><input type="text" name="title[]" style="width:197px;height:16px;font-size:12px;border:none;" value="{$p.img_bewrite}"  placeholder="图片排序"/></div>
+                        </foreach>                           
+                       <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="{:C('__IMG__')}/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>              
+                    </div><!--相关相册的内容结束-->   
+
+                </div>
+                <div class="formBar">
+                  <ul>
+                     <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                     <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+                 </ul>
+               </div>
+            </form>
+                <div class="tabsFooter">
+                    <div class="tabsFooterContent"></div>
+                </div>
+            </div>
+        </div>
+
+

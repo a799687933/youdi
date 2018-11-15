@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>发票资料</title>
+<script src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/mobileInfoPosition.js"></script>
+<link rel="stylesheet" type="text/css" href="__COMMON__/Css/mobileStyle.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script type="text/jscript">
+$(function(){
+  valinit('.form1','post','',true,'bottomLeft',true);   
+});
+</script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">
+    <a href="{:U('Member/puToug')}" style="<if condition="$actionName eq 'puToug'">background:#ccc;color:#fff;<else />color:#fff;</if>
+       padding:2px 10px;border-radius: 3px;margin-right: 1.2rem;">普通发票</a>
+       
+    <a href="{:U('Member/zengZhi')}" style="
+       <if condition="$actionName eq 'zengZhi'">background:#eee;color:#fff;<else />color:#fff;</if>
+       padding:2px 10px;border-radius: 3px;">增值税发票</a>
+    <a href="javascript:;history.back();" class="icon12"></a>
+</h1>
+{/*内容区*/}
+<div class="header-empty"></div>
+<div style="height:20px;"></div>
+<div class="member-content" style="font-size:0.7rem;margin-bottom:80px;">
+  <form method="get" action="{:U(is_m().'/Member/zengZhiForm')}" class="form1">
+    <input type="hidden" name="returnUrl" value="{:base64_decode($_GET['url'])}" />
+   <ul  class="ul-style" style="text-indent:5px;">
+       
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="company_name" value="{$res.company_name}" id="company_name" class="input validate[required]" placeholder="单位名称" data-errormessage="单位名称不可空"/>
+     </li>   
+     
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="id_code" value="{$res.id_code}" id="id_code" class="input validate[required]" placeholder="纳税人识别码" data-errormessage="纳税人识别码不可空" />
+     </li>    
+
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="reg_address" value="{$res.reg_address}" id="reg_address" class="input validate[required]" placeholder="注册地址" data-errormessage="注册地址不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="reg_tel" value="{$res.reg_tel}" id="reg_tel" class="input validate[required]" placeholder="注册电话" data-errormessage="注册电话不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="bank_name" value="{$res.bank_name}" id="bank_name" class="input validate[required]" placeholder="开户银行" data-errormessage="开户银行不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="bank_sn" value="{$res.bank_sn}" id="bank_sn" class="input validate[required]" placeholder="银行账户" data-errormessage="银行账户不可空"/>
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+         <input type="text" name="inv_content" value="{$res.inv_content}" id="inv_content" class="input validate[required]" placeholder="发票内容" data-errormessage="发票内容不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input type="text" name="shou_piao" value="{$res.shou_piao}" id="shou_piao" class="input validate[required]" placeholder="收票人姓名" data-errormessage="收票人姓名不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input type="text" name="shou_mobile" value="{$res.shou_mobile}" id="shou_mobile" class="input validate[required]" placeholder="收票人手机" data-errormessage="收票人手机不可空" />
+     </li>  
+
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="country"  onChange="getPlace(this,true)" id="country" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('Country'),'国家')}</option>
+                    {$region[0]}
+            </select>
+         </div>
+     </li>
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="province"  onChange="getPlace(this,true)" id="province" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('Province'),'省份')}</option>
+                     {$region[1]}
+            </select>
+         </div>
+     </li>   
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="city" onChange="getPlace(this,true)" id="city" url="{:U("/Member/searchRegion","","")}">
+                     <option value="">{:isL(L('City'),'城市')}</option>
+                    {$region[2]}
+            </select>
+         </div>
+     </li>    
+     <li style="line-height:280%;margin-top:1px;" class="arrow">
+         <div style="width:15rem; overflow:hidden;">
+            <select style="width:16rem;border:none" name="district"   id="district">
+                     <option value="">{:isL(L('District'),'区县')}</option>
+                     {$region[3]}
+            </select>
+         </div>
+     </li> 
+
+     <li style="line-height:280%;margin-top:1px;">
+        <input type="text" name="address" id="address" value="{$res.address}" class="input validate[required]" placeholder="详细街道" data-errormessage="详细街道不可空"  />
+     </li>  
+                                             
+     <li style="line-height:280%;margin-top:1px;height:60px;">
+        <div style="height:10px;"></div>
+        <input type="submit" 
+        id="submits" 
+        value="{:isL(L('Preservation'),'保存')}" 
+        class="add-submit" 
+         style="width:90%;background:#c2161d;
+                    border:none;color:#fff;height:40px;line-height:40px;
+                    display:block;
+                    margin:0px auto;
+                    font-size:0.7rem;
+                    border-radius:4px;cursor:pointer;"/>       
+     </li>
+   </ul>  
+  </form> 
+{/*收货信息结束*/}
+             
+ <div class="cb"></div>
+</div>
+{/*内容区结束*/}
+
+<div class="cb pv30"></div>
+<include file="Common:footer" />{/*页脚*/}
+</div>
+</body>
+</html>

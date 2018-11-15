@@ -1,0 +1,258 @@
+<style type="text/css">
+dl dt{text-align:right;}
+
+
+.dlwidht{width:98%;display:table;}
+
+.ddindex{clear:both;font-size:12px;padding:10px;width:100%;height:20px;}
+.dd2{clear:both;padding-left:15px;font-size:11px;font-family:'黑体';width:100%;height:20px;}
+.dd3{float:left;padding-left:30px;width:200px;height:20px;}
+.dd4{clear:both;padding-left:40px;font-size:12px;font-family:'黑体';width:100%;height:20px;}
+.dd5{float:left;padding-left:30px;font-size:12px;font-family:'黑体';width:80px;height:20px;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/User/userAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+
+            <dl>
+                <dt>用户名：</dt>
+                <dd>
+                    <input type="text" name="name" maxlength="20" class="required" />
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>登录密码：</dt>
+                <dd>
+                    <input id="w_validation_pwd" type="password" name="password" class="required alphanumeric" minlength="6" maxlength="20" alt="字母、数字、下划线 6-20位"/>
+                    
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>确认密码：</dt>
+                <dd>
+                    <input type="password" name="notpassword" class="required" equalto="#w_validation_pwd"/>
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>上传照片：</dt>
+                <dd>
+                     <input type="hidden" name="userpic" value="" id="d_thumb"/>
+                     <input type="hidden" name="userpic_big" id="userpic_big" class=""/> 
+                    <input name="file1" type="file" id="fileToUpload4" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>161,'height'=>187,'wat'=>0))}','fileToUpload4','img_show','d_thumb','userpic_big','B-show','__ROOT__','imgloads');">
+                  
+                </dd>
+            </dl>
+            
+            <dl style="display:none;" id="imgloads">
+                <dt>照片信息：</dt>
+                <dd>
+                    <a href="http://" class="B-show" target="_blank"><img src="Uploads/2014/53835293aa9c9.png" width="161" height="187" id="img_show" style="display:inline;position:relative;top:-10px;" class="B-show"/></a>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>注册时间：</dt>
+                <dd>
+                <input type="text" name="entrydate" class="date required" readonly="true"/>
+                <a class="inputDateButton" href="javascript:;">选择</a>
+
+                </dd>
+            </dl>
+            
+            <dl>
+               <dt>分派权限：</dt>
+              <dd style="width:700px;">
+               <foreach name='role' item='app'>
+                 <if condition="$_SESSION[C('SESSION_NAME_VAL')] eq C('RBAC_SUPERADMIN')">    
+                      <label style="width:150px;"><input type="radio" name="role_id[]" value="{$app.id}" />({$app.name}){$app.remark}</label>
+                 <else />
+                       <if condition="strtoupper($app['name']) neq strtoupper(C('ADMIN_KEY'))">
+                           <label style="width:150px;"><input type="radio" name="role_id[]" value="{$app.id}" />({$app.name}){$app.remark}</label>
+                       </if>    
+                 </if>     
+                </foreach>  
+                   
+            </dd>
+            </dl>
+            
+            <dl>
+               <dt>栏目权限：</dt>
+              <dd style="width:700px;">
+                   {/*栏目权限*/}
+                  <div class="dlwidht checkbox-all">
+                     <foreach name="files" item="jc">
+                     <div class="jc1">
+                            <div  class="dd2">
+                                  <input class="top" type="checkbox" 
+                                              name="<if condition="$jc['child']">top_id[]<else />not_child_id[]</if>"  
+                                              value="{$jc['files_id']}" />
+                                  <strong>{$jc['files_name']} 
+                                  </strong> 
+                            </div>
+                            <if condition="$jc['child']">
+                                <foreach name="jc['child']" item="ch">
+                                     <div class="dd4">
+                                        <input type="hidden" name="top_id_{$jc['files_id']}[]" />
+                                         <input class="top2" type="checkbox"   value="{$ch['files_id']}" />{$ch['files_name']} 
+                                         <div>
+                                                  <div class="dd5">
+                                                     <input type="hidden" name="article_{$jc['files_id']}_group1[]" />
+                                                     <input class="group" type="checkbox"   value="1" />添加/修改
+                                                 </div>       
+                                                 <div class="dd5">
+                                                     <input type="hidden" name="article_{$jc['files_id']}_group2[]" />
+                                                     <input class="group"  type="checkbox"  value="2"  />审核 
+                                                 </div>       
+                                                 <div class="dd5">
+                                                     <input type="hidden" name="article_{$jc['files_id']}_group3[]" />
+                                                     <input class="group" type="checkbox"  value="3" />删除 
+                                                 </div>                               
+                                         </div>
+                                     </div>
+                                    
+                                </foreach>
+                           <else />  
+                                     <div class="dd6" style="float:left !important;width:80px;padding-left:40px;font-size:12px;font-family:'黑体';">
+                                         <input type="hidden" name="not_child_article_group1[]" />
+                                         <input class="group" type="checkbox"   value="1" />添加/修改
+                                     </div>       
+                                     <div class="dd6" style="float:left !important;width:80px;padding-left:40px;font-size:12px;font-family:'黑体';">
+                                         <input type="hidden" name="not_child_article_group2[]" />
+                                         <input class="group"  type="checkbox" value="2"  />审核 
+                                     </div>       
+                                     <div class="dd6" style="float:left !important;width:80pxpadding-left:40px;font-size:12px;font-family:'黑体';">
+                                         <input type="hidden" name="not_child_article_group3[]" />
+                                         <input class="group" type="checkbox"  value="3" />删除 
+                                     </div>                    
+                            </if>
+                       </div>
+                     </foreach>            
+                  </div>  
+                  {/*栏目权限结束*/}
+            </dd>
+            </dl>            
+            
+            <dl>
+                <dt>是否锁定：</dt>
+                <dd>
+                    <label><input type="radio" name="lock" value="1"/>是</label>
+                    <label><input type="radio" name="lock" value="0" checked="checked"/>否</label>
+                </dd>
+            </dl>
+            
+        <dl class="nowrap">
+            <dt>后台备注：</dt>
+            <dd><textarea name="remarks" class="required" cols="50" rows="8" style="resize:none;"></textarea></dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+<script type="text/javascript">
+//栏目权限选定
+$(function(){
+	 //选择一级分类   
+	 $('.top').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  if($(this).attr('checked')){
+			  parents.find('input[type="checkbox"]').attr('checked',true);
+		  }else{
+			  parents.find('input[type="checkbox"]').attr('checked',false);
+		  }
+		  set_val();
+	 });	
+	 
+	 //选择二级分类	  
+	 $('.top2').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  parents1=$(this).parents('.dd4');
+		  if($(this).attr('checked')){
+			  parents1.find('input[type="checkbox"]').attr('checked',true);
+			  parents.find('.top').attr('checked',true);
+			  $(this).prev().val($(this).val());
+		  }else{
+			  $(this).prev().val(0);
+			  parents1.find('input[type="checkbox"]').attr('checked',false);
+		  }
+		  var checkeds=parents.find('input[type="checkbox"]');
+		  $k=0;
+		  for(var i=0;i < checkeds.length;i++){
+			  if(checkeds.eq(i).attr('checked') && checkeds.eq(i).attr('class') !='top'){
+				  $k++;
+				  break;
+			  }
+		  }
+		  if($k==0) parents.find('.top').attr('checked',false);
+		  set_val();
+	 });	 
+
+	 //直接选择权限	  
+	 $('.group').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  parents1=$(this).parents('.dd4');
+		  if($(this).attr('checked')){
+			  parents1.find('.top2').attr('checked',true);
+			  parents.find('.top').attr('checked',true);
+			  $(this).prev().val($(this).val());
+		  }else{
+			  $(this).prev().val('');
+			  $j=0;
+			  parents4=$(this).parents('.dd4');
+			  var group=parents4.find('.group');
+			  for(var i=0;i < group.length;i++){
+				  if(group.eq(i).attr('checked')){
+					  $j++;
+					  break;
+				  }
+			  }
+			  if($j==0){
+				  parents1.find('.top2').attr('checked',false);
+			  }			  
+		  }
+		  var checkeds=parents.find('input[type="checkbox"]');
+		  $k=0;
+		  for(var i=0;i < checkeds.length;i++){
+			  if(checkeds.eq(i).attr('checked') && checkeds.eq(i).attr('class') !='top'){
+				  $k++;
+				  break;
+			  }
+		  }
+		  if($k==0) parents.find('.top').attr('checked',false);	
+		  set_val();
+	 });	 
+	 
+});
+
+/*栏目权限符值*/
+function set_val(){
+    var checkbox_all=$('.checkbox-all').find('.group');
+	var top2=$('.top2');
+	for(var j=0;j < top2.length;j++){
+		if(top2.eq(j).attr('checked')){
+			top2.eq(j).prev().val(top2.eq(j).val());
+		}else{
+			top2.eq(j).prev().val('');
+		}
+	}
+	for(var i=0;i < checkbox_all.length;i++){
+		if(checkbox_all.eq(i).attr('checked')){
+			checkbox_all.eq(i).prev().val(checkbox_all.eq(i).val());
+		}else{
+			checkbox_all.eq(i).prev().val('');
+		}
+	}
+}
+</script>
+

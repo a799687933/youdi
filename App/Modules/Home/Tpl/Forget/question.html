@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('RetrievePassword'),'找回密码')}-{:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<script type="text/javascript">  
+$(document).ready(function () {  
+        var url="{:U('Forget/checks','','')}";
+        myValidationEngine('ajaxUser',url,'my=data','{:isL(L("WithoutThisUser"),"不存在此用户")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}','toUser');     
+        var url="{:U('Forget/ajaxYzm','','')}";
+        myValidationEngine('ajaxYzm',url,'my=data','{:isL(L("VerificationCodeError"),"验证码错误")}','{:isL(L("Correct"),"验证信息通过")}','{:isL(L("JustAmoment"),"正在验证，请稍等...")}');  
+        valinit('.form1','get','',true,'topRight');  
+
+        var ps = $("#div_pro").position();  
+        $("#div_pro").mouseenter(function () {  
+            $("#float_box").show();  
+        });  
+        $("#float_box").mouseleave(function () {  
+            $("#float_box").hide();  
+        });          
+});
+
+//回调函数
+function toUser(json){
+    if(json[1]==true){
+       if(json[3]){
+           $('#question-info').text(json[3]+'？');
+           $('#question-value').val(json[3]);
+           $('.questions').show();           
+       }else{           
+           $('.questions').hide();     
+           $('.not-set').show();
+           $('#question-info').text('{:isL(L("NoProblemSetting"),"你未设置问题，没法找回密码")}');
+           $('#question-value').val('');
+       } 
+    }else{
+        $('#question-info').text('');
+        $('#question-value').val('');
+        $('.questions').hide();       
+    }
+}
+</script> 
+<style type="text/css">
+.questions{
+     display:none;
+}   
+</style>
+</head>
+
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+    <div class="login_banner"><img src="__HOME__/images/login_banner.jpg" /></div>
+    <div class="login_c">
+        <div class="login_l"><img src="__HOME__/images/login_l.jpg" /></div>
+        <div class="login_r">
+            <div class="login_d">
+               <form method="post" action="{:U('/Forget/questionForm')}" class="form1" >
+                <table  class="f_12 clr_6 reg_tbl">
+                    <tr>
+                         <td class="al_rt"></td>
+                         <td>{:isL(L('GetYourPassword'),'凭此问题找回密码')}</td>
+                    </tr>
+                                    
+                    <tr>
+                         <td class="al_rt" width="80"><span class="f_12 clr_r">*</span>{:isL(L('UserName'),'用户名')}</td>
+                         <td><input name="user_name" id="user_name" class=" validate[required,ajax[ajaxUser]]" style="height:30px;width:250px;margin:5px;" /></td>
+                    </tr>   
+ 
+                  <tr class="questions not-set">
+                         <td class="al_rt"><span class="f_12 clr_r">*</span>{:isL(L('YourQuestion'),'你的问题')}</td>
+                         <input type="hidden" value="" id="question-value" name="question" />
+                         <td style="text-align:left;color:red;" id="question-info"></td>
+                  </tr>
+                       
+                    <tr class="questions">
+                         <td class="al_rt"><span class="f_12 clr_r">*</span>{:isL(L('QuestionAnswer'),'问题答案')}</td>
+                         <td>
+                         <input type="text" name="answer" id="answer"  class=" validate[required]"  style="height:30px;width:250px;margin:5px;"/>
+                         </td>
+                    </tr>                                       
+                    <tr class="questions">
+                         <td class="al_rt"><span class="f_12 clr_r">*</span>{:isL(L('ResetPassword'),'重置密码')}</td>
+                         <td>
+                         <input type="password"  id="password" name="password" class="" style="height:30px;width:250px;margin:5px;" />
+                         </td>
+                    </tr>   
+                    <tr class="questions">
+                         <td class="al_rt"><span class="f_12 clr_r">*</span>{:isL(L('ConfirmPassword'),'确认密码')}</td>
+                         <td><input type="password" name="not_password" id="not_password" class=" validate[required,equals[password]]" style="height:30px;width:250px;margin:5px;" /></td>
+                    </tr>   
+                    
+                    <tr class="questions">
+                          <td class="al_rt"><span class="f_12 clr_r">*</span>{:isL(L('VerificationCode'),'验证码')}</td>
+                          <td style="text-align:left;">
+                               <input type="text" id="code" name="code" class="validate[required,ajax[ajaxYzm]]" style="width:150px;height:30px;margin:5px;" />
+                               <img src="{:U('/Forget/verify','','')}" alt="" class="fl" style="position:relative;top:6px; cursor:pointer;float:right;height:30px;" onClick="javascript:this.src='{:U('/Forget/verify','','')}/tm/'+Math.random()"/>
+                        </td>
+                    </tr>   
+
+                    <tr class="questions">
+                          <td></td>
+                          <td><input type="submit" id="submits" style="width:100px;height:30px;border:none;background: #99ce47;color:#fff;cursor:pointer;border-radius: 3px;"  value="{:isL(L('RetrievePassword'),'找回密码')}" /></td>
+                    </tr>   
+                    <tr><td></td><td class="al_rt">
+                        <div class="reg_bott"><span>{:isL(L('HaveAccountLogin'),'已经有账号，请点击这里')}</span> &nbsp;&nbsp;
+                        <input type="button" class="" onClick="javascript:;window.location.href='{:U('/Login')}';" value="{:isL(L('QuickLogin'),'快速登录')}>>" style="width:100px;height:25px;border:none;background: #99ce47;color:#fff;cursor:pointer;border-radius: 3px;" /> &nbsp;
+                        </div>
+                    </td></tr>
+                </table>
+              </form>       
+            </div>
+        </div>
+        <div class="clear"></div>
+    
+    </div>
+    
+    <div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

@@ -1,0 +1,35 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/Nav/navSaveForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" name="nav_id" value="{$save.nav_id}"/>
+        <div class="pageFormContent" layoutH="58">
+            <p>
+                <label>栏目名称：</label>
+                <input type="text" name="nav_name" size="30" class="required" value="{$save.nav_name}"/>
+            </p>
+               
+            <p>
+                <label>链接地址：</label>
+                <input type="text" name="nav_url" size="30" class="required" value="{$save.nav_url}" />
+            </p>            
+ 
+            <p>
+                <label>排序：</label>
+                <input type="text" name="nav_sort" size="30"  class="required digits" value="{$save.nav_sort}"/>
+            </p>   
+            
+            <p>
+                <label>是否显示：</label>
+                <input type="radio" value="1" name="nav_show" checked="checked"  <if condition="$save['nav_show']">checked="checked"</if>/>显示
+                <input type="radio" value="0" name="nav_show" <if condition="!$save['nav_show']">checked="checked"</if>/>不显示
+            </p>                      
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

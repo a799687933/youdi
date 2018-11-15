@@ -1,0 +1,39 @@
+<style type="text/css">
+dl{width:100% !important;}
+
+dl dt{text-align:right;}	
+</style>
+
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/ExtendsArticle/extendsCateAddForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input type="hidden" value="{$_GET['caet_id']}" name="caet_id" />
+        <input type="hidden" name="files_pid" value="{$files_pid}"/>
+        <input type="hidden" name="files_path" value="{$files_path}"/>
+        <input type="hidden" name="files_type" value="{$files_type}" />
+        <div class="pageFormContent" layoutH="58">
+          
+             <dl>
+             	<dt>分类名称：</dt>
+             	<dd><input type="text" name="files_name" size="20" class="required" /></dd>
+             </dl>   
+                                    
+            <dl>
+             	<dt>分类描述：</dt>
+             	<dd><input type="text" name="files_bewrite" size="20" class="required" /></dd>
+             </dl>    
+            
+            <dl>
+             	<dt>排序：</dt>
+             	<dd><input type="text" name="files_sort" size="20" value="0" class="required digits"  /></dd>
+             </dl>                                        
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

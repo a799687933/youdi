@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta name="format-detection" content="telephone=no">
+<title>购物车-确认订单</title>
+<script type="text/javascript" src="__COMMON__/Js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/checkOut.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/global.css" />
+<link rel="stylesheet" type="text/css" href="__MOBILE__/Css/style.css" />
+<script src="__MOBILE__/Js/global_phone.js"></script>
+<script>
+$(document).ready(function (){
+  //地址select付值
+ adderssVal();
+});
+
+function adderssVal(){
+   var address=$('select[name="selectAdderss"]').children('option:selected');
+  $('.user-name').text(address.attr('user-name'));//姓名
+  $('.user-mobile').text(address.attr('user-mobile'));//手机   
+}
+
+//结算操作
+options.ROOT="__ROOT__/"; //根目录
+options.IsMobile='<php>echo APP_MOBILE;</php>';//是否手机模块;如果手机模块直接使用 '<php>echo APP_MOBILE;</php>';
+options.CatrIds="{:htmlspecialchars($_GET['cart_id'])}"; //购物车ID集合
+options.redAmount='#red-amount';//显示现金卷金额节点ID  
+options.integralAmount="{$integralAmount}"; //订单可换积分
+options.userIntergal="{$userIntergal}"; //会员可用积分 
+options.showIntegralNode='#integral-amount';//显示已使用积分对换金额节点
+options.CUR_REP="<php>$CUR_REP=C('CUR_REP');echo C($CUR_REP[getLang()].'_CUR');</php>";//PHP货币汇率
+options.integralFormula="{$integralFormula}"; //积分换算位
+options.logisticsSelectName='logistics_name';//物流列表select节点名称
+options.goodsSupplier='supplier_id';//配送点ID，即供应商select节点名称
+options.totalLogisticsNode='#total_logistics';//显示物流费节点
+options.orderAmount='#order-amount'; //显示应付总金额节点
+options.addressInputName='selectAdderss';//地址列表input type="radio" name="selectAdderss" 节点名称
+options.isInv='is_inv'; //发票列表 input type="radio" name="is_inv" 节点名称
+options.payType='pay_type'; //支付方式列表 input type="radio" name="is_inv" 节点名称
+options.integral='integral';//用户输入的积分input 节点名称
+options.redSelectName='member_bonus_id';//红包select节点名称
+options.orderMessage='order_message';//订单留言input 节点名称
+options.tokenInputName='{$_SESSION["MY_TOKEN"]}';//令牌input节点名称
+options.Error="{:isL(L('Error'),'错误')}";//错误提示标题
+options.Pctrgapca="{:isL(L('Pctrgapca'),'请选择收货地址或创建一个新地址')}";//请选择收货地址，如还没有收货地址请新建一个
+options.PleaseOrdData="{:isL(L('PleaseOrdData'),'请先保存普通发票资料')}";//请先保存普通发票资料
+options.PleaseVAT="{:isL(L('PleaseVAT'),'请先保存增值税发票资料')}";//请先保存增值税发票资料
+options.botBg='#ea9901'; //提交按钮背景色
+options.botColor='#fff'; //提交按钮字体色
+options.disabBotBg='#eee'; //提交中的背景色
+options.disabBotColor='#999';  //提交中的字体色   
+options.NoLogisticsCity='{:isL(L("NoLogisticsCity"),"你的地址所在区域暂无物流信息或免运费商品")}'; //你的地址所在区域暂无物流信息或免运费商品
+</script>
+</head>
+<body>
+<div class="wrap">
+<h1 class="toptxt">确认订单<a href="javascript:;history.back();" class="icon12"></a></h1>
+<div class="icon24 mt5">&nbsp;</div>
+
+{/*收货地址*/}   
+<div class="icon25 pt5 pb10 pr10">
+ <span class="lh25 f16 col555">收件人：<span class="user-name">张绍</span></span><span class="lh25 f14 fr col555 user-mobile" >32132423534</span>
+ <div class="cb"></div>
+ <p class="shdz pr15 f14" style="background:none;padding-right: 0;margin-right: 0;overflow: hidden;position: relative;">
+     <select name="selectAdderss" style="width:104%;border:none;font-size: 0.5rem;" onchange="selectAddress(this,0,adderssVal)">
+        <foreach name="addressList" item="addList" >    
+              <option value="{$addList.address_id}" <if condition="$addList['default_address'] eq 1">selected="selected"</if> user-name="{$addList.consignee}" user-mobile="{$addList.mobile}">
+                  地址：{$addList.r_province}{$addList.r_city}{$addList.r_district}{$addList.address}
+              </option>
+         </foreach>
+     </select>
+       <span 
+      style="
+      position: absolute;right:0;top:0;background-image: url(__MOBILE__/images/icon17.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 10px;">&nbsp;&nbsp;</span>     
+ </p>
+</div>
+{/*收货地址结束*/}
+ 
+<div class="icon24 mb5">&nbsp;</div>
+<div class="psfs pl10 pr10">
+ <ul>
+     
+  {/*配送商家*/}     
+  <li style="overflow: hidden;position: relative;">
+      <select name="supplier_id" style="width:104%;border:none;font-size: 0.5rem;">
+           <foreach name="gs" item="g">
+              <option value="{$g['id']}">配送商家：{$g['address']}</option>    
+           </foreach>             
+      </select>
+      <span 
+      style="
+      position: absolute;right:0;top:0;background-image: url(__MOBILE__/images/icon17.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 10px;">&nbsp;&nbsp;</span>      
+ </li>
+ {/*配送商家结束*/} 
+ 
+ {/*支付方式*/}  
+  <li style="overflow: hidden;position: relative;">
+      <select name="pay_type" style="width:104%;border:none;font-size: 0.5rem;">
+              <option value="0">支付方式：在线支付</option> 
+              <option value="3">支付方式：余额支付</option>           
+              <option value="2">支付方式：货到付款</option>      
+              <option value="1">支付方式：到店自提</option>      
+      </select>
+      <span 
+      style="
+      position: absolute;right:0;top:0;background-image: url(__MOBILE__/images/icon17.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 10px;">&nbsp;&nbsp;</span>
+  </li>
+  {/*支付方式结束*/}  
+  
+  {/*发票信息*/}  
+  <li style="overflow: hidden;position: relative;">
+       <select name="is_inv" style="width:104%;border:none;font-size: 0.5rem;">
+              <option value="0">发票信息：不要发票</option> 
+              <option value="1">发票信息：普通发票</option>           
+              <option value="2">发票信息：增值税专用票</option>      
+      </select>
+      <span 
+      style="
+      position: absolute;right:0;top:0;background-image: url(__MOBILE__/images/icon17.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 10px;">&nbsp;&nbsp;</span> 
+  </li>
+  {/*发票信息结束*/}  
+  
+{/*现金卷*/}  
+<if condition="$redList">   
+  <li style="overflow: hidden;">
+      <span style="display: inline-block;width:13rem;overflow: hidden;">
+       <select name="member_bonus_id" style="width:104%;border:none;font-size: 0.5rem;" onChange="checkDiscount(this,'{:U('CheckOut/chkRed','','')}')">
+              <option value="">不使用优惠</option>         
+                <foreach name="redList" item="red">
+                     <option value="{$red.id}" price="{:getPrice($red['bonus_money'],false)}">
+                         {$red['bonus_name']} [{:getPrice($red['bonus_money'],true)}]
+                     </option>
+                </foreach>     
+      </select>
+      </span>
+      <span class="pl10 f16" style="display: inline-block;position: relative;top:-0.3rem;">-{:CUR()}<span id="red-amount">{:getPrice('0.00',false)}</span></span>
+      <span 
+      style="
+      position: absolute;right:0;top:0;background-image: url(__MOBILE__/images/icon17.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 10px;">&nbsp;&nbsp;</span> 
+  </li>
+ </if>
+{/*现金卷结束*/}   
+ 
+ {/*使用积分*/}
+ <if condition="$integralAmount AND $userIntergal">    
+   <li class="icon26">
+       <input type="text" name="integral" onchange="usingIntegral(this)" style="width:13rem;border:none;font-size: 0.5rem;text-indent: 3px;" placeholder="订单可用积分({$integralAmount}) 帐户积分({$userIntergal})" />
+       <span class="pl10 f16">-{:CUR()}<span id="integral-amount">0.00</span></span>
+   </li>  
+  </if> 
+ {/*使用积分结束*/}
+  
+   {/*购物满活动*/}
+   <if condition="$cartGoods['discount']['order_amount'] AND $cartGoods['discount']['real_discount']">  
+      <li class="yhqtxtr">
+          <span class="f16 pl10">购物满({:getPrice($cartGoods['discount']['order_amount'],true)})</span>
+          <span class="fr f14 pr20">-{:CUR()}<b id="prompt-delivery">{:getPrice($cartGoods['discount']['real_discount'],false)}</b></span><div class="cb"></div>
+      </li>
+   </if>
+   {/*购物满活动结束*/}
+     
+ </ul>
+</div><!--psfs end-->
+
+<p class="lh40 bgh3 colfff f16 tr ph10 mt10" style="text-align: left;">
+   商品信息
+</p>
+<table cellpadding="0" cellspacing="0" width="100%">
+    <foreach name="cartGoods['list']" item="cc">
+        <foreach name="cc['cart_list']" item="cca">
+         <tr class="bgf6" style="border-bottom: 1px #eee solid;">
+          <td align="center" valign="middle" width="2%"></td>
+          <td align="center" valign="middle" width="25%"><img src="__ROOT__/{$cca['goods_thumb']}" style="width:160px;height:160px;"/></td>
+          <td align="left" valign="middle" width="67%">
+           <span class="pl10 lh20">{$cca[pfix('goods_name')]}</span>
+           <div class="cb"></div>
+           <p class="pl10 hong3 lh20 pv5"><b>￥<span class="f14">{$cca['goods_price']}</span></b><span class="qccxtxt ml5">{$cca['discount_type']}</span></p>
+           <div class="shul fl">
+           </div>
+           <div class="shulr">
+            <p class="tr lh18 pr10">X{$cca.goods_number}</p>
+            <p class="tr lh18 pr10">小计：<span class="hong3">{$cca['subtotal']}</span></p>
+           </div>
+           <div class="cb"></div>
+          </td>
+         </tr>
+         <tr><td colspan="3" width="100%"></td></tr>
+       </foreach>  
+     </foreach>
+</table>
+
+<div class="cb pv20"></div>
+<div class="bgf0">
+ <table cellpadding="0" cellspacing="0" width="100%"><tr>
+  <td align="right" valign="middle" width="75%">
+   <p class="hong3 lh20 pr10 pt5">
+      共({$cartGoods.count})件商品&nbsp;&nbsp;
+      共金额： {:CUR()}<b class="f14" id="order-amount" total="{:getPrice(number_format($cartGoods['sum'],2, '.', ''),false)}">
+         {/*如果有满即送*/}          
+         <if condition="$cartGoods['discount']['order_amount'] AND $cartGoods['discount']['real_discount']">
+          {:getPrice(number_format($cartGoods['sum'] + $defaultLoginsticsPrice - $cartGoods['discount']['real_discount'],2, '.', ''),false)} 
+        <else />
+          {:getPrice(number_format($cartGoods['sum'] + $defaultLoginsticsPrice,2, '.', ''),false)}
+        </if>                
+       </b>
+   </p>
+   <p class="lh20 pr10 pb5">&nbsp;&nbsp;</p>
+  </td>
+  <td align="center" valign="middle" width="25%" class="bgh3"><input type="button" onClick="sendForm(this)" value="结算({$cartGoods.count})" class="jsbtn"/></td>
+ </tr></table>
+</div>
+  </div>
+  <form></form>
+</body>
+</html>

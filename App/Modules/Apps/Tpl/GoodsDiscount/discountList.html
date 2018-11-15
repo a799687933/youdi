@@ -1,0 +1,92 @@
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->
+</form>
+
+<div class="pageHeader">
+   <!-- <form onsubmit="return navTabSearch(this);" action="{:U(APP_APPS."/GoodsDiscount/discountList","","")}" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                 关键字：<input type="text" name="discu_name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>-->
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+       <!-- <ul class="toolBar">
+            <if condition="access('GoodsDiscount/discountAddSave')">
+              <li><a class="add" href="{:U(APP_APPS.'/GoodsDiscount/discountAddSave',array('send'=>'add'),'')}" target="dialog" mask="true" width="1024" height="590" title="添加优惠活动"><span>添加优惠活动</span></a></li>
+            </if>
+            <if condition="access('GoodsDiscount/groupDealsDelete')">
+              <li><a title="操作不可恢复，确实要删除这些记录吗?" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/GoodsDiscount/discountDelete','','')}/action/discountList/{:C('VAR_PAGE')}/{$currentPage}" class="delete"><span>删除</span></a></li>
+            </if>
+        </ul>-->
+    </div>
+    <table class="list" width="100%" layoutH="61">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th><!--编号-->
+                <th>优惠活动名称</th><!--优惠活动名称-->
+                <th orderfield="end_date"class="<if condition='$end_date eq "desc"'>desc<else />asc</if>" >状态</th><!--状态-->       
+                <th>开始时间</th><!--开始时间-->        
+                <th>结束时间</th><!--结束时间-->           
+                <th orderfield="sort_order"class="<if condition='$sort_order eq "desc"'>desc<else />asc</if>" >排序</th>  <!--排序-->
+                <th>操作</th><!--操作-->      
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="promot" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td>{$V[pfix('dis_name')]}</td>
+                <td>
+                    <if condition="$V['start_date'] gt time()">
+                    <strong style="color:red;" >优惠活动未开始</strong>
+                    <else />
+                        <if condition="time() gt $V['end_date']">
+                            <span style="color:red;" >优惠活动已成功结束</span>
+                        <else />
+                                   剩下：{:case_time($V['end_date'])}             
+                        </if>
+                    </if>
+               </td>
+               <td>{$V.start_date|date='Y-m-d H:i:s',###}</td>
+               <td>{$V.end_date|date='Y-m-d H:i:s',###}</td>
+               <td>{$V.sort_order|tpl_modify_oen=###,'goods_discount','sort_order',$V['id'],'id','GoodsDiscount/saveSort'}</td>
+               <td>
+                   {$action|tpl_action='dialog','GoodsDiscount/discountAddSave','id/'.$V["id"].'/send/update','修改（'.strip_tags($V['dis_name']).'）','icon_edit.gif','icon_edit_not.gif',1024,590} <!--修改按钮-->
+                  <!--  {$action|tpl_action='ajaxTodo','GoodsDiscount/discountDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"],'确定执行删除('.strip_tags($V['dis_name']).')优惠活动业务？','icon_drop.gif','icon_drop_not.gif'}  删除按钮-->
+               </td>
+            </tr>
+          </volist> 
+        </tbody>
+    </table>
+         <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div> 
+</div>
+

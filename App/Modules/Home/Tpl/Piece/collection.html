@@ -1,0 +1,122 @@
+{/*头部愿望商品列表*/}
+<php>
+   $cookiecookie=cookie('cookie_collect');	  
+   $cookiefield="id,".pfix()."goods_name AS goods_name,goods_num,goods_market_price,goods_retail_price,pay_points,rank_points,integral_amount,";
+   $cookiefield.="goods_thumb,goods_thumb2,stock,volume";
+   $cookiewhere['shelves']=1;
+   $cookiewhere['recycle_bin']=0;
+   $cookiewhere['id']=array('in',$cookiecookie);
+   $cookiegoods=M('goods');
+   $cookieresult = $cookiegoods->field($cookiefield)->where($cookiewhere)->select();	
+   $publicCount=$cookieresult ? count($cookieresult) : 0;
+</php>
+<if condition="!$cookieresult"><div  class="col222 f16 lh30" style="display:inline-block;margin-top:20px">您的愿望单中暂无商品</div></if>
+<foreach name="cookieresult" item="g">
+	<li>
+		<!--<span class="icon31" onclick="del_collection('{:U('Cookie/deleteDoodsCollect',array('id'=>$g['id'],'is_location'=>0))}',{$g['id']})"></span>-->
+        <span class="dbclose" onclick="del_collection('{:U('Cookie/deleteDoodsCollect',array('id'=>$g['id'],'is_location'=>0))}',{$g['id']})"><span class="glyphs icon-close"></span></span>
+		<div class="ckywlmt"> 
+			<table width="100%" height="100%">
+			  <tr>
+				  <td align="center" valign="middle" width="100%" height="100%">
+					  <a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb']}" alt=""/></a>
+				   </td>
+			   </tr>
+			</table>
+		 </div>
+		 <div class="ckywlmtb">
+			 <table width="100%" height="100%">
+				<tr>
+					<td align="center" valign="middle" width="100%" height="100%">
+						<a href="{:U('Goods/index',array('html'=>$g['id']))}" target="_blank"><img src="__ROOT__/{$g['goods_thumb2']}" alt=""/></a>
+					</td>
+				 </tr>
+			  </table>
+		 </div>
+		<div class="ckywlmb">
+		<!--<p>{$g['goods_name']|strip_tags=###|sub_str=###,12}</p>-->
+        <if condition="$g['stock'] elt 0"><span class="sold">sold out</span></if>
+		<p><b>{:C('KTEC_H')} {$g['goods_retail_price']}</b></p>
+		</div>
+	</li>
+</foreach>
+<script type="text/javascript">
+colletionCounts();
+function colletionCounts(){ 
+	var count={$publicCount}; 
+    $(function(){
+		 if(count > 0){
+			 $('.iconfont-like2').show();
+			 $('.iconfont-like').hide();
+		 }else{
+			 $('.iconfont-like').show();
+			 $('.iconfont-like2').hide();			 
+		 }	    
+	     $('.public-collect').text(count);
+		 if(count <= 5) $('.zjll3left,.zjll3right').hide();
+		 else $('.zjll3left,.zjll3right').show();
+		wckyw=$(".ckywlbox").width();
+		$(".ckywlm li").css("width",wckyw/5);
+		$(".zjll3").myscroll({ prev: ".zjll3left", next: ".zjll3right", scrollbox: ".zjll3m" });
+		var jrxy=$('.jrxy');
+		for(var i=0;i < jrxy.length;i++){ 
+			if(parseInt(window.goodsId) == parseInt(jrxy.eq(i).attr('id'))){
+				if(jrxy.eq(i).find('span').is('.fa-heart-o')) jrxy.eq(i).find('span').attr('class','fa fa-heart');
+				else jrxy.eq(i).find('span').attr('class','fa fa-heart-o');
+				break;
+			}
+		}
+	});
+}
+/*添加原望单*/
+function coll_and_cac(_this){
+	var url='';
+    if($(_this).attr('class').indexOf('now') > -1) {
+		$(_this).attr('class','jrxy');
+		$(_this).children("span").attr('class','fa fa-heart-o');
+		url=$(_this).attr('del-url');
+	}else {
+		$(_this).attr('class','jrxy jrxynow');
+		$(_this).children("span").attr('class','fa fa-heart');
+		url=$(_this).attr('add-url');
+	}
+	$.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			   var getUrl="{:U('Piece/collection')}";
+			   //实时获得
+				$.ajax({
+					 type:'get',
+					 url:getUrl,
+					 dataType:'text',
+					 success:function(response,status,xhr){
+						   $('.get-new-collection').html(response); 
+					  } 
+				});	
+		  }
+    });	
+}
+/*删除原望单*/
+function del_collection(url,id){
+	window.goodsId=id;
+	$.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			   var getUrl="{:U('Piece/collection')}";
+			   //实时获得
+				$.ajax({
+					 type:'get',
+					 url:getUrl,
+					 dataType:'text',
+					 success:function(response,status,xhr){
+						   $('.get-new-collection').html(response); 
+					  } 
+				});	
+		  }
+    });	
+}
+</script>

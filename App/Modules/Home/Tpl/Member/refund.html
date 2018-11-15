@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:C('WEBTITLE')}</title>
+<meta name="keywords" content="{:C('WEBKEYWORD')}" />
+<meta name="description" content="{:C('WEBDEPICT')}" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/global.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/style.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/myCss.css"/>
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+</head>
+<body>
+<include file='Common:top'/>{/*最顶部*/}
+<include file='Common:header'/>{/*头部*/}
+ <!--content begin-->
+ <div class="content">
+<div style="width:1200px;margin:0 auto;">
+<include file='Member:leftNav'/>{/*左边导航*/}
+
+{/*右边区域*/}
+ <div class="sjzxr">
+<h2>你的位置：<a href="{:U('/Member')}" style="color:#666;">会员首页</a> > 退款退货管理</h2>
+  <div class="zjsc_grzx" style="font-family: '宋体';">
+   <h1 style="border-bottom:1px #ccc solid;padding-bottom: 0px;margin-bottom:10px; "><span>|</span>退款退货管理</h1>
+   <div class="jqddtable">
+   <table width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+	<tr><th style="height:30px;line-height:30px;">订单号</th><th>下单时间</th><th>订单总金额</th><th>应付金额</th><th>支付方式</th><th>订单状态</th><th>操作</th></tr>
+	<foreach name="orderList" item="nos">
+				 <tr>
+					 <td align="center"><strong style="font-size:14px;"><a href="{:U('/Member/orderShow',array('order_id'=>$ord['order_id']))}">{$nos.order_sn}</a></strong></td>
+					 <td align="center">{$nos.add_time|date='Y-m-d H:i:s',###}</td>
+					 <td align="center">￥<strong style="color:red;">{$nos.goods_amount}</strong> </td>
+					 <td align="center">￥<strong style="color:red;">{$nos.order_amount}</strong> </td>
+					 <td align="center"><if condition="$nos['pay_type']"><span style="color:blue;">在线支付</span><else />线下付款</if></td>
+					 <td align="center">
+						 <if condition="$nos['order_status'] eq -1"><!--订单状态-->     
+							  [已取消]
+					   <elseif condition="$nos['order_status'] eq 0"/>     
+							  [未确认]                                  
+					   <elseif condition="$nos['order_status'] eq 1"/>     
+							  [已确认]    
+					   <elseif condition="$nos['order_status'] eq 2"/>     
+							  [<span style="color:green;">交易完成</span>]         
+					   <elseif condition="$nos['order_status'] eq 3"/>     
+							  [退款]             
+					   <elseif condition="$nos['order_status'] eq 4"/>     
+							  [已退款]                                                                                                                                                                                                                  
+						</if> <!--订单状态结束-->
+                        
+                         <if condition="$nos['pay_status'] eq 0"><!--付款状态-->
+                             [ <span style="color:red;">未付款</span>]
+                        <elseif condition="$nos['pay_status'] eq 1"/>
+                              [付款中 ]    
+                       <elseif condition="$nos['pay_status'] eq 2"/>     
+                              [<span style="color:green;">已付款</span>]
+                        </if> <!--付款状态结束-->																		 
+
+					 </td>
+					 <td align="center">
+						<a class="col666" href="{:U('/Member/orderShow',array('order_id'=>$nos['order_id'],'refund'=>'ok'))}">查看</a>
+					</td>
+				 </tr>
+    </foreach>
+   </tbody></table>
+   </div>
+  </div><!--jqdd_grzx end-->
+  <div class="page2 pv15">{$page}</div>
+ </div><!--sjzxr end-->
+{/*右边区域*/}
+ </div>
+ </div>
+  <!--content end-->
+<include file='Common:footer'/>{/*页脚*/}		
+  
+</body>
+</html>

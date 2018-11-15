@@ -1,0 +1,71 @@
+
+<div class="pageHeader">
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+		    <if condition="access('Rbac/roleAdd')">
+			  <li><a class="add" href="{:U(APP_APPS.'/Rbac/roleAdd')}" target="dialog" title="添加角色" mask="true"><span>添加角色</span></a></li>
+			</if>
+      		<li class="line">line</li>
+		</ul>
+	</div>
+	<table class="list" width="100%" layoutH="88">
+		<thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th width="20%" >编号</th>
+                <th width="20%">角色名称</th>
+                <th width="20%" >角色描述</th>
+ 
+                <th width="38%" style="text-align:center;">操作</th>
+            </tr>			
+			
+		</thead>
+		<tbody>
+		    
+		   <volist name="role" id="r">
+		       
+		   <if condition="strtoupper($r['name']) eq strtoupper(C('ADMIN_KEY'))">
+		        <if condition="$_SESSION[C('SESSION_NAME_VAL')] eq C('RBAC_SUPERADMIN')">
+                        <tr target="sid_user" rel="{$i}">
+                            <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                            <td>{$r.id}</td>
+                            <td>{$r.name|tpl_modify_oen=###,'role','name',$r['id'],'id','Rbac/roleSave'}</td>
+                            <td>{$r.remark|tpl_modify_oen=###,'role','remark',$r['id'],'id','Rbac/roleSave'}</td>
+                            <td style="text-align:center;">
+                                {$action|tpl_action='dialog','Rbac/access','id/'.$r["id"],'给（'.strip_tags($r['name']).'）角色分派权限','icon_priv.gif','icon_priv.gif',900,550} <!--添加按钮--> 
+                                {$action|tpl_action='ajaxTodo','Rbac/roleDel','id/'.$r["id"].'/type/1','确定执行删除('.strip_tags($r['name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->          
+                            </td>
+                        </tr>          		            
+		         <else />
+                        <tr target="sid_user" rel="{$i}">
+                            <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                            <td>{$r.id}</td>
+                            <td>{$r.name}</td>
+                            <td>{$r.remark}</td>
+                            <td style="text-align:center;">
+                                <img src="__SYS_IMG__/no-icon_priv.gif" title="你没有权限"/>
+                                <img src="__SYS_IMG__/icon_drop_not.gif" title="你没有权限"/>       
+                            </td>
+                        </tr>        		            
+		        </if>
+		   <else />    
+                        <tr target="sid_user" rel="{$i}">
+                            <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                            <td>{$r.id}</td>
+                            <td>{$r.name|tpl_modify_oen=###,'role','name',$r['id'],'id','Rbac/roleSave'}</td>
+                            <td>{$r.remark|tpl_modify_oen=###,'role','remark',$r['id'],'id','Rbac/roleSave'}</td>
+                            <td style="text-align:center;">
+                                {$action|tpl_action='dialog','Rbac/access','id/'.$r["id"],'给（'.strip_tags($r['name']).'）角色分派权限','icon_priv.gif','icon_priv.gif',900,550} <!--添加按钮--> 
+                                {$action|tpl_action='ajaxTodo','Rbac/roleDel','id/'.$r["id"].'/type/1','确定执行删除('.strip_tags($r['name']).')？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->          
+                            </td>
+                        </tr>  	   
+		   </if>    		       
+          </volist> 
+
+		</tbody>
+	</table>
+</div>
+
+

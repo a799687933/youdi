@@ -1,0 +1,90 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/MemberAccount/accountAdjustForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <div class="pageFormContent nowrap" layoutH="97">
+            <dl>
+                <dt>当前用户：</dt>
+                <dd>
+                    <input  type="text" name="grade_name" value="<if condition="$member['user_name']">{$member['user_name']}<else />{$member['mobile_phone']}</if>" readonly="readonly" class="required" size="27"/>
+                    <input type="hidden" name="member_id" value="{$_GET['id']}"/>
+                </dd>
+            </dl>
+          
+          {/*会员资金帐户*/}  
+          <if condition="C('IS_ACCOUNT')">
+               <!-- <dl>
+                    <dt>可用资金：</dt>
+                    <dd>
+                        <select class="combox" name="select_il_m" class="required">
+                        <option value="1">增加</option>          
+                           <option value="0" >减少</option>
+                    </select> 
+                    <input type="text" name="member_money" class="required number"  value="0" size="18"/>&nbsp;当前值: ￥{$member.member_funds}
+                    </dd>
+                </dl>
+        
+                <dl>
+                    <dt>冻结资金：</dt>
+                    <dd>
+                        <select class="combox" name="select_il_f" class="required">
+                        <option value="1">增加</option>          
+                           <option value="0" >减少</option>
+                       </select> 
+                         <input type="text" name="frozen_money" class="required number" value="0"  size="18"/>&nbsp;当前值: ￥{$member.frozen_funds}
+                    </dd>
+                </dl>
+           </if>-->
+           {/*会员资金帐户结束*/}  
+           
+           {/*会员等级*/}
+           <if condition="C('IS_RANK_POINTS')">           
+             <dl>
+                <dt>等级积分：</dt>
+                <dd>
+                    <select class="combox" name="select_il_r" class="required">
+                    <option value="1">增加</option>          
+                       <option value="0" >减少</option>
+                   </select> 
+                     <input type="text" name="rank_points" class="required number" value="0" size="18"/>&nbsp;当前值:{$member.rank_points}
+                </dd>
+            </dl>
+          </if>
+          {/*会员等级结束*/}            
+            
+           {/*会员消费积分*/}
+           <if condition="C('IS_PAY_POINTS')">
+               <dl>
+                <dt>消费积分：</dt>
+                <dd>
+                    <select class="combox" name="select_il_p" class="required">
+                    <option value="1">增加</option>          
+                       <option value="0" >减少</option>
+                   </select> 
+                     <input type="text" name="pay_points" class="required number" value="0" size="18"/>&nbsp;当前值: {$member.pay_points}
+                </dd>
+            </dl>
+        </if>
+        {/*会员消费积分结束*/}         
+           
+        <dl>
+            <dt>变动原因：</dt>
+            <dd>
+                 <textarea name="change_desc" style="width:600px;height:200px;" class="required"></textarea>
+            </dd>
+        </dl>
+                  
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

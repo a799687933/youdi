@@ -1,0 +1,1213 @@
+<script type="text/javascript">
+var recommend='{$goods.recommend}' ? '{$goods.recommend}' : 0;
+$(function(){
+
+    //计算市场价格返回本商城价格
+    $('.price-click2').click(function(){
+        var market_price=parseFloat($('#market_price1').val());        
+        if(market_price=='' || isNaN(market_price)) {alert('请输入市场价格');return;}
+        var retail_price=market_price * parseFloat("{:C('MARKETSRICERATIO')}");
+       $('#retail_price1').val(retail_price);
+       $('#retail_price1').focus();
+    });
+    
+    //打开促销    
+    if('{$promote["no_ffo"]}'){ //修改商品状态如果有促销信息默认可编辑状态
+        $('.promotion_price').attr('readonly',false);
+        $('.promotion_price').css('background','#fff');
+        $('.date').attr('disabled',false);
+        $('.date').css('background','#fff');
+		$('.numbers').attr('readonly',false).css('background','#fff');
+		$('#goodsFileToUpload1').attr('disabled',false);
+		$('#goods_imgloads1').show();
+    }else{
+        $('#goodsFileToUpload1').attr('disabled',true);
+        $('#goods_imgloads1').hide();       
+    }
+	
+    //点击事件
+    $('.promotion').click(function(){
+       if($(this).attr('checked')){          
+          $('.promotion_price').attr('readonly',false);
+          $('.promotion_price').css('background','#fff');
+		  $('.numbers').attr('readonly',false).css('background','#fff');
+          $('.date').attr('disabled',false);
+          $('.date').css('background','#fff');
+          $('#goodsFileToUpload1').attr('disabled',false);
+          $('#goods_imgloads1').show();
+      }else{
+          $('.promotion_price').attr('readonly','readonly').val('');
+          $('.promotion_price').css('background','#eee');
+          $('.date').attr('disabled','disabled');
+          $('.date').css('background','#eee');
+		  $('.numbers').attr('disabled','disabled').css('background','#eee').val('');
+		  $('#goodsFileToUpload1').attr('disabled',true);
+		  $('#goods_imgloads1').hide();
+      }
+   });
+   
+   //选择商品属性
+   $('.goods-attr').change(function(){
+        var openUrl="{:U(APP_APPS.'/Goods/goodsSendForm','','')}"+"/get_attr/ok/goods_attr_type_id/"+$(this).val();
+        var response=callAjaxDo(openUrl+'/type/ok','text');//获取数据    
+        $('.atrr-tr').html(response);  
+   });  
+   
+   $('input[name="attr_value_list[]"]').live('click',function(){
+		 var _this=$(this);		
+		 var prev=_this.prev();
+		 if(_this.attr('checked')){
+			 prev.val(_this.val());
+		 }else{
+			 prev.val('');
+		 }   
+   });
+   //checkedx商品属性付值到隐藏域
+  /* $('input[name="attr_value_list[]"').live('click',function(){
+		 var _this=$(this);		
+		 var prev=_this.prev();
+		 if(_this.attr('checked')){
+			 prev.val(_this.val());
+		 }else{
+			 prev.val('');
+		 }
+	});   */
+     
+   //商品关联检索
+    $('.pro-ajax').click(function(){
+         var url="{:U(APP_APPS.'/Search/retrieval','','')}";
+         retrieval(url,'s_name','cart-ajax','bra-ajax',1,'selectLeftProList');
+    }); 
+  
+   //商品关联检索
+    $('.acc-ajax').click(function(){
+         var url="{:U(APP_APPS.'/Search/retrieval','','')}";
+         retrieval(url,'acc_name','acc-cart-ajax','acc-bra-ajax',0,'selectLeftacc');
+    }); 
+     
+    //指定会员价格
+   $('#retail_price1').blur(function(){
+         var prev=0;
+         if(!isNaN($(this).val())){
+            var data=<if condition="$json_date">{$json_date}<else />{}</if>;
+            var len=$('.grade_price').length;
+                for(var i=0;i<len;i++){
+                    prev=(data[i].discount/100)*$(this).val();
+                    $($('.grade_price')[i]).val(prev);
+                }
+        }else{
+            alert('本店价格必须是数字！');
+        }      
+   });
+   
+   //修改商品时是否已有推荐
+   if(recommend==1){
+       $('.temp-name-s,.open-temps').show();
+   }
+   
+   //打开分类推荐
+   $('input[name="recommend"]').click(function(){
+         if($(this).val()==1){
+		     $('.temp-name-s').show();
+		 }else{
+		     $('.temp-name-s').hide();
+		 }
+   });   
+   
+});
+
+//复制节点
+function addNode(node){
+      $(function(){
+        var tr=$(node).parent().parent();     
+        var str=$(tr).clone(true);     
+        str='<tr>'+$(str).html()+'</tr>';
+        str=str.replace('addNode', 'delNode');
+        str=str.replace('[+]', '[-]');
+        var s=/data\=\"1\" value\=\"[0-9.]+\"/ ;  
+        str=str.replace(s,'value="0"');
+       $(tr).after(str);    
+      });
+}
+
+//删除节点
+function delNode(_this){
+      $(function(){
+        $(_this).parent().parent().remove();         
+      });
+} 
+
+
+ //AJAX获取区域
+function getPlace(_ths,node){
+   if(!arguments[1]) node = "";	
+   var urls=$(_ths).attr('to-url');
+    if($(_ths).val() > 0){
+      $.ajax({
+         type:'post',
+         dataType: "json",
+         url:urls+"/region_id/"+$(_ths).val()+'/city/ajax',
+         success:function(response,status,xhr){
+            var str='<option value="">请选择</option>';
+            for(var i in response){
+                str+='<option value="'+ response[i].region_id +'">'+ response[i].region_name +'</option>';
+            }
+            if($(_ths).next('select').length >0){
+                $(_ths).next().html(str);
+            }    
+			if(node){
+			      var htmlString=$(_ths).children('option:selected').text();
+				  $(node).val(htmlString);			
+			}
+          }
+       });    
+   }                              
+}  
+
+//检索下级分类
+function whereClass(key,id){
+	var url="{:U(APP_APPS.'/Goods/goodsSendForm','','')}/id/"+ id +'/key/'+ key +'/cate/ajax';
+	var tr=$('.show-trs');
+	for(var i=tr.length;i > 0;i--){
+		tr.eq(i).remove();
+		if(i<=key) break;
+	}
+	$.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			//分类
+		    if(response.cates) tr.eq(key-1).after(response.cates);
+			//分类品牌
+			if(response.b){
+				if(response.bands) {
+					$('#bands-td').html(response.bands); 
+					$('#bands').show();
+				}else{
+					$('#bands-td').html(''); 
+					$('#bands').hide();			
+				}
+			}
+		  }
+   });		 
+}
+
+///获取字母品牌
+function getBrandBAC(abc,_this){
+      $('.boands').attr('class','boands');
+	  $(_this).attr('class','boand-on boands');
+	  var url="{:U(APP_APPS.'/Goods/goodsSendForm','','')}/bac/"+abc+'/band_bac/ajax';
+	  var result=callAjaxDo(url,'text');
+      $('#brand_data').html(result);  
+}
+
+//删除属性图片
+function delAttrImg(num){
+   var inputValId=$('#val_'+num);
+   var img=$('#imgs_'+num);
+   inputValId.val('');
+   img.attr('src',img.attr('default-img'));
+}
+</script>
+<script type="text/javascript" src="__J_UI__/js/DialogEditorSize.js"></script>
+<style type="text/css">
+.temp-name-s,.open-temps{
+    display:none;
+ }
+.boand-on{
+	color:#f60;
+	} 
+</style>
+        <div class="pageContent">
+        <div class="tabs" currentindex="1" eventtype="click">
+            <div class="tabsHeader">
+                <div class="tabsHeaderContent">
+                    <ul>    
+                        <li></li> 
+                        <li ><a href="javascript:;"><span>通用信息</span></a></li>
+                        <li ><a href="javascript:;"><span>其它信息</span></a></li>                            
+                        <!--<li ><a href="javascript:;"><span>产品详情</span></a></li>-->
+                         <if condition="C('IS_GOODS_PARAMETERS')"><li ><a href="javascript:;"><span>规格参数</span></a></li></if>
+                         <if condition="C(IS_GOODS_AFTER_SALES)"><li ><a href="javascript:;"><span>售后保障</span></a></li></if>
+                         <li ><a href="javascript:;"><span>商品相册</span></a></li>
+                         <if condition="C('IS_GOODS_ATTRIBUTE')"><li ><a href="javascript:;"><span>商品属性</span></a></li></if>
+                         <if condition="C('IS_GOODS_LINK')"><li ><a href="javascript:;"><span>关联商品</span></a></li></if>
+                        <if condition="C('IS_GOODS_ACCESSORIES')"><li ><a href="javascript:;"><span>关联配件</span></a></li></if>
+                        <if condition="C('IS_GOODS_LINK_ARTICLE')"><li ><a href="javascript:;"><span>关联文章</span></a></li></if>  
+                        <if condition="C('IS_GOODS_ZHUHE')"><li ><a href="javascript:;"><span>组合购买</span></a></li></if>         
+                    </ul>
+                </div>
+            </div>
+
+                <form method="post" action="{:U(APP_APPS.'/Goods/goodsSendForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+                    <if condition="!$_GET['copy']"><input type="hidden" name="id" value="{$goods.id}" /></if>{/*复制商品/商品修改的ID*/}
+                    <input type="hidden" name="inventory_id" value="{$_REQUEST['inventory_id']}"/>
+                    <input type="hidden" name="storage_id" value="{$storage_id}"/>
+                    <input type="hidden" name="goods_num" value="{$goods.goods_num}" /><!--商品货号-->
+                    <input type="hidden" name="type" value="{$_REQUEST['type']}" />
+					<input type="hidden" name="action" value="{$_REQUEST['action']}" /><!--返回的跳转方法名称-->
+
+                <div class="tabsContent" style="background:#fff;" layoutH="70">
+                    <div inited="1000" style="display: block;"></div><!--占位-->    
+                    
+                    <div inited="1000" style="display: block;"><!--通用资料内容-->
+               
+                        <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+                          {/*商品分类*/}
+                          <if condition="$selectCate">
+                             <foreach name="selectCate" item="sc" key="keyis">
+                                  <tr class="show-trs">
+                                     <td align="right" style="text-align:right;">{$keyis}级分类：</td>
+                                     <td align="left" id="radio-content{$keyis}">
+                                       <foreach name="sc['lists']" item='C'>   
+                                          <label>
+                                          <input type="radio" 
+                                                 value="{$C.id}" 
+                                                 name="<if condition="$keyis eq $countCate">goods_category_id<else />category_{$keyis}</if>"
+                                                 <if condition="$C['selected']">checked="echecked"</if>  
+												 onclick="whereClass({$keyis},{$C.id})"
+												 />
+												 {$C.name}
+                                          </label>
+                                       </foreach>                 
+                                     </td>
+                                 </tr>    
+                              </foreach>                  
+                          <else />
+                            <tr class="show-trs">
+								<td  style="text-align:right;">1级分类：</td>
+								<td align="left" id="radio-content1">
+                                       <foreach name="oenCate" item='C'>   
+                                          <label>
+                                          <input type="radio" 
+                                                 value="{$C.id}" 
+                                                 <php>if($C['is_child']){</php>
+                                                     name="category_1"                                                                                                      
+                                                 <php>}else{</php>
+                                                     name="goods_category_id"    
+                                                 <php>}</php>		
+                                                 onclick="whereClass(1,{$C.id})"										 
+												 />
+												 {$C['name']}
+                                          </label>
+                                       </foreach>        										  				  							  
+                                 </td>
+							 </tr>
+                           </if>   
+                           <tr><td style="height:10px;"></td></tr>
+                            {/*商品分类结束*/}         
+							                 
+                            <!--供货商
+                              <tr><td style="text-align:right;" width="10%">供货商：</td><td>  
+                                   <select class="combox" name="goods_supplier">
+                                      <option value="0">选择供货商</option>
+                                      <foreach name="supplier" item='C'>                       
+                                       <option value="{$C.id}" <if condition="$goods['goods_supplier'] eq $C['id']">selected="selected"</if>>{$C.html}{$C.name}</option>
+                                     </foreach>  
+                                   </select>  
+                            </td></tr>
+                            <!--供货商结束-->
+                            
+                           {/*商品品牌*/}
+							<if condition="C('IS_GOODS_BRAND')">
+                            <tr id="bands" style="display:<if condition="$bands">table-row<else />none</if>;">
+                                 <td  style="text-align:right;">商品品牌：</td>
+                                 <td id="bands-td">{$bands}</td>
+                           </tr>
+                           <tr><td colspan="2" style="height:10px;"></td></tr>
+						   </if>
+                         {/*商品品牌结束*/}
+						  
+						{/*商品城市选择*/}   
+						 <if condition="C('IS_GOODS_CITY_SELECT')">
+                          <tr ><td  style="text-align:right;">选择区域：</td><td>
+                            <select class=" " name="city" id="city">
+                                     <option value="0">-选择城市-</option>
+                                <foreach name="citys" item="c">
+                                      <if condition="$c['region_type'] eq 1">
+                                          <optgroup label="{$c.region_name}">{$c.region_name}</optgroup>                                        
+                                      <else />
+                                         <option value="{$c['region_id']}" <if condition="$goods['city'] eq $c['region_id']">selected="selected"</if>>{$c.html}{$c.region_name}</option>
+                                      </if>                                     
+                                </foreach>
+                              </select>       
+                            </td></tr>
+                          </if>
+                         {/*商品城市选择结束*/}   
+                         
+                         <tr>
+                              <td  style="text-align:right;width:120px;" >上传商品图片1：</td>
+                              <td>
+                                  <input type="hidden" name="goods_thumb"  value="{$goods.goods_thumb}" id="goods_thumb"/>
+                                 <input name="file2" type="file" id="goodsFileToUpload"  
+                                 onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>220,'height'=>293))}',
+                                 'goodsFileToUpload','goods_imgloads_show','goods_thumb','','ac-show','__ROOT__','goods_imgloads');" style="width:70px;"/> 
+                                 图片规格：220 * 293
+                        </td>
+                      </tr>
+                        
+                      <tr style="<if condition="!$goods['goods_thumb']">display:none;</if> " id="goods_imgloads">
+                            <td  style="text-align:right;"></td>
+                          <td style="margin:10px 0;">
+                               <img src="__ROOT__/{$goods.goods_thumb}" 
+                               id="goods_imgloads_show" width="100" height="" style="display:inline-block;position:relative;top:5px;bottom:" class="ac-show"/>
+                         </td>
+                         </tr>
+                          <tr><td colspan="2" style="height:10px;"></td></tr>
+
+                         <tr>
+                              <td  style="text-align:right;" >上传商品图片2：</td>
+                              <td>
+                                  <input type="hidden" name="goods_thumb2"  value="{$goods.goods_thumb2}" id="goods_thumb2"/>
+                                 <input name="file3" type="file" id="goodsFileToUpload2"  
+                                 onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>220,'height'=>293))}',
+                                 'goodsFileToUpload2','goods_imgloads_show2','goods_thumb2','','ac-show2','__ROOT__','goods_imgloads2');" style="width:70px;"/> 
+                                 图片规格：220 * 293
+                        </td>
+                      </tr>
+                        
+                      <tr style="<if condition="!$goods['goods_thumb2']">display:none;</if> " id="goods_imgloads2">
+                            <td  style="text-align:right;"></td>
+                          <td style="margin:10px 0;">
+                               <img src="__ROOT__/{$goods.goods_thumb2}" 
+                               id="goods_imgloads_show2" width="100" height="" style="display:inline-block;position:relative;top:5px;bottom:" class="ac-show2"/>
+                         </td>
+                         </tr>
+                          <tr><td colspan="2" style="height:10px;"></td></tr>
+                                                                               
+                           <foreach name="goodsNames" item="t">
+                            <tr>
+                                 <td  style="text-align:right;">({$t['info']})商品名称：</td>
+                                 <td>
+                                     <input type="text" name="{$t['field']}" 
+                                                 value="{$goods[$t['field']]}" maxlength="250" 
+                                     class="required" size="50" style="margin:3px 0;"/>
+                                 </td>
+                           </tr>                
+                          </foreach> 
+                            
+                        <tr>
+                             <td  style="text-align:right;">市场价格：</td>
+                             <td>
+                                 <input type="text" name="goods.market_price" 
+                                             value="{$goods.goods_market_price}" maxlength="250" 
+                                             id="market_price1" class="required number" size="50" 
+                                 style="margin:3px 0;"/>
+                              </td>
+                        </tr>
+
+                             <tr>
+                                  <td  style="text-align:right;">本店售价：</td>
+                                  <td>
+                                        <input type="text" name="goods.retail_price" 
+                                                   value="{$goods.goods_retail_price}" 
+                                                   maxlength="250" 
+                                                   class="required number" id="retail_price1" 
+                                         size="50" style="margin:3px 0;float:left;margin-right: 3px;"/>
+                                         <a class="button price-click2" href="javascript:;" >
+                                         <span>本商城零售价格({:C('MARKETSRICERATIO')*100}%)</span></a>
+                                  </td>
+                           </tr>
+                           
+                            {/*商品库存*/}
+                            <tr>
+                                 <td  style="text-align:right;">商品库存数量：</td>
+                                 <td>
+                                        <input type="text"  name="stock" class="digits" 
+                                        size="50" value="<if condition="$goods['stock']">{$goods['stock']}<else />0</if>" 
+                                        style="margin:3px 0;"> 
+                                 </td>
+                            </tr>     
+                           {/*商品库存*/}                                
+                            
+                            {/*指定会员等级价格*/}
+							<if condition="C('IS_GOODS_MEMBER_PRICE')">
+								<tr>
+                                    <td  style="text-align:right;">会员价格：</td>
+                                    <td>
+                                       <foreach name="member" item="M" key='k'>
+                                           <input type="hidden" value="{$M.id}" name="member_grade_id[]" />
+                                       {$M.grade_name}
+                                       <input type="text" name="grade_price[]" 
+                                       maxlength="250" class="number grade_price" size="7" value="{$grade[$k]['member_price']}" style="margin:3px 0;"/>&nbsp;
+                                       </foreach> 
+                                       <br/>
+                                       <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                       <span style="color:#666;">
+                                             默认会员价格按会员等级折扣率计算。你也可以为每个等级指定一个固定价格,如果设置为0即没有会员等级价格。
+                                      </span>   
+								</td>
+                               </tr>
+							</if>
+                           {/*指定会员等级价格结束*/}
+                           
+                           {/*商品优惠价格 开始*/}
+                           <if condition="C('IS_GOODS_VOLUME_PRICE')">
+                            <volist name="volume" id='v'>
+                                <tr>
+                                     <td style="text-align:right;"><a href="javascript:;" onclick="delNode('preferes');">[-]</a>商品优惠价格：</td>
+                                     <td>
+                                    优惠数量
+                                    <input type="text" name="discount_sum[]" 
+                                    maxlength="250" class="number textInput" size="10" value="{$v.discount_sum}" style="margin:3px 0;">
+                                     优惠价格
+                                     <input type="text" name="preferential[]" 
+                                     maxlength="250" class="number textInput" size="10" value="{$v.preferential}" style="margin:3px 0;">
+                                     <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                     <span style="color:#666;">购买数量达到优惠数量时享受的优惠价格</span>                       
+                               </td></tr>
+                            </volist>
+                            <tr class="preferes"><td  style="text-align:right;"><a href="javascript:;" onclick="addNode(this);">[+]</a>商品优惠价格：</td><td>
+                                优惠数量<input type="text" name="discount_sum[]" maxlength="250" class="number" size="10" style="margin:3px 0;"/>
+                                优惠价格<input type="text" name="preferential[]" maxlength="250" class="number" size="10" style="margin:3px 0;"/>
+                                 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                 <span style="color:#666;">享受价格</span>                       
+                           </td></tr>
+                         </if>  
+                         {/*商品优惠价格 结束*/}
+                          
+                         {/*赠送消费积分数*/}
+                           <if condition="C('IS_PAY_POINTS')">
+                             <tr>
+                                   <td  style="text-align:right;">赠送消费积分数：</td>
+                                   <td>
+                                     <input type="text" name="pay_points" 
+                                     maxlength="250" class="required" size="50" 
+                                     value="<if condition="$goods['pay_points'] AND $goods['pay_points'] egt 0">{$goods['pay_points']}<else />-1</if>" style="margin:3px 0;"/>
+                                     <br/><img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                     <span style="color:#666;">购买该商品时赠送消费积分数,-1表示按商品价格赠送,0表示不赠送消费积分;大于0表示按输入值赠送</span>
+                                  </td>
+                            </tr>
+                            <tr><td colspan="2" style="height:10px;"></td></tr>        
+                            </if>
+                           {/*赠送消费积分数结束*/}
+                            
+                          {/*赠送等级积分数*/}
+                          <if condition="C('IS_RANK_POINTS')">
+                            <tr>
+                                  <td  style="text-align:right;">赠送等级积分数：</td>
+                                  <td>
+                                     <input type="text" name="rank_points" 
+                                     maxlength="250" class="" size="50"  
+                                     value="<if condition="$goods['rank_points'] AND $goods['rank_points'] egt 0">{$goods['rank_points']}<else />-1</if>" style="margin:3px 0;"/>
+                                     <br/><img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                     <span style="color:#666;">购买该商品时赠送等级积分数,-1表示按商品价格赠送,0表示不赠送等级积分;大于0表示按输入值赠送</span>
+                                  </td>
+                           </tr>      
+                          </if>         
+                          {/*赠送等级积分数结束*/}
+                           
+                           {/*积分购买金额*/}
+                           <if condition="C('IS_PAY_POINTS')">
+                               <tr>
+                                    <td  style="text-align:right;">积分购买金额：</td>
+                                    <td>
+                                         <input type="text" name="integral_amount" 
+                                         maxlength="250" class="required digits" size="50" 
+                                         value="<if condition="$goods['integral_amount']">{$goods['integral_amount']}<else />0</if>" style="margin:3px 0;"/>
+                                         <br/><img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                         <span style="color:#666;">(此处需填写金额)购买该商品时最多可以使用积分的金额</span>                                            
+                                    </td>
+                                </tr>      
+                                <tr><td colspan="2" style="height:10px;"></td></tr>        
+                            </if>
+                          {/*积分购买金额结束*/}  
+
+                         {/*是否支持优惠卷*/} 
+                          <if condition="C('IS_BONUS')">
+                            <tr><td  style="text-align:right;">是否支持优惠卷：</td><td>
+                                    <input type="radio" value="1" name="is_discount" <if condition="$goods['is_new'] eq 1">checked="checked"</if>/>支持
+                                    <input type="radio" name="is_discount" value="0" <if condition="$goods['is_new'] eq '0'">checked="checked"<elseif condition="$goods['is_new'] eq ''" />checked="checked"</if>/>不支持
+                           </td></tr>     
+                          </if>
+                          {/*是否支持优惠卷结束*/}                          
+
+                           {/*商品每次限购*/}
+                           <!--<tr>
+                                <td  style="text-align:right;">商品每次限购：</td>
+                                <td>
+                                 <input type="text" name="buy_limit" 
+                                            maxlength="250" class="required digits" 
+                                            size="50" value="<if condition="$goods['buy_limit']">{$goods['buy_limit']}<else />0</if>" 
+                                 style="margin:3px 0;"/>
+                                 <br/><img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                 <span style="color:#666;">购买该商品时限购数量。</span>   
+                                  </td>
+                            </tr>      
+                            <tr><td colspan="2" style="height:10px;"></td></tr>-->                                                                            
+                          {/*商品每次限购结束*/}
+                           
+                           {/*促销模块*/}  
+                           <if condition="C('IS_PROMOTION')">
+                           <tr>
+                                <td  style="text-align:right;">
+                                       促销价格 
+                                       <input type="checkbox" name="is_promotion"  class="promotion" 
+                                       <if condition="$promote['no_ffo'] AND $promote['promotion_end_date']">checked="checked"</if>  value="1">
+                                 </td>
+                                 <td>
+                                     <input type="text" name="promotion_price" 
+                                     maxlength="250" class="number promotion_price" size="12" 
+                                     value="{$promote['promotion_price']}" style="margin:3px 0;" readonly="readonly"/><!-- 促销价格 promotion_price-->
+                                     促销数量:<input type="text" size="12" 
+                                                       name="numbers" class="number numbers" 
+                                                       value="<if condition="$promote['numbers']">{$promote['numbers']}<else />0</if>" readonly="readonly" />    
+                                     <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">      
+                                     <span style="color:#666;">达到此数量，促销活动自动结束。</span>                                              
+                                  </td>
+                           </tr>   
+                                                         
+                            <tr><td colspan="2" style="height:10px;"></td></tr>                     
+                            <tr>
+                                  <td  style="text-align:right;">促销日期：</td>
+                                  <td>
+                                <if condition="$promote['promotion_start_date']  AND $promote['promotion_end_date'] ">
+                                     <input type="text" name="promote_start_date"  
+                                     class="date textInput readonly valid" size="18"  
+                                     style="margin:3px 0;float:left;" disabled="disabled" 
+                                     value="{$promote.promotion_start_date|date='Y-m-d',###}"/><!-- 促销日期开始 promote_start_date-->    
+                                     <span class="inputDateButton" href="javascript:;" style="float:left;position:relative;top:3px;padding-left:3px;" disabled="disabled">选择</span>       
+                                     <input type="text" name="promote_end_date"  
+                                     class="date textInput readonly valid" size="18"  
+                                     style="margin:3px 0;float:left;" disabled="disabled" 
+                                     value="{$promote.promotion_end_date|date='Y-m-d',###}"/><!-- 促销日期结束 promote_end_date-->    
+                                     <span class="inputDateButton" href="javascript:;" style="float:left;position:relative;top:3px;padding-left:3px;" disabled="disabled">选择</span>
+                                <else />
+                                      <input type="text" name="promote_start_date"  
+                                      class="date textInput readonly valid" size="18"  
+                                      style="margin:3px 0;float:left;" disabled="disabled" value="{:date('Y-m-d',time())}"/><!-- 促销日期开始 promote_start_date-->    
+                                      <span class="inputDateButton" href="javascript:;" style="float:left;position:relative;top:3px;padding-left:3px;" disabled="disabled">选择</span>
+                                     <input type="text" name="promote_end_date"  
+                                     class="date textInput readonly valid" size="18"  
+                                     style="margin:3px 0;float:left;" disabled="disabled" value="{:date('Y-m-d',time()+2592000)}"/><!-- 促销日期结束 promote_end_date-->    
+                                     <span class="inputDateButton" href="javascript:;" style="float:left;position:relative;top:3px;padding-left:3px;" disabled="disabled">选择</span>
+                                </if>                                                 
+                            </td></tr>    
+                            <tr>
+                                  <td  style="text-align:right;" >促销广告图片：</td>
+                                  <td>
+                                      <input type="hidden" name="promotion_img"  value="{$goods.promotion_img}" id="goods_thumb1" />
+                                     <input name="file3" type="file" id="goodsFileToUpload1"  
+                                     onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>465,'height'=>334))}',
+                                     'goodsFileToUpload1','goods_imgloads_show1','goods_thumb1','','ac-show1','__ROOT__','goods_imgloads1');"/> 
+                            </td>
+                          </tr>
+                            
+                          <tr style="<if condition="!$goods['promotion_img']">display:none;</if> " id="goods_imgloads1">
+                                <td  style="text-align:right;"></td>
+                              <td style="margin:10px 0;">
+                                   <img src="__ROOT__/{$goods.promotion_img}" 
+                                   id="goods_imgloads_show1" width="150" height="100" style="display:inline-block;position:relative;top:5px;bottom:" class="ac-show1"/>
+                             </td>
+                             </tr>
+                          <tr><td colspan="2" style="height:10px;"></td></tr>                                                                            
+                          </if>                         
+                        {/*促销模块 结束*/}
+                                                                                                      
+						 {/*是否新品*/} 
+						  <if condition="C('IS_GOODS_NEW')">
+                            <tr><td  style="text-align:right;">是否新品：</td><td>
+                                    <input type="radio" value="1" name="is_new" <if condition="$goods['is_new'] eq 1">checked="checked"</if>/>是
+                                    <input type="radio" name="is_new" value="0" <if condition="$goods['is_new'] eq 0">checked="checked"</if>/>否
+                           </td></tr>     
+                          </if>
+                          {/*是否新品结束*/}
+                           
+                           {/*本店推荐*/}
+                           <if condition="C('IS_RECOMMEND')">
+                            <tr><td  style="text-align:right;">本店推荐：</td><td>
+                                    <input type="radio" value="1" name="recommend" <if condition="$goods['recommend'] eq 1">checked="checked"</if>/>是
+                                    <input type="radio" name="recommend" value="0" <if condition="$goods['recommend'] eq 0">checked="checked"</if>/>否
+                           </td></tr>      
+                           </if>
+                          {/*本店推荐结束*/}
+                           
+                           {/*热销商品*/}	
+                           <if condition="C('IS_GOODS_HOT')">				                             
+                            <tr><td  style="text-align:right;">热销商品：</td><td>
+                                    <input type="radio" value="1" name="hot" <if condition="$goods['hot'] eq 1">checked="checked"</if>/>是
+                                    <input type="radio" name="hot" value="0" <if condition="$goods['hot'] eq 0">checked="checked"</if>/>否
+                           </td></tr>      
+                           </if>       
+                          {/*热销商品结束*/}
+                         
+                         {/*每周优惠*/}   
+                          <if condition="C('IS_GOODS_WEEK')">            
+                            <tr><td  style="text-align:right;">每周优惠：</td><td>
+                                    <input type="radio" value="1" name="is_week" <if condition="$goods['is_week'] eq 1">checked="checked"</if>/>是
+                                    <input type="radio" name="is_week" value="0" <if condition="$goods['is_week'] eq 0">checked="checked"</if>/>否
+                           </td></tr>
+                           </if>    
+                           {/*每周优惠结束*/}
+                           
+                            <tr><td  style="text-align:right;">是否上架：</td><td>
+                                <input type="radio" value="1" name="shelves" <if condition="$goods['shelves'] eq 1">checked="checked"<elseif condition="$goods['shelves'] eq ''" />checked="checked"</if>/>上架
+                                <input type="radio" value="0" name="shelves" <if condition="$goods['shelves'] eq '0'">checked="checked"</if>/>下架                                                 
+                          </td></tr>
+
+                          {/*物流模板*/}
+                            <if condition="C('IS_GOODS_LOGISTICS')" >
+                            <tr><td  style="text-align:right;">物流运费模板：</td>
+							      <td>
+										<select class="combox" name="logistics_tpl_id" >
+												 <option value="0">-请物流运费模板-</option>
+												  <foreach name="logisticsTpl" item='C'>                       
+												   <option value="{$C.id}" <if condition="$goods['logistics_tpl_id'] eq $C['id']">selected="selected"</if>>{$C.tpl_name}</option>
+												 </foreach>  
+										  </select>      
+								  </td>
+							</tr>
+                            </if>
+                          {/*物流模板结束*/}                                                                                               
+                        </table>
+                                                                           
+                    </div><!--通用资料内容结束-->             
+                           
+                    <!--其它信息资料内容-->
+                    <div inited="1000" style="display: block;">  
+                        <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+                        
+                           {/*商品重量*/}
+                             <!--<tr>
+                                 <td  style="text-align:right;" width="20%">商品重量：</td>
+                                 <td>
+                                     <input type="text" name="goods_weight" 
+                                                 maxlength="250" value="{$goods.goods_weight}" 
+                                     class="digits" size="38" style="margin:0 3px 3px 0;float:left;margin-right:5px;"/>
+                                     <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">      
+                                     <span style="color:#666;">以(克)为单位整数</span>                    
+                                 </td>
+                            </tr>-->
+                           {/*商品重量结束*/}
+
+                            {/*商品体积*/}
+                            <!--
+                             <tr><td  style="text-align:right;" width="20%">商品体积：</td><td>
+                                     <input type="text" name="volume_m3" 
+                                             maxlength="250" value="{$goods.volume_m3}"
+                                    class="digits" size="38" style="margin:0 3px 3px 0;float:left;margin-right:5px;"/>
+                                    <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">      
+                                     <span style="color:#666;">以(cm3)为单位整数</span>                    
+                            </td></tr>-->
+                           {/*商品体积结束*/}
+                                                       
+							                            
+                            <!--库存警告数量
+                              <tr><td  style="text-align:right;">库存警告数量：</td><td><input type="text" name="stock_warning" class="digits" size="50" value="<if condition="$goods['stock_warning']">{$goods['stock_warning']}<else />1</if>" style="margin:3px 0;">                              
+                            </td></tr>                                                 
+                             <!--库存警告数量结束-->
+                             
+                             <!--是否普通销售或作为配件
+                             <tr><td  style="text-align:right;">普通商品销售：</td><td><input type="checkbox" name="is_general" <eq name="goods['is_general']" value="1">checked="checked"</eq> value="1"> 
+                                 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                 <span style="color:#666;">打勾表示能作为普通商品销售，否则只能作为配件或赠品销售。</span>
+                            </td></tr>
+                           <!--是否普通销售或作为配件结束-->
+                           
+                           {/*是否为免运费商品*/}
+                           <!--<tr><td  style="text-align:right;">是否为免运费商品：</td><td><input type="checkbox" <eq name="goods['is_free']" value="1">checked="checked"</eq> name="is_free" value="1"> 
+                                 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                 <span style="color:#666;">打勾表示此商品不会产生运费花销，否则按照正常运费计算。</span>
+                            </td></tr>-->                                   
+                            {/*是否为免运费商品结束*/}
+                            
+                            <!-- 发货仓库-- >
+                            <foreach name="warehouses" item="t">
+                            <tr>
+                                  <td  style="text-align:right;">({$t['info']})发货仓库：</td>
+                                  <td>
+                                      <input type="text"  name="{$t['field']}" class="" size="50" value="{$goods[$t['field']]}" style="margin:3px 0;"> 
+                                 </td>
+                            </tr>   
+                            </foreach>  
+                            <!--发货仓库 -->    
+
+                            <!-- 发货仓库-- >
+                            <foreach name="expresss" item="t">
+                            <tr>
+                                <td  style="text-align:right;">({$t['info']})快递说明：</td>                                
+                                <td>
+                                    <input type="text"  name="{$t['field']}" class="" size="50" value="{$goods[$t['field']]}" style="margin:3px 0;"> 
+                                </td>
+                            </tr>     
+                            </foreach> 
+                            <!--发货仓库 -->                                
+
+                         <tr>
+                              <td  style="text-align:right;width:120px;" >尺码介绍图(中文)：</td>
+                              <td>
+                                  <input type="hidden" name="cn_size_img"  value="{$goods.cn_size_img}" id="cn_size_img"/>
+                                 <input name="file10" type="file" id="cn_size_img1"  
+                                 onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'','remove'=>'','width'=>'','height'=>''))}',
+                                 'cn_size_img1','cn_size_img_show','cn_size_img','','cn_size_img-show','__ROOT__','cn_size_img_imgloads');" style="width:70px;"/> 
+                                 图片规格：宽度 531px  ，高度自由扩展
+                        </td>
+                      </tr>
+                        
+                      <tr style="<if condition="!$goods['cn_size_img']">display:none;</if> " id="cn_size_img_imgloads">
+                            <td  style="text-align:right;"></td>
+                          <td style="margin:10px 0;">
+                               <img src="__ROOT__/{$goods.cn_size_img}" 
+                               id="cn_size_img_show" width="100" height="" style="display:inline-block;position:relative;top:5px;bottom:" class="cn_size_img-show"/>
+                         </td>
+                         </tr>
+                          <tr><td colspan="2" style="height:10px;"></td></tr>
+
+                         <tr>
+                              <td  style="text-align:right;width:120px;" >尺码介绍图(英文)：</td>
+                              <td>
+                                  <input type="hidden" name="us_size_img"  value="{$goods.us_size_img}" id="us_size_img"/>
+                                 <input name="file11" type="file" id="us_size_img1"  
+                                 onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'','remove'=>'','width'=>'','height'=>''))}',
+                                 'us_size_img1','us_size_img_show','us_size_img','','us_size_img-show','__ROOT__','us_size_img_imgloads');" style="width:70px;"/> 
+                                 图片规格：宽度 531px  ，高度自由扩展
+                        </td>
+                      </tr>
+                        
+                      <tr style="<if condition="!$goods['us_size_img']">display:none;</if> " id="us_size_img_imgloads">
+                            <td  style="text-align:right;"></td>
+                          <td style="margin:10px 0;">
+                               <img src="__ROOT__/{$goods.us_size_img}" 
+                               id="us_size_img_show" width="100" height="" style="display:inline-block;position:relative;top:5px;bottom:" class="us_size_img-show"/>
+                         </td>
+                         </tr>
+                          <tr><td colspan="2" style="height:10px;"></td></tr>
+                                                                                
+                            {/*商品关键字*/}
+                            <foreach name="commodityKeys" item="t">
+                                <tr>
+                                    <td  style="text-align:right;">({$t['info']})关键字：</td>
+                                    <td>
+                                        <input type="text" name="{$t['field']}" 
+                                        maxlength="250" value="{$goods[$t['field']]}" 
+                                        class="" size="50" style="margin:3px 0;"/>
+                                        <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+                                        <span style="color:#666;">多个商品关键字用豆号隔开</span>
+                                     </td>
+                                </tr>
+                             </foreach>    
+                           {/*商品关键字结束*/}
+                             
+                           {/*商品描述*/}
+                           <foreach name="commodityDescription" item="t">
+                            <tr>
+                                 <td  style="text-align:right;">({$t['info']})商品描述：</td>
+                                 <td>          
+                                    <textarea name="{$t['field']}" cols="50" rows="5" 
+                                    style="margin-bottom:3px;">{$goods[$t['field']]}</textarea>
+                                  </td>
+                            </tr>   
+                            </foreach>                                          
+                          {/*商品描述结束*/}
+                            
+                          {/*商家备注*/}
+                             <tr><td  style="text-align:right;width:120px;">商家备注：</td><td>          
+                                <textarea name="business_notes" cols="50" rows="5" class="">{$goods.business_notes}</textarea>
+                                <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:-70px;">
+                                 <span style="color:#666;position:relative;top:-73px;">仅供商家自己看的信息</span>
+                            </td></tr>                                      
+                          {/*商家备注结束*/}
+                        </table>
+                                                                           
+                    </div><!--其它信息资料内容结束-->            
+          
+                    {/*文档祥细内容*/}
+                    <!--<div inited="1000" style="display: block;">
+                           <foreach name="contents" item="t">
+                               <if condition="C('LANG_SWITCH_ON')">  
+                                   <p style="color:#03408b;height:40px;line-height:40px;
+                                   font-weight:bold;border:1px #ccc solid;font-size:16px;
+                                   text-indent:10px;margin-top:20px;background:#F0F0EE;
+                                   border-bottom:none;width:100%">({$t.info})文档内容</p>
+                              </if>                 
+                                <textarea name="{$t.field}" class="kindeditor"  up-url="{:U(APP_APPS."/UploadFile/upload",'','')}?dwz=ok" space-url=""
+                                  >{$goods[$t['field']]|stripcslashes=###}</textarea>   
+                          </foreach>                           
+                    </div>-->
+                    {/*文档祥细内容结束*/}
+                    
+                    {/*规格参数*/}
+                    <if condition="C('IS_GOODS_PARAMETERS')">
+                    <div inited="1000" style="display: block;">
+                       <style type="text/css">table{border-collapse: collapse;}</style> 
+                       <table cellpadding="0" cellspacing="0" border="0" class="prarm-list">
+                           <if condition="$goods[pfix('parameters')]">
+                             <foreach name="goods[pfix('parameters')]" item="pr" key="keyps">
+                               <tr style="border-bottom: 1px solid #ccc;">
+                                   <td style="padding:5px 0;text-align: right;">
+                                        <if condition="$keyps eq 0">
+                                            <a href="javascript:void(0);" onclick="addNodepc(this)">[+]</a>
+                                        <else />
+                                            <a href="javascript:void(0);" onclick="delNodepc(this)">[-]&nbsp;</a>
+                                        </if>
+                                           
+                                           <foreach name="parameterss" item="par" key="pkeys">
+                                              参数名称({$par['info']})&nbsp;<input type="text" value="{$goods[$par['field']][$keyps]['par_name']}" name="{$par['field']}[]"/>
+                                              <br/><br/>
+                                           </foreach>
+                                   </td>
+                                   <td style="text-align: left;" >
+                                          <foreach name="parameterss" item="par">
+                                           &nbsp;<span style="position:relative; top:-20px;">参数值</span>&nbsp;<!--<input type="text" value="{$goods[$par['field']][$keyps]['par_value']}" name="{$par['field']}_val[]"/>-->
+                                           <textarea name="{$par['field']}_val[]" style="width:300px;height: 60px;">{$goods[$par['field']][$keyps]['par_value']}</textarea>
+                                          <span style="position:relative; top:-20px;">({$par['info']})</span>
+                                           <br/>
+                                          </foreach>
+                                   </td>
+                               </tr>
+                            </foreach>
+                          <else />
+                               <tr style="border-bottom: 1px solid #ccc;">
+                                   <td style="padding:5px 0;text-align: right;">
+                                           <a href="javascript:void(0);" onclick="addNodepc(this)">[+]</a>
+                                           <foreach name="parameterss" item="par" key="pkeys">
+                                              参数名称({$par['info']})&nbsp;<input type="text" value="" name="{$par['field']}[]"/>
+                                              <br/><br/>
+                                           </foreach>
+                                   </td>
+                                   <td style="text-align: left;" >
+                                          <foreach name="parameterss" item="par">
+                                           &nbsp;<span style="position:relative; top:-20px;">参数值</span>&nbsp;<!--<input type="text" value="" name="{$par['field']}_val[]"/>-->
+                                           <textarea name="{$par['field']}_val[]" style="width:300px;height: 60px;"></textarea>
+                                           <span style="position:relative; top:-20px;">({$par['info']})</span>
+                                           <br/>
+                                          </foreach>
+                                   </td>
+                               </tr>                            
+                          </if>  
+                       </table>
+                    </div>
+                    <script type="text/javascript">
+                        //复制节点
+                        function addNodepc(node){
+                              $(function(){
+                                var tr=$(node).parent().parent();     
+                                var str=$(tr).clone(true);     
+                                str='<tr class="seat"><td colspan="2" style="height:8px;"></td></tr><tr style="border-bottom: 1px solid #ccc;margin-bottom:10px;">'+$(str).html()+'</tr>';
+                                str=str.replace('addNodepc', 'delNodepc');
+                                str=str.replace('[+]', '[-]&nbsp;');		
+                               $(node).parents('table').append(str);    
+                               var emptyVlaue=$('.prarm-list').find('tr').last();
+                               emptyVlaue.find('input[type="text"]').val('');
+                               emptyVlaue.find('textarea').val('');
+                              });
+                        }
+                        
+                        //删除节点
+                        function delNodepc(_this){
+                              $(function(){
+                                  var tr=$(_this).parent().parent();
+                                  var prev=tr.prev();   
+                                  tr.remove();                                       
+                                  if(prev.attr('class')=='seat'){
+                                      prev.remove();
+                                  }
+                              });
+                        } 
+                    </script>
+                    </if>
+                  {/*规格参数结束*/}             
+                    
+                    {/*售后服务*/}
+                    <if condition="C('IS_GOODS_AFTER_SALES')">
+                        <div inited="1000" style="display: block;">
+                           <foreach name="afterSales" item="t">
+                               <if condition="C('LANG_SWITCH_ON')">  
+                                   <p style="color:#03408b;height:40px;line-height:40px;
+                                   font-weight:bold;border:1px #ccc solid;font-size:16px;
+                                   text-indent:10px;margin-top:20px;background:#F0F0EE;
+                                   border-bottom:none;width:100%">({$t.info})售后服务</p>
+                              </if>                           
+                                <textarea name="{$t.field}" class="kindeditor"  up-url="{:U(APP_APPS."/UploadFile/upload",'','')}?dwz=ok" space-url=""
+                                  >{$goods[$t['field']]|stripcslashes=###}</textarea>   
+                           </foreach>
+                        </div>
+                    </if>
+                  {/*售后服务结束*/}      
+                  
+                  {/*相关相册的内容*/}
+                    <div inited="1000" style="display: block;">
+                        <p style="height: 10px;padding-bottom:10px;">商品相册: 
+                        <input name="file3" type="file" id="fileToUpload7" 
+                        onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','remove'=>'ok','width'=>1000,'height'=>1334))}'
+                        ,'fileToUpload7','setimgdiv','__ROOT__','');" style="width:70px;"> 图片规格：1000 * 1334 
+                        </p>  
+                        <div class="divider"></div> 
+                        <!--这里上传图片-->
+                        <foreach name="photo" item='p'>
+                          <div class="divigm" style="float:left;margin:3px;position:relative;">
+                               <span 
+                                         style="display:block;width:200px;background:#000;filter:alpha(opacity=30);
+                                         -moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;
+                                         position:absolute;left:0;top:0;">
+                                 <b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer;float:right;color:red;font-size:16px;" title="'+closes+'">×</b>
+                              </span>
+                                   <a href="__ROOT__/{$p.img}" target="_blank">
+                                          <img src="__ROOT__/{$p.img}" width="200" height="180" style="display:block;"/>
+                                  </a>
+                                   <input type="hidden" value="{$p.img}" name="imgAll[]"/>
+                                   <input type="text" name="title[]" style="width:197px;height:16px;font-size:12px;border:none;" value="{$p.img_bewrite}"  
+                                   placeholder=""/>
+                           </div>
+                        </foreach>                           
+                       <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;">
+                             <img src="{:C('__IMG__')}/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/>
+                       </div>              
+                    </div>
+                    {/*相关相册的内容结束*/}   
+                    
+                    {/*商品属性*/}
+					<if condition="C('IS_GOODS_ATTRIBUTE')">
+						 <div inited="1000" style="display: block;">
+							 <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+								 <tr><td  style="text-align:right;" width="10%">商品属性类型：</td><td>
+									<select class="combox required goods-attr" name="goods_attr_type_id" >
+											 <option value="0">-商品属性类型-</option>
+											  <foreach name="attrType" item='C'>       
+											   <option value="{$C.id}" 
+                                               <if condition="$goods['goods_attr_type_id'] eq $C['id']">selected="selected"</if> >{$C[pfix('name')]}</option>                                               
+											 </foreach>  
+									  </select>     
+									 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;">
+									 <span style="color:#666;">请选择商品的属性类型，进而完善此商品的属性</span>                                      
+								</td></tr>
+														
+							<tr><td colspan="2">
+								<table style="width:100%;margin:0 auto;" class="atrr-tr">
+								   {$attrList}
+								</table>
+							</td></tr>
+							 
+							</table>                
+						 </div>     
+					 </if>           
+                   {/*商品属性结束*/}    
+                    
+                  {/*关联商品*/}
+                  <if condition="C('IS_GOODS_LINK')">
+                     <div inited="1000" style="display: block;">
+                              <table cellpadding="0" cellspacing="0" class="tableshide  tableshow5" border="0" style="width:100%;">
+                              <tr> 
+                               <td colspan="3" class="tdleft" style="height:30px;line-height:30px;"> 
+                                    <select class="combox cart-ajax" name="" >
+                                             <option value="0">-全部分类-</option>
+                                              <foreach name="goodCat" item='C'>                       
+                                               <option value="{$C.id}">{$C.html}{$C[pfix('name')]}</option>
+                                             </foreach>  
+                                      </select>  
+                                    <if condition="C('IS_GOODS_BRAND')">   
+                                     <select class="combox bra-ajax" name="" >
+                                         <option value="0">-全部品牌-</option>
+                                          <foreach name="brandList" item='C'>                       
+                                           <option value="{$C.id}">{$C.html}{$C.name}</option>
+                                         </foreach>  
+                                  </select>      
+                                  </if>                                                                      
+                                 <input type="text" name="s_name" class="tdinpt" style="float:left;padding-left:5px;"/>
+                             </span> <a class="button pro-ajax" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" ><span>检索</span></a>  
+                              </td>
+                              </tr>
+                             
+                              <tr>
+                                <th style="height:30px;line-height:30px;text-indent:10px;">可选商品</th>
+                                <th style="text-align:center;">操作</th>
+                                <th>跟该商品关联的商品</th>
+                              </tr>
+                              <tr>
+                                <td width="45%">          
+                                  <select name="" size="20" style="width:100%" multiple class="selectLeftProList">
+                                  </select>             
+                                </td>
+                                <td align="center" style="text-align:center;">
+                                  <p><br />
+                                       <input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  />
+                                  </p><br />
+                                   <p style="text-align: center;">
+                                   <label>
+                                          <input type="radio" value="1" name="two_way" checked="checked" style="position:relative;top:3px;" class="radios"/>双向关联
+                                   </label>
+                                   </p><br />
+                                   <p style="text-align: center;">
+                                        <label>
+                                             <input type="radio" value="0" name="two_way"style="position:relative;top:3px;" class="radios"/>单向关联
+                                         </label>
+                                   </p><br />                                  
+                                  <p>
+                                       <input type="button" value=" >> " onclick="leftValueOen('selectLeftProList','selectRightProList','radios');" class="upbutton" />
+                                   </p><br />
+                                  <p><input type="button" value=" << " onclick="rightValueOen('selectRightProList');" class="upbutton" /></p><br />
+                                </td>
+                                <td width="45%">
+                                  <select name="link_goods_id[]" size="20" style="width:100%" multiple class="selectRightProList">
+                                      <foreach name="goodsRelation" item="g">
+                                          <option value="{$g.link_goods_id}-<eq name="g.is_double" value="1">1<else />0</eq>" selected="selected">
+                                             <eq name="g['is_double']" value="1"> {$g.goods_name}<----- >双向关联<else />{$g.goods_name}---- >单向关联</eq>
+                                         </option>
+                                      </foreach>
+                                  </select>
+                                </td>
+                               </tr>      
+                                </table>              
+                     </div>
+                   </if>  
+                   {/*关联商品结束*/}                 
+                    
+                    {/*关联配件*/}
+                    <if condition="C('IS_GOODS_ACCESSORIES')"> 
+                         <div inited="1000" style="display: block;">
+                              <table cellpadding="0" cellspacing="0" class="tableshide  tableshow5" border="0" style="width:100%;">   
+                              <tr> 
+                               <td colspan="3" class="tdleft" style="height:30px;line-height:30px;"> 
+                                <select class="combox acc-cart-ajax" name="" >
+                                         <option value="0">-全部分类-</option>
+                                          <foreach name="goodCat" item='C'>                       
+                                           <option value="{$C.id}">{$C.html}{$C.name}</option>
+                                         </foreach>  
+                                  </select>   
+                                 <select class="combox acc-bra-ajax" name="" >
+                                     <option value="0">-全部品牌-</option>
+                                      <foreach name="brand" item='C'>                       
+                                       <option value="{$C.id}">{$C.html}{$C.name_cn}</option>
+                                     </foreach>  
+                              </select>                                                                            
+                             <input type="text" name="acc_name" class="tdinpt" style="float:left;padding-left:5px;"/>
+                             </span> <a class="button acc-ajax" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" ><span>检索</span></a>  
+                              </td>
+                              </tr> 
+                           
+                              <tr>
+                                <th style="height:30px;line-height:30px;text-indent:10px;">可选商品</th>
+                                <th style="text-align:center;">操作</th>
+                                <th>该商品的配件</th>
+                              </tr>
+                              <tr>
+                                <td width="45%">          
+                                  <select name="" size="20" style="width:100%" multiple class="selectLeftacc">
+                                  </select>             
+                                </td>
+                                <td align="center" style="text-align:center;">
+                                  <p><br /><input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  /></p><br />
+                                  <p><input type="button" value=" >> " onclick="leftValueOen('selectLeftacc','selectRightacc');" class="upbutton" /></p><br />
+                                  <p><input type="button" value=" << " onclick="rightValueOen('selectRightacc');" class="upbutton" /></p><br />
+                                </td>
+                                <td width="45%">
+                                  <select name="acc_relevance_id[]" size="20" style="width:100%" multiple class="selectRightacc">
+                                      <foreach name="accessories" item="a">
+                                          <option value="{$a.goods_acc_id}" selected="selected">{$a.goods_name}</option>
+                                      </foreach>
+                                  </select>
+                                </td>
+                               </tr>      
+                                </table>                                           
+                     </div>
+                     </if>
+                   {/*关联配件结束*/}           
+                                
+                  {/*关联文章内容*/}
+                  <if condition="C('IS_GOODS_LINK_ARTICLE')">
+                    <div inited="1000" style="display: block;">
+                          <table cellpadding="0" cellspacing="0" class="tableshide  tableshow5" border="0" style="width:100%;">     
+                          <tr> 
+                           <td colspan="3" class="tdleft" >                      
+                         <span style="float:left;position:relative;top:4px;right:3px;"> 标题 </span><input type="text" name="titletext" id="titletext" class="tdinpt" style="float:left;margin-right: 5px;"/>               
+                        <select class="" id="files_id" style="float:left;">
+                            <option value="0">选择分类</option>
+                            <foreach name="cage" item="s">
+                                <option value="{$s.files_id}">{$s.html}{$s.files_name}</option>
+                            </foreach>
+                       </select>                                 
+                         </span> <a class="button upbutton" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" onclick="searchArticle('{:U(APP_APPS.'/Search/article','','')}','article','id','titletext','files_id','selectLeft')"><span>检索</span></a>  
+                          </td>
+                      </tr>  
+                             
+                      <tr>
+                        <th>可选文章</th>
+                        <th style="text-align:center;">操作</th>
+                        <th>关联文章</th>
+                      </tr>
+                      <tr>
+                        <td width="45%">          
+                          <select name="selectLeft[]" size="20" style="width:100%" multiple class="selectLeft">
+                          </select>             
+                        </td>
+                        <td align="center" style="text-align:center;">
+                          <p><br /><input name="price2" type="hidden" size="6" /><input name="is_single" type="hidden"  /></p><br />
+                          <p><input type="button" value=" >> " onclick="leftValueOen('selectLeft','selectRight');" class="upbutton" /></p><br />
+                          <p><input type="button" value=" << " onclick="rightValueOen('selectRight');" class="upbutton" /></p><br />
+                        </td>
+                        <td width="45%">
+                          <select name="selectLinkArticle[]" size="20" style="width:100%" multiple class="selectRight">
+                              <foreach name="article" item="a">
+                                  <option value="{$a.article_id}" selected="selected">{$a.titletext}</option>
+                              </foreach>
+                          </select>
+                        </td>
+                       </tr>      
+                        </table>
+                </div>
+               </if> 
+             {/*关联文章内容结束*/}
+
+           {/*组合购买*/}
+            <div inited="1000" style="display: block;">  
+                <table cellpadding="0" cellspacing="0" class="mytable" style="width:100%;margin:0 auto;">
+                    <tr>
+                         <td  style="text-align:right;width:60px;">商品名称：</td>
+                         <td>
+                             <input type="text" name="goods_zhuhe" style="float:left;width:200px;" />
+                             <a class="button" href="javascript:;" style="float:left;position:relative;top:-3px;left:3px;" onclick="sahceGoods()" >
+                                  <span>检索</span>
+                             </a> 
+                        </td>
+                   </tr>   
+                   <tr><td colspan="2" style="height:20px;"></td></tr>
+                   <tr>
+                       <td colspan="2">
+                          <table style="width:100%;margin:0 auto;" class="goods-zhuhe-link">
+                               {$ZuHeGoods}
+                         </table>
+                    </td>
+                 </tr>  
+                 <tr><td colspan="2" style="height:20px;"></td></tr>
+             </table>
+            </div>  
+            <style type="text/css">
+                .show-goods11{background:#ccc;border-spacing:1px;border-collapse:separate;}
+				.show-goods11 tr td{background:#fff;text-align:center;padding:5px 0;}
+           </style>  
+           <script type="text/javascript">
+		         //检索商品
+				 function sahceGoods(){
+					    var gooodsName=$('input[name="goods_zhuhe"]').val();
+					    if(gooodsName==''){
+							alert('请先输入关键字');
+							return;
+						}
+						var openUrl="{:U(APP_APPS.'/Goods/goodsSendForm','','')}?zhu=ok&keywords="+gooodsName+"&goods_cate_id=0";
+						var response=callAjaxDo(openUrl,'text');//获取数据    
+						$('.goods-zhuhe-link').append(response);  				 
+				 }
+				 
+                 //删除
+				 function delLikeGoods(_this){
+				    $(_this).parents('.goods-list').remove();
+				 }
+           </script>      
+           {/*组合购买结束*/}           
+               
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,90 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    
+     <input type="hidden" value="{$_REQUEST['shops_id']}" name="shops_id"/>     
+     <input type="hidden" value="{$_REQUEST['consignee']}" name="consignee"/>   
+     <input type="hidden" value="{$_REQUEST['add_time']}" name="add_time"/> 
+     <input type="hidden" value="{$_REQUEST['order_status']}" name="order_status"/> 
+     <input type="hidden" value="{$_REQUEST['shipping_status']}" name="shipping_status"/>
+     <input type="hidden" value="{$_REQUEST['pay_status']}" name="pay_status"/>
+</form>
+
+<div class="pageHeader">
+        <form onsubmit="return navTabSearch(this);" action='' method="post">
+        <div class="searchBar">
+            <table class="searchContent">
+                <tr>
+                    <td>
+                      商户ID：<input type="text" name="shops_id" value="{$_REQUEST['shops_id']}" size="20"/>                                                         
+                    </td>             
+                    <td>
+                        <div class="buttonActive" ><div class="buttonContent"><button type="submit">检索</button></div></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </form>
+</div>
+
+<div class="pageContent">
+    <div class="panelBar">
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="10%">交易号</th>
+                <th width="14%" >商户名称</th>
+                <th >支付宝号</th>
+                <th>支付宝交易号</th>
+                <th >支付金额</th>
+                <th >返利(<if condition="$shopTrade[0]['rebate_dot']">{$shopTrade[0]['rebate_dot']}<else />{:C('CODEBUYBACKS')}</if>%)</th>               
+                 <th>实际支付金额</th>
+				<th>交易时间</th>
+				<th>支付状态</th>
+                <th>操作者</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+           <foreach name="shopTrade" item="V">
+            <tr target="sid_user" rel="10">
+                <td><if condition="$V['trade_sn'] gt 0">{$V.trade_sn}<else />未发起支付请求</if></td>
+                <td>{$V.shop_name}</td>
+                <td>{$V.shop_alipay_num}</td>
+                <td><if condition="$V['alipay_sn'] gt 0">{$V.alipay_sn}<else />未发起支付请求</if></td>
+                <td>￥{:number_format($V['amount'] / 100,2, '.', '')}</td>
+                <td>({$V.rebate_dot}%)￥{:number_format($V['rebate_amount'] / 100,2, '.', '')}</td>
+                <td>￥{:number_format($V['actual_amount'] / 100,2, '.', '')}</td>
+                <td>{$V.times|date='Y-m-d H:i:s',###}</td>
+				  <td>   
+                           <if condition="$V['pay_status'] eq -1">
+                               <span style="color:red;">支付失败</span>
+                           <elseif condition="$s['pay_status'] eq 0" />	   
+                               未发起支付请求
+                          <elseif condition="$V['pay_status'] eq 1" />	
+                               <span style="color:green;">支付成功</span>
+                           </if>
+                     </td>
+					 <td>{$V.operator}</td>
+                <td>
+                  <a href="{:U(APP_APPS.'/OrderInfo/showTrade',array('id'=>$V['id']))}" target="dialog" rel="showTrade" mask="true" title="查看备注" class="auto-size">查看备注</a>         
+                </td>
+            </tr>
+          </foreach>  
+        </tbody>
+    </table>
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>

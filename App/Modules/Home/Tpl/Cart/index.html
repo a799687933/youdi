@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('ShoppingBag'),'购物袋')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<link rel="stylesheet" href="__HOME__/css/jquery.bxslider.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/alertAjax.js"></script>
+<script type="text/javascript" src="__HOME__/js/tipso.min.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+/*function removeNode(node){
+    $('.'+node).remove();
+}*/
+$(function(){
+	
+	/** w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 $(".jsr").css("width",w1-w2-10)
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw2")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw2")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});	**/
+	
+	
+$(document).on('click', ".djgg", function(){
+       $(this).hide()
+	   $(this).siblings(".djqx").show()
+	   $(this).siblings(".ggxz").css("display","inline-block")
+	   $(this).siblings(".djval").hide()
+});
+$(document).on('click', ".djqx", function(){
+       $(this).hide()
+	   $(this).siblings(".djgg").show()
+	   $(this).siblings(".ggxz").hide()
+	   $(this).siblings(".djval").show()
+    });
+	
+$(document).on('change', ".shul",function(){
+	var sltxt=$(this).find("option:selected").text();
+	$(this).parent(".ggxz").siblings(".djval").text(sltxt);
+	$(this).parent(".ggxz").hide();
+	$(this).parent(".ggxz").siblings(".djval").show();
+	$(this).parent(".ggxz").siblings(".djqx").hide();
+	$(this).parent(".ggxz").siblings(".djgg").show();
+	var parents=$(this).parents('.update-attr');
+	var goods_id=parents.find('input[name="goods_id"]').val();
+	var number=parents.find('select[name="goods_num"]').val();
+	var cart_id=parents.find('input[name="cart_id"]').val();
+	var attr=parents.find('select[name="attr_id[]"]');
+	var ids='';
+	for(var i=0;i < attr.length;i++)  ids+=attr.eq(i).val()+',';
+	var url="{:get_up_url(array('add'=>'ok'),U('Cart/addCart','',''),true)}&goods_id="+goods_id+"&num="+number+'&attr_id='+ids+'&cart_id='+cart_id;
+	//alert(url);return;
+	//ajaxToHtml(url);
+	window.location.href=url;
+})
+
+$('.tip1').tipso({
+		useTitle: false,
+		position: 'left',
+		background: '#d6d6d4'
+	});
+	$('.tip2').tipso({
+		useTitle: false,
+		position: 'left',
+		background: '#d6d6d4'
+	});
+});
+
+/*愿望单加入购物车*/
+var t=0;
+var c=0;
+function addCarts(_this,goods_id){
+    var wishlis=$(_this).parents('.wishlis');
+	var goods_nums=wishlis.find('select[name="goods_nums"]');
+	if(!parseInt(goods_nums.val())){
+		var error=goods_nums.attr('error-class');
+		wishlis.find('.'+error).show();
+		clearTimeout(t);
+		t=setTimeout(function(){
+			wishlis.find('.'+error).hide();				
+		},3000);
+		return;
+	}
+	var attrs_ids=wishlis.find('select[name="attrs_ids[]"]');
+	
+	var ids='';
+	for(var i=0;i < attrs_ids.length;i++){
+	    var val=parseInt(attrs_ids.eq(i).val());
+		if(!val || isNaN(val)){
+			var error = attrs_ids.eq(i).attr('error-class');
+			wishlis.find('.'+error).show();
+			if(!wishlis.find('.'+error).css('display')=='none') return;
+			clearTimeout(c);
+			c=setTimeout(function(){
+				wishlis.find('.'+error).hide();				
+			},3000);
+			return;
+		}
+		ids+=attrs_ids.eq(i).val()+',';
+	}
+    var url="{:get_up_url(array('add'=>'ok'),U('Cart/addCart','',''),true)}&goods_id="+goods_id+"&num="+goods_nums.val()+'&attr_id='+ids;
+	//删除加入购物车的愿望单
+	var collurl="{:U('Cookie/deleteDoodsCollect','','')}?is_location=0&id="+goods_id;
+	$.ajax({
+		  type:'get',
+		  dataType:'json',
+		  url:collurl,
+		  success:function(response,status,xhr){
+			  window.location.href=url;
+			 /*$('body,html').stop().animate({
+				'scrollTop': 0,
+				'duration': 300,
+				'easing': 'ease-in'
+			  });		*/		  
+		  }
+	});
+	//加入购物车
+	//ajaxToHtml(url);
+	//window.location.href=url;
+}
+
+{/*从购物车移到原望单*/}
+function cartToColl(url){
+	var carUrl="{:U('Cart/index')}";
+	$.ajax({
+		  type:'get',
+		  dataType:'json',
+		  url:url,
+		  success:function(response,status,xhr){
+				 //ajaxToHtml(carUrl);
+				 window.location.href=carUrl;
+		  }
+	});    
+}
+
+
+
+</script>
+<style>
+ .chosen-drop li{ border:none !important}
+.jsr{ background:none !important; box-shadow:none !important}
+
+</style>
+</head>
+
+<body>
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+          <h1>{:isL(L('ShoppingBag'),'购物袋')}
+           <a href="{:U('Category/index')}" class="cola2b f12 fr pcno" style="font-weight:normal; font-size:13px; line-height:22px; margin-top:6.5px">{:isL(L('ContinueShopping'),'继续购物')}</a>
+          </h1>
+          <p> {:isL(L('DomenicoDolceAnd'),'Domenico Dolce和Stefano Gabbana两位设计师在意大利时尚圈扮演了举足轻重的角色。感性，妩媚的意大利时尚女性激起了两人的创作灵感，他们的设计风格性感中带干练，难怪在短短的30年内便能成功地将该品牌晋升为家喻户晓的奢侈品大牌。Farfetch现在就带您体验！')}</p>
+     </div><a href="{:U('Category/index')}" class="cola2b mt10 fr phno">{:isL(L('ContinueShopping'),'继续购物')}</a><div class="cb"></div></div>
+ </div>
+<div class="cb pb30"></div>
+<if condition="is_mobile()">
+<div class="gwdno ph20">
+        <h1>{:isL(L('ShoppingBag'),'购物袋')}</h1>
+        <div style=" position:relative; margin-bottom:30px;">
+         <php>$goodsIds1='';</php>       
+        <foreach name="cart['goods_list']" item="catrs">  
+               {/*保存提交商品ID*/}
+              <php>$goodsIds1.=$catrs['goods_id'].',';</php>        
+        </foreach>
+        <if condition="$goodsIds1">
+           <input type="button" 
+           value="{:isL(L('Settlement'),'结算')}"  class="jsr_btn" onClick="window.location.href='{:sign_url(array('ids'=>$goodsIds1,'total'=>$cart['total']),U('CheckOut/selectAddress'),'')}';"/>       
+           <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+          <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+          <else />
+          <input type="button" 
+           value="{:isL(L('Settlement'),'结算')}"  class="jsr_btn" />       
+           <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+          <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+          </if>
+      </div>
+       </div>
+<else>
+</if>
+<div class="jies">
+
+ <div class="jsl">
+ <if condition="is_mobile()">
+  
+  <if condition="!$cart['goods_list']">
+       <!--<p style="font-size: 16px;text-align: center;margin:50px 0;">{:isL(L('CartNotGoods'),'购物车还没有商品！')}</p>-->
+       <div class="gwdno">
+        <h1>{:isL(L('NoGoodsInYour'),'您的购物袋中暂无商品')}</h1>
+        <a href="{:U('Category/index')}">{:isL(L('ContinueShopping'),'继续购物')}</a>
+        <div class="cb pb30"></div>
+        <p>{:isL(L('BrowseBelowOur'),'浏览下方我们为您精心推荐的商品?')}</p>
+       </div>
+       
+       
+   <else />
+   <foreach name="cart['goods_list']" item="catrs">  
+
+   <div class="gouw remove-{$catrs['goods_id']} update-attr">
+   <input type="hidden" value="{$catrs['goods_id']}" name="goods_id" />
+   <input type="hidden" value="{$catrs['id']}" name="cart_id" />   
+    <div class="gouwt">
+     <div class="gouwtl">
+      <p>{:isL(L('Freight'),'预计运费')} ￥0.00</p>
+      <p class="colaaa">{:isL(L('PriceIsIncluded'),'价格已包含关税')}</p>
+     </div>
+     <div class="gouwtr"><span data-tipso="{:isL(L('ExceptTibetXinjiang'),'西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。')}" class="icon36 glyphs icon-info-circle tip1 tipso_style">&nbsp;</span></div>
+     <div class="cb"></div>
+    </div><!--gouwt end-->
+    <div class="gouwm">
+     <div class="gouwml"><a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}" target="_blank"><img src="__ROOT__/{$catrs['goods_thumb']}" alt=""/></a></div>
+     <div class="gouwmr">
+      <a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}" class="f16 col2a" style="font-family:"Polaris-Condensed-Bold","Polaris-Bold",sans-serif"><b>YOUDI WU</b></a>
+                  <p><a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}" class="col0b">{$catrs[pfix('goods_name')]|strip_tags=###}</a></p>
+                  <p class="pt5 pb10">{:isL(L('ProductNumber'),'商品编号')}：{$catrs.goods_sn}</p>
+                  <div>
+                  <span>{:isL(L('Number'),'数量')}：</span>
+                  <span class="djval">{$catrs.goods_number}</span>
+                  <div class="ggxz" style="display:inline-block; width:90px; display:none">
+                  <select name="goods_num" class="phoneselect shul">
+                    <option value="1" <if condition="$catrs['goods_number'] eq 1">selected="selected"</if>>1</option>
+                    <option value="2" <if condition="$catrs['goods_number'] eq 2">selected="selected"</if>>2</option>
+                    <option value="3" <if condition="$catrs['goods_number'] eq 3">selected="selected"</if>>3</option>
+                    <option value="4" <if condition="$catrs['goods_number'] eq 4">selected="selected"</if>>4</option>
+                    <option value="5" <if condition="$catrs['goods_number'] eq 5">selected="selected"</if>>5</option>
+                    <option value="6" <if condition="$catrs['goods_number'] eq 6">selected="selected"</if>>6</option>
+                    <option value="7" <if condition="$catrs['goods_number'] eq 7">selected="selected"</if>>7</option>  
+                    <option value="8" <if condition="$catrs['goods_number'] eq 8">selected="selected"</if>>8</option>
+                    <option value="9" <if condition="$catrs['goods_number'] eq 9">selected="selected"</if>>9</option>
+                    <option value="10" <if condition="$catrs['goods_number'] eq 10">selected="selected"</if>>10</option>
+                  </select>
+                  </div>
+                  <a href="javascript:void(0)" class="colaaa djgg ml10">{:isL(L('Change'),'更改')}</a>
+                  <a href="javascript:void(0)" class="colaaa djqx ml5" style="display:none">{:isL(L('Cancel'),'取消')}</a>
+                  
+                  </div><!--数量 end-->
+                  
+                  <foreach name="attrlist[$catrs['goods_id']]" item="attr" key="keysce">
+                      <div style="padding:5px 0 0">                   
+                      <span>{$attr['attribute_name']}：</span>
+                      <span class="djval">
+                          <php>
+                                foreach($attr['attr_list'] as $v){                              
+                                    foreach($catrs['goods_attr'] as $kects => $v1){
+                                         if($v1['value']['attr_id']==$v['attr_id']){
+                                            echo $v1['value'][pfix('attr_value')];
+                                            unset($catrs['goods_attr'][$kects]);
+                                            break;                                    
+                                         }
+                                    }
+                                }
+                           </php>
+                      </span>
+                      <div class="ggxz" style="display:inline-block; width:90px; position:relative; display:none">
+                      <select name="attr_id[]" class="phoneselect shul">
+                          <foreach name="attr['attr_list']" item="al">
+                            <option value="{$al['attr_id']}" 
+                               <php>
+                                      foreach($cart['select_attr'] as $v1){
+                                          if($v1['ga_id'] == $al['attr_id']){
+                                            echo 'selected="selected"';
+                                            break;
+                                         }
+                                      }
+                               </php>
+                          >{$al['attr_value']}</option>
+                          </foreach>
+                      </select>
+                      </div>
+                      <a href="javascript:void(0)" class="colaaa djgg ml10">{:isL(L('Change'),'更改')}</a>
+                      <a href="javascript:void(0)" class="colaaa djqx ml5" style="display:none">{:isL(L('Cancel'),'取消')}</a>
+                  </div><!--尺码 end-->
+                 
+                  </foreach>
+                   <p class="f16 lh30"><b>{:C('KTEC_H')}{:number_format($catrs['goods_price'] * $catrs['goods_number'],2, '.', '')}</b></p>
+     </div><!--gouwmr end-->
+     <div class="cb"></div>
+    </div><!--gouwm end-->
+    <div class="gouwb">
+     <a href="javascript:void(0);" onClick="cartToColl('{:U("Cookie/goodsCollect",array('id'=>$catrs['goods_id']))}');"  class="yid fl">
+                      {:isL(L('SavedForLater'),'移至愿望单')}
+                 </a>
+    <a href="javascript:void(0);" 
+                  onClick="myAlert('','','{:get_up_url(array('delete'=>mt_rand(1000,9000)),U('Cart/delCart','',''),true)}&ids={$catrs['goods_id']}','','',2)" 
+                  class="delete fr">{:isL(L('DeleteTtem'),'删除商品')}</a>
+                  <div class="cb"></div>
+    </div><!--gouwb end-->
+   </div><!--gouw end-->
+    <php>$goodsIds1.=$catrs['goods_id'].',';</php>
+    </foreach>
+   </if> 
+ <else/>
+  <div class="gwdlt">
+   <if condition="!$cart['goods_list']">
+       <p style="font-size: 18px;text-align: center;margin:50px 0;">{:isL(L('CartNotGoods'),'购物车还没有商品！')}</p>
+   <else />
+       <ul>
+           <php>$goodsIds1='';</php>       
+            <foreach name="cart['goods_list']" item="catrs">  
+                <li class="remove-{$catrs['goods_id']} update-attr">
+                <input type="hidden" value="{$catrs['goods_id']}" name="goods_id" />
+                <input type="hidden" value="{$catrs['id']}" name="cart_id" />
+                 <div class="hedbl">
+                      <table width="100%" height="100%">
+                           <tr>
+                               <td align="center" valign="middle" width="100%" height="100%">
+                                   <a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}" target="_blank"><img src="__ROOT__/{$catrs['goods_thumb']}" alt=""/></a>
+                               </td>
+                          </tr>
+                      </table>
+                 </div>
+                 <div class="hedbtxt">
+                  <a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}" target="_blank" class="f16 col2a" style="font-family:"Polaris-Condensed-Bold","Polaris-Bold",sans-serif"><b>YOUDI WU</b></a>
+                  <p><a href="{:U('Goods/index','','')}?html={$catrs['goods_id']}"  target="_blank" class="col0b">{$catrs[pfix('goods_name')]|strip_tags=###}</a></p>
+                  <p class="pt10 pb20">{:isL(L('ProductNumber'),'商品编号')}：{$catrs.goods_sn}</p>
+                  <div>
+                  <span>{:isL(L('Number'),'数量')}：</span>
+                  <span class="djval">{$catrs.goods_number}</span>
+                  <div class="ggxz" style="display:inline-block; width:150px; display:none">
+                  <select name="goods_num" class="chosen-select shul">
+                    <option value="1" <if condition="$catrs['goods_number'] eq 1">selected="selected"</if>>1</option>
+                    <option value="2" <if condition="$catrs['goods_number'] eq 2">selected="selected"</if>>2</option>
+                    <option value="3" <if condition="$catrs['goods_number'] eq 3">selected="selected"</if>>3</option>
+                    <option value="4" <if condition="$catrs['goods_number'] eq 4">selected="selected"</if>>4</option>
+                    <option value="5" <if condition="$catrs['goods_number'] eq 5">selected="selected"</if>>5</option>
+                    <option value="6" <if condition="$catrs['goods_number'] eq 6">selected="selected"</if>>6</option>
+                    <option value="7" <if condition="$catrs['goods_number'] eq 7">selected="selected"</if>>7</option>  
+                    <option value="8" <if condition="$catrs['goods_number'] eq 8">selected="selected"</if>>8</option>
+                    <option value="9" <if condition="$catrs['goods_number'] eq 9">selected="selected"</if>>9</option>
+                    <option value="10" <if condition="$catrs['goods_number'] eq 10">selected="selected"</if>>10</option>
+                  </select>
+                  </div>
+                  <a href="javascript:void(0)" class="colaaa djgg ml10">{:isL(L('Change'),'更改')}</a>
+                  <a href="javascript:void(0)" class="colaaa djqx ml5" style="display:none">{:isL(L('Cancel'),'取消')}</a>
+                  
+                  </div><!--数量 end-->
+                  
+                  <foreach name="attrlist[$catrs['goods_id']]" item="attr" key="keysce">
+                      <div style="padding:10px 0 0">
+
+                        <!--<span>{$catrs['goods_attr'][$keysce][pfix('name')]}：</span>
+                        <span class="djval">{$catrs['goods_attr'][$keysce]['value'][pfix('attr_value')]}</span>-->
+                       
+                      <span>{$attr['attribute_name']}：</span>
+                      <span class="djval">
+                          <php>
+                            foreach($attr['attr_list'] as $v){                              
+                                foreach($catrs['goods_attr'] as $kects => $v1){
+                                     if($v1['value']['attr_id']==$v['attr_id']){
+                                        echo $v1['value'][pfix('attr_value')];
+                                        unset($catrs['goods_attr'][$kects]);
+                                        break;                                    
+                                     }
+                                }
+                            }
+                          </php>
+                      </span>
+                      <div class="ggxz" style="display:inline-block; width:150px; position:relative; display:none">
+                      <!--<span style="display:inline-block; line-height:32px; z-index:10; color:#aaa; position:absolute; left:28px; top:0">号</span>-->
+                      <select name="attr_id[]" class="chosen-select shul">
+                          <foreach name="attr['attr_list']" item="al">
+                            <option value="{$al['attr_id']}" 
+                               <php>
+                                      foreach($cart['select_attr'] as $v1){
+                                          if($v1['ga_id'] == $al['attr_id']){
+                                            echo 'selected="selected"';
+                                            break;
+                                         }
+                                      }
+                               </php>
+                          >{$al['attr_value']}</option>
+                          </foreach>
+                      </select>
+                      </div>
+                      <a href="javascript:void(0)" class="colaaa djgg ml10">{:isL(L('Change'),'更改')}</a>
+                      <a href="javascript:void(0)" class="colaaa djqx ml5" style="display:none">{:isL(L('Cancel'),'取消')}</a>
+                  </div><!--尺码 end-->
+                  </foreach>
+                 </div>
+                 <div class="hedbtxt2">
+                 <p class="f16" style="padding:0"><b>{:C('KTEC_H')}{:number_format($catrs['goods_price'] * $catrs['goods_number'],2, '.', '')}</b></p>
+                 <div class="yzyyd">
+                  <a href="javascript:void(0);" onClick="cartToColl('{:U("Cookie/goodsCollect",array('id'=>$catrs['goods_id']))}');"  class="yid">
+                      {:isL(L('SavedForLater'),'移至愿望单')}
+                 </a>
+                 <span style="font-size:13px; color:#999;line-height:26px;">|</span>
+                 <a href="javascript:void(0);" 
+                  onClick="myAlert('','','{:get_up_url(array('delete'=>mt_rand(1000,9000)),U('Cart/delCart','',''),true)}&ids={$catrs['goods_id']}&cart_id={$catrs['id']}','','',2)" 
+                  class="delete">{:isL(L('DeleteTtem'),'删除商品')}</a>
+                  </div>
+                 </div>
+                 <div class="hedbr"><span data-tipso="{:isL(L('ExceptTibetXinjiang'),'西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。')}" class="icon36 glyphs icon-info-circle tip1 tipso_style">&nbsp;</span></div>
+                 <div class="cb"></div>
+                 
+                </li>
+                {/*保存提交商品ID*/}
+                <php>$goodsIds1.=$catrs['goods_id'].',';</php>
+           </foreach>
+        </ul>   
+   </if>   
+  </div><!---->
+  </if>
+ </div><!--jsl end-->
+ <div class="jsr" style="width:24%; padding:0; ">
+  <div class="jsrm" >
+  <h1>{:isL(L('Billing'),'结算')}</h1>
+  <p class="pb5 f12">{:isL(L('Subtotal'),'小计')}<span class="fr b f16">{:C('KTEC_H')} {$cart['total']}</span></p>
+  <!--<p class="myf">{:isL(L('FreeShipping'),'免费送货')}</p>-->
+  <p class="pb5 f12">{:isL(L('Delivery'),'配送')}<span class="fr b f16 huan">{:C('KTEC_H')} 0.00</span></p>
+  <div class="jsrb mt5">
+   <div class="pb20">{:isL(L('TotalCost'),'总计')}<span class="fr tr f16"><b>{:C('KTEC_CUR')} {:C('KTEC_H')} {$cart['total']}</b></span>
+    <p class="tr col999 lh18 f12">({:isL(L('ValueAddedTax'),'已含增值税')})</p>
+   </div>
+   <div style=" position:relative;">
+   <if condition="$goodsIds1">
+       <input type="button" 
+       value="{:isL(L('Settlement'),'结算')}"  class="jsr_btn" onClick="window.location.href='{:sign_url(array('ids'=>$goodsIds1,'total'=>$cart['total']),U('CheckOut/selectAddress'),'')}';"/>       
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+      <else />
+      <input type="button" 
+       value="{:isL(L('Settlement'),'结算')}"  class="jsr_btn" />       
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+      </if>
+      </div>
+   <!--<if condition="$goodsIds1">
+       <input type="button" 
+       value="{:isL(L('SaveAndContinue'),'保存并继续')}" class="jsr_btn" 
+       onClick="window.location.href='{:sign_url(array('ids'=>$goodsIds1,'total'=>$cart['total']),U('CheckOut/selectAddress'),'')}';"/>       
+   <else />
+       <input type="button" 
+       value="{:isL(L('SaveAndContinue'),'保存并继续')}" class="jsr_btn" 
+       style="background: #eee url(__HOME__/images/icon41.png) no-repeat 95% center;color:#ccc;border:1px solid #ccc;cursor:auto;"/>   
+   </if>-->
+  </div>
+  </div><!--gwdrt end-->
+  <!--<div class="gwdrb mt10">
+   <h1>{:isL(L('WhatTimeServed'),'什么时候送达')}</h1>
+   <p class="tj">
+        {:isL(L('NormalCircumstances'),'正常情况下，当天17点前下的订单，我们统一在当天给您发货。17点后下的订单，我们统一为隔天给您发货。')}
+   </p>
+  </div>-->
+  <div class="gwdrb mv10">
+   <h1><span class="khzxbicona3 mr5"><i class="fa fa-mail-reply"></i></span><span class="vam">{:isL(L('FreePickUp'),'免费退货与取货服务')}</span></h1>
+   <p class="tj">{:isL(L('JustAcceptMerc'),'我们提供无理由免费退货及退款服务。只要在接受商品的7天内要求退货，我们将会免费上门提取退货。')}</p>
+   <p>
+       <a href="{:U('Modular/shipping',array('html'=>$files[7][C('B_2')]['id']))}" class="col2ab" target="_blank">
+           {:isL(L('ClickHereForMore'),'点击此处了解更多详情')}{/*订单与寄送单页*/}
+       </a>
+    </p>
+  </div>
+ </div><!--gwdr end-->
+ <div class="cb pb20"></div>
+ <div class="zjll">
+  <div class="zjllt">
+   <ul>
+   	<li class="hover">{:isL(L('YouMayLike'),'您可能会喜欢')}</li>
+    <li>{:isL(L('RecentVisit'),'最近浏览过')}</li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+  
+  
+  <div class="zjllb"  >
+   <blockquote class="block">
+   <div class="slider2">
+      <include file="Piece/likes" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/likes.html */}
+    </div>
+   
+   </blockquote>
+   <blockquote>
+    
+    <div class="slider1">
+      <include file="Piece/visits" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/visits.html */}
+    </div>
+   </blockquote>
+   
+  </div><!--zjllb end-->
+   
+ </div><!--zjll end-->
+ 
+
+ <h1 class="col222 f14 b lh40 pt15 pl10" >{:isL(L('Wishlist'),'愿望单')}</h1>
+ <div class="gwdb pr">
+ <div id="ywd" style="background:#f00; width:100px; height:10px; position:absolute; left:0; top:-160px"></div>
+  <ul>
+    <foreach name="wishlistArr" item="w">
+  	<li class="wishlis">
+             <div class="ywdkd1">
+              <if condition="is_mobile()">
+              <table width="100%" height="100%">
+                     <tr>
+                         <td align="center" valign="middle" width="100%" height="100%">
+                             <a href="{:U('Goods/index',array('html'=>$w['id']))}" target="_blank"><img src="__ROOT__/{$w['goods_thumb']}" alt=""/></a>
+                         </td>
+                     </tr>
+                  </table>
+              <else/>
+              
+                 <table width="100%" height="100%">
+                     <tr>
+                         <td align="left" valign="middle" width="100%" height="100%">
+                             <a href="{:U('Goods/index',array('html'=>$w['id']))}" target="_blank"><img src="__ROOT__/{$w['goods_thumb']}" alt=""/></a>
+                         </td>
+                     </tr>
+                  </table>
+                  </if>
+              </div>
+             <div class="ywdkd2 lh20" >
+              <a href="{:U('Goods/index',array('html'=>$w['id']))}" target="_blank" class="logo3" style="font-family:'Polaris-Condensed-Bold','Polaris-Bold',sans-serif"></a>
+              <p><a href="{:U('Goods/index',array('html'=>$w['id']))}" target="_blank" class="col2ab b">{$w['goods_name']|strip_tags=###}</a></p>
+              <p class="pt10">
+                  <a href="javascript:void(0);" 
+                  onClick="ajaxToHtml('{:U('Cookie/deleteDoodsCollect',array('id'=>$w['id'],'is_location'=>0))}')"
+                 
+                  class="colab"  
+                  style="position:static !important;display:inline !important;background:none;">{:isL(L('DeleteTtem'),'删除商品')}</a>
+              </p>
+              <!--<p class="pt10 hedbtxt3 f16" style="display:block">￥ {$w['goods_retail_price']}</p>-->
+             </div>
+             <div class="ywdkd3" >
+              <p class="f16"><b>{:C('KTEC_H')}{$w['goods_retail_price']}</b></p>
+             </div>
+             <div class="hedbr2"><a href="#" class="icon36">&nbsp;</a></div>
+             <div class="ywdkd4">
+             {/*属性*/}
+             <foreach name="w['attr']" item="a" key="ak">
+             <if condition="is_mobile()">
+             <div class="mb20">
+               <php>$attr_cou=count($a['attr_list']);</php>
+                <select name="attrs_ids[]" error-class="error-info-{$ak}" class="phoneselect ">
+                       <!--<option value="0">{:isL(L('Select'),'选择')}{$a['attribute_name']}</option>-->
+                       <foreach name="a['attr_list']" item="b">
+                        <option value="{$b['attr_id']}" price="{$b['attr_price']}"  <if condition="$attr_cou eq 1">selected="selected"</if> attr-stock="{$b['attr_stock']}">{$b['attr_value']}</option>
+                       </foreach>
+                </select>
+               <!-- <p class="tsy2 error-info-{$ak}">{:isL(L('Required'),'必填项')}</p>-->
+            </div>
+             <else/>
+             
+             <div class="mb20">
+                <php>$attr_cou=count($a['attr_list']);</php>
+                <select name="attrs_ids[]" error-class="error-info-{$ak}" class="chosen-select ">
+                       <!--<option value="0">{:isL(L('Select'),'选择')}{$a['attribute_name']}</option>-->
+                       <foreach name="a['attr_list']" item="b">
+                        <option value="{$b['attr_id']}" price="{$b['attr_price']}" <if condition="$attr_cou eq 1">selected="selected"</if> attr-stock="{$b['attr_stock']}">{$b['attr_value']}</option>
+                       </foreach>
+                </select>
+                <!--<p class="tsy2 error-info-{$ak}">{:isL(L('Required'),'必填项')}</p>-->
+            </div>
+            </if>
+            </foreach>
+            
+            <div class="mb20">
+            <if condition="is_mobile()">
+               <select name="goods_nums" error-class="num-error" class="phoneselect" >
+            <else />
+               <select name="goods_nums" error-class="num-error" class="chosen-select" >
+            </if>
+            <!--<option value="0">{:isL(L('SelectNumberOf'),'选择数量')}</option>-->
+            <php>$selectnum=$w['stock'] > 10 ? 10 : ($w['stock'] > 0 ? $w['stock'] : 1);</php>
+            <php>for($i = 1; $i <= $selectnum; $i++){</php>
+                <option value="{$i}">{$i}</option>
+           <php>}</php>
+            </select>
+            <p class="tsy2 num-error">{:isL(L('Required'),'必填项')}</p>
+            </div>
+            <div style=" position:relative; width:100%">
+    <input type="button" onClick="addCarts(this,{$w['id']})" value="{:isL(L('MoveShoppingSags'),'移至购物袋')}" name="" class="btnf5" />
+   <span class="glyphs icon-thinArrow btnb" style="color:#000"></span>    
+ </div>
+       <!-- <input type="button" class="jsr_btn2" onClick="addCart(this,{$w['id']})" value="{:isL(L('MoveShoppingSags'),'移至购物袋')}" name="">-->
+        <p class="tr pt15 gwdbrb pr5"><span data-tipso="{:isL(L('ExceptTibetXinjiang'),'西藏、新疆、内蒙古、宁夏、青海除外。其余地方1-2天送达。')}" class="icon36 glyphs icon-info-circle tip2 tipso_style">&nbsp;</span></p>
+       
+        </div>
+        <div class="cb"></div>
+    </li>
+    </foreach>
+  </ul>
+  <!--<div class="pv20 tc jzgd gwdbjzgd"><span>加载更多</span></div>-->
+ </div><!--gwdlb end-->
+ <h1 class="col222 f16 b lh24 pv20">{:isL(L('NeedHelp'),'需要帮助？')}</h1>
+ <div class="bzdy">
+  <h1><span class="icon-contact glyphs fl"></span>{:isL(L('EmailNums'),'电邮')}</h1>
+  <p class="pv15"><a href="/Modular/needHelp/html/170.html" class="col2ab">点击此处</a>，发送电邮送电邮送电邮送电邮送电邮送电邮送电邮送电邮送电邮送电邮</p>
+  <p class="colaaa">{:isL(L('YouCanAlsoFind'),'您也可以在我们的<a href="/Modular/problem/html/173.html" class="colabb">常见问题</a>页面中找到您需要的答案')}</p>
+ </div>
+ <div class="cb"></div>
+
+
+</div><!--jies end-->
+
+
+ 
+<!--content end-->
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<!---->
+<div class="tccmbg">
+ <div class="tccm"><span class="close cmclose" style="right:5px; top:5px;"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+ <img src="__HOME__/images/1123a.jpg" alt=""/>
+ </div>
+</div>
+<!--尺码指南 end-->
+<script type="text/javascript">
+function addCart(_this,id){
+     var li=$(_this).parents('li');
+     var radioClass=li.find('.radio_class');
+     var attrIds='';
+     for(var i=0;i < radioClass.length;i++){ 
+            if(radioClass.eq(i).val()) {
+				attrIds+=radioClass.eq(i).val()+',';
+			}else{
+				radioClass.eq(i).css('border','1px red solid');
+				return;
+			}
+     }   
+	 var number=li.find('.goods-num').val();
+     if(isNaN(number) || number <= 0) {
+		 number.css('border','1px red solid').focus();
+         return;
+     }  
+     var url="{:get_up_url(array('add'=>'ok'),U('Cart/addCart','',''),true)}&goods_id="+id+"&num="+number+'&attr_id='+attrIds;
+     window.location.href=url;	 
+}
+</script>
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+            $(".chosen-select").chosen();
+ </script>
+<script type="text/javascript" src="__HOME__/js/jquery.bxslider.js"></script>
+<if condition="is_mobile()">
+<script type="text/javascript">
+$(document).ready(function(){			
+	  wk=$(".zjllb").width()
+	  var slider1=$('.slider1').bxSlider({			
+		slideWidth:  wk/3,
+		minSlides: 2,
+		maxSlides: 3,
+		slideMargin: 0,
+		prevText:"",
+		nextText:"",
+		touchEnabled:true
+  });
+		  
+$('.dbcloseb').click(function(e){
+  e.preventDefault();
+  $(this).parent('.slide').remove();
+  slider1.reloadSlider({
+	  slideWidth:  wk/3,
+            minSlides: 2,
+            maxSlides: 3,
+            slideMargin: 0,
+			prevText:"",
+			nextText:"",
+	  });
+});	  		 	  
+		  
+$('.slider2').bxSlider({			
+	slideWidth:  wk/3,
+	minSlides: 2,
+	maxSlides: 3,
+	slideMargin: 0,
+	prevText:"",
+	nextText:""
+
+  });
+
+	
+	
+});
+
+</script>
+<else/>
+
+     <script type="text/javascript">
+
+		$(document).ready(function(){
+		
+		/*加载浏览过的商品*/
+		wkt=$(".zjllb").width();
+		var slider1=$('.slider1').bxSlider({			
+				slideWidth:  wkt/8-1,
+				minSlides: 7,
+				maxSlides: 8,
+				slideMargin: 0,
+				prevText:"",
+				nextText:""
+		 });
+		
+		/*删除浏览过的商品*/
+		$(document).on('click','.dbcloseb',function(e){
+			 var _this=$(this);
+			 var url=_this.attr('url');
+			 delRecentVisit(url);
+			  e.preventDefault();
+			  $(this).parent('.slide').remove();
+			  slider1.reloadSlider({
+				  slideWidth:  wkt/8-1,
+				  minSlides: 7,
+				  maxSlides: 8,
+				  slideMargin: 0,
+				  prevText:"",
+				  nextText:"",	
+			   });
+		});	
+
+
+
+		  $('.slider2').bxSlider({			
+            slideWidth:  wkt/8-1,
+            minSlides: 7,
+            maxSlides: 8,
+            slideMargin: 0,
+			prevText:"",
+			nextText:""
+
+          });
+		  
+		  
+
+
+        });
+
+    </script>
+</if>
+     <script>
+ 
+  $(function(){
+	  $(".zjllt li").click(function(){
+	var num=$(".zjllt li").index($(this)) 
+	$(this).addClass("hover")
+	$(this).siblings("li").removeClass("hover")
+	$(".zjllb blockquote").eq(num).css("visibility","visible")
+	$(".zjllb blockquote").eq(num).siblings("blockquote").css("visibility","hidden")
+	 })
+	  })
+ </script>   
+</body>
+</html>

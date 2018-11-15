@@ -1,0 +1,43 @@
+<!---->
+
+<div class="navmin"><div class="navminm">
+  <a href="__ROOT__/" class="navlink2" >HOME</a>
+
+  <a href="{:U('Category/index',array('order_type'=>'create_time','order'=>desc,'text'=>'new'))}" class="navlink2">{:isL(L('NewArrivals'),'最新发布')}</a>
+  <a href="{:U('Category/index')}" class="navlink2">{:isL(L('Categories'),'产品分类')}</a>
+  <a href="{:U('Modular/singleProduct',array('html'=>$files[3][C('A_5')]['id']))}" class="navlink2">{$files[3][C('A_5')]['titletext']}{/*单品推荐*/}</a>
+  <a href="{:U('Modular/lookbook')}" class="navlink2">LOOKBOOK</a>
+  <a href="{:U('Modular/brandImage')}" class="navlink2">{$files[3][C('A_8')]['titletext']}{/*品牌形象*/}</a>
+  <a href="{:U('Modular/enjoy',array('html'=>$files[3][C('A_6')]['id']))}" class="navlink2">{:isL(L('CustomerRespect'),'客户尊享')}</a>
+  <a href="{:U('Article/index')}" class="navlink2">{:isL(L('News'),'YOUDI WU最新资讯')}{/*WU最新资讯*/}</a>
+  <a href="{:U('Modular/opportunity',array('html'=>$files[3][C('A_2')]['id']))}" class="navlink2">{:isL(L('CareerOpportunities'),'职业机会')}</a>
+  <div class="pt20 pl10 pr10 pb10">
+  <if condition="is_login()">
+    <a href="{:U('Member/index')}" class="color-white mr10 glyphs b ff-icon-user js-details-account f14 fl" style="line-height:22px;"><span class="js-details-account-name">ltmisa lt</span></a>
+        <a href="{:U('Login/exitLogin')}" class="color-medium-grey fl" style=" line-height:25px;">退出</a>  
+        <div class="cb"></div>  
+       <!--<a href="{:U('Login/exitLogin')}" class="dl"> {:getUserC('SE_NICKNAME')} {:isL(L('Exit'),'退出')}</a>-->
+  <else />
+      <a href="{:U('Login/index')}" class="dl">{:isL(L('Login'),'登录')}</a>
+      <a href="{:U('Login/index',array('reg'=>1))}" class="dl">{:isL(L('Registered'),'注册')}</a>  
+  </if>
+  <!--<a href="{:U('Member/index')}" class="dl">{:isL(L('MyAccount'),'我的账户')}</a>-->
+  </div>
+</div></div>
+<!----> 
+<!---->
+<div class="ssmin">
+    <div class="ph10">
+    <span class="close ssminclose"><span class="glyphs icon-close" style="line-height:30px;"></span></span>
+    <div class="cb pv25"></div>
+    
+    <form action="{:U('Category/index')}">
+     <input type="text" name="keywords" value="" placeholder="{:isL(L('InputKey'),'请输入关键字')}" class="ssmin_input"/>
+     </form>
+     <p class="lh30 f14 col000"><b>{:isL(L('PressEnterSearch'),'请按Enter键搜索')}</b></p>
+    </div>
+</div>
+<!---->
+<script type="text/javascript" src="__HOME__/js/MYscroll.js"></script>
+<script type="text/javascript" src="__HOME__/js/MYscroll2.js"></script>
+<script type="text/javascript" src="__HOME__/js/common.js"></script>

@@ -1,0 +1,97 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<script>
+$('#ffos').click(function(){
+   if($(this).attr('checked')){
+      $('#w,#h').attr('disabled',true);
+   }else{
+      $('#w,#h').attr('disabled',false);
+   }
+});
+</script>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Ad/adUpdateForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="ad_id" value="{$adsave.ad_id}" /> 
+        <input type="hidden" name="ad_pid" value="{$_GET['ad_pid']}" /> 
+        <div class="pageFormContent nowrap" layoutH="97">
+
+            <dl>
+                <dt>重定义宽和高：</dt>
+                <dd>
+                   <input type="checkbox" id="ffos" checked="checked">
+                                                   宽:<input type="text" disabled="true" name="ad_width" value="{$adsave['ad_width']}" id="w" size="10" style="float:none;"/> 高:<input type="text" name="ad_height" disabled="true" value="{$adsave['ad_height']}" id="h" size="10" style="float:none;"/>
+               </dd>                                                                                                              
+            </dl>
+            
+            <dl>
+                <dt>上传图片：</dt>
+                <dd>
+                     <input type="hidden" name="ad_img" value="{$adsave.ad_img}" id="d_thumb"/>
+                    <input name="file1" type="file" id="fileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>$adsave['ad_width'],'height'=>$adsave['ad_height'],remove=>'ok'))}','fileToUpload','img_show','d_thumb','','a-show','__ROOT__','imgloads');">
+                     </dd>
+            </dl>
+            
+            <dl  id="imgloads">
+                <dt>图片信息：</dt>
+                <dd>
+                          <a href="__ROOT__/{$adsave.ad_img}" class="a-show" target="_blank"> 
+                                <img src="__ROOT__/{$adsave.ad_img}" style="display:inline-block;padding:3px;max-width:100px;" id="img_show"  class="a-show"/>
+                          </a>                          
+                </dd>
+            </dl>
+            
+             <foreach name="adTitle" item="t"><!--广告标题多语言-->
+                <dl>
+                    <dt>{$t.info}广告标题：</dt>
+                    <dd>
+                        <input  type="text" name="{$t.field}" value="{$adsave[$t['field']]}" class="required" size="50"/>
+                        
+                    </dd>
+                </dl>              
+             </foreach><!--广告标题多语言结-->      
+
+            <dl>
+                <dt>广告价格：</dt>
+                <dd>
+                    <input  type="text" name="price" value="{$adsave['price']}" class="" size="50"/>
+                    
+                </dd>
+            </dl>  
+                               
+            <dl>
+                <dt>链接地址：</dt>
+                <dd>
+                    <input  type="text" name="ad_url" size="50" value="{$adsave.ad_url}"/>
+                    
+                </dd>
+            </dl>         
+             <dl>
+                <dt>是否显示：</dt>
+                <dd>
+                    <input  type="radio" name="display" size="50" value="1" <if condition="$adsave['display']">checked="checked"</if> />是
+                    <input  type="radio" name="display" size="50" value="0" <if condition="!$adsave['display']">checked="checked"</if>/>否
+                    
+                </dd>
+            </dl>                           
+            
+               <foreach name="bewrite" item="t"><!--广告描述多语言-->
+                <dl class="nowrap">
+                    <dt>{$t.info}广告描述：</dt>
+                    <dd><textarea name="{$t.field}" class="required" cols="50" rows="4" style="resize:none;">{$adsave[$t['field']]}</textarea></dd>
+                </dl>            
+             </foreach><!--广告描述多语言结-->                 
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

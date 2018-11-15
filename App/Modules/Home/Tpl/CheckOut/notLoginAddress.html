@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('BillingSend'),'结算 - 寄送')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/psw.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/adderss.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<style>
+ select {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 8px;
+    padding-left: 5px;
+    padding-right: 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    background-image: url(data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0D%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2018.1.1%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0D%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0D%0A%09%20viewBox%3D%220%200%20612%20792%22%20enable-background%3D%22new%200%200%20612%20792%22%20xml%3Aspace%3D%22preserve%22%3E%0D%0A%3Cpath%20fill%3D%22%23AAAAAA%22%20d%3D%22M11.1%2C234.7C0%2C245.8%2C0%2C268%2C11.1%2C284.7l272.6%2C272.6c11.1%2C11.1%2C33.4%2C11.1%2C44.5%2C0l272.6-272.6%0D%0A%09c11.1-11.1%2C11.1-33.4%2C0-50.1c-5.6-5.6-11.1-11.1-22.3-11.1l0%2C0H33.4C27.8%2C223.5%2C16.7%2C229.1%2C11.1%2C234.7z%22/%3E%0D%0A%3C/svg%3E%0D%0A);
+    background-size: 12px;
+    background-position: right 10px top 10px;
+    background-repeat: no-repeat;
+    text-indent: .01px;
+    text-overflow: "";
+    cursor: pointer;
+	 color:#222; font-size:13px;
+}
+.selc{ color:#ccc;}
+.selc:focus{ color:#222;}
+
+.jsrdw{ position:fixed; top:52px;}
+ .sub{display:none;}
+</style>
+
+<if condition="is_mobile()">
+
+<else />
+<script>
+ $(function(){
+	 w=$(window).width()
+	 w1=$(".jies").width()
+	 w2=$(".jsl").width()
+	 
+
+    $(window).scroll(function () {
+if ($(window).scrollTop() > 100) {
+$(".jsr").addClass("jsrdw")
+$(".jsr").css("right",(w-w1)/2)
+$(".jsr").css("width",w1-w2-10)
+}else{
+	$(".jsr").removeClass("jsrdw")
+	$(".jsr").css("width",w1-w2-10)
+	}
+});
+
+	
+	 })
+</script>
+</if>
+</head>
+
+<body>
+<div class="box">
+<include file="Common:headermin" />{/*公共头部*/}
+<script type="text/javascript">
+$(function(){
+    formInit('.not-regster-form',false,true,true,true);
+});    
+</script> 
+<!--content begin-->
+<form class="not-regster-form" action="{:sign_url(array('ids'=>$_GET['ids'],'total'=>$_GET['total']),U('Register/regDo','',''),'')}" method="post">
+    <input type="hidden" value="{$userName}" name="user_name" />
+    <div class="jies">
+     <if condition="is_mobile()">
+      <div class="jiest">结算</div>
+     <else/>
+      <div class="gwdt b"><!--{:isL(L('Billing'),'结算')}-->结算</div>
+    </if>
+     
+     
+     <div class="jsl">
+      <div class="jslt" style="float:left; border-left:none">
+       <ul>
+       	<li class="now" style="border-left:none">1.{:isL(L('SentOut'),'配送')}</li>
+        <li>2.{:isL(L('Pay'),'支付')}<span class="jsltspan1"></span></li>
+        <li class="last">3.{:isL(L('Checklist'),'核对')}<span class="jsltspan2"></span></li>
+        <div class="cb"></div>
+       </ul>
+      </div><!--jslt end-->
+      <div class="cb"></div>
+      <div class="tjps">
+
+       <h1 class="shdzt" style="font-weight:normal;padding-top:20px;padding-left:10px;font-size:18px; line-height:30px;">
+       {:isL(L('PleaseAddAddress'),'添加收货地址')}
+            <!--<span class="icon36 glyphs icon-info-circle" style="height:23px; line-height:23px;"></span>
+            <span class="pl15">尊敬的<strong>{$userName}</strong>你还不是youdi wu会员，请先填写登录密码注册成会员。</span>-->
+       </h1>
+   
+        <!--<p>{:isL(L('PleaseUseEnglishOr'),'请使用英文或拼音填写以下表格，并请确保您的联系方式填写正确无误')}</p>-->
+        <h1 class="jstxt1">添加收货地址</h1>
+        <p class="jstxt2">* {:isL(L('Required'),'必填栏')}</p>
+            
+        <div class="tjdz">
+
+            <!--<p class="tjtxt pt20">{:isL(L('EnterYourName'),'请输入您的姓名（填入全名）')} *</p>
+           <input type="text" class="tjdz_input validate[required]"  name="full_name">
+           <div class="tjdzm " style="width:100%;">
+           <p class="pt15 pb5">{:isL(L('country'),'国家')} *</p>
+           <select  class="tjdz_select validate[required]" name="country">
+               <option value="">{:isL(L('SelectCountry'),'请选择国家')}</option>
+               <foreach name="countryList" item="c">
+                  <option value="{$c['region_id']}">{$c['region_name']}</option>
+                </foreach> 
+           </select>
+          </div><!----> 
+          <input type="hidden" value="中国" name="country" />{/*默认国家ID*/}
+          <div class="tjdzm fl">
+           <p class="tjtxt"><b></b>{:isL(L('Surname'),'姓氏')}  *</p>
+           <div class="pr">
+           <input type="text" name="surname" class="tjdz_input required"  info-text="last-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+           <p class="tsy last-text">提示层</p>
+           </div>
+          </div>
+          <div class="tjdzm fr">
+           <p class="tjtxt b">{:isL(L('FullNname'),'名字')} *</p>
+           <div class="pr">
+           <input type="text" name="full_name" class="tjdz_input required" info-text="full-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('Names5_15'),'请使用英文或拼音填写')}"/>
+           <p class="tsy full-text">提示层</p>
+           </div>
+          </div><!---->      
+          <div class="cb"></div>
+          <div class="tjdzm fl">
+           <p class="tjtxt"><!--{:isL(L('ProvinceCity'),'省/直辖市')}-->{:isL(L('Province'),'省/直辖市')}  *</p>
+           <div style="position:relative; width:100%;  box-sizing:border-box">
+           <input type="text" name="province" class="tjdz_input required" info-text="province-text" error-info="{:isL(L('Required'),'必填栏')}"/>
+           <!--<span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:3px; top:2px; line-height:33px; border:none; opacity:0.3"></span>
+<select  class="cityselect required" name="province" id="province" info-text="province-text" error-info="{:isL(L('SelectProvince'),'请选择省份')}" onChange="getPlace(this,'#city','')" url="{:U('CheckOut/getCitys','','')}">
+ <option value="">{:isL(L('SelectProvince'),'请选择省份')}</option>
+  {$province['province']}
+</select>-->
+<p class="tsy province-text">提示语</p>
+</div>
+          <!-- <div class="pr">
+           <select name="province" class="chosen-select required" id="sel1" info-text="province-text" error-info="{:isL(L('SelectProvince'),'请选择省份')}" onChange="getPlace(this,'#sel2','choseSelect')" url="{:U('CheckOut/getCitys','','')}">
+            <option value="">{:isL(L(SelectProvince),'选择省份')}</option>
+             {$province['province']}
+           </select>
+           <p class="tsy province-text">提示层</p>
+           </div>-->
+           <!--<input type="text" name="province" class="tjdz_input validate[required]"/>-->
+          </div>
+          <div class="tjdzm fr">
+           <p class="tjtxt">{:isL(L('City'),'城市')} *</p>
+           <!--<input type="text" name="city" class="tjdz_input validate[required]"/>-->
+           <div style="position:relative; width:100%;  box-sizing:border-box">
+           <input type="text" name="city" class="tjdz_input required" info-text="city-text" error-info="{:isL(L('Required'),'必填栏')}"/>
+          <!-- <span class="dropdown-container dropdown-white-form-container glyphs" style="position:absolute; right:3px; top:2px; line-height:33px; border:none; opacity:0.3"></span>
+<select  class="cityselect required" name="city" id="city" info-text="city-text" error-info="{:isL(L('SelectCity'),'请选择城市')}">
+ <option value="">{:isL(L('SelectCity'),'请选择城市')}</option>
+
+</select>-->
+<p class="tsy city-text">提示语</p>
+</div>
+           <!--<div class="pr">
+           <select name="city" class="selc chosen-select sub required" info-text="city-text" error-info="{:isL(L('SelectCity'),'请选择城市')}" id="sel2">
+            <option value="">{:isL(L(SelectCity),'请选择城市')}</option>
+           </select>
+           
+           <p class="tsy city-text">提示层</p>
+           </div>-->
+          </div><!---->
+          <div class="cb"></div>
+          <p class="tjtxt">{:isL(L('Address'),'地址')} *</p>
+          <div class="pr">
+          <input type="text" class="tjdz_input validate[required]" info-text="add-text" error-info="{:isL(L('Required'),'必填栏')}" name="address">
+          <p class="tsy add-text">提示层</p>
+           </div>
+          <div class="cb pb10"></div>
+          <div class="tjdzm fl">
+           <p class="tjtxt">{:isL(L('ZipCode'),'邮编')} *</p>
+           <div class="pr">
+           <input type="text" class="tjdz_input required digits" info-text="zip-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('TrueCode'),'请输入正确的邮编')}" name="zipcode">
+           <p class="tsy zip-text">请输入正确的邮编</p>
+           </div>
+           
+          </div>
+          <div class="tjdzm fr">
+           <p class="tjtxt">{:isL(L('Telephone'),'电话')} *</p>
+           <div class="pr">
+           <input type="text" class="tjdz_input required digits" info-text="tel-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('CorrectNumber'),'请输入正确电话')}" name="tel">
+           <p class="tsy tel-text">提示</p>
+           </div>
+          </div>
+          <div class="cb"></div>
+          <!--<p class="pv20"><input type="checkbox" class="vam" name="default_address" value="1"><span class="pl5 vam">{:isL(L('DefaultAddress'),'默认地址')}</span></p>-->
+          <p class="f16 pt20">{:isL(L('SecurityInformation'),'安全信息')}</p>
+          
+          <p class="jstxt3" style="margin-bottom:15px;">* {:isL(L('Required'),'必填项')}</p>
+          <p class="tjtxt">{:isL(L('PleaseCreatePassword'),'请创建密码')} *</p>
+          
+          <div style="position:relative" class="mmbox">
+      <input type="password" id="password"  name="password" info-text="pas-text" min="6" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('PleaseEnterApassword'),'密码长度必须介于6到300个字母。')}"  class="mm_input2 validate[required] mmpsw" />
+      <span class="glyphs icon-show mmyj iconmm2"></span>
+      <p class="tsy pas-text">密码长度必须介于6到300个字母。</p> 
+      </div>
+      
+         <!-- <div class="pr">
+          <input type="password" class="tjdz_input48 validate[required]" name="password" id="password">
+          <p class="tsy">请输入8位数字，拼音或者数字和拼音组合的字符。</p>
+           </div>-->
+           
+           
+          <p class="tjtxt pt20">{:isL(L('ConfirmPassword'),'请确认密码')} *</p>
+          
+          
+          <div style="position:relative" class="mmbox">
+      <input type="password" name="not_password" id="not_password" equal-input="#password" info-text="not-text" error-info="{:isL(L('Required'),'必填栏')}" error-other="{:isL(L('PleaseConfirmYourPassword'),'两次输入的密码不一致, 请重新输入')}" class="mm_input2 required mmpsw" />
+      <span class="glyphs icon-show mmyj iconmm3"></span>
+      <p class="tsy not-text">两次输入的密码不一致，请重新输入。</p> 
+      </div>
+          
+          <!--<div class="pr">
+          <input type="password" class="tjdz_input48 validate[required,equals[password]]" name="not_password" id="not_password">
+          <p class="tsy" >两次输入的密码不一致，请重新输入。</p>
+           </div>-->
+          <div class="pt30 pb30 pr10 woyw">
+           <span style="position:relative; padding-left:20px;">
+           <input type="checkbox" class="vam" name="subs" id="subs" style="display:none" value="1">
+          
+          <label class="ffInput" for="subs"> 
+          <span class="ffInput__checkbox"></span>
+          <span class=" pr10 vam mt10 b col555" style="display:inline-block">{:isL(L('GetInformationAbout'),'我希望以电子报及邮件形式获得有关 Farfetch最新动态的信息。')}</span>
+          </label>
+          </span>
+              <!--<input type="checkbox" class="vam" name="subs" value="1">
+              <span class="pl5 vam">{:isL(L('GetInformationAbout'),'我希望以电子报及邮件形式获得有关 Farfetch最新动态的信息。')}</span>-->
+          </div>
+          <div class="cb"></div>
+         </div><!--tjdz end-->
+       <div class="cb"></div>
+           
+       
+       
+       
+      </div><!--tjps end-->
+     </div><!--jsl end-->
+     <div class="jsr"  >
+     <div class="jsrm" >
+      <h1>{:isL(L('Billing'),'总结')}</h1>
+      <p class="pb10 f12">{:isL(L('Subtotal'),'小计')}<span class="fr b f16">{:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</span></p>
+      <p class="pb10 f12">{:isL(L('Freight'),'预计运费')}<span class="fr b f16 huan">{:C('KTEC_H')} 0.00</span></p>
+      <!--<p class="myf">{:isL(L('FreeShipping'),'免费送货')}</p>-->
+      <div class="jsrb mt5">
+       <div class="pb30 f12">{:isL(L('TotalCost'),'总计')}
+       <span class="fr tr f16"><b>{:C('KTEC_CUR')} {:C('KTEC_H')} {:number_format($_GET['total'],2, '.', '');}</b></span>
+       <p class="tr col999 lh18 f12 pt5">({:isL(L('IncludedIns'),'价格已包含关税')})</p>
+       </div>
+       <input type="hidden" value="not-regster" name="submits" />
+       <div style=" position:relative;">
+       <input type="submit" id="not-regster" value="{:isL(L('SaveAndContinue'),'保存并继续')}"  class="jsr_btn" type="submit">
+       <span class="glyphs icon-thinArrow" style="position:absolute; right:10px; top:0; line-height:38px; color:#fff; font-size:1.25em"></span>
+      <p class="hong submit-text" style="position:absolute; left:20px; top:40px; display:none">成功或失败提示</p> 
+      </div>
+       
+       <!--<input type="submit" id="not-regster" value="{:isL(L('SaveAndContinue'),'保存并继续')}" class="jsr_btn"/>-->
+      </div>
+      
+      </div>
+     
+     
+      <div class="jstxt4"><p style="text-align:justify">{:web_root(isL(L('OnceRegistereds2'),'一旦注册即代表您同意遵守我们的 条件与条款 以及 隐私与Cookie政策'))}</p></div>
+     
+     </div><!--jsr end-->
+     <div class="cb"></div>
+     <div class="pv20 tl"><span class="fhdb"><span class="icon19"><span class="glyphs icon-arrowUp" style="line-height:30px;"></span></span><span class="pl10">{:isL(L('ReturnToTheTop'),'返回顶部')}</span></span></div>
+
+    </div><!--jies end-->
+</form>
+<!--content end-->
+<div class="cb pv30"></div>
+<include file="Common:footermin" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js" ks="333" ></script>
+<script type="text/javascript">
+function choseSelect(node,html){
+    var ul=$(node).next();
+	ul.find('.chosen-results').html(html);
+	alert(ul.find('.chosen-results').html());	
+} 
+$(".chosen-select").chosen();
+</script>
+</body>
+</html>

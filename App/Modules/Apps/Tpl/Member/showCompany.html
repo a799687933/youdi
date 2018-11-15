@@ -1,0 +1,136 @@
+<script type="text/javascript">
+ //AJAX获取区域
+function getPlaces(_ths,node){
+   if(!arguments[1]) node = "";	
+   var urls=$(_ths).attr('to-url');
+    if($(_ths).val() > 0){
+      $.ajax({
+         type:'post',
+         dataType: "json",
+         url:urls+"/region_id/"+$(_ths).val()+'/city/ajax',
+         success:function(response,status,xhr){
+            var str='<option value="">请选择</option>';
+            for(var i in response){
+                str+='<option value="'+ response[i].region_id +'">'+ response[i].region_name +'</option>';
+            }
+            if($(_ths).next('select').length >0){
+                $(_ths).next().html(str);
+            }    
+			if(node){
+			      var htmlString=$(_ths).children('option:selected').text();
+				  $(node).val(htmlString);			
+			}
+          }
+       });    
+   }                              
+}  
+</script>
+<div class="pageContent">
+<div class="tabs" currentindex="1" eventtype="click">
+    <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+            <ul>   
+                 <li></li>         
+                 <li class="selected"><a href="javascript:;"><span>通用信息</span></a></li>
+               <!--  <li ><a href="javascript:;"><span>会员简介</span></a></li>
+                 <li ><a href="javascript:;"><span>相关专辑</span></a></li>-->
+               <!--  <li ><a href="javascript:;"><span>备注</span></a></li> -->                  
+            </ul>
+        </div>
+    </div>
+    <form method="post" action="{:U(APP_APPS.'/Member/companyForm','','')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" name="id" value="{$_GET['id']}"/>
+        <div class="tabsContent" style="background:#fff;" layoutH="70">
+            <div inited="1000" style="display: block;"></div>
+            <div inited="1000" style="display: block;"><!--通用资料内容-->
+       
+                <table cellpadding="0" cellspacing="0" class="mytable">
+                    <tr><td  style="text-align:right;">公司名称：</td><td><input type="text" name="company_name" value="{$save.company_name}" maxlength="200" class="" style="margin:3px 0;" size="50"/></td></tr>   
+					<tr><td  style="text-align:right;">联系人：</td><td><input type="text" name="linkman" value="{$save.linkman}" maxlength="20" class="required" style="margin:3px 0;" size="50"/></td></tr>   
+                    <tr><td  style="text-align:right;">电话：</td><td>
+					      <input  type="text" name="tel1" value="{$save.tel1}"  style="margin:3px 0;" class="digits" size="7"/>
+						  <input  type="text" name="tel2"  value="{$save.tel2}" style="margin:3px 0;" class="digits" size="15"/>
+						  <input  type="text" name="tel3"  value="{$save.tel3}" style="margin:3px 0;" class="digits" size="7"/>
+					</td></tr>
+                    <tr><td  style="text-align:right;">手机：</td><td> <input type="text" value="{$save.mobile}" name="mobile" class="digits"  size="50"/></td></tr>
+					<tr><td style="height:10px;" colspan="2"></td></tr>
+					<tr><td  style="text-align:right;">邮箱：</td><td> <input type="text" value="{$save.email}" name="email" class="email"  size="50"/></td></tr>
+					<tr><td style="height:10px;" colspan="2"></td></tr>
+					<tr><td  style="text-align:right;">仓库大区：</td><td> 
+					   <select name="large_area" id="large_area"  class="">
+						<foreach name="chinaArea" item="ci">
+							<option value="{$ci.area_id}" <if condition="$ci['area_id'] eq $save['large_area']">selected="selected"</if>>{$ci.area_name}</option>
+						</foreach>
+						 </select>
+					</td></tr>
+					<tr><td style="height:10px;" colspan="2"></td></tr>
+					<tr><td  style="text-align:right;">仓库地址：</td><td> 
+						   <select name="country" id="country" onChange="getPlaces(this)" to-url="{:U(APP_APPS."/Member/companyForm","","")}/region/ok" class="select110 mr15"><option value="">选择国家</option>{$region[0]}</select>
+						   <select name="province" class="select110 mr15" id="province" onChange="getPlaces(this)" to-url="{:U(APP_APPS."/Member/companyForm","","")}/region/ok"><option value="">选择省份</option>{$region[1]}</select>
+						   <select name="city" class="select110 mr15" id="city" onChange="getPlaces(this)" to-url="{:U(APP_APPS."/Member/companyForm","","")}/region/ok"><option value="">选择城市</option>{$region[2]}</select>
+						   <select name="district" class="select110 mr15" id="district" onChange="getPlaces(this)" to-url="{:U(APP_APPS."/Member/companyForm","","")}/region/ok"><option value="">选择区县</option>{$region[3]}</select>
+					</td></tr>					
+                    <tr><td style="height:10px;" colspan="2"></td></tr>             
+                    <tr><td  style="text-align:right;">缩略图：</td><td>
+                      <input type="hidden" name="logo" value="{$save.logo}" id="member_thumb"/>
+                     <input name="file4" type="file" id="memberFileToUpload" onchange="ajaxFileUpload('{:U(APP_APPS.'/UploadFile/upload',array('thum'=>'ok','width'=>250,height=>250,'remove'=>'ok'))}','memberFileToUpload','member_img_show','member_thumb','','B-show','__ROOT__');" style="margin:3px 0;"/> 
+                    </td></tr>
+                    <tr id="member_imgloads" style=""><td>缩略图信息：</td><td> 
+                    <if condition="$save['logo']">
+                     <img src="__ROOT__/{$save.logo}"  height="80" id="member_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/>
+                    <else />
+                     <img src="__ROOT__/{:C('USER_IMG')}"  height="80" id="member_img_show" style="display:inline;position:relative;top:3px;" class="B-show"/>
+                    </if>
+                    </td></tr>   
+					<tr><td style="height:10px;" colspan="2"></td></tr>            
+                    <tr><td>公司介绍：</td><td>
+					   <textarea name="business" class="text340 fl required" style="width:400px;height:200px;">{$save.business}</textarea>
+					</td></tr>  
+					                                                       
+                    <tr><td  style="text-align:right;">是否审核：</td><td>
+                              <label><input type="radio" name="is_verify" value="0"  <if condition="$save['is_verify'] eq 0">checked="checked"</if>/>否</label> 
+							  <label><input type="radio" name="is_verify" value="1" <if condition="$save['is_verify'] eq 1">checked="checked"</if>/>是</label>
+                   </td></tr>
+				   
+                </table>
+                                                                   
+            </div><!--通用资料内容结束-->
+            
+            <!--
+            <div inited="1000" style="display: block;"><!--文档祥细内容
+                               
+                    <textarea name="profile"  style="width:99%;height:470px;">{$save.profile}</textarea>   
+               
+            </div><!--文档祥细内容结束-->
+             
+             <!--
+            <div inited="1000" style="display: block;"><!--相关相册的内容
+                               
+                <p style="height: 10px;padding-bottom:10px;">相关相册: <input name="file3" type="file" id="fileToUpload10" onchange="relatedAlbumUpload('{:U(APP_APPS.'/UploadFile/upload')}','fileToUpload10');"></p>  
+                <div class="divider"></div> 
+                <!--这里上传图片
+            <foreach name="photo" item='p'>
+              <div class="divigm" style="float:left;margin:3px;position:relative;"><span style="display:block;width:200px;background:#000;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3; opacity: 0.5;font-weight:bold;position:absolute;left:0;top:0;"><b class="close_upimg" onclick="delDiv(this);" style="cursor:pointer;float:right;color:red;font-size:16px;" title="'+closes+'">×</b></span><img src="__ROOT__/{$p.img}" width="200" height="180" style="display:block;"/><input type="hidden" value="{$p.img}" name="imgAll[]"/><input type="text" name="title[]" style="width:197px;height:16px;font-size:12px;border:none;" value="{$p.img_bewrite}"  placeholder="这里输入图片说明"/></div>
+            </foreach>    
+               <div id="setimgdiv" style="width:200px;height:180px;float:left;margin:3px;"><img src="__PUBLIC__/Images/13221814.gif" style="display:none;padding:80px 0 0 80px;" id="img_related"/></div>
+               
+            </div><!--相关相册的内容结束-->    
+			 
+            <!--关联文章内容
+            <div inited="1000" style="display: block;">
+                 <textarea name="remarks"  style="width:99%;height:470px;">{$save.remarks}</textarea>   
+            </div><!--关联文章内容结束-->
+            
+        </div>
+        <div class="formBar">
+          <ul>
+             <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+             <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+         </ul>
+       </div>
+    </form>
+        <div class="tabsFooter">
+            <div class="tabsFooterContent"></div>
+        </div>
+    </div>
+</div>

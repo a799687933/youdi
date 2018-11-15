@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{:isL(L('UserCenter'),'用户中心')} - {:C($langfx.'WEBNAME')}</title>
+<link href="__HOME__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<link href="__COMMON__/Css/style.css" rel="stylesheet" type="text/css">{/*控制表格CSS*/}
+<script type="text/javascript" src="__HOME__/js/jquery.DB_tabMotionBanner.min.js"></script>
+<script src="__HOME__/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__HOME__js/gotop.js"></script>
+<script type="text/javascript">  
+window.isConfirm="{:L('Confirm')}";
+window.isCancel="{:L('Cancel')}";
+$(document).ready(function () {  
+	var ps = $("#div_pro").position();  
+	$("#div_pro").mouseenter(function () {  
+		$("#float_box").show();  
+	});  
+	$("#float_box").mouseleave(function () {  
+		$("#float_box").hide();  
+	});  
+})  
+</script> 
+</head>
+<body>
+<include file="Common:top" />
+<include file="Common:header" />
+
+<div class="main">
+ <include file='Member:leftNav'/>{/*左边导航*/}
+ <div class="member_r">       
+        
+    <div class="slideTxtBoxdd" style="margin-top: 0;border:1px solid #ccc;height: auto;">{/*内容区域*/}
+        <div class="hd">                   
+             <p style="color: #fff;margin-left: 20px;">
+                 <a href="{:U('/Member')}" style="color: #fff;">{:isL(L('Home'),'首页')}</a> > {:isL(L('AddressList'),'收货地址')}
+                <a href="{:U('Member/address')}" style="color:#fff;float:right;padding-right: 10px;">{:isL(L('AddNewAddress'),'添加新地址')}</a>
+             </p>
+            
+        </div>
+        <div class="content" style="width:970px;margin:5px auto;">{/*主区域*/}
+                 <table class="my-table my-table-bot-border" style="width:100%;font-size:14px;">                 
+                     <foreach name="address" item="add">
+                          <tr>
+                              <td style="text-align:left;">
+                                     <strong>{$add.consignee}&nbsp;&nbsp;{$add.r_province}&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                                     {$add.r_country} {$add.r_province} {$add.r_city} {$add.r_district} {$add.address} ({$add.consignee} 收) {$add.mobile}
+                              </td>
+                              <td style="text-align:right">
+                                 <if condition="$add['default_address']">
+                                        <span style="color:#ccc;">{:isL(L('DefaultAddress'),'设为默地址')}</span>
+                                 <else />
+                                       <a href="javascript:void(0);" 
+                                           onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}',
+                                           '{:isL(L('IsDefaultAddress'),'您是否确定此地址设为默认地址？')}',
+                                           '{:U('/Member/setDefault',array('address_id'=>$add['address_id']))}')">
+                                           {:isL(L('DefaultAddress'),'设为默地址')}
+                                       </a>
+                                 </if>
+                                  
+                                  <a href="{:U('Member/address',array('address_id'=>$add['address_id']))}">{:isL(L('Modify'),'编辑')}</a>
+                                  <a href="javascript:void(0);" 
+                                      onclick="myAlert('{:isL(L('ConfirmationPrompt'),'确定提示')}',
+                                      '{:isL(L('ISDELETE'),'操作不可恢复确定执行本次操作？')}',
+                                      '{:U('Member/delAddress',array('address_id'=>$add['address_id']))}' )">
+                                      {:isL(L('Delete'),'删除')}
+                                  </a>
+                              </td>
+                          </tr> 
+                      </foreach>                                
+                 </table>
+            <div class="pro_next" style="background:none;">{$page}</div>                         
+        </div>{/*主区域*/}
+    <div style="clear: both"></div>
+  </div>{/*内容区域*/}                   
+  </div>  
+<div class="clear"></div>
+</div>
+<include file="Common:footer" />{/*页脚*/}
+<include file="Common:float" />{/*左边公共*/}
+</body>
+</html>

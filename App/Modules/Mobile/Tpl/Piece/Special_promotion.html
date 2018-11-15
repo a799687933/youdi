@@ -1,0 +1,16 @@
+﻿{/*限时促销列表*/}
+<foreach name="result" item="res" key="resKey">
+      <li>
+       <img src="__ROOT__/{$res['goods_thumb']}" alt=""/>
+       <h1 class="col666 f14 lh20 b">{$res['goods_name']|strip_tags=###|sub_str=###,10}</h1>
+       <p class="hong lh25 pb5">团购价：￥<b class="f16">{$res['promotion_price']}</b></p>
+       <div class="yhtgl">
+        <p class="col999 lh20"><del>市场价：{$res['goods_retail_price']}</del></p>
+       <p class="icon6 pl25 lh20 col999 tg_time" id="time_{$resKey}" endTime="{$res.promotion_end_date}" style="color:#f60;font-size: 0.4rem;">
+           <span class="chen">3</span>天<span class="chen">5</span>时<span class="chen">44</span>分<span class="chen">31</span>秒
+       </p>
+       </div>
+       <a href="{:U(is_m().'/Goods/index',array('html'=>$res['id']))}" class="yhtgr">立即<br/>抢购</a>
+       <div class="cb"></div>
+      </li>
+</foreach>

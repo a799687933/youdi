@@ -1,0 +1,61 @@
+<div class="pageContent">
+
+    <form method="post" action="{:U(APP_APPS.'/GoodsAttribute/goodsAttributeSaveForm')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <input name="goods_attr_type_id" type="hidden" value="{$_REQUEST['goods_attr_type_id']}" />
+        <input type="hidden" name="id" value="{$_GET['id']}"/>
+        <div class="pageFormContent" layoutH="58" >
+        
+        <p style="width:100%;">
+                <label>所属属性类型：</label>
+                <input type="hidden" name="goods_attr_type_id" value="{$goods_type['id']}" size="44" class="" />
+               <input type="text" name="goods_type_name" readonly="readonly" value="{$goods_type[pfix('name')]}" size="44" class="" />
+          </p>   
+               
+          <foreach name="attrNames" item="t"><!--属性类型名称多语言-->
+            <p style="width:100%;">
+                <label>({$t.info})属性名称：</label>
+                <input type="text" name="{$t.field}" value="{$save[$t['field']]}" size="44" class="required" />
+            </p>
+            </foreach><!--属性类型名称多语言结-->  
+            
+           <p style="width:100%;margin-bottom:5px;">
+                <label>能否进入检索：</label>
+                <input type="radio" name="attr_index" value="0" <if condition="$save['attr_index'] eq '0'">checked="checked"</if>/>不可检索
+                 <input type="radio" name="attr_index" value="1" <if condition="$save['attr_index'] eq 1 OR $save['attr_index'] eq ''">checked="checked"</if> />
+                 范围检索 <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;"/>
+                 <span style="color:#666;">
+                       不需要该属性成为检索商品条件的情况请选择不可检索，如果该属性检索时希望是指定某个范围时，选择范围检索。
+                 </span>
+            </p>       
+ 
+            <p style="width:100%;">
+                <label>是否关联：</label>
+                <input type="radio" name="is_linked" value="0"  <if condition="$save['is_linked'] eq 0">checked="checked"</if>/>不关联
+                <input type="radio" name="is_linked" value="1" <if condition="$save['is_linked'] eq 1">checked="checked"</if>/>关联 
+                <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;"/>
+                <span style="color:#666;">相同属性值的商品是否关联？</span>
+            </p>      
+            
+             <p style="width:100%;margin-bottom:5px;">
+                <label>属性是否可选：</label>
+                <!--<input type="radio" name="attr_type" value="0"  <if condition="$save['attr_type'] eq 0">checked="checked"</if>/>唯一属性-->
+                <input type="radio" name="attr_type" value="1" 
+                <if condition="$save['attr_type'] eq 1">checked="checked"<elseif condition="$save['attr_type'] eq ''" />checked="checked"</if> />单选
+                <input type="radio" name="attr_type" value="2" <if condition="$save['attr_type'] eq 2">checked="checked"</if>/>复选
+                <img src="{:C('__IMG__')}/notice.gif" style="position:relative;top:3px;"/>
+                <span style="color:#666;">选择"单选/复选属性"时，可以对商品该属性设置多个值，同时还能对不同属性值指定不同的价格加价。
+                  <!--选择"唯一属性"时，商品的该属性值只能设置一个值，用户只能查看该值。-->
+               </span>
+            </p>                                    
+
+          
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>

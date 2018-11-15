@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__css/css.css" />
+<title>优惠劵 - {:C('WEBNAME')}</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<script type="text/javascript" src="__PUBLIC__js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__js/div-dialog.js"></script>
+<script>
+	$(function(){
+		$('.cat_tree').hide();	   
+	});
+</script>
+</head>
+<body>
+<include file='Common:header'/>{/*头部*/}
+	<div class="pp_bann m_auto">
+		<a <if condition="$navAdcou['ad_url']">href="{$navAdcou.ad_url}"</if>><img src="__ROOT__/{$navAdcou.ad_img}" class="dis_b" /></a>	
+	</div>
+
+	<div class="company m_auto">
+		
+		<div class="coupon mt_10">
+			<ul class="coupon_ul zm1">
+               <foreach name="result" item="res">
+				<li><a href="javascript:void(0);" onClick="myAlert('','','{:U('/Coupon/receive',array('id'=>$res['id']),'')}','')"><img src="__ROOT__/{$bt.picture}" class="dis_b" /></a></li>	
+              </foreach>  
+			</ul>	
+            <div class="pager f_12 clr_6 al_rt mt_30">{$page}</div>	
+		</div>		
+							
+		<div class="hot_recom pos_rela">
+				<h2 class="pp_h2 f_16 f_norm clr_6"><p style="width:100px;">热门产品推荐</p></h2>
+				<a href="javascript:;"><img src="__PUBLIC__images/arr1.gif" class="dis_b prev" /></a>
+				<a href="javascript:;"><img src="__PUBLIC__images/arr2.gif" class="dis_b next" /></a>
+				<div class="hot_slide pos_rela bd">
+					<ul  class="recom_ul zm1">
+                           <foreach name="hots" item="h">
+							<li>
+								<a href="{:U('Goods/index',array('html'=>'goods_'.$h['id']))}"><img src="__ROOT__/{$h.goods_thumb}" class="dis_b" width="100" /></a>
+								<p class="pos_rela f_12 clr_6">
+									<a href="{:U('Goods/index',array('html'=>'goods_'.$h['id']))}" class="f_12 clr_6">{$h.goods_name|strip_tags=###|sub_str=###,9}</a><br />
+									￥{$h.goods_retail_price} <span class="del_recom">
+										<a href="{:U('Goods/index',array('html'=>'goods_'.$h['id']))}" class="f_12 clr_ora">查看详情</a>
+									</span>
+								</p>
+							</li>
+                          </foreach>
+					</ul>
+				</div>
+		</div>
+		
+		<script>
+			jQuery(".hot_recom").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:true,vis:6});	
+		</script>
+	</div>
+<include file='Common:footer'/>{/*页脚*/}	
+</body>
+
+</html>

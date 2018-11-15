@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>
+<php>if($_GET['text'] == 'new'){</php>
+   {:isL(L('NewArrivals'),'最新发布')} | YOUDI WU  中国
+<php>}else{</php>
+   {:isL(L('Categories'),'产品分类')} | YOUDI WU  中国
+<php>}</php>  
+</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<link rel="stylesheet" href="__HOME__/css/jquery.bxslider.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/waypoints.min.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+function sendClick(_this){
+    $(function(e){
+        $('.not-now').attr('class','not-now ');
+        $(_this).attr('class','not-now active');
+        var href=$(_this).attr('href');
+        var loc="window.location.href='"+href+"';";
+        $('#to-content').attr('onclick',loc);
+    });
+    return false;
+}  
+
+/*收藏或取消收藏*/
+function coll_and_cac(_this){
+	var url='';
+    if($(_this).attr('class').indexOf('now') > -1) {
+		$(_this).attr('class','jrxy');
+		$(_this).children("span").attr('class','fa fa-heart-o');
+		url=$(_this).attr('del-url');
+	}else {
+		$(_this).attr('class','jrxy jrxynow');
+		$(_this).children("span").attr('class','fa fa-heart');
+		url=$(_this).attr('add-url');
+	}
+	$.ajax({
+		 type:'get',
+		 url:url,
+		 dataType:'json',
+		 success:function(response,status,xhr){
+			 //实时获得
+              getNewcollection();
+		  }
+    });	
+}
+/*$(document).ready(function() {	
+ $(".icon29").click(function(){
+	 $(this).toggleClass("icon29now");
+	 }) 	
+});  */
+
+/**/
+$(document).on('click', ".sxcmr", function(){
+    $(this).parent("li").slideUp();
+	//处理清除条件
+	clearSelect(this,false);
+});
+$(document).on('click', ".splb h1", function(){
+    $(this).toggleClass("active")
+   $(this).siblings(".splbul,.clear2").slideToggle()
+});
+</script>
+
+</head>
+<body>
+<div class="box">
+<include file="Common:header" />{/*公共头部*/}
+<!--content begin-->
+<div class="flmin">
+ <span class="flspan fldj">{:isL(L('Categories'),'产品分类')}</span>
+ <span class="flspan">
+  <span class="pxdj">{:isL(L('ComprehensiveRanking'),'综合排序')}</span>
+  <div class="pxb">
+   <a href="">{:isL(L('popularity'),'人气')}</a>
+   <a href="">{:isL(L('New'),'新品')}</a>
+   <a href="">{:isL(L('InfoPrice'),'价格')}</a>
+   <a href="">{:isL(L('Wishlist'),'愿望单')}</a>
+   <a href="">{:isL(L('SalesVolume'),'销量')}</a>
+  </div>
+ </span>
+</div><!---flmin end-->
+ <div class="lbt">
+     <div class="wrap"><div class="lbtm fl">
+ <if condition="$cateName">
+     <h1>{$cateName}</h1>
+     <p>在YOUDI WU一站式选购全球最新款式的设计师pp男装精品，打造时尚男士的专属衣服！</p>
+<else />
+    <if condition="$_GET['text'] eq 'new'">
+        <h1>{:isL(L('NewArrivals'),'最新发布')}</h1>     
+        <p>在YOUDI WU一站式选购全球最新款式的设计师pp男装精品，打造时尚男士的专属衣服！</p>
+    <else />
+        <h1>{:isL(L('All'),'全部')}</h1>     
+        <p>在YOUDI WU一站式选购全球最新款式的设计师pp男装精品，打造时尚男士的专属衣服！</p>
+    </if>   
+ </if>
+     </div><div class="cb"></div></div>
+ </div><!--lbt end-->
+<div class="zxfb">
+ <div id="ajax-div">
+   <include file="Category:index_ajax" />
+ </div>   
+ <div class="cb"></div>
+ <div class="zjll">
+  <div class="zjllt">
+   <ul id="menu1">
+   	<li onClick="setTab(1,0)" class="hover">{:isL(L('YouMayLike'),'您可能会喜欢')}</li>
+    <li onClick="setTab(1,1)">{:isL(L('RecentVisit'),'最近浏览过')}</li>
+    <div class="cb"></div>
+   </ul>
+  </div>
+  <div class="zjllb" id="main1">
+   <blockquote class="block" get="likes">
+    <div class="zjllbox zjll1">
+     <a href="javascript:void(0)" class="icon30a zjll1right"></a>
+     <a href="javascript:void(0)" class="icon30b zjll1left"></a>
+     <div class="zjllbm zjll1m show-list"><include file="Piece/likes" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/likes.html */}
+      
+     </div>
+     <div class="cb"></div>
+    </div>
+    
+   </blockquote>
+   <blockquote get="visits">
+    
+    <div class="slider1">
+<include file="Piece/visits" /> {/*动态数据模板 /App/Modules/Home/Tpl/Piece/visits.html */}
+      
+    </div>
+    <script type="text/javascript" src="__HOME__/js/jquery.bxslider.js"></script>
+     <script type="text/javascript">
+
+        $(document).ready(function(){
+ wk=$(".zxfb").width()
+          $('.slider1').bxSlider({			
+            slideWidth: wk/8,
+            minSlides: 7,
+            maxSlides: 8,
+            slideMargin: 0,
+			prevText:"",
+			nextText:""
+
+          });
+
+        });
+
+    </script>
+   </blockquote>
+  </div><!--zjllb end-->
+ </div><!--zjll end-->
+ <div class="cb"></div>
+</div><!--zxfb end-->
+ 
+<!--content end-->
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+<script type="text/javascript" src="__HOME__/js/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+            $(".chosen-select").chosen();
+
+        </script>
+</body>
+</html>

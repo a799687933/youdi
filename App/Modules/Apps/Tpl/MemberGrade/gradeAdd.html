@@ -1,0 +1,68 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/MemberGrade/gradeAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+        <input type="hidden" value="{$result['id']}" name="id" />
+        <div class="pageFormContent nowrap" layoutH="97">
+        
+           <foreach name="gradeName" item="t">
+                <dl>
+                    <dt>({$t['info']})等级名称：</dt>
+                    <dd>
+                        <input  type="text" name="{$t['field']}" value="{$result[$t['field']]}" class="required" size="40"/>
+                        
+                    </dd>
+                </dl>
+           </foreach> 
+           
+            <dl>
+                <dt>积分上限：</dt>
+                <dd>
+                    <input type="text" name="min_points" value="{$result['min_points']}" class="required digits" size="40"/>
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>积分下限：</dt>
+                <dd>
+                     <input type="text" name="max_points" value="{$result['max_points']}" class="required digits"  size="40"/>
+                </dd>
+            </dl>
+            
+             <dl>
+                <dt>初始折扣率(%)：</dt>
+                <dd>
+                     <input type="text" name="discount" value="{$result['discount']}" class="required digits" size="40"/>
+                </dd>
+            </dl>
+                       
+            <!--<dl>
+                <dt>特殊会员组：</dt>
+                <dd>
+                    <label><input type="radio" name="special_rank" value="1" />是</label>
+                    <label><input type="radio" name="special_rank" value="0" checked="checked"/>否</label>
+                </dd>
+            </dl>-->
+            
+            <dl>
+                <dt>显示价格：</dt>
+                <dd>
+                    <label><input type="radio" name="show_price" value="1" <if condition="$result['show_price'] eq 1">checked="checked"</if> />是</label>
+                    <label><input type="radio" name="show_price" value="0" <if condition="$result['show_price'] eq 0">checked="checked"</if>/>否</label>
+                </dd>
+            </dl>
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

@@ -1,0 +1,64 @@
+<style type="text/css">
+dl dt{text-align:right;}
+</style>
+<div class="pageContent">
+    
+    <form method="post" action="{:U(APP_APPS.'/Ad/adClassAddForm')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+       <input type="hidden" name="ad_id" value="{$_GET['id']}" />
+        <div class="pageFormContent nowrap" layoutH="97">
+
+            <!--<dl>
+                <dt>选择城市：</dt>
+                <dd>
+                 <select class="combox" name="city_id">
+                    <option value="0">-请选择城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.region_id}" <if condition="$save['city_id'] eq $C['region_id']">selected="selected"</if>>{$C.html}{$C.region_name}</option>
+                   </foreach>  
+                </select>
+                    
+                </dd>
+            </dl>-->
+            
+            <foreach name="adName" item="t">
+            <dl>
+                <dt>({$t['info']})广告名称：</dt>
+                <dd>
+                    <input  type="text" name="{$t['field']}" value="{$save[$t['field']]}" class="required"/>
+                    
+                </dd>
+            </dl>
+            </foreach>
+            
+            <dl>
+                <dt>广告位宽度：</dt>
+                <dd>
+                    <input type="text" name="ad_width" value="{$save.ad_width}" class="required digits"/>
+                </dd>
+            </dl>
+    
+            <dl>
+                <dt>广告位高度：</dt>
+                <dd>
+                     <input type="text" name="ad_height" value="{$save.ad_height}" class="required digits" />
+                </dd>
+            </dl>
+            
+        <dl class="nowrap">
+            <dt>广告位描述：</dt>
+            <dd><textarea name="cn_ad_class_bewrite" class="required" cols="50" rows="8" style="resize:none;">{$save.cn_ad_class_bewrite}</textarea></dd>
+        </dl>
+            
+            
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+
+

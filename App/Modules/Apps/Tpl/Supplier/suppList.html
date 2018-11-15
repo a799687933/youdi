@@ -1,0 +1,113 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+     <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->  
+    <input type="hidden" name="is_vetted" value="{$_REQUEST['is_vetted']}" /><!--已审核和未审核-->    
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                     输入关键字：<input type="text" name="name" value="{$searchVal}"/>
+                </td>
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Supplier/suppAddSave')">
+              <li><a class="add auto-size" href="{:U(APP_APPS.'/Supplier/suppAddSave','','')}?action={$action}" target="dialog" mask="true" title="添加供应商"><span>添加供应商</span></a></li>
+            </if>
+            
+            <if condition="access('Supplier/exportExcel')">
+            <li class="">
+                 <a class="icon" href="{:U(APP_APPS.'/Supplier/exportExcel',array(C('VAR_PAGE')=>$currentPage),'xls')}" target="dwzExport" targettype="navTab" title="实要导出这些记录吗?这可能需要几分钟，请耐心等待">
+                 <span>导出EXCEL</span>
+                 </a>           
+            </li>
+            </if>
+            
+            <if condition="access('Supplier/suppDel')">
+              <li><a title="操作不可恢复确定执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Supplier/suppDel','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/{$action}" class="delete"><span>删除供应商</span></a></li>
+            </if>
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>               
+                <th orderfield="name"  class="<if condition='$name eq "desc"'>desc<else />asc</if>">供应商名称</th>
+                <th orderfield="bankroll"  class="<if condition='$bankroll eq "desc"'>desc<else />asc</if>">供应商帐户</th>
+                <th orderfield="city"  class="<if condition='$city eq "desc"'>desc<else />asc</if>">所属城市</th>
+                <th>联系人</th>
+                <th>联系电话</th>
+                <th orderfield="orders"  class="<if condition='$orders eq "desc"'>desc<else />asc</if>">最后登录时间</th>
+                <th orderfield="temp_login_count"  class="<if condition='$temp_login_count eq "desc"'>desc<else />asc</if>">帐号异常</th>
+                <th orderfield="is_lock"  class="<if condition='$is_lock eq "desc"'>desc<else />asc</if>">锁定用户</th>
+                <th orderfield="addtime"  class="<if condition='$addtime eq "desc"'>desc<else />asc</if>">添加时间</th>
+                <th>操作</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            
+           <volist name="supplier" id="r">
+            <tr target="sid_user" rel="{$r.id}">
+                <td><input name="ids" value="{$r.id}" type="checkbox"></td>
+                <td>{$r.id}</td>
+                <td>{$r.name}</td>
+                <td>￥<strong style="color:red;">{$r.bankroll}</strong></td>
+                <td>{$r.region_name}</td>
+                <td>{$r.contacts}</td>
+                 <td>{$r.tel}</td>
+                <td><if condition="$r['last_time']">{$r.last_time|date='Y-m-d',###}<else />暂无记录</if></td>                
+                <td>                    
+                       <if condition="$r['temp_login_count'] egt 5">
+                            <span style="color:red;" title="登录失败5次帐号被禁止登录">登录被限制</span> | 
+                            <a href="javascript:;" onclick="testConfirmMsg('{:U(APP_APPS.'/Supplier/suppForm',array('id'=>$r['id'],'cancelLimit'=>'ok','rel'=>$action))}','ajax','确定取消本次限制？')" rel="{$action}">取消限制</a>
+                      <else />
+                           <span style="color:green;">登录正常</span>
+                      </if>                    
+                </td>
+                <td>{$r.is_lock|tpl_yes_no=###,'goods_supplier','is_lock',$r['id'],'id','Supplier/suppForm'}</td>
+                <td><if condition="$r['addtime']">{$r.addtime|date='Y-m-d',###}<else />暂无记录</if></td>
+               <td>
+                   {$action|tpl_action='dialog','Supplier/suppAddSave','id/'.$r["id"].'/action/'.$action,'修改（'.strip_tags($r['name']).'）','icon_edit.gif','icon_edit_not.gif'} <!--修改按钮-->
+                    {$action|tpl_action='navTab','Goods/goodsAllList','supplier_id/'.$r['id'],strip_tags($r['name']).'--供应商品列表','book_open.gif','book_open2.gif'}   <!--供应商商品列表按钮-->
+                    {$action|tpl_action='navTab','Bankroll/supplierExpenses','supplier_id/'.$r["id"],'('.$r['name'].')帐户清单','icon_account.gif','icon_account_not.gif'}    
+                                      
+                    {$action|tpl_action='ajaxTodo','Supplier/suppDel',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$r["id"].'/action/'.$action,'确定执行删除('.strip_tags($r['name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

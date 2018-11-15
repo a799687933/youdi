@@ -1,0 +1,32 @@
+2016-05-19 13:42:30, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\secureUtil.php ], Line[16]------ =====签名报文开始====== 
+2016-05-19 13:42:30, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\secureUtil.php ], Line[22]------ 签名key=val&...串 >accessType=0&backUrl=http://www.hcm9w.com/Payment/backReceive.html&bizType=000201&certId=40220995861346480087409489142384722381&channelType=07&currencyCode=156&encoding=utf-8&frontUrl=http://www.hcm9w.com/Payment/frontReceive.html&merId=777290058126043&orderId=2016051913290770926&signMethod=01&txnAmt=2500&txnSubType=01&txnTime=19700101080000&txnType=02&version=5.0.0 
+2016-05-19 13:42:30, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\secureUtil.php ], Line[25]------ 摘要sha1x16 >421fc2381ea0b0620a36fad978e56d64446a1797 
+2016-05-19 13:42:31, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\secureUtil.php ], Line[32]------ 签名串为 >QA/P6HybudyPMRks2H4HmauW4BlTGhb7/vko7TCEsZHEk0ZnCvIi7xnskpGbQM0nxeIgi69CWquBxUz0noSCZ8VTnhu1UkUyYhACJ4M2343Wk/w59uA+evF0UzBCn+Ruu6R+itWYKnWpQltFIPxzyNwfKSMkckNNI/ZiR9hZrEo= 
+2016-05-19 13:42:31, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\secureUtil.php ], Line[37]------ =====签名报文结束====== 
+2016-05-19 13:42:31, INFO, 127.0.0.1, File[ E:\wamp\www\yuege_shop_lot_lang_2016_4\App\Plugins\Payment\UnionPay\Sdk\acp_service.php ], Line[160]------ 自动跳转html><html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body onload="javascript:document.pay_form.submit();">
+    <form id="pay_form" name="pay_form" action="https://101.231.204.80:5000/gateway/api/frontTransReq.do" method="post">
+	    <input type="hidden" name="version" id="version" value="5.0.0" />
+    <input type="hidden" name="encoding" id="encoding" value="utf-8" />
+    <input type="hidden" name="txnType" id="txnType" value="02" />
+    <input type="hidden" name="txnSubType" id="txnSubType" value="01" />
+    <input type="hidden" name="bizType" id="bizType" value="000201" />
+    <input type="hidden" name="frontUrl" id="frontUrl" value="http://www.hcm9w.com/Payment/frontReceive.html" />
+    <input type="hidden" name="backUrl" id="backUrl" value="http://www.hcm9w.com/Payment/backReceive.html" />
+    <input type="hidden" name="signMethod" id="signMethod" value="01" />
+    <input type="hidden" name="channelType" id="channelType" value="07" />
+    <input type="hidden" name="accessType" id="accessType" value="0" />
+    <input type="hidden" name="currencyCode" id="currencyCode" value="156" />
+    <input type="hidden" name="merId" id="merId" value="777290058126043" />
+    <input type="hidden" name="orderId" id="orderId" value="2016051913290770926" />
+    <input type="hidden" name="txnTime" id="txnTime" value="19700101080000" />
+    <input type="hidden" name="txnAmt" id="txnAmt" value="2500" />
+    <input type="hidden" name="certId" id="certId" value="40220995861346480087409489142384722381" />
+    <input type="hidden" name="signature" id="signature" value="QA/P6HybudyPMRks2H4HmauW4BlTGhb7/vko7TCEsZHEk0ZnCvIi7xnskpGbQM0nxeIgi69CWquBxUz0noSCZ8VTnhu1UkUyYhACJ4M2343Wk/w59uA+evF0UzBCn+Ruu6R+itWYKnWpQltFIPxzyNwfKSMkckNNI/ZiR9hZrEo=" />
+   <!-- <input type="submit" type="hidden">-->
+    </form>
+</body>
+</html> 

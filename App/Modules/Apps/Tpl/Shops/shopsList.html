@@ -1,0 +1,151 @@
+<script type="text/javascript" src="__J_UI__/js/DialogAutoSize.js"></script>
+<form id="pagerForm" method="post" action="{$url}">
+    <input type="hidden" name="status" value="${param.status}">
+    <input type="hidden" name="keywords" value="${param.keywords}" />
+    <input type="hidden" name="pageNum" value="1" />
+    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
+    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="user_type" value="{$user_type}" />
+    <input type="hidden" name="order" value="<if condition="$order">{$order}<else />DESC</if>" /><!--默认排序-->
+    <input type="hidden" name="orderPage" value="{$currentPage}" /><!--排序当前页-->
+    <input type="hidden" name="orderFieldGet" value="{$orderFieldGet}" /><!--排序数据库字段名称-->
+    <input type="hidden" name="orderGet" value="{$orderGet}" /><!--保存已选择的排序方式 ASC 或 DESC-->         
+</form>
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="" method="post">
+    	<input type="hidden" name="user_type" value="{$user_type}" />
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                  输入关键字：<input type="text" name="user_name" value="{$searchVal}"/>
+                </td>
+               <td>城市：</td>
+               <td>
+                <select class="combox" name="city" >
+                    <option value="">-全部城市-</option>
+                   <foreach name="City" item='C'>                       
+                       <option value="{$C.region_id}" <if condition='$_REQUEST["city"] eq $C["region_id"]'>selected="selected"</if>>{$C.html}{$C.region_name}</option>
+                   </foreach>  
+                </select>
+                </td>
+                <td>
+              <!-- <td>分类：</td> 	
+               <td>
+                <select class="combox" name="files_id" >
+                    <option value="">-全部分类-</option>
+                   <foreach name="cage" item='C'>                       
+                       <option value="{$C.files_id}" <if condition='$_REQUEST["files_id"] eq $C["files_id"]'>selected="selected"</if>>{$C.html}{$C.files_name}</option>
+                   </foreach>  
+                </select>
+                </td>-->
+                <td>
+                    <div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <if condition="access('Shops/shopAddSave')">
+              <li><a class="add auto-size" href="{:U(APP_APPS.'/Shops/shopAddSave',array('action'=>'shopsList'))}"target="dialog" mask="true"  title="添加商铺"><span>添加商铺</span></a></li>
+            </if>
+            <if condition="access('Shops/shopDelete')">
+              <li><a title="操作不可恢复确定要执行本次操作？" target="selectedTodo" rel="ids" postType="string" href="{:U(APP_APPS.'/Shops/shopDelete','','')}/{:C('VAR_PAGE')}/{$currentPage}/action/shopsList" class="delete"><span>删除</span></a></li>
+            </if>
+            <if condition="access('InstationInfo/sendInfo')">
+              <li>
+                  <a class="add" href="{:U(APP_APPS.'/InstationInfo/sendInfo',array('type'=>'shops','action'=>'shopsList'))}"target="dialog" mask="true" width="1024" height="590" title="服务商批量推送站内信">
+                 	<span>服务商批量推送站内信</span>
+                  </a>
+              </li>
+            </if>    
+            <if condition="access('Shops/updateShopsTpl')">
+              <li>
+                   <a class="add" href="javascript:void(0);" onclick="testConfirmMsg('{:U(APP_APPS.'/Shops/updateShopsTpl')}','ajax','确定执行批量更新？')" title="服务商批量推送信息">
+                       <span> 执行批量更新商铺模板</span>
+                   </a>            
+              </li>
+            </if>                         
+            <li class="line">line</li>
+        </ul>
+    </div>
+    <table class="list" width="100%" layoutH="90">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox" group="ids"  class="checkboxCtrl"></th>
+                <th orderfield="id"  class="<if condition='$id eq "desc"'>desc<else />asc</if>">编号</th>
+                <th>商铺目录</th>
+                <th>商铺模板</th>
+                <th>商铺名称</th>
+              <!--  <th>商户类型</th>    -->
+                <th orderfield="agent_shops_id"  class="<if condition='$agent_shops_id eq "desc"'>desc<else />asc</if>">商户类型</th>
+                <th>会员名称</th>         
+                <th orderfield="user_type"  class="<if condition='$user_type eq "desc"'>desc<else />asc</if>">所属城市</th>
+                <th>是否审核</th>
+                 <th orderfield="shop_close"  class="<if condition='$shop_close eq "desc"'>desc<else />asc</if>">商户状态</th>
+                 <th>是否推荐</th>
+                <th orderfield="shop_time"  class="<if condition='$shop_time eq "desc"'>desc<else />asc</if>">加入时间</th>
+                <th>操作</th>
+            </tr>           
+            
+        </thead>
+        <tbody>
+            
+           <volist name="shops" id="V">
+            <tr target="sid_user" rel="{$V.id}">
+                <td><input name="ids" value="{$V.id}" type="checkbox"></td>
+                <td>{$V.id}</td>
+                <td><if condition="$V['catalog']">{$V.catalog}<else />{$V.member_id}</if></td>
+                <td><if condition="$V['is_edit_tpl']"><span style="color:#009">自定义编辑模板</span><else />{$V['shop_style']}</if></td>
+                <td><a href="{:U('/Shops/index/',array('store'=>$V['catalog']),'')}" target="_blank">{$V.shop_name}</a></td>
+               <!-- <td><if condition="$V['shops_type']"><span style="color:#00F">企业商家</span><else /><span style="color:#F90">个人商家</span></if></td>-->
+                <td><if condition="$V['agent_shops_id']">普通商户<else /><span style="color:#f60;">代理商</span></if></td>
+                <td>{$V.user_name}</td>
+                <td>{$V.city_name}</td>
+                <td>
+                    <if condition="$V['display'] eq 0">
+                        <img src="{:C('__IMG__')}/no.gif" />
+                    <else />
+                         <img src="{:C('__IMG__')}/yes.gif" />
+                    </if>                
+                </td>
+                <td>
+                    <if condition="$V['shop_close'] eq 0">
+                        <img src="{:C('__IMG__')}/no.gif" />
+                    <else />
+                         <img src="{:C('__IMG__')}/yes.gif" />
+                    </if>
+                </td>
+                <td>{$V.recommend|tpl_yes_no=###,'shops','recommend',$V['id'],'id','Shops/shopAddSaveForm'}</td>
+               
+                <td>{$V.shop_time|date='Y-m-d',###}</td>      
+                <td>                
+                 {$action|tpl_action='dialog','Shops/shopAddSave','id/'.$V["id"].'/action/shopsList','查看/修改('.strip_tags($V['shop_name']).')','icon_view.gif','icon_view_not.gif'} <!--添加按钮-->
+                 {$action|tpl_action='navTab','Shops/shopTpls','id/'.$V["id"].'/name/'.$V['shop_name'],'商铺模板','icon_account.gif','icon_account_not.gif'} <!--商铺模板-->
+                <!-- {$action|tpl_action='navTab','Shops/shopCateList','id/'.$V["id"].'/name/'.$V['shop_name'],'文章分类','book_open.gif','book_open2.gif'} 文章分类-->
+				 {$action|tpl_action='navTab','Goods/shopsGoodsList','shops_id/'.$V["id"].'/action/shopsGoodsList',$V['shop_name'].'商品列表','book_open.gif','book_open2.gif'} <!--商品列表-->
+				 {$action|tpl_action='navTab','OrderInfo/orderList','shops_id/'.$V["id"],'('.$V['shop_name'].')订单列表','book_open.gif','book_open2.gif'} <!--订单列表-->
+                 {$action|tpl_action='dialog','InstationInfo/sendInfo','id/'.$V["id"].'/type/shops/name/'.$V['shop_name'].'/action/shopsList','给('.$V['shop_name'].')服务商发站内信','icon_account.gif','icon_account_not.gif',1024,590} <!--给服务商发消息-->                    
+                 {$action|tpl_action='ajaxTodo','Shops/shopDelete',C('VAR_PAGE').'/'.$currentPage.'/ids/'.$V["id"].'/action/shopsList','确定执行删除('.strip_tags($V['shop_name']).')','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->  
+                </td>
+            </tr>
+          </volist> 
+
+        </tbody>
+    </table>
+    
+        <div class="panelBar">
+        <div class="pages">
+            <span>共 {$totalCount} 条数据 <b style="color:red;">{$currentPage}</b>/{$pageNumShown} 页</span>
+        </div>
+        
+        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="18" currentPage="{$currentPage}"></div>
+
+    </div>
+</div>
+

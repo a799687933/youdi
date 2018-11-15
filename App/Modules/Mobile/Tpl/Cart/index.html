@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{:isL(L('shoppingCa'),'我的购物车')}-{:C($langfx.'WEBNAME')}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+<link href="__MOBILE__/style/style.css" rel="stylesheet" type="text/css" />
+<script src="__COMMON__/Js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__COMMON__/Js/div-dialog.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/cartPage.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="__MOBILE__/js/jquery.dlmenu.js"></script>
+<link href="__MOBILE__/css/component.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+__root__="__ROOT__/";    
+$(function(){
+    var str="{:isL(L('shoppingCa'),'我的购物车')}({$cartCount})";
+    $('.title').text(str);
+});
+
+/*使用加调函数重新付值选择样式*/
+function toChecked(_this,types){
+    var checkeds=$('input[name="cart_id[]"]');
+    if($(_this).attr('checked')){
+        $(_this).parent().attr('class','on');
+    }else{
+        $(_this).parent().attr('class','');
+    }    
+    if(types=='all'){
+        for(var i=0;i < checkeds.length;i++){
+            if(checkeds.eq(i).attr('checked')){
+                checkeds.eq(i).parent().attr('class','on');
+            }else{
+                checkeds.eq(i).parent().attr('class','');
+            }
+        }        
+    }
+}
+</script>
+<style type="text/css">
+.order_list li.titlec {
+  height: 35px;
+  width: 100%;
+  line-height: 35px;
+  background-color: #8ec835;
+  font-size: 14px;
+  color: #fff;
+  float: left;
+}    
+</style>
+</head>
+<body>
+<div class="g-mn">
+   <include file="Common:header1" />
+   <form  id="cart-form">    
+     <div class="order_list"> 
+        <ul>
+          <li class="titlec"> 
+              <span class="lista1">
+                  <input type="checkbox" id="Checkbox1" name="all" onClick="selectCheckbox(this,'all')" class="allselect"  />
+                  {:isL(L('CheckAll'),'全选')}
+              </span> 
+          </li>
+          
+             <foreach name="cartList['list']" item="li">    
+                  <li > 
+                      <span class="list1">
+                        <input type="checkbox" class="input_o" name="cart_id[]" value="{$li.id}" />
+                        </span>
+                        <span class="list2">
+                            <a href="{:U('Goods/index',array('html'=>'g-'.$li['goods_id']))}"  target="_blank">
+                                 <img src="__ROOT__/{$li.goods_thumb}"  />
+                            </a>     
+                        </span>
+                        
+                        <span class="list4">
+                        {$li[pfix('goods_name')]|show_str=###,25}<br/>
+                        <!--商品属性<foreach name="li['goods_attr']['attr_array']" item="attr">
+                           {$attr[pfix('name')]}：{$attr[pfix('attr_value')]}(+{:getPrice($attr['attr_price'])})<br/>
+                        </foreach>-->
+                        <span class="list3" ><label  class="tot" style="color:#ff5500;font-size:14px; font-weight:bold;"> {:getPrice($li['goods_price'],true)}</label></span>
+                        <div class="sl_add">
+                            <a  id="min3" onClick="updateNumber('-','number_{$li.id}',{$li.id},'<php>echo APP_MOBILE;</php>')"><img src="__MOBILE__/images/btn_down.jpg" width=29 height=34></a>
+                            <input  size="5" 
+                            type="text"
+                            name="number_{$li.id}" id="number_{$li.id}" 
+                            value="{$li.goods_number}"
+                            temp="{$li.goods_number}"
+                            >
+                            <a id="add3" onClick="updateNumber('+','number_{$li.id}',{$li.id},'<php>echo APP_MOBILE;</php>')"><img src="__MOBILE__/images/btn_up.jpg" width=29 height=34></a>
+                        </div>
+                       
+                        </span>
+                       
+                        <span class="list5">
+                            <a href="javascript:void(0);" onClick="toDelete({$li.id},'<php>echo APP_MOBILE;</php>')">{:isL(L('Delete'),'删除')}</a> 
+                       </span> 
+                  </li>
+             </foreach>
+              
+        </ul>
+    
+  </div>
+  <div class="order_buy">
+      <div class="buy1">
+          <input type="checkbox" name="all"  onClick="selectCheckbox(this,'all')" class="allselect" />
+           {:isL(L('CheckAll'),'全选')}
+      </div>
+      <div class="buy5">
+          <a href="javascript:void(0);" onClick="sendForm('<php>echo APP_MOBILE;</php>')">
+              {:isL(L('Settlement'),'结算')}(<label id="shuliang" class="counts">0</label>)
+          </a>
+      </div>
+    <div class="buy4">
+        <!--
+        {/*启用会员等级积分*/}
+        <if condition="C('IS_RANK_POINTS')">
+            <span class="ver_mid">{:isL(L('SendLevelIntegral'),'赠送等级积分')}： {$cartList.rank_points}</span> | 
+        </if>
+        {/*启用会员等级积分结束*/}
+        
+        {/*启用会员消费积分*/} 
+        <if condition="C('IS_PAY_POINTS')">
+            <span class="ver_mid">{:isL(L('ChargeIntegration'),'赠送消费积分')}： {$cartList.pay_points}</span> | 
+        </if>
+        {/*启用会员消费积分结束*/} 
+        -->
+        {:isL(L('TotalAmount'),'总金额')}：<b style="color:red;">{:getPrice($cartList['sum'],true)}</b>
+    </div>   
+  </div>
+  </form>
+<include file="Common:float" />{/*右边返回项部*/}
+<include file="Common:footer" />{/*页脚*/}
+<form></form>
+</body>
+</html>

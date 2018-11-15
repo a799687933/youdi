@@ -1,0 +1,12 @@
+﻿{/*商品分类列表*/}
+  <foreach name="goodsList" item="gos">   
+      <li style="text-align: left">
+          <a href="{:U(is_m().'/Goods/index',array('html'=>$gos['id']))}">
+               <img src="__ROOT__/{$gos['goods_thumb']}" alt=""/>
+               <p class="pl5 hong2 lh25">￥<b class="f14">{$gos['goods_retail_price']}</b></p>
+               <p class="col999 ">市场价：<del>￥{$gos['goods_market_price']}</del></p>
+               <div class="cb"></div>
+               <p class="col666 lh20 pl5 pr5 pb5">{$gos['goods_name']|strip_tags=###|sub_str=###,7}</p>
+           </a>
+       </li>
+  </foreach> 

@@ -1,0 +1,200 @@
+<foreach name="result" item="gs">  
+ 	<li>
+    <if condition="is_mobile()">
+     <div class="xspjt">
+     <div style="display:inline-block;" class="rating-static-module fl"> 
+            {/*评星*/}
+            <span class="<php>if($gs['score'] >= 1){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+            <span class="<php>if($gs['score'] >= 2){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+            <span class="<php>if($gs['score'] >= 3){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+            <span class="<php>if($gs['score'] >= 4){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+            <span class="<php>if($gs['score'] >= 5){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+             {/*评星结束*/}        
+                   
+             <!--星星标题本
+              <span class="rateit-selected fl svg"></span> 全黑色星
+              <span class="rateit-halfselected fl svg"></span>半黑半灰的星星
+             <span class="rateit fl svg"></span>灰色的星星
+              -->
+           </div>
+           <span class="fr colaaa">{$gs.times|date='Y.m.d',###}</span>
+           <div class="cb pb5"></div>
+           <div class="xspjtl">
+       <p>
+          <php>if($gs['is_open']){</php>
+             {:isL(L('Privacy'),'顾客')}：{$gs.full_name} {$gs.surname}
+          <php>}else{</php>
+             {:isL(L('Privacy'),'顾客')}：{:isL(L('Anonymous'),'匿名用户')}
+          <php>}</php>
+       </p>
+       <p><php>if($gs['goods_attr']){</php>
+                  <foreach name="gs['goods_attr']" item="att">{$att[pfix('name')]}：{$att['value'][pfix('attr_value')]} &nbsp;&nbsp;</foreach>
+              <php>}</php>   </p>
+      </div>
+    </div><!--xspjt end-->
+    <else/>
+    
+     <div class="xspjt">
+      <div class="xspjtl">
+       <p>
+          <php>if($gs['is_open']){</php>
+             {:isL(L('Privacy'),'顾客')}：{$gs.full_name} {$gs.surname}
+          <php>}else{</php>
+             {:isL(L('Privacy'),'顾客')}：{:isL(L('Anonymous'),'匿名用户')}
+          <php>}</php>            
+       </p>
+       <p><php>if($gs['goods_attr']){</php>
+                  <foreach name="gs['goods_attr']" item="att">{$att[pfix('name')]}：{$att['value'][pfix('attr_value')]} &nbsp;&nbsp;</foreach>
+              <php>}</php>   </p>
+      </div>
+      <div class="xspjtr">
+      <p class="colaaa">{$gs.times|date='Y.m.d',###}</p>
+      <div style="display:inline-block; float:right" class="rating-static-module"> 
+      
+                <span class="<php>if($gs['score'] >= 1){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+                <span class="<php>if($gs['score'] >= 2){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+                <span class="<php>if($gs['score'] >= 3){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+                <span class="<php>if($gs['score'] >= 4){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+                <span class="<php>if($gs['score'] >= 5){</php>rateit-selected fl svg<php>}else{</php>rateit fl svg<php>}</php>"></span>
+
+                  <!--<span class="rateit-halfselected fl svg"></span>---半黑半灰的星星>
+                  <!--<span class="rateit fl svg"></span>---灰色的星星>
+                  <!-- <img src="__HOME__/images/img11.jpg" alt="" class="fr ml10"/>-->
+           </div>  
+           <div class="cb"></div>
+      </div>
+      <div class="cb"></div>
+     </div><!--xspjt end-->
+     </if>
+     <div class="xspjb">
+      <div class="pjbbtxt">{$gs.content|strip_tags=###}</div>
+      <php>if(strlen(strip_tags($gs['content'])) > 200){</php>
+         <p class="tr"><a href="javascript:void(0)" class="pjbbtxtdj col2ab">{:isL(L('ReadMore'),'继续阅读')}</a></p>
+      <php>}</php>
+      <php>if($gs['slide_show']){</php>                    
+                  <div class="pjbbimg pt10">
+                       <ul>
+                            <foreach name="gs['slide_show']" item="att">
+                            <li><img src="__ROOT__/{$att}" /><span></span></li>
+                            </foreach>
+                       </ul>
+                       <div class="tctp">
+ <span class="tpprev glyphs icon-prev"></span><span class="tpnext glyphs icon-next"></span>
+ <div class="tpm"><span class="close tpclose" ><span class="glyphs icon-close" style="line-height:30px;"></span></span><b><img src="" alt=""/></b></div>
+</div><!--tctp end-->
+                  </div>
+      <php>}</php>
+     
+     </div><!--xspjt end-->
+        <!-- <div class="pjbt">
+         <p><span>Privacy：{$gs.user_name|center_tsterisk=###,1}</span><span class="fr">{$gs.times|date='Y.m.d',###}</span></p> 
+          <p>
+              <php>if($gs['goods_attr']){</php>
+                  <foreach name="gs['goods_attr']" item="att">{$att[pfix('name')]}：{$att['value'][pfix('attr_value')]} &nbsp;&nbsp;</foreach>
+              <php>}</php>    
+              <for start="0" end="$gs['score']"><img src="__HOME__/images/img11.jpg" alt="" class="fr ml10"/></for>
+         </p>
+         </div>
+         <div class="pjbb">
+              <div class="pjbbtxt">{$gs.content|strip_tags=###}</div>
+              <p class="tr"><span class="pjbbtxtdj">{:isL(L('ReadMore'),'继续阅读')}</span></p>
+               {/*用户晒图*/}
+              <php>if($gs['slide_show']){</php>                    
+                  <div class="pjbbimg pt10" data-toggle="lightbox-gallery">
+                       <ul>
+                            <foreach name="gs['slide_show']" item="att">
+                            <li><a href="__ROOT__/{$att}" class="gallery-link"><img src="__ROOT__/{$att}" /></a><span></span></li>
+                            </foreach>
+                       </ul>
+                  </div>
+              <php>}</php>
+              
+              
+              
+         </div>-->
+    </li>
+</foreach>
+<style>
+ .tctp{ background:rgba(0,0,0,0.7); width:100%; height:100%; position:fixed; left:0; top:0; z-index:300; display:none}
+ .tpprev{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; left:35px; top:50%; margin-top:-15px; color:#bababa; line-height:30px; text-align:center; font-size:60px; z-index:10}
+ .tpnext{ display:inline-block; cursor:pointer; width:30px; height:30px; position:absolute; right:35px; top:50%; margin-top:-15px;color:#bababa; line-height:30px; text-align:center; font-size:60px; z-index:10}
+ .tpm{ background:#444; width:520px; height:520px; position:absolute; left:50%; top:50%; margin:-260px 0 0 -260px; display:none}
+ .tpm b{ display:table-cell; vertical-align:middle; text-align:center; width:520px; height:520px;  box-sizing:border-box}
+ .tpm img{ max-width:520px; max-height:520px}
+ .tpclose{top:-30px; right:-40px;}
+ @media screen and (max-width:767px){
+	  .tpm{ width:100%; left:0; margin-left:0}
+	  .tpm b{ width:100%}
+	  .tpm img{max-width:100%;}
+	  .tpprev{ left:0}
+	  .tpnext{ right:30px}
+	  .tpclose{top:50px; right:10px;}
+	 }
+</style>
+<if condition="is_mobile()">
+<script type="text/javascript" src="__HOME__/js/jqueryph.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.mobile-1.4.5.min.js"></script>
+<else/>
+</if>
+
+<script type="text/javascript">
+ $(function(){
+ 
+/****/
+var bigImg='';
+	var _index=0;
+	
+		$(".tpclose").click(function(){
+			$(this).parent(".tpm").hide()
+		$(this).parents(".tctp").fadeOut()	
+		
+	});//关闭
+	$(".pjbbimg li img").click(function(){
+		$(this).parent("li").parent("ul").siblings(".tctp").fadeIn("fast",function(){
+			$(this).children(".tpm").show()
+			});
+		bigImg=$(this).attr("src");//获取点击图片的地址
+		$(this).parent("li").parent("ul").siblings(".tctp").children(".tpm").children("b").children("img").attr("src",bigImg); //更换大图的图片地址
+		_index=$(this).parent("li").index();//保存图片的序列号
+		i=$(this).parent("li").parent("ul").children("li").length;
+		
+	});
+
+
+	$(".tpnext").bind("click",function(){
+			 _index++;
+			b= $(this).parent(".tctp").parent(".pjbbimg").children("ul").children("li").length
+			//alert(b)
+			 
+			 if(_index>=b){_index=0}; 
+			 bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+			 })
+	$(".tpm b").on("swiperight",function(){
+		_index++;
+		b= $(this).parent(".tpm").parent(".tctp").parent(".pjbbimg").children("ul").children("li").length
+		if(_index>=b){_index=0}; 
+		bigImg2=$(this).parent(".tpm").parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+  $(this).children("img").attr("src",bigImg2);
+});
+	
+	$(".tpprev").click(function(){
+		_index--; //序列号加1 _index+1
+		b= $(this).parent(".tctp").parent(".pjbbimg").children("ul").children("li").length
+		if(_index< 0){_index=b-1};
+		//alert(_index)
+		bigImg=$(this).parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+		$(this).siblings(".tpm").children("b").children("img").attr("src",bigImg);
+	});
+	
+	$(".tpm b").on("swipeleft",function(){
+		_index--;
+		b= $(this).parent(".tpm").parent(".tctp").parent(".pjbbimg").children("ul").children("li").length
+		if(_index< 0){_index=b-1};
+		bigImg2=$(this).parent(".tpm").parent(".tctp").siblings("ul").children("li").children("img").eq(_index).attr("src");
+  $(this).children("img").attr("src",bigImg2);
+});
+	 
+    }); 
+
+</script>

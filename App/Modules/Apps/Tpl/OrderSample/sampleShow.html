@@ -1,0 +1,157 @@
+<style type="text/css">
+.list tr td{background:#fff;}    
+</style>
+<div class="page">
+    <div class="pageContent pageForm">
+        <form method="post" action="{:U('OrderSample/setExes')}" class="pageForm required-validate" onsubmit="return validateCallback(this,navTabAjaxDone)">
+		<input type="hidden" name="id" value="{$res.id}" />
+        <div class="pageFormContent" layoutH="58">
+        <table class="list" style="width:100%;">
+           <!--订单信息-->  
+            <tr><th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">样品信息</th></tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">样品订单号：</td>
+                   <td>{$res.order_sn}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">订单状态：</td>
+                   <td>
+                         <if condition="$res['status'] EQ 0"><!--发货状态-->
+                             [待发货]
+                         <elseif condition="$res['status'] EQ 1"/>
+                             [<span style="color:blue;">已发货</span>]
+                         <elseif condition="$res['status'] EQ 2"/>
+                             [<span style="color:green;">已收货</span>]                                                                              
+                         </if><!--发货状态结束-->                                                          
+                   </td>
+            </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">样品卖家：</td>
+                   <td>{$res.company_name} </td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">卖家联系人：</td>
+                   <td>{$res.linkman}</td>
+            </tr>
+
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">卖家电话：</td>
+                   <td>{$res.tel}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">卖家手机：</td>
+                   <td>{$res.mobile}</td>
+            </tr>      
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">索取样品会员：</td>
+                   <td>{$res.mobile_phone}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">索取样品联系人：</td>
+                   <td>{$res.user_name}</td>
+            </tr>      
+           <!--订单信息结束-->  
+           
+           <!--收货人信息-->
+           <tr>
+                <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">收货人信息</th>
+           </tr>
+		   
+           <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">收货人：</td>
+                   <td>{$res.user_name}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">收货人电话：</td>
+                   <td>{$res.mobile}</td>
+           </tr>      
+            
+           <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">邮编：</td>
+                   <td style="border-bottom:1px #eee solid;">{$res.zip}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;border-bottom:1px #eee solid;">地址：</td>
+                   <td style="border-bottom:1px #eee solid;">{$res.m_province}{$res.m_city}{$res.m_district}{$res.address}</td>
+            </tr>   
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;" >备注：</td>
+                   <td clospan="3" style="border-right:none;padding:10px;">{$res.remarks}</td>
+            </tr>       
+                                 
+            <!--收货人信息结束-->       
+
+            <!--商品信息-->   
+             <tr>
+                  <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                      商品样品信息
+                     <!-- <if condition="access('OrderInfo/saveGoods')">
+                         <a class="buttonActive auto-size" target="dialog" mask="true" rel="orderShow" href="{:U(APP_APPS.'/OrderInfo/saveGoods',array('order_id'=>$orders['order_id']))}" style="float:right;">
+                             <span>修改商品信息</span>
+                         </a>     
+                      </if>-->      
+                 </th>
+            </tr>    
+             <tr><td colspan="4">
+                    <table cellpadding="0" border="0" cellspacing="0" width="100%" >
+                        <tr >
+                            <td style="font-weight: bold;">样品名称</td>
+                            <td style="font-weight: bold;">样品单价</td>
+                            <td style="font-weight: bold;">实收金额</td>
+                            <td style="font-weight: bold;">数量</td>
+                            <td style="font-weight: bold;">属性</td>
+                       </tr>
+                       <foreach name="asmp" item="gl">
+                            <tr>
+                                <td style="border-top:1px #ccc solid;">{$gl.sample_name}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.price}</td>
+                                <td style="border-top:1px #ccc solid;">0.00</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.number} </td>
+                                <td style="border-top:1px #ccc solid;">
+                                     <foreach name="gl['attr']['attr_array']" item="ga">
+                                           {$ga.attr_name}：{$ga.attr_value}[￥{$ga.attr_price}]<br/>
+                                     </foreach>
+                               </td>
+                            </tr>
+                        </foreach>
+                      <!--  <tr>
+                            <td style="border-top:1px #ccc solid;" colspan="8"></td>
+                            <td style="border-top:1px #ccc solid;text-align: right;">合计</td>
+                            <td style="border-top:1px #ccc solid;" >￥<strong style="color:red;">{:number_format($goodsTotal,2, '.', '')}</strong></td>
+                        </tr>       -->                                    
+                      </table>  
+             </td></tr>
+            <!--商品信息结束-->       
+            
+            <!--操作信息-->
+             <tr><th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">操作信息</th></tr>  
+			 
+			  <tr class="preferes">
+				<td  style="text-align:right;">选择物流公司：</td>
+					 <td>
+					   <select name="logistics"  class="select110 mr15 ">
+									<option value="">选择物流</option>
+									<foreach name="shipping" item="ci">
+											<option value="{$ci.shipping_id}" <if condition="$res['logistics'] eq $ci['shipping_id']">selected="selected"</if>>{$ci.shipping_name}</option>
+									</foreach>   
+					   </select>            
+					</td>
+			  </tr>		
+			  				   
+             <tr class="show-num" >
+                 <td colspan="1"  style="text-align: right;">物流单号：</td>
+                 <td colspan="3"><input type="text" size="50" name="logistics_sn" value="{$res.logistics_sn}" class="required"/></td>
+            </tr>    
+						
+             <tr>
+                 <td colspan="1"  style="text-align: right;">可操作：</td>
+                 <td colspan="3">
+				     <p style="width:100%">
+							 <label style="width:70px;"><input type="radio" name="status" <if condition="$res['status'] eq 0">checked="checked"</if> value="0"/>待发货</label>
+							 <label style="width:70px;"><input type="radio" name="status" <if condition="$res['status'] eq 1">checked="checked"</if> value="1"/>已发货</label>
+							 <label style="width:70px;"><input type="radio" name="status" <if condition="$res['status'] eq 2">checked="checked"</if> value="2"/>已发货</label>
+					 </p>
+                </td>
+           </tr>    
+          <!--操作信息结束-->
+        </table>        
+		</div>
+        <div class="formBar">
+            <ul>
+			    <li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    </div>
+</div>

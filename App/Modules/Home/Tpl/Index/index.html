@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:get_con($langfx.'WEBTITLE')}</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<script type="text/javascript" src="__HOME__/js/jquery.cookie.js"></script>
+<!--[if IE]>
+        <script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="box yyhddb wlgq">
+ <include file="Common:header" />{/*公共头部*/}
+ <script type="text/javascript">
+ 
+   $(function(){
+       //提交订阅1
+      // valinit('.form1','post','',true,'bottomLeft');   
+	   
+	   
+	   if($.cookie("isClose") != 'yes'){
+			$(".dybg,.dyym").show();
+			
+			$(".dyclose").click(function(){
+				$(".dyym").slideUp("fast",function(){
+                       $(".dybg").fadeOut(); 
+                   })  
+				//$.cookie("isClose",'yes',{ expires:1/8640});	
+				$.cookie("isClose",'yes',{ expires:1/8640});		//一天
+				notMsg();//只出现一次     
+			}); 
+		}
+		
+	h=$(window).height()	
+		
+		h2=175+$(".syimg").height()+$(".sydb").height()
+		//alert(h2)
+		if(h2>h){
+			//$(".sydb").addClass("sydbnow")
+			}
+		  
+   }); 
+     
+ </script> 
+ <style>
+  .sydbnow{ width:100%; position:fixed; left:0; bottom:0; z-index:100}
+ </style>
+ <!--首页弹层提示-->
+<if condition="!$_COOKIE['app_box']">
+    <div class="bgf50 dybg" style="/*display:none*/"></div>
+    <div class="dyym" style="/*display:none*/"><span class="close dyclose"><span class="glyphs icon-close" style="line-height:30px"></span></span>
+     <p class="icon1" style="line-height:33px;">China</p>
+     <h1 class="dyymtxt1">{:isL(L('Welocome'),'欢迎光临 <img src="/Public/Home/images/logo.png" width="115" alt="" class="vam"> 中国官方网站<br/><b>Welcome</b>')}</h1>
+     <p class="dyymtxt2">{:isL(L('experience'),'享受最佳时尚购物体验')}：</p>
+     <div class="pr"><p class="icon21b dyymtxt3">{:isL(L('FreeDelivery'),'顺丰航空 免费送货')}</p></div>
+     <div class="pr"><p class="icon21b dyymtxt3">{:isL(L('daysAllOver'),'全国各地1-2天即达')}</p></div>
+     <div class="pr"><p class="icon21b dyymtxt3">{:isL(L('FreeRefund'),'在家试穿 免费退货')}</p></div>
+     <p class="dyymtxt4">{:isL(L('latestInformation'),'订阅我们的电子报，即可第一时间获得新近单品信息以及YOUDI WU 最新相关资讯')}</p>
+     <form  action="{:U('EmailSubscribe/saveEmail')}" class="form1" method="get">
+         <input type="text" name="email" value="" placeholder="{:isL(L('YourEmailAdderss'),'输入邮件的地址')}" info-text="email-text1" error-info="{:isL(L('EnterYourEmail'),'请输入您的电邮地址')}" error-other="{:isL(L('EmailFormatError'),'请输入正确的电邮地址')}" class="dyym_input  email required"/>
+         <!--<a href="#" class="jkdy mt30 mb20">{:isL(L('SubscribeNow'),'即刻订阅')}</a>-->
+         <p class="colf00 f12 lh28 email-text1" style="display:none;">提示层</p><!--已注册的提示-->
+         <input type="hidden" value="submits1" name="submits"/>
+         <div style="height: 20px;"></div>
+         <input type="submit" id="submits1" msg="{:isL(L('PleaseLater'),'提交中...')}" class="jkdy  mb10" value="{:isL(L('SubscribeNow'),'即刻订阅')}" />
+     </form>
+     <a href="javascript:void(0);" class="dylink dyclose">{:isL(L('NotSubscribe'),'暂时不要订阅')}</a>
+     <a href="javascript:void(0);" class="dylink fr" onClick="notMsg()">{:isL(L('NotShowMes'),'请不要再显示此信息')}</a>
+     <div class="cb"></div>
+    </div>
+    <script type="text/javascript">
+		//邮件订阅
+	    formInit('.form1',false,true,true,true);
+        function notMsg(){
+          var url="{:U('Index/notMsg')}";  
+          $.ajax({
+             type:'text',
+             url:url,
+             success:function(response,status,xhr){
+                  $(".dyym").slideUp("fast",function(){
+                       $(".dybg").fadeOut();
+                   })    
+              }
+           });                         
+        }
+    </script>
+ </if>   
+<!--首页弹层提示结束-->
+
+
+
+ <div class="syimg">
+  <a <if condition="trim($indexAd[0]['ad_url'])">href="{$indexAd[0]['ad_url']}" target="_blank"</if>>
+  <img src="__HOME__/images/1203a.jpg" alt=""/><span></span>
+  </a>
+     <!--<a  <if condition="trim($indexAd[0]['ad_url'])">href="{$indexAd[0]['ad_url']}" target="_blank"</if>>
+         <img src="__ROOT__/{$indexAd[0]['ad_img']}" alt=""/><span></span>
+    </a>
+    <a <if condition="trim($indexAd[1]['ad_url'])">href="{$indexAd[1]['ad_url']}" target="_blank"</if>>
+        <img src="__ROOT__/{$indexAd[1]['ad_img']}" alt=""/><span></span>
+    </a>-->
+    <div class="cb"></div>
+ </div><!--syimg end-->
+ <div class="sydb">
+ <div class="cjwt"><div class="cjwtm">
+  <a href="{:U('Modular/problem',array('html'=>$files[7][C('B_4')]['id']))}"><span class="glyphs icon-faq vam"></span><span>{$files[7][C('B_4')]['titletext']}{/*常见问题*/}</span><b></b></a>
+  <a href="{:U('Modular/pubarticle',array('html'=>$files[7][C('B_8')]['id']))}"><span class="glyphs icon-howtoshop"></span><span>{$files[7][C('B_8')]['titletext']}{/*如何购物*/}</span><b></b></a>
+  <a href="{:U('Modular/needHelp',array('html'=>$files[7][C('B_7')]['id']))}" class="last"><span class="glyphs icon-help"></span><span>{$files[7][C('B_7')]['titletext']}{/*需要帮助？*/}</span></a>
+  <div class="cb"></div>
+ </div></div><!--cjwt end-->
+
+ 
+<include file="Common:footer" />{/*公共底部*/} 
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+</body>
+</html>

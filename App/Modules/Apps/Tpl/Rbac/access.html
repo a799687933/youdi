@@ -1,0 +1,168 @@
+<div class="pageContent">
+<style>
+.dlwidht{width:98%;display:table;}
+
+.ddindex{clear:both;font-size:12px;padding:10px;width:100%;height:20px;}
+.dd2{clear:both;padding-left:15px;font-size:11px;font-family:'黑体';width:100%;height:20px;}
+.dd3{float:left;padding-left:30px;width:200px;height:20px;}
+.dd4{clear:both;padding-left:30px;font-size:12px;font-family:'黑体';width:100%;height:20px;}
+.dd5{float:left;padding-left:20px;font-size:12px;font-family:'黑体';width:80px;height:20px;}
+</style>
+
+    <form method="post" action="{:U(APP_APPS.'/Rbac/setAccess')}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+        <div class="pageFormContent" layoutH="58" >
+  
+     <div class="dlwidht">
+    <foreach name='nodeArr' item='app'>
+        <if condition='$app.pid eq 0'>
+          <div  class="ddindex"><input class="box" {$app.checked} type="checkbox" name="access[]" value="{$app.id}_1" level='1' a_id="{$app.id}" a_pd="{$app.pid}"/><strong>{$app.title}</strong></div>
+          <else/>
+            <if condition='$app.padding eq 30'>
+                  <div class="dd2"><input class="box" {$app.checked} type="checkbox"name="access[]" value="{$app.id}_2" level='2' a_id="{$app.id}" a_pd="{$app.pid}"/><strong>{$app.title}</strong></div>
+             <else/>
+                  <div class="dd3"><input  class="box" {$app.checked} type="checkbox" name="access[]" value="{$app.id}_3" level='3' a_id="{$app.id}" a_pd="{$app.pid}"/>{$app.title}</div>
+              </if>
+          </if>
+     </foreach>    
+    </div> 
+     <input type="hidden" value="{$id}" name="id"/>
+  
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent" ><button type="submit">提交</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+    
+</div>
+<script type="text/javascript">
+//栏目权限选定
+$(function(){
+	 //选择一级分类   
+	 $('.top').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  if($(this).attr('checked')){
+			  parents.find('input[type="checkbox"]').attr('checked',true);
+		  }else{
+			  parents.find('input[type="checkbox"]').attr('checked',false);
+		  }
+		  set_val();
+	 });	
+	 
+	 //选择二级分类	  
+	 $('.top2').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  parents1=$(this).parents('.dd4');
+		  if($(this).attr('checked')){
+			  parents1.find('input[type="checkbox"]').attr('checked',true);
+			  parents.find('.top').attr('checked',true);
+			  $(this).prev().val($(this).val());
+		  }else{
+			  $(this).prev().val(0);
+			  parents1.find('input[type="checkbox"]').attr('checked',false);
+		  }
+		  var checkeds=parents.find('input[type="checkbox"]');
+		  $k=0;
+		  for(var i=0;i < checkeds.length;i++){
+			  if(checkeds.eq(i).attr('checked') && checkeds.eq(i).attr('class') !='top'){
+				  $k++;
+				  break;
+			  }
+		  }
+		  if($k==0) parents.find('.top').attr('checked',false);
+		  set_val();
+	 });	 
+
+	 //直接选择权限	  
+	 $('.group').click(function(){
+	      var parents=$(this).parents('.jc1');
+		  parents1=$(this).parents('.dd4');
+		  if($(this).attr('checked')){
+			  parents1.find('.top2').attr('checked',true);
+			  parents.find('.top').attr('checked',true);
+			  $(this).prev().val($(this).val());
+		  }else{
+			  $(this).prev().val('');
+			  $j=0;
+			  parents4=$(this).parents('.dd4');
+			  var group=parents4.find('.group');
+			  for(var i=0;i < group.length;i++){
+				  if(group.eq(i).attr('checked')){
+					  $j++;
+					  break;
+				  }
+			  }
+			  if($j==0){
+				  parents1.find('.top2').attr('checked',false);
+			  }			  
+		  }
+		  var checkeds=parents.find('input[type="checkbox"]');
+		  $k=0;
+		  for(var i=0;i < checkeds.length;i++){
+			  if(checkeds.eq(i).attr('checked') && checkeds.eq(i).attr('class') !='top'){
+				  $k++;
+				  break;
+			  }
+		  }
+		  if($k==0) parents.find('.top').attr('checked',false);	
+		  set_val();
+	 });	 
+	 
+});
+
+/*栏目权限符值*/
+function set_val(){
+    var checkbox_all=$('.checkbox-all').find('.group');
+	var top2=$('.top2');
+	for(var j=0;j < top2.length;j++){
+		if(top2.eq(j).attr('checked')){
+			top2.eq(j).prev().val(top2.eq(j).val());
+		}else{
+			top2.eq(j).prev().val('');
+		}
+	}
+	for(var i=0;i < checkbox_all.length;i++){
+		if(checkbox_all.eq(i).attr('checked')){
+			checkbox_all.eq(i).prev().val(checkbox_all.eq(i).val());
+		}else{
+			checkbox_all.eq(i).prev().val('');
+		}
+	}
+}
+
+//checkbox选定
+ $(function(){
+     $('.box').click(function(){
+         var a_id=$(this).attr('a_id');
+         var a_pd=$(this).attr('a_pd');
+         var box=$('.box');
+         var boxLength=$('.box').length;
+         if($(this).attr('checked')){           
+             for(var i=0;i<boxLength;i++){
+                 if($(box[i]).attr('a_pd')==$(this).attr('a_id')){
+                    $(box[i]).attr('checked',true); 
+                    for(var j=0;j<boxLength;j++){
+                       if($(box[j]).attr('a_pd')==$(box[i]).attr('a_id')){
+                         $(box[j]).attr('checked',true);  
+                       }
+                    }
+                 }               
+             }
+         }else{
+             for(var i=0;i<boxLength;i++){
+                 if($(box[i]).attr('a_pd')==$(this).attr('a_id')){
+                    $(box[i]).attr('checked',false); 
+                    for(var j=0;j<boxLength;j++){
+                       if($(box[j]).attr('a_pd')==$(box[i]).attr('a_id')){
+                         $(box[j]).attr('checked',false);  
+                       }
+                    }
+                 }               
+             }             
+         }
+     });
+ });   
+    
+</script>

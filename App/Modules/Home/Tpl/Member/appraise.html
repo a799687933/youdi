@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<title>{:isL(L('UserCenter'),'用户中心')} | YOUDI WU 中国</title>
+<include file="Common:jsGlobal" />{/*js全局变量*/}
+<link rel="stylesheet" href="__HOME__/css/global.css" />
+<link rel="stylesheet" href="__HOME__/css/essentials.min.css"/>
+<link rel="stylesheet" href="__HOME__/css/iconfont2.css"/>
+<link rel="stylesheet" href="__HOME__/css/font-awesome.min.css" />
+<link rel="stylesheet" href="__HOME__/css/style.css" />
+<link rel="stylesheet" href="__HOME__/css/style0417.css" />
+<link rel="stylesheet" href="__HOME__/css/chose.css"/>
+<script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="__HOME__/js/global.js"></script>
+<link rel="stylesheet" href="__COMMON__/Css/alert.css" />
+<script type="text/javascript" src="__COMMON__/Js/div-dialog2.js"></script>
+<script type="text/javascript" src="__COMMON__/Js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="__HOME__/js/psw.js"></script>
+<link rel="Stylesheet" href="__PLUGINS__/ValidationEngine/Css/validationEngine.jquery.css"/>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/jquery.validationEngine-{:getLang()}.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ValidationEngine/Js/myValidationEngine.js"></script>
+<!--[if IE]>
+		<script src="__HOME__/js/html5shiv.min.js"></script>
+<![endif]-->
+
+<script>
+//防止页面后退
+if (window.history && window.history.pushState) {
+	$(window).on('popstate', function () {
+	var hashLocation = location.hash;
+	var hashSplit = hashLocation.split("#!/");
+	var hashName = hashSplit[1];
+	if (hashName !== '') {
+	var hash = window.location.hash;
+	if (hash === '') {
+	//alert("Back button isn't supported. You are leaving this application on next clicking the back button");
+	}
+	}
+	});
+	window.history.pushState('forward', null, './#order-h1');
+}
+
+$(function(){
+ $(".pjiabr span").click(function(){
+	 $(this).addClass("fa-star")
+	 $(this).prevAll("span").addClass("fa-star")
+	 $(this).nextAll("span").removeClass("fa-star")
+	 $(this).removeClass("fa-star-o")
+	  $(this).prevAll("span").removeClass("fa-star-o")
+	  $(this).nextAll("span").addClass("fa-star-o")
+	 $(this).children("b").show()
+	 $(this).siblings("span").children("b").hide();
+	 var sva_name=$(this).attr('sva_name');
+     var num=parseInt($(this).attr('num'));
+	 if(num < 3) num=0;
+	 else if(num == 3) num=1;
+	 else if(num > 3) num=2;
+	 $('input[name="'+sva_name+'"]').val(num);
+})
+ });
+ //删除评价图片
+ function delApprainses(_this){
+	 var ul=$(_this).parents('.imgs_url');
+	 $(_this).parents('.img_lists').remove();
+	 var img_lists=ul.find('.img_lists');
+	 if((img_lists.length - 1) >= 5){
+		 ul.find('.jan_weis').hide();
+	 }else{
+	     ul.find('.jan_weis').show();
+	 }
+}
+//提交表单
+function sendForm(_this){
+    var form=$(_this).parents('form');
+	var content=form.find('.content');
+	for(var i = 0;i < content.length;i++){
+		var value=content.eq(i).val();
+		if(value) value=value.replace(/(^\s*)|(\s*$)/g, "");
+		if(!value) {
+			content.eq(i).val('').css('border-color','red').focus();
+			return false;
+		}else{
+			content.eq(i).css('border-color','#ccc');
+		}			
+	}
+	return true;
+}
+</script>
+<style type="text/css">
+/*ul.img_lists:last-child{margin:0;}*/
+</style>
+</head>
+<body>
+<div class="box" style="background:#fff;">
+<include file="Common:headermin" />{/*公共头部*/} 
+<div class="wztxt"><div class="wrap">请对商品作出评价</div></div>
+<!--content begin-->
+<form action="{:sign_url(array('order_id'=>$_REQUEST['order_id']),U(is_m().'/Member/appraiseForm'))}" method="post" class="form1">
+ <div class="wrap pr">
+ 
+  <div class="pjia">
+   <ul>
+    <foreach name="order_goods" item="og" key="ogk"> 
+        <li>
+        <div class="data_moer_{$ogk}">
+              <input type="hidden" name="appraise_id[]" value="{$goods_appraise[$og['goods_id']]['goods_id']?$goods_appraise[$og['goods_id']]['id'] : 0}" />
+             <input type="hidden" name="appraise_id_sign[]" 
+             value="{$goods_appraise[$og['goods_id']]['appraise_id_sign']?$goods_appraise[$og['goods_id']]['appraise_id_sign'] : $og['appraise_id_sign']}" />
+             <input type="hidden" name="goods_id[]" value="{$og['goods_id']}" />
+             <input type="hidden" name="class_name_{$ogk}" value="error-pin-{$ogk}" />    
+             <input type="hidden" name="is_open_{$ogk}" value="1" />{/*不使用匿名评论*/}
+             <input type="hidden" name="sva_{$ogk}" value="{$goods_appraise[$og['goods_id']]['sva'] ? $goods_appraise[$og['goods_id']]['sva'] : 0}" />{/*中评/好评/差评*/}       
+        </div>
+         <div class="pjiat">
+          <div class="pjiatl"><div class="pjiatlm"><a href="{:U('Goods/index',array('html'=>$og['goods_id']))}" target="_blank"><img src="__ROOT__/{$og['goods_thumb']}" alt=""></a></div></div>
+          <div class="pjiatr" style="width:720px;">
+           <ul class="imgs_url">
+            <li class="upload_click">
+                 <input name="file{$ogk}" type="file" id="appraiseUp_{$ogk}" onChange="appraiseUpload('{:U("/UploadFile/upload",array('up'=>'UploadFile','file_type'=>'jpg,png,gif,jpeg'),"")}',
+                 'appraiseUp_{$ogk}','__ROOT__','{$_SESSION["MY_TOKEN"]}','#img_related',this,'img_{$ogk}[]');" class="pjia_file"/>
+             </li>
+             
+            <foreach name="goods_appraise[$og['goods_id']]['slide_show']" item="ss"> 
+                <li class="img_lists" style="position:relative;">
+                   <span style="position:absolute;top:-8px;right:5px;color:red;font-weight:bold;font-size:30px; cursor:pointer" onClick="delApprainses(this)">×</span>
+                   <img src="__ROOT__/{$og['goods_thumb']}" style="width:75px;height:75px;">
+                   <input type="hidden" value="{$ss}" name="img_{$ogk}[]">
+                </li>   
+            </foreach>                                             
+            <li class="jan_weis"></li>
+            <div class="cb"></div>
+           </ul>
+          </div>
+          <div class="cb"></div>
+         </div><!--pjiat end-->
+         <div class="pjiab">
+          <div class="pjiabl">
+           <p class="pb5">{$og['goods_name']}</p>
+           <p><foreach name="og['goods_attr']" item="ga">{$ga[pfix('name')]}：{$ga['value'][pfix('attr_value')]}&nbsp;&nbsp; </foreach> </p>
+          </div>
+          <div class="pjiabr">
+           <span class="fa {$goods_appraise[$og['goods_id']]['score'] >=0 ? 'fa-star' : 'fa-star-o'}" sva_name="sva_{$ogk}" num="1">
+              <b style="{$goods_appraise[$og['goods_id']]['score'] ==1 ? 'display: inline;' : ''}">很不满意</b>
+           </span>
+           <span class="fa {$goods_appraise[$og['goods_id']]['score'] >=2 ? 'fa-star' : 'fa-star-o'}" sva_name="sva_{$ogk}" num="2">
+              <b style="{$goods_appraise[$og['goods_id']]['score'] ==2 ? 'display: inline;' : ''}">不满意</b>
+           </span>
+           <span class="fa {$goods_appraise[$og['goods_id']]['score'] >=3 ? 'fa-star' : 'fa-star-o'}" sva_name="sva_{$ogk}" num="3">
+              <b style="{$goods_appraise[$og['goods_id']]['score'] ==3 ? 'display: inline;' : ''}">一般</b>
+           </span>
+           <span class="fa {$goods_appraise[$og['goods_id']]['score'] >=4 ? 'fa-star' : 'fa-star-o'}" sva_name="sva_{$ogk}" num="4">
+               <b style="{$goods_appraise[$og['goods_id']]['score'] ==4 ? 'display: inline;' : ''}">满意</b>
+           </span> 
+           <span class="fa {$goods_appraise[$og['goods_id']]['score'] >=5 ? 'fa-star' : 'fa-star-o'}" sva_name="sva_{$ogk}" num="5">
+               <b style="{$goods_appraise[$og['goods_id']]['score'] ==5 ? 'display: inline;' : ''}">非常满意</b>
+           </span>
+          </div>
+          <div class="cb"></div>
+          <div style="margin-top:20px;">
+              <input type="text" class="content" name="content[]" placeholder="{:isL(L('WritePointEvaluation'),'写点评价吧，您的评价对其他买家有很大帮助的。')}" 
+              value="{$goods_appraise[$og['goods_id']]['content']}"  style="width:100%;border:none;border-bottom:1px #ccc solid;background:#f5f5f5;height:30px;font-size:15px;" />
+          </div>
+         </div><!--pjiab end-->
+        </li>
+     </foreach>
+   </ul>
+  </div><!--pjia end-->
+  <div class="cb"></div>
+  <div class="sppj2 pr" style="width:308px; position:absolute; bottom:20px; right:0;">
+   <input value="提交评价"  class="btn" type="submit" onClick="return sendForm(this)">
+    <span class="glyphs icon-thinArrow btnb"></span>    
+  </div>
+ </div>
+ <div class="cb pv15"></div>
+ </form>
+<!--content end-->
+<div class="footermint"></div>
+<include file="Common:footermin" />{/*公共底部*/}
+</div><!--box end-->
+<include file="Common:botReqType" />{/*响应式导航*/}
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<div class="nav">
+<div class="wrap">
+ <div class="ymfl">
+  <div class="ymflt"><span class=" icon6 pl30">全部分类</span></div>
+  <div  class="qbcpfllist" style="display:block">
+  <ul>
+    <foreach name="cateList" item="ca" key="cateKey">
+    <if condition="$cateKey lt 7">
+        <li class="qbcpfllistli">
+        <h2>{$ca.name}</h2>
+        <div class="qbflrbox">
+           <foreach name="ca['child']" item="ch1">
+                <a href="{:U('/Category/index',array('html'=>'cat_'.$ch1['id']))}" target="_blank">{$ch1.name}</a>
+           </foreach>
+         <div class="cb"></div>
+        </div><!--qbflrbox end-->
+       </li>
+     </if>  
+  </foreach>
+   </ul>
+   </div>
+ </div>
+ <div class="navr">
+  <a href="__ROOT__/" <if condition="$modelName eq 'Index'">class="now"</if> >首页</a>
+  <a href="{:U('ShoplList/index',array('shops'=>'xk'))}" <if condition="$_GET['shops'] eq 'xk'">class="now"</if>>新店开张</a>
+  <a href="{:U('/Bargain/index',array('sales'=>'today'))}" <if condition="$_GET['sales'] eq 'today'">class="now"</if>>今日特价</a>
+  <a href="{:U('/Bargain/index',array('sales'=>'all'))}" <if condition="$_GET['sales'] eq 'all'">class="now"</if>>烫染促销</a>
+  <a href="{:U('/Twos/index',array('html'=>'cat_20'))}" <if condition="str_replace('cat_','',$_GET['html']) eq '20'">class="now"</if>>项目体验</a>
+  <a href="{:U('ShoplList/index',array('shops'=>'ls'))}" <if condition="$_GET['shops'] eq 'ls'">class="now"</if>>连锁经营</a>
+  <a href="{:U('/Cover')}" <if condition="$modelName eq 'Cover'">class="now"</if>>魅力咨讯</a>
+  <a href="{:U('/Hiring')}" <if condition="$modelName eq 'Hiring'">class="now"</if>>人才流动</a>
+  <a href="{:U('/Twos/index',array('html'=>'cat_21'))}" <if condition="str_replace('cat_','',$_GET['html']) eq '21'">class="now"</if> >到家服务</a>
+ </div>
+ <div class="cb"></div>
+</div></div><!--nav end-->

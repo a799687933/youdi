@@ -1,0 +1,187 @@
+
+<div class="page">
+    <div class="pageContent pageForm">
+        <form method="post" action="{:U('OrderInfo/changeState')}" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<input type="hidden" name="id" value="{$orders.order_id}" />
+        <div class="pageFormContent" layoutH="58">
+        <table class="list" style="width:100%;"  border="1">
+           <!--订单信息-->  
+           <tr>
+                  <th colspan="4" style="background:#D9E7F8;">
+                       <a class="buttonActive auto-size" href="{:U(APP_APPS.'/OrderInfo/printOrder',array('order_id'=>$orders['order_id']))}" target="_blank" style="display:inline;"> <span>打印订单</span>
+                       </a>          
+                      <!-- <a class="buttonActive auto-size" target="_blank" href="{:U(APP_APPS.'/OrderInfo/exportEXCEL',array('order_id'=>$orders['order_id']))}" style="display:inline;">
+                           <span>导出EXCEL</span>
+                       </a>            -->                           
+                  </th>           
+           </tr>
+            <tr>
+
+                  <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">订单信息</th>
+            </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">订单号：</td>
+                   <td>{$orders.order_sn}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">订单状态：</td>
+                   <td>
+						<if condition="$orders['order_status'] eq -1">
+						   <span style="color:red;">已取消</span>
+						<elseif condition="$orders['order_status'] eq 0" />
+						   <span style="">未付款</span>
+						<elseif condition="$orders['order_status'] eq 1" />
+						   <span style="color:green;">已付款(待卖家发货)</span>			
+						<elseif condition="$orders['order_status'] eq 2" />
+						   <span style="color:blue;">已发货(待买家收货)</span>		
+						<elseif condition="$orders['order_status'] eq 3" />
+						   <span style="color:green;">已收货（交易完成）</span>			
+						<elseif condition="$orders['order_status'] eq 4" />
+						   <span style="color:#f60;">申请退货</span>			
+						<elseif condition="$orders['order_status'] eq 5" />
+						   <span style="color:#f60;">已退货</span>						   			   			   					   		   
+						</if>                                                           
+                   </td>
+            </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">购货人：</td>
+                   <td><if condition="$orders['mobile_phone']">{$orders.mobile_phone} <else />匿名用户</if> </td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">下单时间：</td>
+                   <td>{$orders.add_time|date='Y-m-d H:i:s',###}</td>
+            </tr>
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">支付方式：</td>
+                   <td>{$orders.pay_way}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">发货时间：</td>
+                   <td><if condition="$orders['shipping_time']">{$orders.shipping_time|date='Y-m-d H:i:s',###}<else />未发货</if></td>          
+             </tr>   
+    
+           <!--订单信息结束-->  
+           
+           <!--收货人信息-->
+           <tr>
+                <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                   收货人信息
+                </th>
+           </tr>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">收货人：</td>
+                   <td>{$orders.consignee}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">手机：</td>
+                   <td>{$orders.mobile}</td>
+            </tr>      
+            
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">地址：</td>
+                   <td>{$orders.region_name_1}{$orders.region_name_2}{$orders.region_name_3}{$orders.address}</td>
+                   <td style="text-align: right;padding-right:3px;font-weight: bold;">邮编：</td>
+                   <td>{$orders.zipcode}</td>
+            </tr>   
+  
+                  
+            <!--收货人信息结束-->       
+            
+           <!--发票信息-->
+           <tr>
+                <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                                                 发票信息 
+                </th>
+           </tr>		  
+		   
+			<tr >
+				   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">发票类型：</td>
+				   <td><if condition="$orders['is_inv'] eq 1">普通发票<elseif condition="$orders['is_inv'] eq 2" />增值税发票</if></td>
+				   <td style="text-align: right;padding-right:3px;font-weight: bold;"><if condition="$orders['is_inv'] eq 2" >单位名称：<elseif condition="$orders['is_inv'] eq 1" />发票抬头：</if></td>
+				   <td><if condition="$orders['is_inv'] eq 2" >{$invs.company_name}<elseif condition="$orders['is_inv'] eq 1" />{$invs.inv_title }</if></td>
+			</tr>     
+		   <if condition="$orders['is_inv'] eq 2" >			
+			<tr >
+				   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">税纳税人识别码：</td>
+				   <td>{$invs.id_code}</td>
+				   <td style="text-align: right;padding-right:3px;font-weight: bold;">注册地址：</td>
+				   <td>{$invs.reg_address}</td>
+			</tr>  	
+			<tr >
+				   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">注册电话：</td>
+				   <td>{$invs.reg_tel}</td>
+				   <td style="text-align: right;padding-right:3px;font-weight: bold;">开户银行：</td>
+				   <td>{$invs.bank_name}</td>
+			</tr>  			
+			<tr >
+				   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">银行帐户：</td>
+				   <td>{$invs.bank_sn}</td>
+				   <td style="text-align: right;padding-right:3px;font-weight: bold;"></td>
+				   <td></td>
+			</tr>  						    	   
+		   </if>
+            <tr >
+                   <td width="15%" style="text-align: right;padding-right:3px;font-weight: bold;">发票内容：</td>
+                   <td colspan="3" style="border-top:1px #eee solid;padding:5px;">{$invs.inv_content}</td>
+            </tr>    
+			                     
+            <!--发票信息结束-->                
+            
+            <!--商品信息-->   
+             <tr>
+                  <th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">
+                      商品信息
+                     <!-- <if condition="access('OrderInfo/saveGoods')">
+                         <a class="buttonActive auto-size" target="dialog" mask="true" rel="orderShow" href="{:U(APP_APPS.'/OrderInfo/saveGoods',array('order_id'=>$orders['order_id']))}" style="float:right;">
+                             <span>修改商品信息</span>
+                         </a>     
+                      </if>-->      
+                 </th>
+            </tr>    
+             <tr><td colspan="4">
+                    <table cellpadding="0"  cellspacing="0" width="100%" border="1" style="border:none;">
+                        <tr >
+                            <td style="font-weight: bold;">所属商户</td>
+                            <td style="font-weight: bold;">商品名称</td>
+                            <td style="font-weight: bold;">货号</td>
+                            <td style="font-weight: bold;">单价</td>
+                            <td style="font-weight: bold;">数量</td>
+                            <td style="font-weight: bold;">属性</td>
+                            <td style="font-weight: bold;">物流费</td>
+                             <td style="font-weight: bold;">总税金</td>
+                            <td style="font-weight: bold;">小计(含商品属性价)</td>
+                       </tr>
+                       <foreach name="goodsList" item="gl">
+                            <tr>
+                                <td style="border-top:1px #ccc solid;">{$gl.company_name}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_name}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_sn}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_price}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.goods_number} </td>
+                                <td style="border-top:1px #ccc solid;">
+                                     <foreach name="gl['goods_attr']['attr_array']" item="ga">
+                                           {$ga.attr_name}：{$ga.attr_value}[￥{$ga.attr_price}]<br/>
+                                     </foreach>
+                               </td>
+                               <td style="border-top:1px #ccc solid;">{$gl.freight}</td>
+                               <td style="border-top:1px #ccc solid;">{$gl.taxes}</td>
+                                <td style="border-top:1px #ccc solid;">{$gl.subtotal}</td>
+                            </tr>
+                        </foreach>
+                        <tr>
+                            <td style="border-top:1px #ccc solid;" colspan="7"></td>
+                            <td style="border-top:1px #ccc solid;text-align: right;">合计</td>
+                            <td style="border-top:1px #ccc solid;" >￥<strong style="color:red;">{:number_format($goodsTotal,2, '.', '')}</strong></td>
+                        </tr>                                           
+                      </table>  
+             </td></tr>
+            <!--商品信息结束-->       
+            
+            <!--费用信息-->       
+            <tr><th colspan="4" style="text-align: center;background:#D9E7F8;font-weight:bold;">费用信息</th></tr>  
+            <tr><td colspan="4" style="text-align: right;">商品总金额：￥{$orders.goods_amount}</td></tr>     
+            <tr><td colspan="4"  style="text-align: right;">物流费用： ￥{$orders.freight} </td></tr>
+           <tr><td colspan="4"  style="text-align: right;">总税金 ：{$orders.taxes}</td></tr>
+           <!-- <tr><td colspan="4"  style="text-align: right;"> - 使用红包({$orders.bonus_name})： ￥{$orders.bonus}元</td></tr>  -->  
+            <tr><td colspan="4"  style="text-align: right;"> 订单总金额：￥<strong style="color:red;float:right;position:relative;top:5px;">{$orders.order_amount}</strong></td></tr>         
+            <!--费用信息结束-->      
+        </table>
+        </div>
+
+        </form>
+    </div>
+</div>
+<script type="text/javascript">window.print();</script>

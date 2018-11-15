@@ -1,0 +1,47 @@
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+            <if condition="access('Ad/adAdd')">
+              <li><a class="add" href="{:U(APP_APPS.'/Ad/adAdd','','')}/city_id/{$city_id}/ad_id/{$ad_id}" target="dialog" width="900" height="550" mask="true"><span title="添加广告图片">添加广告图片</span></a></li>
+            </if>
+            <li class="line">line</li>
+		</ul>
+	</div>
+	<table class="list" width="100%" layoutH="30">
+		<thead>
+			<tr>
+				<th >编号</th>
+				<th >图片</th>
+				<th >广告宽度度</th>
+				<th>广告高度</th>
+				<th >排序</th>
+				<th>图片描述</th>
+				<th >是否显示</th>
+				<th  style="text-align: center;">操作</th>				
+			</tr>
+		</thead>
+		<tbody>
+		   <foreach name="List" item="app"> 
+    			<tr target="sid_user">  				
+    				<td>{$app.ad_id}</td>                    
+                    <td><a href="__ROOT__/{$app.ad_img}" target="_blank"><img src="__ROOT__/{$app.ad_img}" width="100" /></a></td>
+    				<td>{$app.ad_width}</td>
+    				<td>{$app.ad_height}</td>
+    				<td>{$app.ad_order|tpl_modify_oen=###,'ad','ad_order',$app['ad_id'],'ad_id','Ad/adUpdateForm'}</td>   			
+    				<td>{$app.ad_class_bewrite|tpl_modify_oen=###,'ad','ad_class_bewrite',$app['ad_id'],'ad_id','Ad/adUpdateForm'}</td>
+    				<td>{$app.display|tpl_yes_no=###,'ad','display',$app['ad_id'],'ad_id','Ad/adUpdateForm'}</td>
+    				<td style="text-align: center;">   	
+                    	  
+                    {$action|tpl_action='dialog','Ad/adUpdate','ad_id/'.$app["ad_id"].'/ad_pid/'.$_GET['ad_id'],'修改内容','icon_edit.gif','icon_edit_not.gif',900,550} <!--修改按钮-->
+                    {$action|tpl_action='ajaxTodo','Ad/adDelete','ids/'.$app["ad_id"].'/ad_pid/'.$_GET['ad_id'],'操作不可恢复确定执行本次操作？','icon_drop.gif','icon_drop_not.gif'}   <!--删除按钮-->    				  
+                    </td>
+    				
+    			</tr>
+           </foreach> 
+
+		</tbody>
+	</table>
+
+</div>
+
