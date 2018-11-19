@@ -115,6 +115,8 @@ class GoodsBasicAction extends BasicAction {
 			$goods=$db->query($gsql);
 			$goods[0]['goods_photo']=$goods[0]['goods_photo'] ? json_decode($goods[0]['goods_photo'],true) : array();
 			$goods[0][pfix('parameters')]=$goods[0][pfix('parameters')] ? json_decode($goods[0][pfix('parameters')],true) : array();
+
+			//var_dump($goods[0]);
             return $goods[0];	
 	}
    

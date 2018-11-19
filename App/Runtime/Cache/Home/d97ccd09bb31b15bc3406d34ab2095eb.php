@@ -661,7 +661,25 @@ function toEmail(){
  </div><!--lbt end-->
 <div class="zxfb">
  <div id="ajax-div">
-   <script>
+   <style type="text/css">
+
+.zxfbrbt img {
+    width: auto;
+    height: 71.49%;
+    background: #fff;
+}
+
+.zxfbrbtb img {
+    width: auto;
+    height: 71.49%;
+    background: #fff;
+}
+</style>
+
+
+
+
+<script>
 
 /*$(document).on('click', ".sxcmr", function(){
     $(this).parent("li").slideUp()

@@ -36,8 +36,11 @@ window.MaximumPossibleUpload="<?php echo isL(L('MaximumPossibleUpload'),'最大�
 <script type="text/javascript" src="__HOME__/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="__HOME__/js/global.js"></script>
 <script type="text/javascript" src="__HOME__/js/swiper4.js"></script>
-
+<link rel="stylesheet" href="__HOME__/layui/css/layui.css" />
+<script type="text/javascript" src="__HOME__/layui/layui.all.js"></script>
 <script type="text/javascript">
+
+
 $(document).ready(function() {
 	$(".zixun li").each(function(){
 		var i = $(this).index();
@@ -63,8 +66,8 @@ $(document).ready(function() {
 		 $(this).removeClass("fa-heart-o")
 		 })	*/
 	/*$(".zxsc").click(function(){
-		 $(this).addClass("fa-star")
-		 $(this).removeClass("fa-star-o")
+		 $(this).addClass("fa-bookmark")
+		 $(this).removeClass("fa-bookmark-o")
 	})	*/
 	//展开更多文章内容
 	$(document).on('click','.zxfbnr b',function(){
@@ -230,9 +233,9 @@ function setCollection(_this,url){
 			 return;
 		}
 		if(res[5] == 'save'){
-			$(_this).removeClass('fa-star').addClass('fa-star-o');
+			$(_this).removeClass('fa-bookmark').addClass('fa-bookmark-o');
 		}else{
-			$(_this).removeClass('fa-star-o').addClass('fa-star');			
+			$(_this).removeClass('fa-bookmark-o').addClass('fa-bookmark');			
 	    }
 	});
 }
@@ -322,10 +325,30 @@ function showAlls(_this){
     line-height:20px;
    height:22px; z-index:10
 }
+#black{
+top:21%;
+position:absolute;
+float:left;
+width: 100%;
+height: 13%;
+}
+
+.wrap {
+    margin-top: 89px !important;
+}
 </style>
 </head>
 
 <body>
+
+ <div class="nav" id="black" ><div class="navm">
+  <div class="sswrap"><span class="glyphs icon-search" onclick="topRetrieval(this)"></span>
+  <input type="submit" name="" value="" onclick="return topRetrieval(this)" class="ss_btn"/>
+  <input type="text" name="keywords" value="" class="ss_input"/>
+  </div>
+ </div></div><!--nav end-->
+<!-- <div class="layui-layer layui-layer-page layui-layer-dir" style="z-index: 19891015; top: 284px; left: 1067px; margin-left: -15px;"><div class="layui-layer-title" style="cursor: move;">内容</div><div id="" class="layui-layer-content" style="height: 300px;background: black"></div><span class="layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a></span><span class="layui-layer-resize"></span></div> -->
+
 
 <div class="box">
 <link rel="stylesheet" href="__HOME__/css/essentials.min.css"/>
@@ -855,10 +878,37 @@ function toEmail(){
  <div class="zixun">
   <ul id="article-list">
       
+<style type="text/css">
+
+.zxpltext {
+float: left;
+width: 530px;
+height: 35px;
+border: none;
+resize: none;
+color: #000;
+font-size: 12px;
+line-height: 16px;
+font-family: "\5FAE\8F6F\96C5\9ED1";
+}
+#youdi {
+  width: 11%;
+  height: 10%;
+  border-radius: 0;
+  margin-left: 11px;
+  margin-top: 4px;
+}
+#ydhand {
+  margin-right: 4px;
+  margin-top: 3px;
+}
+</style>
+
+
 <?php if(is_array($result)): foreach($result as $reskey=>$res): ?><li>
     <h2 class="zixunt">
-        <img src="http://aliyun-cdn.hypebeast.cn/cn.hypebeast.com/files/2016/10/interview-with-shawn-yue-3-1.jpg?resize=40,40" alt="">
-        <del class="ml10">youdi wu</del>
+        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542375294737&di=cd44d196936ce50906027c88db82e8cd&imgtype=0&src=http%3A%2F%2Fwww.jituwang.com%2Fuploads%2Fallimg%2F151007%2F258199-15100G2513752.jpg" alt="" style="margin-top: 3px;margin-left: 0px;">
+      <img id='youdi' src="__HOME__/images/youdi.png"  alt=""/>
         <div class="cb"></div>
      </h2>
     <div class="zxpic zxpic_<?php echo ($_GET['p'] ? $_GET['p'] :1); ?>_<?php echo ($reskey); ?>">
@@ -870,14 +920,15 @@ function toEmail(){
     </div><!--zxpic end-->
     
     <div class="zxpicbwrap">
+    
     <div class="zxpicb zxpicb_<?php echo ($_GET['p'] ? $_GET['p'] :1); ?>_<?php echo ($reskey); ?>"></div>
-    <?php if($memberId > 0): ?><b class="zxdz fa <?php echo ($res['is_like'] ? 'zxdznow fa-heart' : 'fa-heart-o'); ?>" onClick="praise(this,'<?php echo U('Article/clickLike',array('id'=>$res['id']));?>')"></b>
-         <a href="javascript:void(0);" class="zxplun fa fa-commenting-o" onClick="positions(this)"></a> 
-         <b class="zxsc fa <?php echo ($res['is_colle'] ? 'fa-star' : 'fa-star-o'); ?>" onClick="setCollection(this,'<?php echo sign_url(array('id'=>$res['id'],'to_action'=>'Article/index2'),U('Article/setCollection'));?>')"></b>                     
+    <?php if($memberId > 0): ?><b class="zxdz fa <?php echo ($res['is_like'] ? 'zxdznow fa-heart' : 'fa-heart-o'); ?>" style="margin-left:-1px;"  onClick="praise(this,'<?php echo U('Article/clickLike',array('id'=>$res['id']));?>')"></b>
+         <a href="javascript:void(0);" class="zxplun fa fa-commenting-o" style="margin-left: 0px;font-size: 24px;" onClick="positions(this)"></a> 
+         <b class="zxsc fa <?php echo ($res['is_colle'] ? 'fa-bookmark' : 'fa-bookmark-o'); ?>" style="margin-top: 1px;margin-left: 0px;font-size: 23px;" onClick="setCollection(this,'<?php echo sign_url(array('id'=>$res['id'],'to_action'=>'Article/index2'),U('Article/setCollection'));?>')"></b>                     
      <?php else: ?>
          <b class="zxdz fa fa-heart-o" onClick="window.location.href='<?php echo sign_url(array('url'=>base64_encode(get_url())),U('Login/index'));?>';"></b>
           <a href="<?php echo sign_url(array('url'=>base64_encode(get_url())),U('Login/index'));?>" class="zxplun fa fa-commenting-o"></a> 
-         <b class="zxsc fa fa-star-o" onClick="window.location.href='<?php echo sign_url(array('url'=>base64_encode(get_url())),U('Login/index'));?>';"></b> <?php endif; ?> 
+         <b class="zxsc fa fa-bookmark-o" onClick="window.location.href='<?php echo sign_url(array('url'=>base64_encode(get_url())),U('Login/index'));?>';"></b> <?php endif; ?> 
     </div><!--zxpicbwrap end-->
     <p class="pl15 col333 f12"><span class="paraise_num"><?php echo ($res['like_count']); ?></span>次赞</p>
     <div class="zxfbnr">
@@ -911,9 +962,10 @@ function toEmail(){
              </div><?php endif; ?>  
      <div class="zxplbox" id="zxpl1">
          <form action="<?php echo sign_url(array('article_id'=>$res['id']),U('Article/commentReply'));?>" onSubmit="return formSend(this)">
-              <input name="content" placeholder="添加评论···" class="zxpltext">
+              <textarea name="content" class="zxpltext" value="添加评论···" onblur="if(this.value==''){this.value='添加评论···'}" onfocus="if(this.value=='添加评论···'){this.value=''}" v-model="cureInfo.Symptom" id="symptomTxt" oninput="autoTextAreaHeight(this)" ></textarea>
               <div class="zxplboxr">
-              <b class="fa fa-hand-pointer-o"></b>
+
+             <b><img id="ydhand" width="20px" src="__HOME__/images/ydhand.png"  alt=""/></b>
               <input type="submit" value="发送" class="zxplbtn">
           </form>
       </div>
@@ -922,11 +974,16 @@ function toEmail(){
 
    </li><?php endforeach; endif; ?>
  <script>
+    function autoTextAreaHeight(o) {
+        o.style.height = o.scrollTop + o.scrollHeight + "px";
+    }
+    $(function () {
+        var ele = document.getElementById("symptomTxt");
+        autoTextAreaHeight(ele);
+    })
 
      $(function(){
-
 		$(".zxpic .swiper-wrapper").click(function(e){
-		
 			$(this).parents(".zxpic").find(".zxpicicon").fadeIn()
 			num=$(this).parents(".zxpic").find(".zxpicicon").width()/2
 			$(this).parents(".zxpic").find(".zxpicicon").css({top:event.offsetY+10,left:event.offsetX-num-10})
