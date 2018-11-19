@@ -515,7 +515,7 @@ function deleteTopCatr(url){
   <a href="<?php echo U('Modular/enjoy',array('html'=>$files[3][C('A_6')]['id']));?>" class="navlink"><span><?php echo isL(L('CustomerRespect'),'客户尊享');?></span></a>
   <a href="<?php echo U('Article/index');?>" class="navlink"><span>YOUDI WU<!--<?php echo isL(L('News'),'YOUDI WU最新资讯');?>--></span></a>
   <a href="<?php echo U('Modular/opportunity',array('html'=>$files[3][C('A_2')]['id']));?>" class="navlink"><span><b class="icon7" style="font-weight:normal"><?php echo isL(L('CareerOpportunities'),'职业机会');?></b></span></a>
-  <a href="<?php echo U('Article/index2');?>" class="navlink navlinkzx">资讯</a>
+  <a href="<?php echo U('Article/index2');?>" class="navlink navlinkzx" style="margin-left: 218px;"></a>
   <span class="icon8" ><span class="glyphs icon-search" ></span><?php echo isL(L('Search'),'搜索');?></span>
   <form action="<?php echo U('Category/index','','');?>" id="keywords-form">
   <div class="sswrap"><span class="glyphs icon-search" onclick="topRetrieval(this)"></span>

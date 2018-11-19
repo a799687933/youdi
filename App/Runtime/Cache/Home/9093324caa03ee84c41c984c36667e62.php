@@ -326,7 +326,7 @@ function showAlls(_this){
    height:22px; z-index:10
 }
 #black{
-top:21%;
+top:19.5%;
 position:absolute;
 float:left;
 width: 100%;
@@ -334,7 +334,21 @@ height: 13%;
 }
 
 .wrap {
-    margin-top: 89px !important;
+    margin-top: 115px !important;
+}
+.swiper-pagination-bullet {
+    width: 6.5px;
+    height: 6.5px;
+   
+}
+.swiper-pagination-bullet-active {
+    background:rgba(72, 141, 243, 0.99) !important;
+    opacity: 10;
+}
+.swiper-pagination-bullet {
+
+    background: #000000a3;
+   
 }
 </style>
 </head>
@@ -769,7 +783,7 @@ function deleteTopCatr(url){
   <a href="<?php echo U('Modular/enjoy',array('html'=>$files[3][C('A_6')]['id']));?>" class="navlink"><span><?php echo isL(L('CustomerRespect'),'客户尊享');?></span></a>
   <a href="<?php echo U('Article/index');?>" class="navlink"><span>YOUDI WU<!--<?php echo isL(L('News'),'YOUDI WU最新资讯');?>--></span></a>
   <a href="<?php echo U('Modular/opportunity',array('html'=>$files[3][C('A_2')]['id']));?>" class="navlink"><span><b class="icon7" style="font-weight:normal"><?php echo isL(L('CareerOpportunities'),'职业机会');?></b></span></a>
-  <a href="<?php echo U('Article/index2');?>" class="navlink navlinkzx">资讯</a>
+  <a href="<?php echo U('Article/index2');?>" class="navlink navlinkzx" style="margin-left: 218px;"></a>
   <span class="icon8" ><span class="glyphs icon-search" ></span><?php echo isL(L('Search'),'搜索');?></span>
   <form action="<?php echo U('Category/index','','');?>" id="keywords-form">
   <div class="sswrap"><span class="glyphs icon-search" onclick="topRetrieval(this)"></span>
@@ -922,6 +936,8 @@ font-family: "\5FAE\8F6F\96C5\9ED1";
     <div class="zxpicbwrap">
     
     <div class="zxpicb zxpicb_<?php echo ($_GET['p'] ? $_GET['p'] :1); ?>_<?php echo ($reskey); ?>"></div>
+
+    
     <?php if($memberId > 0): ?><b class="zxdz fa <?php echo ($res['is_like'] ? 'zxdznow fa-heart' : 'fa-heart-o'); ?>" style="margin-left:-1px;"  onClick="praise(this,'<?php echo U('Article/clickLike',array('id'=>$res['id']));?>')"></b>
          <a href="javascript:void(0);" class="zxplun fa fa-commenting-o" style="margin-left: 0px;font-size: 24px;" onClick="positions(this)"></a> 
          <b class="zxsc fa <?php echo ($res['is_colle'] ? 'fa-bookmark' : 'fa-bookmark-o'); ?>" style="margin-top: 1px;margin-left: 0px;font-size: 23px;" onClick="setCollection(this,'<?php echo sign_url(array('id'=>$res['id'],'to_action'=>'Article/index2'),U('Article/setCollection'));?>')"></b>                     
@@ -955,17 +971,22 @@ font-family: "\5FAE\8F6F\96C5\9ED1";
                      <span class="show_all" onclick="showAlls(this)">显示全部</span>
                   </p><?php endif; endforeach; endif; ?>
          </div><!--zxdh end-->
-        
+ 
+                <span class="show_time"></span>
              <div class="zxdhb" style="<?php if(!$res['reply_arr']): ?>display:none;<?php endif; ?>">
-                <span class="show_time"><?php echo from_time($times,'');?></span><b>全部<span class="show_app_num"><?php echo ($res['comment']); ?></span>条评论</b>
+                <b>全部<span class="show_app_num"><?php echo ($res['comment']); ?></span>条评论</b>
                 <div class="cb"></div>
              </div><?php endif; ?>  
+
+       <span>
+                  <?php echo ($res['addtime']['hour']); ?>小时
+                前</span>
      <div class="zxplbox" id="zxpl1">
          <form action="<?php echo sign_url(array('article_id'=>$res['id']),U('Article/commentReply'));?>" onSubmit="return formSend(this)">
-              <textarea name="content" class="zxpltext" value="添加评论···" onblur="if(this.value==''){this.value='添加评论···'}" onfocus="if(this.value=='添加评论···'){this.value=''}" v-model="cureInfo.Symptom" id="symptomTxt" oninput="autoTextAreaHeight(this)" ></textarea>
+              <input name="content" class="zxpltext" value="添加评论···" onblur="if(this.value==''){this.value='添加评论···'}" onfocus="if(this.value=='添加评论···'){this.value=''}" v-model="cureInfo.Symptom" id="symptomTxt" oninput="autoTextAreaHeight(this)" >
               <div class="zxplboxr">
 
-             <b><img id="ydhand" width="20px" src="__HOME__/images/ydhand.png"  alt=""/></b>
+             <b><img id="ydhand" width="20px" src="__HOME__/images/ydhand.png"  /></b>
               <input type="submit" value="发送" class="zxplbtn">
           </form>
       </div>

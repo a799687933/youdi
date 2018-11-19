@@ -2,7 +2,8 @@
 // 资讯控制器
 class ArticleAction extends BasicAction {
     //资讯一
-	public function index(){	
+	public function index(){
+
 		//$files=M('files_sort')->field('files_id')->where(array('files_type'=>5,'display'=>1))->select();
 		//$ids=in_id($files,'files_id');
 		$ids=498; //资讯一ID
@@ -88,6 +89,7 @@ class ArticleAction extends BasicAction {
 				if($tems) $tres=array_merge($tres,$tems);
 			}
 		}
+
 		$this->assign('tres',$tres);
 	    $this->display();
 	}
@@ -176,7 +178,8 @@ class ArticleAction extends BasicAction {
 		$data['content']=$content;
 		$data['score']=0;
 		$data['is_show']=1;
-		$data['times']=time();//isL(L('EvaluationSuccess'),'评价提交成功')
+		$data['times']=time();
+		//isL(L('EvaluationSuccess'),'评价提交成功')
 		if(M('comment')->add($data)) {
 			//文章表加1 
 			M('article')->where(array('id'=>$id))->setInc('comment');
@@ -355,22 +358,48 @@ class ArticleAction extends BasicAction {
 					$reply_arr[$new_aid][]=$v;
 				}
 			}
-			
+			//var_dump($reply);die;
 			 //合拼数据
 			 foreach($result as $k=>$v){
 				 $result[$k]['album']=$album[$v['id']];
 				 $result[$k]['is_like']=$clicks[$v['id']]; //是否已赞过
 				 $result[$k]['is_colle']=$collection[$v['id']]; //是否已收藏
 				 $result[$k]['reply_arr']=$reply_arr[$v['id']];
+				 
+	             $result[$k]['addtime']=$this->timediff($result[$k]['addtime'],time());
 			 }
 		}
 		//p($result);die;
 		$this->result=$result;
+	//	die;
 		if(IS_AJAX){
 		    $this->display('index2_list');
 			die;
 		}		
 	    $this->display();
 	}
-
+function timediff($begin_time,$end_time)
+{
+      if($begin_time < $end_time){
+         $starttime = $begin_time;
+         $endtime = $end_time;
+      }else{
+         $starttime = $end_time;
+         $endtime = $begin_time;
+      }
+ 
+      //计算天数
+      $timediff = $endtime-$starttime;
+      $days = intval($timediff/86400);
+      //计算小时数
+      $remain = $timediff%86400;
+      $hours = intval($remain/3600);
+      //计算分钟数
+      $remain = $remain%3600;
+      $mins = intval($remain/60);
+      //计算秒数
+      $secs = $remain%60;
+      $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
+      return $res;
+}
 }
