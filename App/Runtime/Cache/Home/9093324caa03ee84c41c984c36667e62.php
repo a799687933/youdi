@@ -153,10 +153,10 @@ function positions(_this){
 var isForm10=false;
 function formSend(_this){
 	var li=$(_this).parents('li');
-     var content=$(_this).find('input[name="content"]').val();
+     var content=$(_this).find('textarea[name="content"]').val();
 	 if(content)  content=content.replace(/(^\s*)|(\s*$)/g, "");
 	 if(!content) {
-		$(_this).find('input[name="content"]').val('').focus();
+		$(_this).find('textarea[name="content"]').val('').focus();
 		return false;
 	 }	 
 	 var url=$(_this).attr('action');
@@ -180,7 +180,7 @@ function formSend(_this){
              node+='<img src="/Public/Home/images2/logo.png" width="68" alt="" class="vam mr5">'+content+'</p>';
               li.find('.zxdh').append(node);
 			  li.find('.show_time').text('刚刚');
-			  $(_this).find('input[name="content"]').val('');
+			  $(_this).find('textarea[name="content"]').val('');
 			  var num=parseInt(li.find('.show_app_num').text());
 			  num++;
 			  li.find('.show_app_num').text(num);
@@ -983,7 +983,7 @@ font-family: "\5FAE\8F6F\96C5\9ED1";
                 前</span>
      <div class="zxplbox" id="zxpl1">
          <form action="<?php echo sign_url(array('article_id'=>$res['id']),U('Article/commentReply'));?>" onSubmit="return formSend(this)">
-              <input name="content" class="zxpltext" value="添加评论···" onblur="if(this.value==''){this.value='添加评论···'}" onfocus="if(this.value=='添加评论···'){this.value=''}" v-model="cureInfo.Symptom" id="symptomTxt" oninput="autoTextAreaHeight(this)" >
+              <textarea name="content" class="zxpltext" value="添加评论···" onblur="if(this.value==''){this.value='添加评论···'}" onfocus="if(this.value=='添加评论···'){this.value=''}" v-model="cureInfo.Symptom" id="symptomTxt" oninput="autoTextAreaHeight(this)" ></textarea>
               <div class="zxplboxr">
 
              <b><img id="ydhand" width="20px" src="__HOME__/images/ydhand.png"  /></b>
